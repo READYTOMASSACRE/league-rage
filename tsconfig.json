@@ -2,6 +2,11 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "commonjs",
-        "experimentalDecorators": true
-    }
+        "experimentalDecorators": true,
+        "outDir": "../../packages/league-tdm",
+        "preserveConstEnums": true,
+        "emitDecoratorMetadata": true,
+    },
+    "include": ["index.ts", "src/**/*"],
+    "exclude": ["node_modules"]
 }

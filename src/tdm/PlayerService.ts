@@ -1,4 +1,4 @@
-import { ensurePlayer } from "../../helpers/decorators/ensurePlayer";
+import { ensurePlayer } from "../helpers/decorators/ensurePlayer";
 
 export default class PlayerService {
   @ensurePlayer
@@ -22,8 +22,8 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  spawn(p: number | PlayerMp, vector: number) {
-    (p as PlayerMp).spawn(new mp.Vector3(vector, vector, vector))
+  spawn(p: number | PlayerMp, vector: Vector3Mp) {
+    (p as PlayerMp).spawn(vector)
   }
 
   @ensurePlayer

@@ -1,4 +1,4 @@
-import { toMs } from "../../helpers"
+import { toMs } from "../helpers"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -8,6 +8,7 @@ interface RoundConfig {
   prepareSeconds: number
   roundSeconds: number
 }
+
 export default class Round {
   private prepareTimer: number = 0
   private roundTimer: number = 0
@@ -50,9 +51,9 @@ export default class Round {
   }
 
   addPlayer(id: number) {
-    this.playerService.setDimension(id, this.arena.dimension)
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
+    this.playerService.setDimension(id, this.arena.dimension)
     this.playerService.spawn(id, vector)
     this.playerService.setState(id, 'alive')
     this.playerService.setHealth(id, 99)

@@ -1,7 +1,7 @@
-import PermissionService from "../src/PermissionService"
-import PlayerService from "../src/PlayerService"
-import RoundService from "../src/RoundService"
-import TdmService from "../src/TdmService"
+import PermissionService from "./src/tdm/PermissionService"
+import PlayerService from "./src/tdm/PlayerService"
+import RoundService from "./src/tdm/RoundService"
+import TdmService from "./src/tdm/TdmService"
 
 const main = () => {
   const playerService = new PlayerService()

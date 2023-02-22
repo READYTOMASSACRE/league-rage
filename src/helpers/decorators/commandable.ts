@@ -101,7 +101,7 @@ const client = <T extends ctor>(target: T) => {
               const groupCommandInfo = indexByCommand[commandName]
               
               if (!groupCommandInfo) {
-                (<string[]>descriptions || []).forEach(text => mp.gui.chat.push(text))
+                (<string[]>descriptions || []).forEach(text => (mp as any).gui.chat.push(text))
                 return
               } else {
                 const {description, callback} = groupCommandInfo
@@ -114,7 +114,7 @@ const client = <T extends ctor>(target: T) => {
               return callback(description, ...commandArgs)
             }
           } catch (err) {
-            mp.gui.chat.push('Invalid register command: ' + err.message)
+            (mp as any).gui.chat.push('Invalid register command: ' + err.message)
           }
         })
 

@@ -1,6 +1,6 @@
-import { command } from "../../helpers/decorators/command";
-import { commandable } from "../../helpers/decorators/commandable";
-import { eventable } from "../../helpers/decorators/eventable";
+import { command } from "../helpers/decorators/command";
+import { commandable } from "../helpers/decorators/commandable";
+import { eventable } from "../helpers/decorators/eventable";
 import PermissionError from "./PermissionError";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
@@ -13,7 +13,7 @@ export default class TdmService {
     readonly permissionService: PermissionService
   ) {}
 
-  @command(['start', 'arena', 'a'], {desc: 'Usage /{{cmdName}} <id> - starts new round in id arena'})
+  @command(['start', 'arena', 'a'], {desc: 'Usage /{{cmdName}} <id> - start arena by id'})
   start(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!this.permissionService.hasRight(player, 'tdm.start')) {
       throw new PermissionError('tdm.start', player)

@@ -1,4 +1,4 @@
-import { sleep } from "../../helpers"
+import { sleep } from "../helpers"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
