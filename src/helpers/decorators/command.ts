@@ -1,3 +1,5 @@
+import { Decorator } from "../../types/decorator"
+
 const registeredCommands: Record<string, boolean> = {}
 
 const getCommandName = ({name, group, separator = '.'}: {
@@ -73,18 +75,20 @@ export const command = <T extends Function>(
       : `Usage /${getCommandName({group, name, separator: ' '})}`
   })
 
-  return function(target: T, method: string, descriptor: TypedPropertyDescriptor<any>) {
+  return function(target: T, key: string, descriptor: TypedPropertyDescriptor<any>) {
     if (typeof descriptor.value !== 'function') {
       throw new Error(`Command(s) ${commands.join(', ')} must be callable`)
     }
 
+    const proto = Object.getPrototypeOf(target)
+
     Reflect.defineMetadata(
-      Decorator.Enum.events,
+      Decorator.commands,
       [
-        ...(Reflect.getMetadata(Decorator.Enum.commands, target) || []),
-        {commands, descriptions, method, group}
+        ...(Reflect.getMetadata(Decorator.commands, proto) || []),
+        {commands, descriptions, descriptor, group}
       ],
-      target.prototype
+      proto
     )
 
     return descriptor

@@ -1,3 +1,5 @@
+import { Decorator } from "../../types/decorator"
+
 /**
  * Decorator for adding events into RAGE API
  * 
@@ -16,13 +18,15 @@ export const event = <T extends Function>(eventName: string | string[]): MethodD
       throw new Error(`Event(s) ${events.join(', ')} must be callable`)
     }
 
+    const proto = Object.getPrototypeOf(target)
+
     Reflect.defineMetadata(
-      Decorator.Enum.events,
+      Decorator.events,
       [
-        ...(Reflect.getMetadata(Decorator.Enum.events, target) || []),
-        {events, method}
+        ...(Reflect.getMetadata(Decorator.events, proto) || []),
+        {events, callback: descriptor.value}
       ],
-      target.prototype
+      proto
     )
 
     return descriptor

@@ -1,6 +1,6 @@
 export const ensurePlayer = function (target: Object, key: string, descriptor: TypedPropertyDescriptor<any>) {
   const child = descriptor.value
-  descriptor.value = (..._args: any[]) => {
+  descriptor.value = function (..._args: any[]) {
     let [player, ...args] = _args
 
     if (typeof player === 'number') {

@@ -1,4 +1,5 @@
-import 'reflect-metadata'
+import { ctor } from '../../types'
+import { Decorator, Event } from '../../types/decorator'
 
 // todo update rage-decorators library
 
@@ -7,20 +8,18 @@ export const eventable = <T extends ctor>(target: T) => {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.Enum.eventsInit, target.prototype)) {
-        const list: Decorator.Event[] = Reflect.getMetadata(Decorator.Enum.events, target) || []
+      if (!Reflect.getMetadata(Decorator.eventsInit, target.prototype)) {
+        const list: Event[] = Reflect.getMetadata(Decorator.events, target) || []
 
-        for (const { events, method } of list) {
-          const callback = target.prototype[method]
-
+        for (const { events, callback } of list) {
           if (typeof callback !== 'function') {
             throw new Error('Invalid type of target method ' + typeof callback)
           }
 
-          events.forEach(eventName => mp.events.add(eventName, callback.bind(target)))
+          events.forEach(eventName => mp.events.add(eventName, callback))
         }
 
-        Reflect.defineMetadata(Decorator.Enum.eventsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.eventsInit, true, target.prototype)
       }
     }
   }

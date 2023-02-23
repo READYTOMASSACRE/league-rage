@@ -1,8 +1,16 @@
 {
   "devDependencies": {
+    "@types/colors": "^1.2.1",
+    "@types/node": "^18.14.0",
     "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#master"
   },
   "dependencies": {
+    "colors": "^1.4.0",
+    "date-fns": "^2.29.3",
     "reflect-metadata": "^0.1.13"
+  },
+  "scripts": {
+    "build": "rm -rf ../../packages/league-tdm && tsc",
+    "postbuild": "cp -R node_modules ../../packages/league-tdm"
   }
 }

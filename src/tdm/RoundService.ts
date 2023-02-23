@@ -1,4 +1,5 @@
 import { sleep } from "../helpers"
+import { log } from "../helpers/decorators/log"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
@@ -7,6 +8,7 @@ export default class RoundService {
   private round?: Round
   constructor(readonly playerService: PlayerService) {}
 
+  @log
   start(player: PlayerMp, id: string) {
     if (this.running) {
       player.outputChatBox('Раунд запущен')
@@ -22,6 +24,7 @@ export default class RoundService {
     this.watch()
   }
 
+  @log
   stop(player: PlayerMp) {
     if (!this.running || !this.round) {
       player.outputChatBox('Раунд не запущен')
@@ -30,6 +33,7 @@ export default class RoundService {
     this.round.end()
   }
 
+  @log
   async watch() {
     while (this.running) {
       if (!this.round) {

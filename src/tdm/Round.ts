@@ -1,4 +1,5 @@
 import { toMs } from "../helpers"
+import { log } from "../helpers/decorators/log"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -10,8 +11,8 @@ interface RoundConfig {
 }
 
 export default class Round {
-  private prepareTimer: number = 0
-  private roundTimer: number = 0
+  private prepareTimer: ReturnType<typeof setTimeout>
+  private roundTimer: ReturnType<typeof setTimeout>
   private players: number[] = []
   private startDate: number = 0
   private _running: boolean = false
@@ -24,6 +25,7 @@ export default class Round {
     this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
   }
 
+  @log
   prepare() {
     this.config.players.map(id => this.addPlayer(id))
     this.roundTimer = setTimeout(() => this.end(), this.roundTime)
@@ -34,6 +36,7 @@ export default class Round {
     this.playerService.call('tdm.round.start', this.players, [this.arena.id])
   }
 
+  @log
   end() {
     const result = this.getResult()
     this.players.forEach(id => this.removePlayer(id))
@@ -42,6 +45,7 @@ export default class Round {
     mp.events.call('tdm.round.end', [this.arena.id, result])
   }
   
+  @log
   destroy() {
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
@@ -50,6 +54,7 @@ export default class Round {
     mp.events.call('tdm.round.destroy', [this.arena.id])
   }
 
+  @log
   addPlayer(id: number) {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
@@ -63,6 +68,7 @@ export default class Round {
     mp.events.call('tdm.round.addPlayer', [id])
   }
 
+  @log
   removePlayer(id: number) {
     this.players = this.players.filter(playerId => playerId !== id)
     this.playerService.setState(id, 'lobby')

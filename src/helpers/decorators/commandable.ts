@@ -1,23 +1,25 @@
 import { env } from ".."
+import { ctor, Enviroment } from "../../types"
+import { Command, Decorator } from "../../types/decorator"
 
 const server = <T extends ctor>(target: T) => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.Enum.commandsInit, target.prototype)) {
-        const list: Decorator.Command[] = Reflect.getMetadata(Decorator.Enum.commands, target.prototype) || []
+      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
+        const list: Command[] = Reflect.getMetadata(Decorator.commands, this) || []
 
-        for (const {commands, descriptions, method, group} of list) {
+        for (const {commands, descriptions, descriptor, group} of list) {
           if (!commands.length) {
             continue
           }
 
-          if (typeof target.prototype[method] !== 'function') {
+          const callback = descriptor.value
+
+          if (typeof callback !== 'function') {
             throw new Error(`Commands ${commands.join(', ')} should be callable`)
           }
-
-          const callback = target.prototype[method].bind(target)
 
           if (group) {
             mp.events.addCommand(
@@ -39,13 +41,13 @@ const server = <T extends ctor>(target: T) => {
               mp.events.addCommand(
                 name,
                 (player: PlayerMp, fullText: string, ...args: any[]) =>
-                  callback(player, fullText, descriptions[index], ...args)
+                  callback.apply(this, [player, fullText, descriptions[index], ...args])
               )
             ))
           }
         }
 
-        Reflect.defineMetadata(Decorator.Enum.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
       }
     }
   }
@@ -56,11 +58,11 @@ const client = <T extends ctor>(target: T) => {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.Enum.commandsInit, target.prototype)) {
-        const list: Decorator.Command[] = Reflect.getMetadata(Decorator.Enum.commands, target.prototype) || []
+      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
+        const list: Command[] = Reflect.getMetadata(Decorator.commands, target.prototype) || []
         const indexByCommand: Record<string, any> = {}
 
-        for (const {commands, descriptions, method, group} of list) {
+        for (const {commands, descriptions, descriptor, group} of list) {
           if (group) {
             indexByCommand[group] = {
               group: true,
@@ -68,7 +70,7 @@ const client = <T extends ctor>(target: T) => {
             }
           }
 
-          const callback = target.prototype[method]
+          const callback = descriptor.value
 
           if (typeof callback !== 'function') {
             throw new Error(`Command(s) ${commands.join(', ')} should be callable`)
@@ -118,7 +120,7 @@ const client = <T extends ctor>(target: T) => {
           }
         })
 
-        Reflect.defineMetadata(Decorator.Enum.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
       }
     }
   }
