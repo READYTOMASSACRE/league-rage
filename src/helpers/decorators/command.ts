@@ -80,15 +80,13 @@ export const command = <T extends Function>(
       throw new Error(`Command(s) ${commands.join(', ')} must be callable`)
     }
 
-    const proto = Object.getPrototypeOf(target)
-
     Reflect.defineMetadata(
       Decorator.commands,
       [
-        ...(Reflect.getMetadata(Decorator.commands, proto) || []),
+        ...(Reflect.getMetadata(Decorator.commands, target) || []),
         {commands, descriptions, descriptor, group}
       ],
-      proto
+      target
     )
 
     return descriptor

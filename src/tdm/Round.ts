@@ -1,5 +1,6 @@
 import { toMs } from "../helpers"
 import { log } from "../helpers/decorators/log"
+import { State, Team } from "../types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -21,7 +22,7 @@ export default class Round {
     readonly config: RoundConfig,
     readonly playerService: PlayerService
   ) {
-    mp.events.call('tdm.round.prepare', [this.arena.id])
+    mp.events.call('tdm.round.prepare', this.arena.id)
     this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
   }
 
@@ -32,8 +33,7 @@ export default class Round {
     this.startDate = Date.now()
 
     this._running = true
-    mp.events.call('tdm.round.start', [this.arena.id])
-    this.playerService.call('tdm.round.start', this.players, [this.arena.id])
+    mp.events.call('tdm.round.start', this.arena.id, this.players)
   }
 
   @log
@@ -42,7 +42,7 @@ export default class Round {
     this.players.forEach(id => this.removePlayer(id))
 
     this._running = false
-    mp.events.call('tdm.round.end', [this.arena.id, result])
+    mp.events.call('tdm.round.end', this.arena.id, result)
   }
   
   @log
@@ -60,24 +60,24 @@ export default class Round {
 
     this.playerService.setDimension(id, this.arena.dimension)
     this.playerService.spawn(id, vector)
-    this.playerService.setState(id, 'alive')
+    this.playerService.setState(id, State.alive)
     this.playerService.setHealth(id, 99)
 
     this.players.push(id)
 
-    mp.events.call('tdm.round.addPlayer', [id])
+    mp.events.call('tdm.round.addPlayer', id)
   }
 
   @log
   removePlayer(id: number) {
     this.players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, 'lobby')
+    this.playerService.setState(id, State.ready)
     this.playerService.spawnLobby(id)
 
-    mp.events.call('tdm.round.removePlayer', [id])
+    mp.events.call('tdm.round.removePlayer', id)
   }
 
-  private getResult(): "attackers" | "defenders" | "draw" {
+  private getResult(): Team | "draw" {
     const result = this.info
 
     if (result.attackers === result.defenders) {
@@ -86,13 +86,13 @@ export default class Round {
       }
 
       return result.attackersHealth > result.defendersHealth
-        ? "attackers"
-        : "defenders"
+        ? Team.attackers
+        : Team.defenders
     }
 
     return result.attackers > result.defenders
-      ? "attackers"
-      : "defenders"
+      ? Team.attackers
+      : Team.defenders
   }
 
   get info() {
@@ -100,10 +100,10 @@ export default class Round {
       const teamId = this.playerService.getTeam(id)
       const health = this.playerService.getHealth(id)
 
-      if (teamId === 0) { // todo use enums
+      if (teamId === Team.attackers) {
         acc.attackers++
         acc.attackersHealth += health
-      } else {
+      } else if (teamId === Team.defenders) {
         acc.defenders++
         acc.defendersHealth += health
       }

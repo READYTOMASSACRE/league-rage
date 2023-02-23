@@ -18,15 +18,13 @@ export const event = <T extends Function>(eventName: string | string[]): MethodD
       throw new Error(`Event(s) ${events.join(', ')} must be callable`)
     }
 
-    const proto = Object.getPrototypeOf(target)
-
     Reflect.defineMetadata(
       Decorator.events,
       [
-        ...(Reflect.getMetadata(Decorator.events, proto) || []),
-        {events, callback: descriptor.value}
+        ...(Reflect.getMetadata(Decorator.events, target) || []),
+        {events, descriptor, method}
       ],
-      proto
+      target
     )
 
     return descriptor

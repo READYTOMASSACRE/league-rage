@@ -9,14 +9,22 @@ export const eventable = <T extends ctor>(target: T) => {
       super(...args)
 
       if (!Reflect.getMetadata(Decorator.eventsInit, target.prototype)) {
-        const list: Event[] = Reflect.getMetadata(Decorator.events, target) || []
+        const list: Event[] = Reflect.getMetadata(Decorator.events, target.prototype) || []
 
-        for (const { events, callback } of list) {
+        for (const {events, descriptor, method} of list) {
+          const callback = descriptor.value
+
           if (typeof callback !== 'function') {
             throw new Error('Invalid type of target method ' + typeof callback)
           }
 
-          events.forEach(eventName => mp.events.add(eventName, callback))
+          events.forEach(eventName => {
+            console.log(
+              `[EVENTS::${eventName.cyan.underline}]`,
+              this.constructor.name.green+'.'+method.magenta.underline+'::()'
+            )
+            mp.events.add(eventName, (...args: any[]) => callback.apply(this, args))
+          })
         }
 
         Reflect.defineMetadata(Decorator.eventsInit, true, target.prototype)

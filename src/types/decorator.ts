@@ -1,8 +1,7 @@
-import { callable } from "."
-
 export interface Event {
   events: string[]
-  callback: callable
+  method: string
+  descriptor: TypedPropertyDescriptor<any>
 }
 
 export interface Command {
