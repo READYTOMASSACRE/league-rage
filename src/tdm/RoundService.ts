@@ -15,8 +15,7 @@ export default class RoundService {
   @log
   start(player: PlayerMp, id: string) {
     if (this.running) {
-      player.outputChatBox('Раунд запущен')
-      return
+      return player.outputChatBox('Раунд запущен')
     }
 
     const players = [
@@ -25,12 +24,11 @@ export default class RoundService {
     ]
 
     if (!players.length) {
-      player.outputChatBox('Недостаточно игроков для запуска')
-      return
+      return player.outputChatBox('Недостаточно игроков для запуска')
     }
 
     this.round = new Round({
-      arena: new Arena(Number(id)),
+      arena: new Arena(id, player),
       players,
       prepareSeconds: 1,
       roundSeconds: 120,
@@ -42,10 +40,52 @@ export default class RoundService {
   @log
   stop(player: PlayerMp) {
     if (!this.running || !this.round) {
-      player.outputChatBox('Раунд не запущен')
+      return player.outputChatBox('Раунд не запущен')
     }
 
     this.end()
+  }
+
+  @log
+  add(player: PlayerMp) {
+    if (!this.running || !this.round) {
+      return player.outputChatBox('Раунд не запущен')
+    }
+
+    return this.round.addPlayer(player.id, true)
+  }
+
+  @log
+  remove(player: PlayerMp) {
+    if (!this.running || !this.round) {
+      return player.outputChatBox('Раунд не запущен')
+    }
+
+    return this.round.removePlayer(player.id, true)
+  }
+
+  @log
+  pause(player: PlayerMp) {
+    if (!this.running || !this.round) {
+      return player.outputChatBox('Раунд не запущен')
+    }
+    if (this.paused) {
+      return player.outputChatBox('Раунд уже остановлен')
+    }
+
+    return this.round.pause()
+  }
+
+  @log
+  unpause(player: PlayerMp) {
+    if (!this.running || !this.round) {
+      return player.outputChatBox('Раунд не запущен')
+    }
+    if (!this.paused) {
+      return player.outputChatBox('Раунд не остановлен')
+    }
+
+    return this.round.unpause()
   }
 
   @log
@@ -79,6 +119,6 @@ export default class RoundService {
   }
 
   get paused() {
-    return false
+    return Boolean(this.round?.paused)
   }
 }

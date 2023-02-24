@@ -1,3 +1,4 @@
+import { resolve } from "path"
 import { Enviroment } from "../types"
 
 export const env = typeof (mp as any).game !== 'undefined' ? Enviroment.client : Enviroment.server
@@ -9,3 +10,5 @@ export const toId = (e: any): number => {
 
   return e.id
 }
+export const mapFolder = resolve(__dirname, '../../arenas.json')
+export const rand = (max: number): number => Math.floor(Math.random() * Math.floor(max))

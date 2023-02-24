@@ -75,7 +75,7 @@ export const command = <T extends Function>(
       : `Usage /${getCommandName({group, name, separator: ' '})}`
   })
 
-  return function(target: T, key: string, descriptor: TypedPropertyDescriptor<any>) {
+  return function(target: T, method: string, descriptor: TypedPropertyDescriptor<any>) {
     if (typeof descriptor.value !== 'function') {
       throw new Error(`Command(s) ${commands.join(', ')} must be callable`)
     }
@@ -84,7 +84,7 @@ export const command = <T extends Function>(
       Decorator.commands,
       [
         ...(Reflect.getMetadata(Decorator.commands, target) || []),
-        {commands, descriptions, descriptor, group}
+        {commands, descriptions, descriptor, group, method}
       ],
       target
     )

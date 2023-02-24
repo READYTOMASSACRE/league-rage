@@ -9,6 +9,7 @@ export interface Command {
   descriptions: string[]
   descriptor: TypedPropertyDescriptor<any>
   group?: string
+  method: string
 }
 
 export enum Decorator {

@@ -26,4 +26,28 @@ export default class BroadcastService {
   tdmRoundEnd(id: number, result: Team | "draw") {
     mp.players.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
   }
+
+  @log
+  @event('tdm.round.add')
+  tdmRoundAdd(id: number, manual?: boolean) {
+    if (manual) {
+      mp.players.broadcast(`Игрок ${id} был добавлен в раунд`)
+    }
+  }
+
+  @log
+  @event('tdm.round.remove')
+  tdmRoundRemove(id: number, manual?: boolean) {
+    if (manual) {
+      mp.players.broadcast(`Игрок ${id} был удален из раунда`)
+    }
+  }
+
+  @log
+  @event('tdm.round.pause')
+  tdmRoundPause(toggle: boolean) {
+    const text = toggle ? 'Раунд остановлен' : 'Раунд возобновлен'
+
+    mp.players.broadcast(text)
+  }
 }

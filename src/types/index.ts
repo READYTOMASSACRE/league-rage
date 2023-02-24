@@ -10,8 +10,21 @@ export enum Team {
   spectators = 'spectators'
 }
 export enum State {
-  ready = 'ready',
+  idle = 'idle',
   alive = 'alive',
   dead = 'dead',
-  spectate = 'spectate'
+  spectate = 'spectate',
+  select = 'select',
+}
+
+export type Point2d = [number,number]
+export type Point3d = [number,number,number]
+
+export type ArenaConfig = {
+  id: number
+  code: string
+  area: Point2d[]
+  [Team.attackers]: Point3d[]
+  [Team.defenders]: Point3d[]
+  [Team.spectators]: Point3d[]
 }

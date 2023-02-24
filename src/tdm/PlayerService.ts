@@ -9,7 +9,7 @@ export default class PlayerService {
   @log
   @event(RageEnums.EventKey.PLAYER_READY)
   playerReady(player: PlayerMp) {
-    this.setState(player, State.ready)
+    this.setState(player, State.idle)
   }
 
   @log
@@ -32,7 +32,7 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  getTeam(p: number | PlayerMp) {
+  getTeam(p: number | PlayerMp): Team {
     return (p as PlayerMp).getVariable('team')
   }
 
@@ -50,7 +50,7 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  getState(p: number | PlayerMp) {
+  getState(p: number | PlayerMp): State {
     return (p as PlayerMp).getVariable('state')
   }
 
@@ -75,5 +75,14 @@ export default class PlayerService {
         player.call(eventName, args)
       }
     }
+  }
+
+  @log
+  getPlayerByIdOrName(id: string): PlayerMp | undefined {
+    if (mp.players.exists(Number(id))) {
+      return mp.players.at(Number(id))
+    }
+
+    return mp.players.toArray().find(player => player.name === id)
   }
 }

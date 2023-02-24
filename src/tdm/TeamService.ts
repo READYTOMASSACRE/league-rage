@@ -67,7 +67,7 @@ export default class TeamService {
   change(p: number | PlayerMp, team: Team) {
     const state = this.playerService.getState(p)
 
-    if (state !== State.ready) {
+    if (state !== State.idle) {
       (p as PlayerMp).outputChatBox('Вы не в лобби')
     }
 

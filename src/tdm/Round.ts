@@ -15,68 +15,99 @@ export default class Round {
   private prepareTimer: ReturnType<typeof setTimeout>
   private roundTimer: ReturnType<typeof setTimeout>
   private players: number[] = []
-  private startDate: number = 0
+  private date: number = 0
   private _running: boolean = false
+  private _paused: boolean = false
+  private roundTime: number = 0
+  private prepareTime: number = 0
 
   constructor(
     readonly config: RoundConfig,
     readonly playerService: PlayerService
   ) {
+    this.roundTime = toMs(this.config.roundSeconds)
+    this.prepareTime = toMs(this.config.prepareSeconds)
+
     mp.events.call('tdm.round.prepare', this.arena.id)
     this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
   }
 
   @log
   prepare() {
+    if (this.running) {
+      return
+    }
+
     this.config.players.map(id => this.addPlayer(id))
     this.roundTimer = setTimeout(() => this.end(), this.roundTime)
-    this.startDate = Date.now()
-
+    this.date = Date.now()
     this._running = true
+
     mp.events.call('tdm.round.start', this.arena.id, this.players)
   }
 
   @log
   end() {
+    if (!this.running) {
+      return
+    }
+
     const result = this.getResult()
     this.players.forEach(id => this.removePlayer(id))
-
     this._running = false
-    mp.events.call('tdm.round.end', this.arena.id, result)
-  }
-  
-  @log
-  destroy() {
+
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
 
-    this.end()
-    mp.events.call('tdm.round.destroy', [this.arena.id])
+    mp.events.call('tdm.round.end', this.arena.id, result)
   }
 
   @log
-  addPlayer(id: number) {
+  addPlayer(id: number, manual?: boolean) {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
-    this.playerService.setDimension(id, this.arena.dimension)
     this.playerService.spawn(id, vector)
     this.playerService.setState(id, State.alive)
     this.playerService.setHealth(id, 99)
 
     this.players.push(id)
 
-    mp.events.call('tdm.round.addPlayer', id)
+    mp.events.call('tdm.round.addPlayer', id, manual)
   }
 
   @log
-  removePlayer(id: number) {
+  removePlayer(id: number, manual?: boolean) {
     this.players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, State.ready)
+    this.playerService.setState(id, State.idle)
     this.playerService.spawnLobby(id)
 
-    mp.events.call('tdm.round.removePlayer', id)
+    mp.events.call('tdm.round.removePlayer', id, manual)
   }
 
+  @log
+  pause() {
+    clearTimeout(this.roundTimer)
+    this.roundTime = this.timeleft
+    this._paused = true
+
+    mp.events.call('tdm.round.pause', true)
+  }
+
+  @log
+  unpause() {
+    if (!this.timeleft) {
+      return this.end()
+    }
+
+    this.roundTimer = setTimeout(() => this.end(), this.roundTime)
+    this.date = Date.now()
+    this._paused = false
+
+    mp.events.call('tdm.round.pause', false)
+
+  }
+
+  @log
   private getResult(): Team | "draw" {
     const result = this.info
 
@@ -117,11 +148,10 @@ export default class Round {
     })
   }
 
-  private get prepareTime() {
-    return toMs(this.config.prepareSeconds)
-  }
-  private get roundTime() {
-    return toMs(this.config.roundSeconds)
+  get timeleft() {
+    const ms = this.roundTime - Date.now() - this.date
+
+    return ms > 0 ? ms : 0
   }
 
   get arena() {
@@ -130,5 +160,9 @@ export default class Round {
 
   get running() {
     return this._running
+  }
+
+  get paused() {
+    return this._paused
   }
 }

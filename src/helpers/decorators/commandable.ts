@@ -10,7 +10,7 @@ const server = <T extends ctor>(target: T) => {
       if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
         const list: Command[] = Reflect.getMetadata(Decorator.commands, this) || []
 
-        for (const {commands, descriptions, descriptor, group} of list) {
+        for (const {commands, descriptions, descriptor, group, method} of list) {
           if (!commands.length) {
             continue
           }
@@ -22,6 +22,12 @@ const server = <T extends ctor>(target: T) => {
           }
 
           if (group) {
+            commands.forEach((name) => {
+              console.log(
+                `[COMMANDS /${group} ${name.cyan.underline}]`,
+                this.constructor.name.green+'.'+method.magenta.underline+'::()'
+              )
+            })
             mp.events.addCommand(
               group,
               (player: PlayerMp, fullText: string, ...args: any[]) => {
@@ -33,17 +39,21 @@ const server = <T extends ctor>(target: T) => {
                   return;
                 }
 
-                callback(player, fullText, descriptions[commandIndex], ...args)
+                callback.apply(this, [player, fullText, descriptions[commandIndex], ...args])
               }
             )
           } else {
-            commands.forEach((name, index) => (
+            commands.forEach((name, index) => {
+              console.log(
+                `[COMMANDS /${name.cyan.underline}]`,
+                this.constructor.name.green+'.'+method.magenta.underline+'::()'
+              )
               mp.events.addCommand(
                 name,
                 (player: PlayerMp, fullText: string, ...args: any[]) =>
                   callback.apply(this, [player, fullText, descriptions[index], ...args])
               )
-            ))
+            })
           }
         }
 
@@ -108,12 +118,12 @@ const client = <T extends ctor>(target: T) => {
               } else {
                 const {description, callback} = groupCommandInfo
   
-                return callback(description, ...commandArgsWithoutName)
+                return callback.apply(this, [description, ...commandArgsWithoutName])
               }
             } else {
               const {description, callback} = commandInfo
   
-              return callback(description, ...commandArgs)
+              return callback.apply(this, [description, ...commandArgs])
             }
           } catch (err) {
             (mp as any).gui.chat.push('Invalid register command: ' + err.message)
