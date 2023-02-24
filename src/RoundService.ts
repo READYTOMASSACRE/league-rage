@@ -63,7 +63,7 @@ export default class RoundService {
       arena: new Arena(id, player),
       players,
       prepareSeconds: 1,
-      roundSeconds: 120,
+      roundSeconds: 15,
     }, this.playerService)
 
     this.watch()
@@ -124,8 +124,8 @@ export default class RoundService {
     return this.round.unpause()
   }
 
-  @log
-  async watch() {
+  @log // todo move watcher into Round
+  private async watch() {
     while (this.running) {
       if (!this.round) {
         break
@@ -133,7 +133,7 @@ export default class RoundService {
 
       const {attackers, defenders} = this.round.info
 
-      if (!attackers || !defenders || !this.round.timeleft) {
+      if (!attackers || !defenders) {
         this.end()
         break
       }
