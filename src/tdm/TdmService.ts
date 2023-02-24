@@ -43,10 +43,14 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    const addPlayer = this.playerService.getPlayerByIdOrName(id)
+    const addPlayer = this.playerService.getByIdOrName(id, player)
 
     if (!addPlayer) {
       return player.outputChatBox(`Игрок ${id} не найден`)
+    }
+
+    if (Array.isArray(addPlayer)) {
+      return player.outputChatBox('Найдены следующие игроки: ' + addPlayer.map(p => p.name).join(', '))
     }
 
     return this.roundService.add(addPlayer)
@@ -61,10 +65,14 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    const removePlayer = this.playerService.getPlayerByIdOrName(id)
+    const removePlayer = this.playerService.getByIdOrName(id, player)
 
     if (!removePlayer) {
       return player.outputChatBox(`Игрок ${id} не найден`)
+    }
+
+    if (Array.isArray(removePlayer)) {
+      return player.outputChatBox('Найдены следующие игроки: ' + removePlayer.map(p => p.name).join(', '))
     }
 
     return this.roundService.remove(removePlayer)
