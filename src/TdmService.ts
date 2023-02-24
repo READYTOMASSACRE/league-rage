@@ -6,6 +6,7 @@ import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
 import VoteService from "./VoteService";
+import Arena from "./Arena";
 
 @commandable
 export default class TdmService {
@@ -105,7 +106,9 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    return this.voteService.voteArena(player, id, (result) => {
+    const arena = Arena.get(id, player)
+
+    return this.voteService.voteArena(player, arena.id, (result) => {
       return this.roundService.start(result)
     })
   }

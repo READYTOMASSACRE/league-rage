@@ -22,7 +22,7 @@ export default class VoteService {
   }
 
   @log
-  voteArena(player: PlayerMp, key: string, callback: (result: string) => void) {
+  voteArena(player: PlayerMp, key: string | number, callback: (result: string) => void) {
     if (this.isRunning('voteArena')) {
       this.add('voteArena', key, player)
     } else {
@@ -50,7 +50,7 @@ export default class VoteService {
   }
 
   @log
-  private add(vote: string, key: string, player: PlayerMp) {
+  private add(vote: string, key: string | number, player: PlayerMp) {
     const info = this.info[vote]
 
     if (info.players.includes(player.id)) {
@@ -63,14 +63,18 @@ export default class VoteService {
   }
 
   @log
-  private start(vote: string, key: string, player: PlayerMp, callback: (result: string) => void) {
+  private start(vote: string, key: string | number, player: PlayerMp, callback: (result: string) => void) {
     this.info[vote] = {
       result: {[key]: 1},
       players: [player.id],
       timer: setTimeout(() => {
-        const result = this.getResult(vote)
-        callback(result)
-        this.stop(vote, result)
+        try {
+          const result = this.getResult(vote)
+          callback(result)
+          this.stop(vote, result)
+        } catch (err) {
+          console.error(err)
+        }
       }, this.getTimeleft(vote))
     }
 

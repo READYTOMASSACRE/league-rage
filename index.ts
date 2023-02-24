@@ -18,7 +18,7 @@ const main = () => {
   const tdmService = new TdmService(roundService, permissionService, playerService, voteService)
   const broadcastService = new BroadcastService(playerService)
 
-  Arena.load(arenaPath)
+  Arena.load()
 
   mp.events.call('tdm.start')
 }

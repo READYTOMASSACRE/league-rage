@@ -10,5 +10,5 @@ export const toId = (e: any): number => {
 
   return e.id
 }
-export const arenaPath = resolve(__dirname, '../../arenas.json')
+export const arenaPath = resolve(__dirname, '../../../arenas.json')
 export const rand = (max: number): number => Math.floor(Math.random() * Math.floor(max))

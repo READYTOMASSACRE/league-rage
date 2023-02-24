@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
-import { rand } from "./helpers"
+import { arenaPath, rand } from "./helpers"
 import { log } from "./helpers/decorators/log"
 import { ArenaConfig, Team } from "./types"
 
@@ -22,8 +22,13 @@ export default class Arena {
   @log
   getRandVector(team: Team): Vector3Mp {
     const randIndex = rand(this.arena[team].length)
+    const vector = this.arena[team][randIndex]
 
-    return new mp.Vector3(...this.arena[team][randIndex])
+    if (!vector) {
+      throw new NotFoundError(`Not found spawn points in arena ${this.arena.id}`)
+    }
+
+    return new mp.Vector3(...vector)
   }
 
   static get arenas() {
@@ -44,9 +49,8 @@ export default class Arena {
   }
 
   @log
-  static load(path: string) {
-    if (this._arenas) return
-
+  static load() {
+    const path = arenaPath
     if (!existsSync(path)) writeFileSync(path, '[]')
 
     const arenas = JSON.parse(readFileSync(path).toString()) as ArenaConfig[]
@@ -55,7 +59,14 @@ export default class Arena {
       throw new Error('Invalid arenas format')
     }
 
-    this._arenas = arenas
+    this._arenas = arenas.map(arena => {
+      return {
+        [Team.attackers]: [],
+        [Team.defenders]: [],
+        [Team.spectators]: [],
+        ...arena,
+      }
+    })
 
     const {indexById, indexByCode} = arenas.reduce((acc, current, index) => {
       acc.indexById[current.id] = index
@@ -69,9 +80,14 @@ export default class Arena {
 
     this.indexById = indexById
     this.indexByCode = indexByCode
+
+    return true
   }
 
   private static isArenaConfig(a: any): a is ArenaConfig {
-    return Boolean(a?.id && a?.area)
+    return typeof a?.id !== 'undefined' &&
+      Array.isArray(a?.area) &&
+      Array.isArray(a?.[Team.attackers]) &&
+      Array.isArray(a?.[Team.defenders])
   }
 }
