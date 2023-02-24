@@ -50,4 +50,26 @@ export default class BroadcastService {
 
     mp.players.broadcast(text)
   }
+
+  @log
+  @event('tdm.vote')
+  tdmVote(vote: string, id: number, key: string) {
+    const player = this.playerService.getById(id)
+
+    mp.players.broadcast(`[${vote}] Игрок ${player?.name} проголосовал за ${key}, ${vote}`)
+  }
+
+  @log
+  @event('tdm.vote.start')
+  tdmVoteStart(vote: string, id: number, key: string) {
+    const player = this.playerService.getById(id)
+
+    mp.players.broadcast(`[${vote}] Запущено голосование игроком ${player?.name}, ${key}`)
+  }
+
+  @log
+  @event('tdm.vote.end')
+  tdmVoteEnd(vote: string, result: string) {
+    mp.players.broadcast(`[${vote}] Голосование завершено, результат: ${result}`)
+  }
 }

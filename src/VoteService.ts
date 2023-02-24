@@ -59,7 +59,7 @@ export default class VoteService {
 
     info.result[key]++
 
-    mp.events.call('tdm.vote', vote, player.id)
+    mp.events.call('tdm.vote', vote, player.id, key)
   }
 
   @log
@@ -68,20 +68,21 @@ export default class VoteService {
       result: {[key]: 1},
       players: [player.id],
       timer: setTimeout(() => {
-        callback(this.getResult(vote))
-        this.stop(vote)
+        const result = this.getResult(vote)
+        callback(result)
+        this.stop(vote, result)
       }, this.getTimeleft(vote))
     }
 
-    mp.events.call('tdm.vote.start', vote, player.id)
+    mp.events.call('tdm.vote.start', vote, player.id, key)
   }
 
   @log
-  private stop(vote: string) {
+  private stop(vote: string, result?: string) {
     clearTimeout(this.info[vote]?.timer)
     delete this.info[vote]
 
-    mp.events.call('tdm.vote.end', vote)
+    mp.events.call('tdm.vote.end', vote, result)
   }
 
   @log

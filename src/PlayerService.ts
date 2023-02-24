@@ -78,17 +78,24 @@ export default class PlayerService {
   }
 
   @log
-  getByIdOrName(id: string, player?: PlayerMp): PlayerMp | PlayerMp[] | undefined {
+  getByIdOrName(id: string | number, player?: PlayerMp): PlayerMp | PlayerMp[] | undefined {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))
     }
 
-    const [p, ...other] = mp.players.toArray().filter(player => player.name.match(id))
+    const [p, ...other] = mp.players.toArray().filter(player => player.name.match(String(id)))
 
     if (other.length) {
       return [p, ...other]
     }
 
     return p
+  }
+
+  @log
+  getById(id: number): PlayerMp | undefined {
+    if (mp.players.exists(Number(id))) {
+      return mp.players.at(Number(id))
+    }
   }
 }
