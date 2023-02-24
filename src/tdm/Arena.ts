@@ -42,9 +42,9 @@ export default class Arena {
 
     if (!existsSync(path)) writeFileSync(path, '[]')
 
-    const arenas = JSON.parse(readFileSync(path).toString())
+    const arenas = JSON.parse(readFileSync(path).toString()) as ArenaConfig[]
 
-    if (!this.isArenaConfig(arenas)) {
+    if (arenas.filter(this.isArenaConfig).length !== arenas.length) {
       throw new Error('Invalid arenas format')
     }
 
@@ -65,11 +65,7 @@ export default class Arena {
   }
 
   @log
-  private static isArenaConfig(a: any): a is ArenaConfig[] {
-    return Boolean(
-      Array.isArray(a) &&
-        a[0]?.id &&
-        a[0]?.area
-    )
+  private static isArenaConfig(a: any): a is ArenaConfig {
+    return Boolean(a?.id && a?.area)
   }
 }
