@@ -8,6 +8,10 @@ export default class Arena {
   readonly arena: ArenaConfig
   readonly id: number
 
+  private static _arenas?: ArenaConfig[]
+  private static indexById: Record<number, number> = {}
+  private static indexByCode: Record<string, number> = {}
+
   constructor(id: number | string, player?: PlayerMp) {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
@@ -28,9 +32,6 @@ export default class Arena {
     return new mp.Vector3(...this.arena[team][randIndex])
   }
 
-  private static _arenas?: ArenaConfig[]
-  private static indexById: Record<number, number> = {}
-  private static indexByCode: Record<string, number> = {}
   static get arenas() {
     return this._arenas
   }

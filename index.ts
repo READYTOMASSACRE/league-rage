@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { mapFolder } from './src/helpers'
+import {arenaPath} from './src/helpers'
 import Arena from './src/tdm/Arena'
 import BroadcastService from './src/tdm/BroadcastService'
 import PermissionService from "./src/tdm/PermissionService"
@@ -13,10 +13,10 @@ const main = () => {
   const permissionService = new PermissionService()
   const teamService = new TeamService(playerService)
   const roundService = new RoundService(playerService, teamService)
-  const tdmService = new TdmService(roundService, permissionService)
+  const tdmService = new TdmService(roundService, permissionService, playerService)
   const broadcastService = new BroadcastService(playerService)
 
-  Arena.load(mapFolder)
+  Arena.load(arenaPath)
 
   mp.events.call('tdm.start')
 }
