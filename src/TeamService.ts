@@ -1,11 +1,11 @@
-import { toId } from "../helpers";
-import { command } from "../helpers/decorators/command";
-import { commandable } from "../helpers/decorators/commandable";
-import { ensurePlayer } from "../helpers/decorators/ensurePlayer";
-import { event } from "../helpers/decorators/event";
-import { eventable } from "../helpers/decorators/eventable";
-import { log } from "../helpers/decorators/log";
-import { State, Team } from "../types";
+import { toId } from "./helpers";
+import { command } from "./helpers/decorators/command";
+import { commandable } from "./helpers/decorators/commandable";
+import { ensurePlayer } from "./helpers/decorators/ensurePlayer";
+import { event } from "./helpers/decorators/event";
+import { eventable } from "./helpers/decorators/eventable";
+import { log } from "./helpers/decorators/log";
+import { State, Team } from "./types";
 import PlayerService from "./PlayerService";
 
 @eventable

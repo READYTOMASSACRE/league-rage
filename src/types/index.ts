@@ -28,3 +28,9 @@ export type ArenaConfig = {
   [Team.defenders]: Point3d[]
   [Team.spectators]: Point3d[]
 }
+
+export type VoteConfig = {
+  timer: NodeJS.Timeout
+  players: number[]
+  result: Record<string, number>
+}

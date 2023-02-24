@@ -1,8 +1,8 @@
-import { ensurePlayer } from "../helpers/decorators/ensurePlayer";
-import { event } from "../helpers/decorators/event";
-import { eventable } from "../helpers/decorators/eventable";
-import { log } from "../helpers/decorators/log";
-import { State, Team } from "../types";
+import { ensurePlayer } from "./helpers/decorators/ensurePlayer";
+import { event } from "./helpers/decorators/event";
+import { eventable } from "./helpers/decorators/eventable";
+import { log } from "./helpers/decorators/log";
+import { State, Team } from "./types";
 
 @eventable
 export default class PlayerService {

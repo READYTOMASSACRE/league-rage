@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
-import NotFoundError from "../error/NotFoundError"
-import { rand } from "../helpers"
-import { log } from "../helpers/decorators/log"
-import { ArenaConfig, Team } from "../types"
+import NotFoundError from "./error/NotFoundError"
+import { rand } from "./helpers"
+import { log } from "./helpers/decorators/log"
+import { ArenaConfig, Team } from "./types"
 
 export default class Arena {
   readonly arena: ArenaConfig
@@ -13,15 +13,9 @@ export default class Arena {
   private static indexByCode: Record<string, number> = {}
 
   constructor(id: number | string, player?: PlayerMp) {
-    const index = typeof Arena.indexById[id] !== 'undefined'
-      ? Arena.indexById[id]
-      : Arena.indexByCode[id]
+    const arena = Arena.get(id, player)
 
-    if (!Arena.arenas[index]) {
-      throw new NotFoundError(`Arena ${id} not found`, player)
-    }
-
-    this.arena = Arena.arenas[index]
+    this.arena = arena
     this.id = this.arena.id
   }
 
@@ -34,6 +28,19 @@ export default class Arena {
 
   static get arenas() {
     return this._arenas
+  }
+
+  static get(id: number | string, player?: PlayerMp): ArenaConfig | undefined {
+    const index = typeof Arena.indexById[id] !== 'undefined'
+      ? Arena.indexById[id]
+      : Arena.indexByCode[id]
+
+
+    if (!this.arenas[index]) {
+      throw new NotFoundError(`Arena ${id} not found`, player)
+    }
+
+    return this.arenas[index]
   }
 
   @log
@@ -64,7 +71,6 @@ export default class Arena {
     this.indexByCode = indexByCode
   }
 
-  @log
   private static isArenaConfig(a: any): a is ArenaConfig {
     return Boolean(a?.id && a?.area)
   }

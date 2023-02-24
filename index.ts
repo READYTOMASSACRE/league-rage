@@ -1,19 +1,21 @@
 import 'reflect-metadata'
 import {arenaPath} from './src/helpers'
-import Arena from './src/tdm/Arena'
-import BroadcastService from './src/tdm/BroadcastService'
-import PermissionService from "./src/tdm/PermissionService"
-import PlayerService from "./src/tdm/PlayerService"
-import RoundService from "./src/tdm/RoundService"
-import TdmService from "./src/tdm/TdmService"
-import TeamService from './src/tdm/TeamService'
+import Arena from './src/Arena'
+import BroadcastService from './src/BroadcastService'
+import PermissionService from "./src/PermissionService"
+import PlayerService from "./src/PlayerService"
+import RoundService from "./src/RoundService"
+import TdmService from "./src/TdmService"
+import TeamService from './src/TeamService'
+import VoteService from './src/VoteService'
 
 const main = () => {
   const playerService = new PlayerService()
   const permissionService = new PermissionService()
   const teamService = new TeamService(playerService)
   const roundService = new RoundService(playerService, teamService)
-  const tdmService = new TdmService(roundService, permissionService, playerService)
+  const voteService = new VoteService()
+  const tdmService = new TdmService(roundService, permissionService, playerService, voteService)
   const broadcastService = new BroadcastService(playerService)
 
   Arena.load(arenaPath)

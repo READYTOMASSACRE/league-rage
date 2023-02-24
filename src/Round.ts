@@ -1,6 +1,6 @@
-import { toMs } from "../helpers"
-import { log } from "../helpers/decorators/log"
-import { State, Team } from "../types"
+import { toMs } from "./helpers"
+import { log } from "./helpers/decorators/log"
+import { State, Team } from "./types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -14,7 +14,7 @@ interface RoundConfig {
 export default class Round {
   private prepareTimer: ReturnType<typeof setTimeout>
   private roundTimer: ReturnType<typeof setTimeout>
-  private players: number[] = []
+  private _players: number[] = []
   private date: number = 0
   private _running: boolean = false
   private _paused: boolean = false
@@ -77,11 +77,20 @@ export default class Round {
 
   @log
   removePlayer(id: number, manual?: boolean) {
-    this.players = this.players.filter(playerId => playerId !== id)
+    if (!this.players.includes(id)) {
+      return
+    }
+
+    this._players = this.players.filter(playerId => playerId !== id)
     this.playerService.setState(id, State.idle)
     this.playerService.spawnLobby(id)
 
     mp.events.call('tdm.round.removePlayer', id, manual)
+  }
+
+  @log
+  playerQuit(id: number) {
+    this._players = this.players.filter(playerId => playerId !== id)
   }
 
   @log
@@ -164,5 +173,9 @@ export default class Round {
 
   get paused() {
     return this._paused
+  }
+
+  get players() {
+    return this._players
   }
 }

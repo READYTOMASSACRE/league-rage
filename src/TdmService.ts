@@ -1,10 +1,11 @@
-import { command } from "../helpers/decorators/command";
-import { commandable } from "../helpers/decorators/commandable";
-import { log } from "../helpers/decorators/log";
-import PermissionError from "../error/PermissionError";
+import { command } from "./helpers/decorators/command";
+import { commandable } from "./helpers/decorators/commandable";
+import { log } from "./helpers/decorators/log";
+import PermissionError from "./error/PermissionError";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
+import VoteService from "./VoteService";
 
 @commandable
 export default class TdmService {
@@ -12,6 +13,7 @@ export default class TdmService {
     readonly roundService: RoundService,
     readonly permissionService: PermissionService,
     readonly playerService: PlayerService,
+    readonly voteService: VoteService,
   ) {}
 
   @log
@@ -23,7 +25,7 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    return this.roundService.start(player, id)
+    return this.roundService.start(id, player)
   }
 
   @log
@@ -92,5 +94,19 @@ export default class TdmService {
     this.permissionService.hasRight(player, 'tdm.pause')
 
     return this.roundService.unpause(player)
+  }
+
+  @log
+  @command('vote', {desc: 'Usage //{{cmdName}} <id|code> vote for arena'})
+  vote(player: PlayerMp, fullText: string, description: string, id?: string) {
+    this.permissionService.hasRight(player, 'tdm.vote')
+
+    if (!id) {
+      return player.outputChatBox(description)
+    }
+
+    return this.voteService.voteArena(player, id, (result) => {
+      return this.roundService.start(result)
+    })
   }
 }

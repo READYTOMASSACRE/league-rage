@@ -1,10 +1,13 @@
-import { sleep } from "../helpers"
-import { log } from "../helpers/decorators/log"
+import { sleep } from "./helpers"
+import { event } from "./helpers/decorators/event"
+import { eventable } from "./helpers/decorators/eventable"
+import { log } from "./helpers/decorators/log"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
 
+@eventable
 export default class RoundService {
   private round?: Round
   constructor(
@@ -12,10 +15,35 @@ export default class RoundService {
     readonly teamService: TeamService,
   ) {}
 
+  @event(RageEnums.EventKey.PLAYER_DEATH)
+  playerDeath(player: PlayerMp) {
+    if (!this.running) {
+      return
+    }
+
+    if (!mp.players.exists(player)) {
+      return
+    }
+
+    this.round.removePlayer(player.id)
+  }
+
+  @event(RageEnums.EventKey.PLAYER_QUIT)
+  playerQuit(player: PlayerMp) {
+    if (!this.running) {
+      return
+    }
+
+    this.round.playerQuit(player.id)
+  }
+
   @log
-  start(player: PlayerMp, id: string) {
+  start(id: string, player?: PlayerMp) {
     if (this.running) {
-      return player.outputChatBox('Раунд запущен')
+      if (player) {
+        player.outputChatBox('Раунд запущен')
+      }
+      return
     }
 
     const players = [
@@ -24,7 +52,11 @@ export default class RoundService {
     ]
 
     if (!players.length) {
-      return player.outputChatBox('Недостаточно игроков для запуска')
+      if (player) {
+        player.outputChatBox('Недостаточно игроков для запуска')
+      }
+
+      return
     }
 
     this.round = new Round({
@@ -38,9 +70,13 @@ export default class RoundService {
   }
 
   @log
-  stop(player: PlayerMp) {
+  stop(player?: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox('Раунд не запущен')
+      if (player) {
+        player.outputChatBox('Раунд не запущен')
+      }
+
+      return
     }
 
     this.end()
@@ -97,7 +133,7 @@ export default class RoundService {
 
       const {attackers, defenders} = this.round.info
 
-      if (!attackers || !defenders) {
+      if (!attackers || !defenders || !this.round.timeleft) {
         this.end()
         break
       }

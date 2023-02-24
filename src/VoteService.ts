@@ -1,0 +1,91 @@
+import { toMs } from "./helpers";
+import { event } from "./helpers/decorators/event";
+import { eventable } from "./helpers/decorators/eventable";
+import { log } from "./helpers/decorators/log";
+import { VoteConfig } from "./types";
+
+@eventable
+export default class VoteService {
+  private info: Record<string, VoteConfig> = {}
+  private seconds: Record<string, number> = {
+    voteArena: 30,
+  }
+
+  @log
+  @event(RageEnums.EventKey.PLAYER_QUIT)
+  playerQuit(player: PlayerMp) {
+    for (const[, info] of Object.entries(this.info)) {
+      if (info.players.includes(player.id)) {
+        info.players = info.players.filter(id => id !== player.id)
+      }
+    }
+  }
+
+  @log
+  voteArena(player: PlayerMp, key: string, callback: (result: string) => void) {
+    if (this.isRunning('voteArena')) {
+      this.add('voteArena', key, player)
+    } else {
+      this.start('voteArena', key, player, callback)
+    }
+  }
+
+  @log
+  isRunning(vote: string) {
+    return Boolean(this.info[vote] && this.info[vote].timer)
+  }
+
+  @log
+  getResult(vote: string): string {
+    const {key} = Object.entries(this.info[vote].result).reduce((acc, [key, vote]) => {
+      if (acc.vote < vote) {
+        acc.key = key
+        acc.vote = vote
+      }
+
+      return acc
+    }, {key: undefined, vote: 0})
+
+    return key
+  }
+
+  @log
+  private add(vote: string, key: string, player: PlayerMp) {
+    const info = this.info[vote]
+
+    if (info.players.includes(player.id)) {
+      return player.outputChatBox('Вы уже проголосовали')
+    }
+
+    info.result[key]++
+
+    mp.events.call('tdm.vote', vote, player.id)
+  }
+
+  @log
+  private start(vote: string, key: string, player: PlayerMp, callback: (result: string) => void) {
+    this.info[vote] = {
+      result: {[key]: 1},
+      players: [player.id],
+      timer: setTimeout(() => {
+        callback(this.getResult(vote))
+        this.stop(vote)
+      }, this.getTimeleft(vote))
+    }
+
+    mp.events.call('tdm.vote.start', vote, player.id)
+  }
+
+  @log
+  private stop(vote: string) {
+    clearTimeout(this.info[vote]?.timer)
+    delete this.info[vote]
+
+    mp.events.call('tdm.vote.end', vote)
+  }
+
+  @log
+  private getTimeleft(vote: string) {
+    return toMs(this.seconds[vote])
+  }
+}
