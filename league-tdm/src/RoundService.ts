@@ -1,4 +1,4 @@
-import { event, eventable, log } from "../../core/server"
+import { event, eventable, log } from "../../league-core"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"

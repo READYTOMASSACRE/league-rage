@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { log, helpers } from '../../core/server'
+import { log, helpers } from '../../league-core'
 import { ArenaConfig, Team } from "./types"
 
 export default class Arena {

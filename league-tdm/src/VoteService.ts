@@ -1,5 +1,4 @@
-import { toMs } from "../../core/src/helpers";
-import { log, eventable, event } from "../../core/server";
+import { log, eventable, event, helpers } from "../../league-core";
 import { VoteConfig } from "./types";
 
 @eventable
@@ -89,6 +88,6 @@ export default class VoteService {
 
   @log
   private getTimeleft(vote: string) {
-    return toMs(this.seconds[vote])
+    return helpers.toMs(this.seconds[vote])
   }
 }

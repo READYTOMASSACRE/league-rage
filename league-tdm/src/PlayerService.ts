@@ -1,7 +1,4 @@
-import { ensurePlayer } from "../../core/server";
-import { event } from "../../core/server";
-import { eventable } from "../../core/server";
-import { log } from "../../core/server";
+import { event, eventable, log, ensurePlayer } from "../../league-core";
 import { State, Team } from "./types";
 
 @eventable

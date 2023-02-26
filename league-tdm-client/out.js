@@ -810,7 +810,6 @@
 
   // ../league-core/src/helpers/index.ts
   var env = typeof mp?.game !== "undefined" ? Core.Enviroment.client : Core.Enviroment.server;
-  var _mp = mp;
 
   // ../league-core/src/decorators/commandable.ts
   var server = (target) => {

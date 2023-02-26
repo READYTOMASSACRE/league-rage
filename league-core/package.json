@@ -12,7 +12,8 @@
     "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s"
   },
   "scripts": {
-    "build:server": "rm -rf ../../packages/league-core && tsc && yarn run postbuild:server",
-    "postbuild:server": "cp -R node_modules ../../packages/league-core"
+    "build": "rm -rf ../../packages/league-core && tsc",
+    "postbuild": "cp -R node_modules ../../packages/league-core",
+    "build:common": "tsc -p tsconfig.common.json"
   }
 }

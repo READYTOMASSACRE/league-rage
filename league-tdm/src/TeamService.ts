@@ -1,5 +1,4 @@
-import { toId } from "../../core/src/helpers";
-import { log, eventable, event, ensurePlayer, commandable, command } from "../../core/server";
+import { log, eventable, event, ensurePlayer, commandable, command, helpers } from "../../league-core";
 import { State, Team } from "./types";
 import PlayerService from "./PlayerService";
 
@@ -39,7 +38,7 @@ export default class TeamService {
 
   @log
   getPlayersByTeam(id: Team): number[] {
-    return mp.players.toArray().filter(player => this.playerService.getTeam(player) === id).map(toId)
+    return mp.players.toArray().filter(player => this.playerService.getTeam(player) === id).map(helpers.toId)
   }
 
   @log

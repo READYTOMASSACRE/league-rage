@@ -1,4 +1,4 @@
-import { commandable, command, log } from "../../core/server";
+import { commandable, command, log } from "../../league-core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";

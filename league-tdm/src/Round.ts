@@ -1,5 +1,4 @@
-import { sleep, toMs } from "../../core/src/helpers"
-import { log } from "../../core/server"
+import { log, helpers } from "../../league-core"
 import { State, Team } from "./types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
@@ -25,8 +24,8 @@ export default class Round {
     readonly config: RoundConfig,
     readonly playerService: PlayerService
   ) {
-    this.roundTime = toMs(this.config.roundSeconds)
-    this.prepareTime = toMs(this.config.prepareSeconds)
+    this.roundTime = helpers.toMs(this.config.roundSeconds)
+    this.prepareTime = helpers.toMs(this.config.prepareSeconds)
 
     mp.events.call('tdm.round.prepare', this.arena.id)
     this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
@@ -146,7 +145,7 @@ export default class Round {
         break
       }
 
-      await sleep(0.1)
+      await helpers.sleep(0.1)
     }
   }
 

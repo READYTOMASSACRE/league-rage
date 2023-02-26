@@ -1,5 +1,5 @@
 import PermissionError from "./error/PermissionError";
-import { log } from "../../core/server";
+import { log } from "../../league-core";
 
 export default class PermissionService {
   @log

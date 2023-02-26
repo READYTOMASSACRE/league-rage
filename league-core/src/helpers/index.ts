@@ -9,4 +9,3 @@ export const toId = (e: any): number => {
 
 export const rand = (max: number): number => Math.floor(Math.random() * Math.floor(max))
 export const env = typeof mp?.game !== 'undefined' ? Core.Enviroment.client : Core.Enviroment.server
-export const _mp: any = mp
