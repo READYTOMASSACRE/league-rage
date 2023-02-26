@@ -1,4 +1,3 @@
-import { sleep } from "./helpers"
 import { event } from "./helpers/decorators/event"
 import { eventable } from "./helpers/decorators/eventable"
 import { log } from "./helpers/decorators/log"
@@ -65,8 +64,6 @@ export default class RoundService {
       prepareSeconds: 1,
       roundSeconds: 15,
     }, this.playerService)
-
-    this.watch()
   }
 
   @log
@@ -122,24 +119,6 @@ export default class RoundService {
     }
 
     return this.round.unpause()
-  }
-
-  @log // todo move watcher into Round
-  private async watch() {
-    while (this.running) {
-      if (!this.round) {
-        break
-      }
-
-      const {attackers, defenders} = this.round.info
-
-      if (!attackers || !defenders) {
-        this.end()
-        break
-      }
-
-      await sleep(0.1)
-    }
   }
 
   @log

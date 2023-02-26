@@ -18,7 +18,6 @@ export default class PlayerService {
     (p as PlayerMp).health = health
   }
 
-  @log
   @ensurePlayer
   getHealth(p: number | PlayerMp) {
     return (p as PlayerMp).health
@@ -30,7 +29,6 @@ export default class PlayerService {
     (p as PlayerMp).dimension = dimension
   }
 
-  @log
   @ensurePlayer
   getTeam(p: number | PlayerMp): Team {
     return (p as PlayerMp).getVariable('team')

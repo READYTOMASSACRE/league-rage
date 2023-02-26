@@ -8,7 +8,7 @@ export default class Arena {
   readonly arena: ArenaConfig
   readonly id: number
 
-  private static _arenas?: ArenaConfig[]
+  private static _arenas: ArenaConfig[] = []
   private static indexById: Record<number, number> = {}
   private static indexByCode: Record<string, number> = {}
 

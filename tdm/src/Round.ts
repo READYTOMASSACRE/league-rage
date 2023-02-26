@@ -1,4 +1,4 @@
-import { toMs } from "./helpers"
+import { sleep, toMs } from "./helpers"
 import { log } from "./helpers/decorators/log"
 import { State, Team } from "./types"
 import Arena from "./Arena"
@@ -42,6 +42,7 @@ export default class Round {
     this.roundTimer = setTimeout(() => this.end(), this.roundTime)
     this.date = Date.now()
     this._running = true
+    this.watch()
 
     mp.events.call('tdm.round.start', this.arena.id, this.players)
   }
@@ -133,6 +134,20 @@ export default class Round {
     return result.attackers > result.defenders
       ? Team.attackers
       : Team.defenders
+  }
+
+  @log
+  private async watch() {
+    while (this.running) {
+      const {attackers, defenders} = this.info
+
+      if (!attackers || !defenders) {
+        this.end()
+        break
+      }
+
+      await sleep(0.1)
+    }
   }
 
   get info() {
