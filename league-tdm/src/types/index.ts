@@ -1,7 +1,3 @@
-export enum Enviroment {
-  client = 'client',
-  server = 'server'
-}
 export enum Team {
   attackers = 'attackers',
   defenders = 'defenders',
