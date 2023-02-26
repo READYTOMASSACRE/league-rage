@@ -1,15 +1,12 @@
-import { ctor } from '../../types'
-import { Decorator, Event } from '../../types/decorator'
-
 // todo update rage-decorators library
 
-export const eventable = <T extends ctor>(target: T) => {
+export const eventable = <T extends Core.ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.eventsInit, target.prototype)) {
-        const list: Event[] = Reflect.getMetadata(Decorator.events, target.prototype) || []
+      if (!Reflect.getMetadata(Core.Decorator.eventsInit, target.prototype)) {
+        const list: Core.Event[] = Reflect.getMetadata(Core.Decorator.events, target.prototype) || []
 
         for (const {events, descriptor, method} of list) {
           const callback = descriptor.value
@@ -27,7 +24,7 @@ export const eventable = <T extends ctor>(target: T) => {
           })
         }
 
-        Reflect.defineMetadata(Decorator.eventsInit, true, target.prototype)
+        Reflect.defineMetadata(Core.Decorator.eventsInit, true, target.prototype)
       }
     }
   }

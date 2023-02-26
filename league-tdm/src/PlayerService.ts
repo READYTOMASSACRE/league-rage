@@ -1,7 +1,7 @@
-import { ensurePlayer } from "./helpers/decorators/ensurePlayer";
-import { event } from "./helpers/decorators/event";
-import { eventable } from "./helpers/decorators/eventable";
-import { log } from "./helpers/decorators/log";
+import { ensurePlayer } from "../../core/server";
+import { event } from "../../core/server";
+import { eventable } from "../../core/server";
+import { log } from "../../core/server";
 import { State, Team } from "./types";
 
 @eventable

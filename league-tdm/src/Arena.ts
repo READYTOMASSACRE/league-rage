@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
-import { arenaPath, rand } from "./helpers"
-import { log } from "./helpers/decorators/log"
+import { arenaPath } from "./helpers"
+import { log, helpers } from '../../core/server'
 import { ArenaConfig, Team } from "./types"
 
 export default class Arena {
@@ -21,7 +21,7 @@ export default class Arena {
 
   @log
   getRandVector(team: Team): Vector3Mp {
-    const randIndex = rand(this.arena[team].length)
+    const randIndex = helpers.rand(this.arena[team].length)
     const vector = this.arena[team][randIndex]
 
     if (!vector) {

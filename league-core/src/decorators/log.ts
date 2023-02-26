@@ -1,6 +1,6 @@
 import 'colors'
-import {isEntity} from '..'
 import {format} from 'date-fns'
+import { isEntity } from '../helpers'
 
 export const log = function (target: Object, key: string, descriptor: TypedPropertyDescriptor<any>) {
   const child = descriptor.value

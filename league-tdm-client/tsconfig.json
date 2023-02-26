@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "experimentalDecorators": true,
+      "preserveConstEnums": true,
+      "emitDecoratorMetadata": true,
+      "allowJs": true,
+      "alwaysStrict": true,
+      "moduleResolution": "node"
+  },
+  "references": [
+    {"path": "../league-core"}
+  ],
+  "include": ["index.ts", "src/**/*"],
+  "exclude": ["node_modules"]
+}

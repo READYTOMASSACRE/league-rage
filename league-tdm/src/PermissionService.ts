@@ -1,5 +1,5 @@
 import PermissionError from "./error/PermissionError";
-import { log } from "./helpers/decorators/log";
+import { log } from "../../core/server";
 
 export default class PermissionService {
   @log

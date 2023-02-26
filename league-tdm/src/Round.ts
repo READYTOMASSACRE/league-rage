@@ -1,5 +1,5 @@
-import { sleep, toMs } from "./helpers"
-import { log } from "./helpers/decorators/log"
+import { sleep, toMs } from "../../core/src/helpers"
+import { log } from "../../core/server"
 import { State, Team } from "./types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"

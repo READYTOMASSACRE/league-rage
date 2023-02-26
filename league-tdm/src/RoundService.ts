@@ -1,6 +1,4 @@
-import { event } from "./helpers/decorators/event"
-import { eventable } from "./helpers/decorators/eventable"
-import { log } from "./helpers/decorators/log"
+import { event, eventable, log } from "../../core/server"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"

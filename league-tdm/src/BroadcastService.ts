@@ -1,6 +1,6 @@
-import { event } from "./helpers/decorators/event";
-import { eventable } from "./helpers/decorators/eventable";
-import { log } from "./helpers/decorators/log";
+import { event } from "../../core/server";
+import { eventable } from "../../core/server";
+import { log } from '../../core/server'
 import { Team } from "./types";
 import PlayerService from "./PlayerService";
 

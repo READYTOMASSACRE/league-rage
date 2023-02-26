@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "esbuild": "^0.17.10"
+  },
+  "scripts": {
+    "build": "esbuild index.ts --bundle --outfile=out.js"
+  }
+}

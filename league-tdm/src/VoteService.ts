@@ -1,7 +1,5 @@
-import { toMs } from "./helpers";
-import { event } from "./helpers/decorators/event";
-import { eventable } from "./helpers/decorators/eventable";
-import { log } from "./helpers/decorators/log";
+import { toMs } from "../../core/src/helpers";
+import { log, eventable, event } from "../../core/server";
 import { VoteConfig } from "./types";
 
 @eventable

@@ -1,14 +1,12 @@
-import { env } from ".."
-import { ctor, Enviroment } from "../../types"
-import { Command, Decorator } from "../../types/decorator"
+import { env } from "../helpers"
 
-const server = <T extends ctor>(target: T) => {
+const server = <T extends Core.ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
-        const list: Command[] = Reflect.getMetadata(Decorator.commands, this) || []
+      if (!Reflect.getMetadata(Core.Decorator.commandsInit, target.prototype)) {
+        const list: Core.Command[] = Reflect.getMetadata(Core.Decorator.commands, this) || []
 
         for (const {commands, descriptions, descriptor, group, method} of list) {
           if (!commands.length) {
@@ -30,7 +28,7 @@ const server = <T extends ctor>(target: T) => {
             })
             mp.events.addCommand(
               group,
-              (player: PlayerMp, fullText: string, ...args: any[]) => {
+              (player: any, fullText: string, ...args: any[]) => {
                 const [callableCommand] = args
                 const commandIndex = commands.findIndex((commandName) => commandName === callableCommand)
 
@@ -50,26 +48,26 @@ const server = <T extends ctor>(target: T) => {
               )
               mp.events.addCommand(
                 name,
-                (player: PlayerMp, fullText: string, ...args: any[]) =>
+                (player: any, fullText: string, ...args: any[]) =>
                   callback.apply(this, [player, fullText, descriptions[index], ...args])
               )
             })
           }
         }
 
-        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Core.Decorator.commandsInit, true, target.prototype)
       }
     }
   }
 }
 
-const client = <T extends ctor>(target: T) => {
+const client = <T extends Core.ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
-        const list: Command[] = Reflect.getMetadata(Decorator.commands, target.prototype) || []
+      if (!Reflect.getMetadata(Core.Decorator.commandsInit, target.prototype)) {
+        const list: Core.Command[] = Reflect.getMetadata(Core.Decorator.commands, target.prototype) || []
         const indexByCommand: Record<string, any> = {}
 
         for (const {commands, descriptions, descriptor, group} of list) {
@@ -130,10 +128,10 @@ const client = <T extends ctor>(target: T) => {
           }
         })
 
-        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Core.Decorator.commandsInit, true, target.prototype)
       }
     }
   }
 }
 
-export const commandable = env === Enviroment.client ? client : server
+export const commandable = env === Core.Enviroment.client ? client : server

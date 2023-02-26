@@ -1,7 +1,4 @@
-import { command } from "./helpers/decorators/command";
-import { commandable } from "./helpers/decorators/commandable";
-import { log } from "./helpers/decorators/log";
-import PermissionError from "./error/PermissionError";
+import { commandable, command, log } from "../../core/server";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";

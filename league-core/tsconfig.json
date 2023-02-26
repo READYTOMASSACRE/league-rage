@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "experimentalDecorators": true,
+      "outDir": "../../packages/league-core",
+      "preserveConstEnums": true,
+      "emitDecoratorMetadata": true,
+      "allowJs": true,
+      "alwaysStrict": true,
+      "composite": true,
+      "skipLibCheck": true
+  },
+  "include": ["client.ts", "server.ts", "src/**/*"],
+  "exclude": ["node_modules"]
+}

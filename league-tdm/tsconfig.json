@@ -9,6 +9,9 @@
         "allowJs": true,
         "alwaysStrict": true
     },
+    "references": [
+        {"path": "../league-core", "declarationMap": true}
+    ],
     "include": ["index.ts", "src/**/*"],
     "exclude": ["node_modules"]
 }
