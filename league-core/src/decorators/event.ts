@@ -1,3 +1,5 @@
+import { Decorator } from "../types"
+
 /**
  * Decorator for adding events into RAGE API
  * 
@@ -17,9 +19,9 @@ export const event = <T extends Function>(eventName: string | string[]): MethodD
     }
 
     Reflect.defineMetadata(
-      Core.Decorator.events,
+      Decorator.events,
       [
-        ...(Reflect.getMetadata(Core.Decorator.events, target) || []),
+        ...(Reflect.getMetadata(Decorator.events, target) || []),
         {events, descriptor, method}
       ],
       target

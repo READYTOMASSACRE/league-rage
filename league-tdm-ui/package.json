@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@types/ragemp-c": "github:CocaColaBear/types-ragemp-c",
+    "esbuild": "^0.17.10"
+  },
+  "scripts": {
+    "build": "esbuild index.ts --bundle --outfile=../../client_packages/league-tdm-ui/index.js",
+    "watch": "esbuild index.ts --bundle --outfile=../../client_packages/league-tdm-ui/index.js --watch",
+    "build:local": "esbuild index.ts --bundle --outfile=./bundle.js"
+  },
+  "dependencies": {
+    "global": "^4.4.0"
+  }
+}

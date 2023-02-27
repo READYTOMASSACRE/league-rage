@@ -1,3 +1,5 @@
+import { Decorator } from "../types"
+
 const registeredCommands: Record<string, boolean> = {}
 
 const getCommandName = ({name, group, separator = '.'}: {
@@ -79,9 +81,9 @@ export const command = <T extends Function>(
     }
 
     Reflect.defineMetadata(
-      Core.Decorator.commands,
+      Decorator.commands,
       [
-        ...(Reflect.getMetadata(Core.Decorator.commands, target) || []),
+        ...(Reflect.getMetadata(Decorator.commands, target) || []),
         {commands, descriptions, descriptor, group, method}
       ],
       target

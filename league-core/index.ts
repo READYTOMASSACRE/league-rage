@@ -1,5 +1,3 @@
-/// <reference path="./@types/index.d.ts" />
-
 import 'reflect-metadata'
 
 export * from './src/decorators/command'

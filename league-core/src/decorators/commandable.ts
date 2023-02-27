@@ -1,12 +1,13 @@
 import { env } from "../helpers"
+import { Command, ctor, Decorator, Enviroment } from "../types"
 
-const server = <T extends Core.ctor>(target: T): T => {
+const server = <T extends ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Core.Decorator.commandsInit, target.prototype)) {
-        const list: Core.Command[] = Reflect.getMetadata(Core.Decorator.commands, this) || []
+      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
+        const list: Command[] = Reflect.getMetadata(Decorator.commands, this) || []
 
         for (const {commands, descriptions, descriptor, group, method} of list) {
           if (!commands.length) {
@@ -21,10 +22,7 @@ const server = <T extends Core.ctor>(target: T): T => {
 
           if (group) {
             commands.forEach((name) => {
-              console.log(
-                `[COMMANDS /${group} ${name.cyan.underline}]`,
-                this.constructor.name.green+'.'+method.magenta.underline+'::()'
-              )
+              printCommand({constructor: this.constructor.name, group, name, method})
             })
             mp.events.addCommand(
               group,
@@ -42,10 +40,7 @@ const server = <T extends Core.ctor>(target: T): T => {
             )
           } else {
             commands.forEach((name, index) => {
-              console.log(
-                `[COMMANDS /${name.cyan.underline}]`,
-                this.constructor.name.green+'.'+method.magenta.underline+'::()'
-              )
+              printCommand({constructor: this.constructor.name, name, method})
               mp.events.addCommand(
                 name,
                 (player: any, fullText: string, ...args: any[]) =>
@@ -55,22 +50,22 @@ const server = <T extends Core.ctor>(target: T): T => {
           }
         }
 
-        Reflect.defineMetadata(Core.Decorator.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
       }
     }
   }
 }
 
-const client = <T extends Core.ctor>(target: T): T => {
+const client = <T extends ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Core.Decorator.commandsInit, target.prototype)) {
-        const list: Core.Command[] = Reflect.getMetadata(Core.Decorator.commands, target.prototype) || []
+      if (!Reflect.getMetadata(Decorator.commandsInit, target.prototype)) {
+        const list: Command[] = Reflect.getMetadata(Decorator.commands, target.prototype) || []
         const indexByCommand: Record<string, any> = {}
 
-        for (const {commands, descriptions, descriptor, group} of list) {
+        for (const {commands, descriptions, descriptor, method, group} of list) {
           if (group) {
             indexByCommand[group] = {
               group: true,
@@ -91,6 +86,8 @@ const client = <T extends Core.ctor>(target: T): T => {
               description: descriptions[index],
               callback,
             }
+
+            printCommand({constructor: this.constructor.name, method, group, name})
           })          
         }
 
@@ -128,10 +125,23 @@ const client = <T extends Core.ctor>(target: T): T => {
           }
         })
 
-        Reflect.defineMetadata(Core.Decorator.commandsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.commandsInit, true, target.prototype)
       }
     }
   }
 }
 
-export const commandable = env === Core.Enviroment.client ? client : server
+const printCommand = ({constructor, method, group, name}: {
+  constructor: string, method: string, group?: string, name: string
+}) => {
+  if (env === Enviroment.server) {
+    console.log(
+      `[COMMANDS /${group && group + ' '}${name.cyan.underline}]`,
+      constructor.green+'.'+method.magenta.underline+'::()'
+    )
+  } else {
+    mp.gui.chat.push(`[COMMANDS /${group && group + ' '}${name}] ${constructor}.${method}::()`)
+  }
+}
+
+export const commandable = env === Enviroment.client ? client : server

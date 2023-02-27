@@ -1,12 +1,15 @@
 // todo update rage-decorators library
 
-export const eventable = <T extends Core.ctor>(target: T): T => {
+import { env } from "../helpers"
+import { ctor, Decorator, Enviroment, Event } from "../types"
+
+export const eventable = <T extends ctor>(target: T): T => {
   return class extends target {
     constructor(...args: any[]) {
       super(...args)
 
-      if (!Reflect.getMetadata(Core.Decorator.eventsInit, target.prototype)) {
-        const list: Core.Event[] = Reflect.getMetadata(Core.Decorator.events, target.prototype) || []
+      if (!Reflect.getMetadata(Decorator.eventsInit, target.prototype)) {
+        const list: Event[] = Reflect.getMetadata(Decorator.events, target.prototype) || []
 
         for (const {events, descriptor, method} of list) {
           const callback = descriptor.value
@@ -16,16 +19,24 @@ export const eventable = <T extends Core.ctor>(target: T): T => {
           }
 
           events.forEach(eventName => {
-            console.log(
-              `[EVENTS::${eventName.cyan.underline}]`,
-              this.constructor.name.green+'.'+method.magenta.underline+'::()'
-            )
+            printEvent({constructor: this.constructor.name, eventName, method})
             mp.events.add(eventName, (...args: any[]) => callback.apply(this, args))
           })
         }
 
-        Reflect.defineMetadata(Core.Decorator.eventsInit, true, target.prototype)
+        Reflect.defineMetadata(Decorator.eventsInit, true, target.prototype)
       }
     }
+  }
+}
+
+const printEvent = ({constructor, eventName, method}) => {
+  if (env === Enviroment.client) {
+    mp.gui.chat.push(`[EVENTS::${eventName}] ${constructor}.${method}::()`)
+  } else {
+    console.log(
+      `[EVENTS::${eventName.cyan.underline}]`,
+      constructor.green+'.'+method.magenta.underline+'::()'
+    )
   }
 }
