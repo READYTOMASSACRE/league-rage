@@ -1,6 +1,6 @@
 import 'colors'
 import {format} from 'date-fns'
-import { isEntity } from '../helpers'
+import { decorate } from '../helpers'
 
 export const log = function (target: Object, key: string, descriptor: TypedPropertyDescriptor<any>) {
   const child = descriptor.value
@@ -42,12 +42,4 @@ export const log = function (target: Object, key: string, descriptor: TypedPrope
   }
 
   return descriptor
-}
-
-const decorate = (arg: any): string => {
-  if (typeof arg ==='undefined') return 'undefined'
-  if (isEntity(arg)) return `${arg.type}_${arg.id}`
-  if (typeof arg === 'object') return JSON.stringify(arg)
-
-  return arg
 }

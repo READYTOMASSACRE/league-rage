@@ -5,6 +5,7 @@ export * from './src/decorators/commandable'
 export * from './src/decorators/ensurePlayer'
 export * from './src/decorators/event'
 export * from './src/decorators/eventable'
+export * from './src/decorators/logClient'
 
 export * as helpers from './src/helpers'
 export * as types from './src/types'

@@ -1,4 +1,4 @@
-import { env } from "../helpers"
+import { decorate, env } from "../helpers"
 import { Command, ctor, Decorator, Enviroment } from "../types"
 
 const server = <T extends ctor>(target: T): T => {
@@ -96,11 +96,11 @@ const client = <T extends ctor>(target: T): T => {
             const args = input.split(' ')
             const [groupName, ...commandArgs] = args
             const commandInfo = indexByCommand[groupName]
-  
+
             if (!commandInfo) {
               return
             }
-  
+
             if (commandInfo.group) {
               const {descriptions} = commandInfo
               const [name, ...commandArgsWithoutName] = commandArgs
@@ -140,7 +140,7 @@ const printCommand = ({constructor, method, group, name}: {
       constructor.green+'.'+method.magenta.underline+'::()'
     )
   } else {
-    mp.gui.chat.push(`[COMMANDS /${group && group + ' '}${name}] ${constructor}.${method}::()`)
+    mp.gui.chat.push(`[COMMANDS /${group && group || ''}${name}] ${constructor}.${method}::()`)
   }
 }
 
