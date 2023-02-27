@@ -10,7 +10,9 @@
     "reflect-metadata": "^0.1.13"
   },
   "scripts": {
-    "build": "rm -rf ../../packages/league-tdm && tsc",
-    "postbuild": "cp -R node_modules ../../packages/league-tdm"
+    "watch": "tsc -p tsconfig.local.json --watch",
+    "build": "tsc -p tsconfig.local.json",
+    "build:external": "rm -rf ../../packages/league-tdm && tsc",
+    "postbuild:external": "cp -R node_modules ../../packages/league-tdm"
   }
 }
