@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "jsx": "react",
+    "target": "esnext",
+    "allowJs": true,
+    "preserveConstEnums": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "isolatedModules": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
