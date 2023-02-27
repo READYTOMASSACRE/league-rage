@@ -1,6 +1,7 @@
-import { event, eventable, logClient } from "../../league-core/client";
+import { command, commandable, event, eventable, logClient } from "../../league-core/client";
 
 @eventable
+@commandable
 export default class UIService {
   constructor(readonly url: string) {}
 
@@ -8,11 +9,14 @@ export default class UIService {
 
   @logClient
   @event("playerReady")
+  @command('reload')
   loadCef() {
     if (this.cef) {
       this.cef.destroy()
     }
 
     this.cef = mp.browsers.new(this.url)
+
+    return this.url
   }
 }

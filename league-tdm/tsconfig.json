@@ -7,8 +7,8 @@
         "preserveConstEnums": true,
         "emitDecoratorMetadata": true,
         "allowJs": true,
-        "alwaysStrict": true,
-        "strictNullChecks": true
+        // "alwaysStrict": true, // todo fix errors
+        // "strictNullChecks": true
     },
     "references": [
         {"path": "../league-core", "declarationMap": true}

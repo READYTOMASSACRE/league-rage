@@ -35,7 +35,7 @@ export default class Arena {
     return this._arenas
   }
 
-  static get(id: number | string, player?: PlayerMp): ArenaConfig | undefined {
+  static get(id: number | string, player?: PlayerMp): ArenaConfig {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
       : Arena.indexByCode[id]

@@ -2,7 +2,7 @@
   "name": "league-tdm-cef",
   "version": "0.1.0",
   "license": "ISC",
-  "main": "index.js",
+  "source": "index.html",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -10,12 +10,13 @@
   "devDependencies": {
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
-    "parcel": "^2.8.3"
+    "parcel": "^2.8.3",
+    "process": "^0.11.10"
   },
   "scripts": {
-    "start": "parcel -p 3000 --no-cache index.html --dist-dir ../../client_packages/league-tdm-cef/",
+    "watch": "parcel -p 3000 --no-cache index.html --dist-dir ../../client_packages/league-tdm-cef/",
     "build": "parcel build index.html --dist-dir ../../client_packages/league-tdm-cef/",
-    "start:local": "parcel -p 3000 --no-cache index.html",
+    "watch:local": "parcel -p 3000 --no-cache index.html",
     "build:local": "parcel build index.html"
   }
 }

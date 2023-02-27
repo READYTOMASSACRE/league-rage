@@ -22,7 +22,9 @@ export default class RoundService {
       return
     }
 
-    this.round.removePlayer(player.id)
+    if (this.round) {
+      this.round.removePlayer(player.id)
+    }
   }
 
   @event(RageEnums.EventKey.PLAYER_QUIT)
@@ -31,7 +33,9 @@ export default class RoundService {
       return
     }
 
-    this.round.playerQuit(player.id)
+    if (this.round) {
+      this.round.playerQuit(player.id)
+    }
   }
 
   @log
