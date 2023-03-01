@@ -13,7 +13,7 @@ const HeaderScoreboard: FC<Props> = ({ teams }) => {
     <div className={cl(s.top)}>
         {teams.map(team =>
           team.role === 'attack' && (
-            <div className={s.left_team_score}>{team.name} {team.score}</div>
+            <div key={team.role} className={s.left_team_score}>{team.name} {team.score}</div>
           )
         )}
         <div className={s.chertochkaXD}>
@@ -21,7 +21,7 @@ const HeaderScoreboard: FC<Props> = ({ teams }) => {
         </div>
         {teams.map(team =>
           team.role === 'defense' && (
-            <div className={s.right_team_score}>{team.score} {team.name}</div>
+            <div key={team.role} className={s.right_team_score}>{team.score} {team.name}</div>
           )
         )}
       </div>

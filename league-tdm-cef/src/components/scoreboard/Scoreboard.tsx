@@ -6,6 +6,9 @@ import PlayerItem from './PlayerItem/PlayerItem'
 import TeamBar from './TeamBar/TeamBar'
 import { ICurrentPlayer, IPlayers, ITeams } from '../../types'
 import HeaderScoreboard from './HeaderScoreboard/HeaderScoreboard'
+import TeamItem from './Teamitem/TeamItem'
+import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
+import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
 
 interface Props {
   players: IPlayers[];
@@ -29,64 +32,47 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
 
   const sortedPlayers = useMemo(() => {
     // more sort (assist/death/score)
-    const sortedPlayers = sortScoreboard === 'kills' ? 
-    players.sort((a, b) => a.kills > b.kills ? -1 : 1) : 
-    players.sort((a, b) => a.death > b.death ? -1 : 1)
+    const sortedPlayers = sortScoreboard === 'kills' ?
+      players.sort((a, b) => a.kills > b.kills ? -1 : 1) :
+      players.sort((a, b) => a.death > b.death ? -1 : 1)
 
     return sortedPlayers;
   }, [players, sortScoreboard])
 
-  // add hoock for filter
-
-  const attackers = useMemo(() => {
-    const role = 'attack'
-    const attackers = sortedPlayers.filter(player =>
-      player.role === role && player
-    )
-
-    return attackers;
-  }, [sortedPlayers])
-
-  const defenders = useMemo(() => {
-    const role = 'defense'
-    const defenders = sortedPlayers.filter(player =>
-      player.role === role && player
-    )
-
-    return defenders;
-  }, [sortedPlayers])
+  const attackPlayers = useFilterPlayersBySide(players, 'attack')
+  const defensePlayers = useFilterPlayersBySide(players, 'defense')
+  const attackTeam = useFilterTeamBySide(teams, 'attack')
+  const defenseTeam = useFilterTeamBySide(teams, 'defense')
 
   const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
-
-// add team commponent
 
   return (
     <div className={cl(s.scoreboard, s.active)}>
       <HeaderScoreboard teams={teams} />
-      <div className={cl(s.left_team)}>
-        {teams && teams.map(team =>
-          team.role === 'attack' && (
-            <TeamBar team={team} />
-          )
-        )}
+      <TeamItem side={'left'}>
+        <TeamBar team={attackTeam} />
         <ListOfPlayers>
-          {players && attackers.map((player, index) =>
-            <PlayerItem key={player.id} player={player} currentPlayer={currentPlayer?.id === player.id ? true : false} position={index + 1} />
+          {players && attackPlayers.map((player, index) =>
+            <PlayerItem
+              key={player.id}
+              player={player}
+              currentPlayer={currentPlayer?.id === player.id ? true : false} position={index + 1}
+            />
           )}
         </ListOfPlayers>
-      </div>
-      <div className={cl(s.right_team)}>
-        {teams && teams.map(team =>
-          team.role === 'defense' && (
-            <TeamBar team={team} />
-          )
-        )}
+      </TeamItem>
+      <TeamItem side={'right'}>
+        <TeamBar team={defenseTeam} />
         <ListOfPlayers>
-          {players && defenders.map((player, index) =>
-            <PlayerItem key={player.id} player={player} currentPlayer={currentPlayer?.id === player.id ? true : false} position={index + 1} />
+          {players && defensePlayers.map((player, index) =>
+            <PlayerItem
+              key={player.id}
+              player={player}
+              currentPlayer={currentPlayer?.id === player.id ? true : false} position={index + 1}
+            />
           )}
         </ListOfPlayers>
-      </div>
+      </TeamItem>
       {/* make boat component */}
       <div className={cl(s.bottom)}>
         bottom
