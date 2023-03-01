@@ -1,0 +1,29 @@
+$black_tp: transparentize(#343434, 0.5)
+
+.scoreboard
+  width: 90vw
+  height: 90vh
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  grid-template-rows: 100px 1fr 60px
+  gap: 10px
+  font-size: 18px
+
+.left_team
+  grid-column-start: 1
+  grid-column-end: 2
+  background-color: $black_tp
+
+.right_team
+  grid-column-start: 2
+  grid-column-end: 3
+  background-color: $black_tp
+
+.bottom
+  grid-column-start: 1
+  grid-column-end: 3
+  background-color: $black_tp
+
+.left_team .right_team
+  display: flex
+  flex-direction: column
