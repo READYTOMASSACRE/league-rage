@@ -35,3 +35,16 @@ export type Point3d = [number,number,number]
 export interface IConfig {
   weaponConfig: WeaponConfig
 }
+
+export const enum Events {
+  'tdm.vote' = 'tdm.vote',
+  'tdm.vote.start' = 'tdm.vote.start',
+  'tdm.vote.end' = 'tdm.vote.end',
+  'tdm.weapon.request' = 'tdm.weapon.request',
+  'tdm.round.prepare' = 'tdm.round.prepare',
+  'tdm.round.start' = 'tdm.round.start',
+  'tdm.round.end' = 'tdm.round.end',
+  'tdm.round.add' = 'tdm.round.add',
+  'tdm.round.remove' = 'tdm.round.remove',
+  'tdm.round.pause' = 'tdm.round.pause',
+}

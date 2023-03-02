@@ -1,11 +1,12 @@
 import { event, eventable, types } from "../../league-core";
+import { Events } from "../../league-core/src/types";
 import BroadCastError from "./error/BroadCastError";
 
 @eventable
 export default class WeaponService {
   constructor(readonly config: types.weapon.Config) {}
 
-  @event('tdm.weapon.request')
+  @event(Events["tdm.weapon.request"])
   weaponRequest(player: PlayerMp, choice: string[]) {
     player.removeAllWeapons()
 
