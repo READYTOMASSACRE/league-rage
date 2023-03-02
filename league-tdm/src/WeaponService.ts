@@ -18,10 +18,10 @@ export default class WeaponService {
   }
 
   private isValid(choice: string[]) {
-    return choice.length > this.config.slots && choice.every((hash) => this.flat.includes(hash))
+    return choice.length > this.config.slotCount && choice.every((hash) => this.flat.includes(hash))
   }
 
   get flat() {
-    return Object.values(this.config.id).flat()
+    return Object.values(this.config.category).flat()
   }
 }
