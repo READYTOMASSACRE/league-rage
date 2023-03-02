@@ -37,14 +37,26 @@ export interface IConfig {
 }
 
 export const enum Events {
+  /** Fires when tdm gamemode starts */
+  'tdm.start' = 'tdm.start',
+  /** Fires when player has voted */
   'tdm.vote' = 'tdm.vote',
+  /** Fires when vote has started */
   'tdm.vote.start' = 'tdm.vote.start',
+  /** Fires when vote has ended */
   'tdm.vote.end' = 'tdm.vote.end',
+  /** Fires when player requested weapon */
   'tdm.weapon.request' = 'tdm.weapon.request',
+  /** Fires when round is preparing */
   'tdm.round.prepare' = 'tdm.round.prepare',
+  /** Fires when round is starting */
   'tdm.round.start' = 'tdm.round.start',
+  /** Fires when round is end */
   'tdm.round.end' = 'tdm.round.end',
+  /** Fires when player has been added to round */
   'tdm.round.add' = 'tdm.round.add',
+  /** Fires when player has been removed from round */
   'tdm.round.remove' = 'tdm.round.remove',
+  /** Fires when round has been paused */
   'tdm.round.pause' = 'tdm.round.pause',
 }
