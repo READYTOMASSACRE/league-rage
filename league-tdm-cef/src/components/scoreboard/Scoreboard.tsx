@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import s from './Scoreboard.module.sass'
 import cl from 'classnames'
 import ListOfPlayers from './ListOfPlayer/ListOfPlayers'
@@ -24,35 +24,40 @@ const findCurrentPlayer = (playerId: number, players: IPlayers[]) => {
   }
 }
 
-const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
+const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {          
 
-  const [attackSideName, setAttackSideName] = useState<string>('Attackers')
-  const [defenseSideName, setDefenseSideName] = useState<string>('Defenders')
-  const [sortScoreboard, setSortScoreboard] = useState<string>('kills')
+  const [[sortScoreboard, desSortScorboard], setSortScoreboard] = useState<[string, boolean]>(['kills', true])
+
+  const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
 
   const sortedPlayers = useMemo(() => {
-    // more sort (assist/death/score)
     const sortedPlayers = sortScoreboard === 'kills' ?
-      players.sort((a, b) => a.kills > b.kills ? -1 : 1) :
-      players.sort((a, b) => a.death > b.death ? -1 : 1)
+      players.slice().sort((a, b) => desSortScorboard ? b.kills - a.kills : a.kills - b.kills) :
+      sortScoreboard === 'assists' ?
+        players.slice().sort((a, b) => desSortScorboard ? b.assists - a.assists : a.assists - b.assists) :
+        players.slice().sort((a, b) => desSortScorboard ? b.death - a.death : a.death - b.death)
 
     return sortedPlayers;
-  }, [players, sortScoreboard])
+  }, [players, sortScoreboard, desSortScorboard])
 
-  const attackPlayers = useFilterPlayersBySide(players, 'attack')
-  const defensePlayers = useFilterPlayersBySide(players, 'defense')
+  const attackPlayers = useFilterPlayersBySide(sortedPlayers, 'attack')
+  const defensePlayers = useFilterPlayersBySide(sortedPlayers, 'defense')
   const attackTeam = useFilterTeamBySide(teams, 'attack')
   const defenseTeam = useFilterTeamBySide(teams, 'defense')
 
-  const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
+  const changeSort = (type: string) => {
+    type === sortScoreboard ?
+      setSortScoreboard([sortScoreboard, !desSortScorboard]) :
+      setSortScoreboard([type, true])
+  }
 
   return (
     <div className={cl(s.scoreboard, s.active)}>
       <HeaderScoreboard teams={teams} />
       <TeamItem side={'left'}>
-        <TeamBar team={attackTeam} />
+        <TeamBar changeSort={changeSort} color={attackTeam?.color} />
         <ListOfPlayers>
-          {players && attackPlayers.map((player, index) =>
+          {attackPlayers && attackPlayers.map((player, index) =>
             <PlayerItem
               key={player.id}
               player={player}
@@ -62,9 +67,9 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
         </ListOfPlayers>
       </TeamItem>
       <TeamItem side={'right'}>
-        <TeamBar team={defenseTeam} />
+        <TeamBar changeSort={changeSort} color={defenseTeam?.color} />
         <ListOfPlayers>
-          {players && defensePlayers.map((player, index) =>
+          {defensePlayers && defensePlayers.map((player, index) =>
             <PlayerItem
               key={player.id}
               player={player}

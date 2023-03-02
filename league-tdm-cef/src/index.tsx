@@ -94,12 +94,14 @@ const teamInfo = [
     name: 'USA',
     role: 'attack',
     score: 3,
+    color: 'purple',
   },
   {
     id: 2,
     name: 'CN',
     role: 'defense',
     score: 2,
+    color: 'yellow',
   }
 ]
 

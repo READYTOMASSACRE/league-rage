@@ -14,6 +14,7 @@ export interface ITeams {
   name: string;
   role: string;
   score: number;
+  color: string;
 }
 
 export interface ICurrentPlayer {
