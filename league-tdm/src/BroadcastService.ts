@@ -1,5 +1,4 @@
-import { event, eventable, log } from "../../league-core";
-import { Team } from "./types";
+import { event, eventable, log, types } from "../../league-core";
 import PlayerService from "./PlayerService";
 
 @eventable
@@ -21,7 +20,7 @@ export default class BroadcastService {
 
   @log
   @event('tdm.round.end')
-  tdmRoundEnd(id: number, result: Team | "draw") {
+  tdmRoundEnd(id: number, result: types.tdm.Team | "draw") {
     mp.players.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
   }
 

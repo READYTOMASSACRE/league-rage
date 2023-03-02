@@ -1,12 +1,11 @@
-import { event, eventable, log, ensurePlayer } from "../../league-core";
-import { State, Team } from "./types";
+import { event, eventable, log, ensurePlayer, types } from "../../league-core";
 
 @eventable
 export default class PlayerService {
   @log
   @event(RageEnums.EventKey.PLAYER_READY)
   playerReady(player: PlayerMp) {
-    this.setState(player, State.idle)
+    this.setState(player, types.tdm.State.idle)
   }
 
   @log
@@ -27,13 +26,13 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  getTeam(p: number | PlayerMp): Team {
+  getTeam(p: number | PlayerMp): types.tdm.Team {
     return (p as PlayerMp).getVariable('team')
   }
 
   @log
   @ensurePlayer
-  setTeam(p: number | PlayerMp, id: Team) {
+  setTeam(p: number | PlayerMp, id: types.tdm.Team) {
     (p as PlayerMp).setVariable('team', id)
   }
 
@@ -45,13 +44,13 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  getState(p: number | PlayerMp): State {
+  getState(p: number | PlayerMp): types.tdm.State {
     return (p as PlayerMp).getVariable('state')
   }
 
   @log
   @ensurePlayer
-  setState(p: number | PlayerMp, state: State) {
+  setState(p: number | PlayerMp, state: types.tdm.State) {
     (p as PlayerMp).setVariable('state', state)
   }
 

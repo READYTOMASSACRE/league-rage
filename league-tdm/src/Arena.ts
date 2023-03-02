@@ -1,14 +1,13 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { log, helpers } from '../../league-core'
-import { ArenaConfig, Team } from "./types"
+import { log, helpers, types } from '../../league-core'
 
 export default class Arena {
-  readonly arena: ArenaConfig
+  readonly arena: types.tdm.Arena
   readonly id: number
 
-  private static _arenas: ArenaConfig[] = []
+  private static _arenas: types.tdm.Arena[] = []
   private static indexById: Record<number, number> = {}
   private static indexByCode: Record<string, number> = {}
 
@@ -20,7 +19,7 @@ export default class Arena {
   }
 
   @log
-  getRandVector(team: Team): Vector3Mp {
+  getRandVector(team: types.tdm.Team): Vector3Mp {
     const randIndex = helpers.rand(this.arena[team].length)
     const vector = this.arena[team][randIndex]
 
@@ -35,7 +34,7 @@ export default class Arena {
     return this._arenas
   }
 
-  static get(id: number | string, player?: PlayerMp): ArenaConfig {
+  static get(id: number | string, player?: PlayerMp): types.tdm.Arena {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
       : Arena.indexByCode[id]
@@ -53,7 +52,7 @@ export default class Arena {
     const path = arenaPath
     if (!existsSync(path)) writeFileSync(path, '[]')
 
-    const arenas = JSON.parse(readFileSync(path).toString()) as ArenaConfig[]
+    const arenas = JSON.parse(readFileSync(path).toString()) as types.tdm.Arena[]
 
     if (arenas.filter(this.isArenaConfig).length !== arenas.length) {
       throw new Error('Invalid arenas format')
@@ -61,9 +60,9 @@ export default class Arena {
 
     this._arenas = arenas.map(arena => {
       return {
-        [Team.attackers]: [],
-        [Team.defenders]: [],
-        [Team.spectators]: [],
+        [types.tdm.Team.attackers]: [],
+        [types.tdm.Team.defenders]: [],
+        [types.tdm.Team.spectators]: [],
         ...arena,
       }
     })
@@ -84,10 +83,10 @@ export default class Arena {
     return true
   }
 
-  private static isArenaConfig(a: any): a is ArenaConfig {
+  private static isArenaConfig(a: any): a is types.tdm.Arena {
     return typeof a?.id !== 'undefined' &&
       Array.isArray(a?.area) &&
-      Array.isArray(a?.[Team.attackers]) &&
-      Array.isArray(a?.[Team.defenders])
+      Array.isArray(a?.[types.tdm.Team.attackers]) &&
+      Array.isArray(a?.[types.tdm.Team.defenders])
   }
 }

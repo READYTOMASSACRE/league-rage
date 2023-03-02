@@ -1,5 +1,10 @@
 import { log, eventable, event, helpers } from "../../league-core";
-import { VoteConfig } from "./types";
+
+interface VoteConfig {
+  timer: NodeJS.Timeout
+  players: number[]
+  result: Record<string, number>
+}
 
 @eventable
 export default class VoteService {

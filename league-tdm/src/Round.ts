@@ -1,5 +1,4 @@
-import { log, helpers } from "../../league-core"
-import { State, Team } from "./types"
+import { log, helpers, types } from "../../league-core"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -67,7 +66,7 @@ export default class Round {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
     this.playerService.spawn(id, vector)
-    this.playerService.setState(id, State.alive)
+    this.playerService.setState(id, types.tdm.State.alive)
     this.playerService.setHealth(id, 99)
 
     this.players.push(id)
@@ -82,7 +81,7 @@ export default class Round {
     }
 
     this._players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, State.idle)
+    this.playerService.setState(id, types.tdm.State.idle)
     this.playerService.spawnLobby(id)
 
     mp.events.call('tdm.round.removePlayer', id, manual)
@@ -117,7 +116,7 @@ export default class Round {
   }
 
   @log
-  private getResult(): Team | "draw" {
+  private getResult(): types.tdm.Team | "draw" {
     const result = this.info
 
     if (result.attackers === result.defenders) {
@@ -126,13 +125,13 @@ export default class Round {
       }
 
       return result.attackersHealth > result.defendersHealth
-        ? Team.attackers
-        : Team.defenders
+        ? types.tdm.Team.attackers
+        : types.tdm.Team.defenders
     }
 
     return result.attackers > result.defenders
-      ? Team.attackers
-      : Team.defenders
+      ? types.tdm.Team.attackers
+      : types.tdm.Team.defenders
   }
 
   @log
@@ -154,10 +153,10 @@ export default class Round {
       const teamId = this.playerService.getTeam(id)
       const health = this.playerService.getHealth(id)
 
-      if (teamId === Team.attackers) {
+      if (teamId === types.tdm.Team.attackers) {
         acc.attackers++
         acc.attackersHealth += health
-      } else if (teamId === Team.defenders) {
+      } else if (teamId === types.tdm.Team.defenders) {
         acc.defenders++
         acc.defendersHealth += health
       }
