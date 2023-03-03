@@ -4,6 +4,7 @@ import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
 import VoteService from "./VoteService";
 import Arena from "./Arena";
+import WeaponService from "./WeaponService";
 
 @commandable
 export default class TdmService {
@@ -12,6 +13,7 @@ export default class TdmService {
     readonly permissionService: PermissionService,
     readonly playerService: PlayerService,
     readonly voteService: VoteService,
+    readonly weaponService: WeaponService,
   ) {}
 
   @log
@@ -108,5 +110,29 @@ export default class TdmService {
     return this.voteService.voteArena(player, arena.id, (result) => {
       return this.roundService.start(result)
     })
+  }
+
+  @log
+  @command(['w', 'weapon'], {desc: 'Usage //{{cmdName}} <id|list>'})
+  weaponRequest(player: PlayerMp, fullText: string, description: string, id?: string) {
+    if (!id) {
+      return player.outputChatBox(description)
+    }
+
+    const availableSet = {
+      1: ['weapon_sniperrifle', 'weapon_revolver_mk2', 'weapon_bat'],
+      2: ['weapon_assaultrifle', 'weapon_revolver_mk2', 'weapon_bat'],
+      3: ['weapon_pumpshotgun', 'weapon_revolver_mk2', 'weapon_bat'],
+    }
+
+    if (id === 'list' || !availableSet[id]) {
+      player.outputChatBox('Available weapon sets:')
+      player.outputChatBox('1. Sniper Rifle + Deagle + Bat')
+      player.outputChatBox('2. Assault Rifle + Deagle + Bat')
+      player.outputChatBox('3. Pump Shotgun + Deagle + Bat')
+      return
+    }
+
+    return this.weaponService.weaponRequest(player, availableSet[id])
   }
 }

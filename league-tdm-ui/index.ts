@@ -6,6 +6,8 @@ const main = () => {
   new UIService("package://league-tdm-cef/index.html")
   const playerService = new PlayerService()
   new WeaponService(playerService)
+  
+  mp.gui.chat.push('league-tdm-ui package init')
 }
 
 main()

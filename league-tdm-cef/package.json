@@ -21,7 +21,7 @@
     "watch": "yarn clean && parcel -p 3000 --no-cache index.html",
     "build": "parcel build index.html",
     "watch:external": "parcel -p 3000 --no-cache index.html --dist-dir ../../client_packages/league-tdm-cef/",
-    "prebuild:external": "rm -rf ../../client_packages/league-tdm-cef",
-    "build:external": "parcel build index.html --dist-dir ../../client_packages/league-tdm-cef/"
+    "prebuild:external": "rm -rf ../../client_packages/league-tdm-cef/*",
+    "build:external": "parcel build index.html --no-cache --dist-dir ../../client_packages/league-tdm-cef/"
   }
 }

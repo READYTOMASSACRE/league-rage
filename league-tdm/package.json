@@ -1,4 +1,6 @@
 {
+  "name": "league-tdm",
+  "license": "ISC",
   "devDependencies": {
     "@types/colors": "^1.2.1",
     "@types/node": "^18.14.0",
@@ -12,7 +14,9 @@
   "scripts": {
     "watch": "tsc -p tsconfig.local.json --watch",
     "build": "tsc -p tsconfig.local.json",
-    "build:external": "rm -rf ../../packages/league-tdm && tsc",
-    "postbuild:external": "cp -R node_modules ../../packages/league-tdm"
+    "prebuild:external": "rm -rf ../../packages/league-tdm",
+    "build:external": "tsc",
+    "postbuild:external": "cp -R node_modules ../../packages/league-tdm",
+    "source:external": "tsc"
   }
 }

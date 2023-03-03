@@ -136,7 +136,7 @@ const printCommand = ({constructor, method, group, name}: {
 }) => {
   if (env === Enviroment.server) {
     console.log(
-      `[COMMANDS /${group && group + ' '}${name.cyan.underline}]`,
+      `[COMMANDS /${group && group + ' ' || ''}${name.cyan.underline}]`,
       constructor.green+'.'+method.magenta.underline+'::()'
     )
   } else {

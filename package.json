@@ -1,0 +1,16 @@
+{
+  "license": "ISC",
+  "scripts": {
+    "build": "yarn build:server && yarn build:client",
+    "build:server": "yarn build:core && yarn build:tdm",
+    "build:client": "yarn build:ui && yarn build:cef && yarn build:tdm-client",
+    "build:core": "yarn --cwd ./league-core build:external",
+    "build:tdm": "yarn --cwd ./league-tdm build:external",
+    "build:ui": "yarn --cwd ./league-tdm-ui build:external",
+    "build:cef": "yarn --cwd ./league-tdm-cef build:external",
+    "source:server": "yarn source:core && yarn source:tdm",
+    "source:core": "yarn --cwd ./league-core source:external",
+    "source:tdm": "yarn --cwd ./league-tdm source:external",
+    "build:tdm-client": "cp -R ./league-tdm-client/index.js ../client_packages/index.js"
+  }
+}

@@ -17,10 +17,16 @@ const main = () => {
   const teamService = new TeamService(playerService)
   const roundService = new RoundService(playerService, teamService)
   const voteService = new VoteService()
+  const weaponService = new WeaponService(config.weaponConfig, playerService)
 
-  new TdmService(roundService, permissionService, playerService, voteService)
   new BroadcastService(playerService)
-  new WeaponService(config.weaponConfig)
+  new TdmService(
+    roundService,
+    permissionService,
+    playerService,
+    voteService,
+    weaponService,
+  )
 
   Arena.load()
 

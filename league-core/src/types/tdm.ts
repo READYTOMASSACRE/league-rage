@@ -5,12 +5,18 @@ export enum Team {
   defenders = 'defenders',
   spectators = 'spectators'
 }
+
 export enum State {
   idle = 'idle',
   alive = 'alive',
   dead = 'dead',
   spectate = 'spectate',
   select = 'select',
+}
+
+export enum WeaponState {
+  idle = 'idle',
+  has = 'has',
 }
 
 export type Arena = {
