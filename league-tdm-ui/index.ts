@@ -4,10 +4,11 @@ import UIService from "./src/UIService"
 import WeaponService from "./src/WeaponService"
 
 const main = () => {
-  new UIService("package://league-tdm-cef/index.html")
+  const uiService = new UIService("package://league-tdm-cef/index.html")
   const playerService = new PlayerService()
+
   new WeaponService(playerService)
-  new ChatService()
+  new ChatService(uiService)
 
   mp.gui.chat.push('league-tdm-ui package init')
 }

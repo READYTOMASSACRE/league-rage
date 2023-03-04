@@ -70,4 +70,10 @@ export default class BroadcastService {
   tdmVoteEnd(vote: string, result: string) {
     mp.players.broadcast(`[${vote}] Голосование завершено, результат: ${result}`)
   }
+
+  @log
+  @event(Events["tdm.chat.push"])
+  tdmChatPush(player: PlayerMp, msg: string) {
+    mp.players.call(Events["tdm.chat.push"], [msg])
+  }
 }

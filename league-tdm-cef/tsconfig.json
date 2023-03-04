@@ -14,6 +14,9 @@
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
   },
+  "references": [
+    {"path": "../league-core"}
+  ],
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

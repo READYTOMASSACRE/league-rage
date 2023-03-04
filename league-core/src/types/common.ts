@@ -59,4 +59,8 @@ export const enum Events {
   'tdm.round.remove' = 'tdm.round.remove',
   /** Fires when round has been paused */
   'tdm.round.pause' = 'tdm.round.pause',
+  /** Fires when player toggle chat */
+  'tdm.chat.toggle' = 'tdm.chat.toggle',
+  /** Fires when player push to chat */
+  'tdm.chat.push' = 'tdm.chat.push',
 }
