@@ -10,6 +10,7 @@ export default class UIService {
   constructor(readonly url: string) {
     mp.gui.chat.activate(false)
     mp.gui.chat.show(false)
+
     mp.console.clear()
     mp.console.reset()
 
@@ -28,6 +29,7 @@ export default class UIService {
     }
 
     this.cef = mp.browsers.new(this.url)
+    this.cef.markAsChat()
 
     return this.url
   }
@@ -36,6 +38,11 @@ export default class UIService {
   @event(Events["tdm.chat.push"])
   chatPush(msg: string, from?: Enviroment) {
     if (from === Enviroment.cef) {
+      const [slash, ...input] = msg
+      mp.console.logInfo(slash + ' ' + input.join(''))
+      if (slash === '/') {
+        mp.events.call("playerCommand", input.join(''))
+      }
       mp.events.callRemote(Events["tdm.chat.push"], msg)
     } else if (from === Enviroment.server) {
       this.cef.call(Events["tdm.chat.push"], msg)
