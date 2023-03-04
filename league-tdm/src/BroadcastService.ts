@@ -1,5 +1,5 @@
 import { event, eventable, log, types } from "../../league-core";
-import { Events } from "../../league-core/src/types";
+import { Enviroment, Events } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 
 @eventable
@@ -74,6 +74,6 @@ export default class BroadcastService {
   @log
   @event(Events["tdm.chat.push"])
   tdmChatPush(player: PlayerMp, msg: string) {
-    mp.players.call(Events["tdm.chat.push"], [msg])
+    mp.players.call(Events["tdm.chat.push"], [msg, Enviroment.server])
   }
 }

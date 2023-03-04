@@ -26,7 +26,8 @@ export const enum Decorator {
 
 export const enum Enviroment {
   client = 'client',
-  server = 'server'
+  server = 'server',
+  cef = 'cef'
 }
 
 export type Point2d = [number,number]
