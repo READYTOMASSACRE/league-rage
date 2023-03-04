@@ -4,7 +4,7 @@ import { tdm } from "../../league-core/src/types";
 @eventable
 export default class PlayerService {
   @log
-  @event(RageEnums.EventKey.PLAYER_READY)
+  @event("playerReady")
   playerReady(player: PlayerMp) {
     this.setState(player, tdm.State.idle)
   }
@@ -39,8 +39,8 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  spawn(p: number | PlayerMp, vector: Vector3Mp) {
-    (p as PlayerMp).spawn(vector)
+  spawn(p: number | PlayerMp, vector: IVector3) {
+    (p as PlayerMp).spawn(new mp.Vector3(vector))
   }
 
   @log

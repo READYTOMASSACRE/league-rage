@@ -7,7 +7,7 @@ export default class TeamService {
   constructor(readonly playerService: PlayerService) {}
   
   @log
-  @event(RageEnums.EventKey.PLAYER_READY)
+  @event("playerReady")
   playerReady(player: PlayerMp) {
     this.playerService.setTeam(player, types.tdm.Team.attackers)
   }

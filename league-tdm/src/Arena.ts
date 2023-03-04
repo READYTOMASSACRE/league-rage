@@ -19,7 +19,7 @@ export default class Arena {
   }
 
   @log
-  getRandVector(team: types.tdm.Team): Vector3Mp {
+  getRandVector(team: types.tdm.Team): Vector3 {
     const randIndex = helpers.rand(this.arena[team].length)
     const vector = this.arena[team][randIndex]
 

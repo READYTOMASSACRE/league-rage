@@ -15,7 +15,7 @@ export default class VoteService {
   }
 
   @log
-  @event(RageEnums.EventKey.PLAYER_QUIT)
+  @event("playerQuit")
   playerQuit(player: PlayerMp) {
     for (const[, info] of Object.entries(this.info)) {
       if (info.players.includes(player.id)) {

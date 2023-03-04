@@ -12,7 +12,7 @@ export default class RoundService {
     readonly teamService: TeamService,
   ) {}
 
-  @event(RageEnums.EventKey.PLAYER_DEATH)
+  @event("playerDeath")
   playerDeath(player: PlayerMp) {
     if (!this.running) {
       return
@@ -27,7 +27,7 @@ export default class RoundService {
     }
   }
 
-  @event(RageEnums.EventKey.PLAYER_QUIT)
+  @event("playerQuit")
   playerQuit(player: PlayerMp) {
     if (!this.running) {
       return

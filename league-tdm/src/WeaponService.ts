@@ -13,7 +13,7 @@ export default class WeaponService {
   @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare() {
-    mp.players.apply((p) => this.playerService.setWeaponState(p, tdm.WeaponState.idle))
+    mp.players.forEachFast((p) => this.playerService.setWeaponState(p, tdm.WeaponState.idle))
   }
 
   @log

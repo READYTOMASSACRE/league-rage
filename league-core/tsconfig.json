@@ -5,11 +5,11 @@
       "experimentalDecorators": true,
       "outDir": "../../packages/league-core",
       "preserveConstEnums": true,
-      "emitDecoratorMetadata": true,
       "allowJs": true,
       "alwaysStrict": true,
       "composite": true,
-      "skipLibCheck": true
+      "skipLibCheck": true,
+      "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
   },
   "include": ["client.ts", "index.ts", "src/**/*"],
   "exclude": ["node_modules"]

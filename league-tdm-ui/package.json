@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@types/ragemp-c": "github:CocaColaBear/types-ragemp-c",
+    "@ragempcommunity/types-client": "^2.1.3",
     "esbuild": "^0.17.10"
   },
   "scripts": {

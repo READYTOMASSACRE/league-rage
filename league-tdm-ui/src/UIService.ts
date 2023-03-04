@@ -16,6 +16,8 @@ export default class UIService {
     }
 
     this.cef = mp.browsers.new(this.url)
+    mp.gui.chat.activate(true)
+    mp.gui.chat.show(true)
 
     return this.url
   }

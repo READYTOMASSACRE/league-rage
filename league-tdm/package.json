@@ -2,9 +2,9 @@
   "name": "league-tdm",
   "license": "ISC",
   "devDependencies": {
+    "@ragempcommunity/types-server": "^2.1.1",
     "@types/colors": "^1.2.1",
-    "@types/node": "^18.14.0",
-    "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#master"
+    "@types/node": "^18.14.0"
   },
   "dependencies": {
     "colors": "^1.4.0",
@@ -17,6 +17,7 @@
     "prebuild:external": "rm -rf ../../packages/league-tdm",
     "build:external": "tsc",
     "postbuild:external": "cp -R node_modules ../../packages/league-tdm",
-    "source:external": "tsc"
+    "source:external": "tsc",
+    "watch:external": "tsc --watch"
   }
 }

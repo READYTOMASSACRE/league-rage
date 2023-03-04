@@ -5,8 +5,8 @@
         "experimentalDecorators": true,
         "outDir": "../../packages/league-tdm",
         "preserveConstEnums": true,
-        "emitDecoratorMetadata": true,
-        "allowJs": true
+        "allowJs": true,
+        "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
         // "alwaysStrict": true, // todo fix errors
         // "strictNullChecks": true
     },
