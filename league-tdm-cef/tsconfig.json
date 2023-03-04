@@ -11,7 +11,8 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

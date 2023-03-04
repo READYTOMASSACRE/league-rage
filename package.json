@@ -1,6 +1,11 @@
 {
   "license": "ISC",
   "scripts": {
+    "install": "yarn install:core && yarn install:tdm && yarn install:cef && yarn install:ui",
+    "install:core": "yarn --cwd ./league-core",
+    "install:tdm": "yarn --cwd ./league-tdm",
+    "install:cef": "yarn --cwd ./league-tdm-cef",
+    "install:ui": "yarn --cwd ./league-tdm-ui",
     "build": "yarn build:server && yarn build:client",
     "build:server": "yarn build:core && yarn build:tdm",
     "build:client": "yarn build:ui && yarn build:cef && yarn build:tdm-client",
