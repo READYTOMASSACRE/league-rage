@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { Chat } from './components/chat'
+import Chat from './components/chat'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
 
