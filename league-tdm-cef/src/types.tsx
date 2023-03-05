@@ -7,6 +7,7 @@ export interface IPlayers {
   ping: number,
   role: string;
   team: string,
+  lvl: number;
 }
 
 export interface ITeams {

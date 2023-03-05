@@ -4,24 +4,29 @@
   gap: 3px
 
 .playerItem div
-  background-color: transparentize(#343434, 0.5)
+  background-color: transparentize(grey, 0.7)
 
 .position
-  width: 22px
+  min-width: 22px
   display: flex
   align-items: center
   justify-content: center
+  padding: 2px 2px
 
 .name
-  flex-grow: 1
   align-items: center
-  padding-left: 5px
+  padding: 5px
+  flex-grow: 1
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
 
 .name.current
   color: #00ff00
 
-.kills, .assists, .death, .ping
+.statistics
   display: flex
   align-items: center
   justify-content: center
-  width: 33px
+  min-width: 33px
+  padding: 2px 2px

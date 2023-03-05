@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import cl from 'classnames'
 import s from './ListOfPlayers.module.sass'
 
@@ -7,9 +7,15 @@ interface Props {
 }
 
 const ListOfPlayers: FC<Props> = ({ children }) => {
-  // add scrollbar
+  
+  const listOfPlayerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+console.log(listOfPlayerRef.current)
+  }, [listOfPlayerRef])
+
   return (
-    <div className={cl(s.listOfPlayers)}>
+    <div ref={listOfPlayerRef} className={cl(s.listOfPlayers)}>
       {children}
     </div>
   )

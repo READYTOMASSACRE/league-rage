@@ -4,10 +4,10 @@
   gap: 3px
 
 .teamBar > div
-  background-color: transparentize(#343434, 0.5)
+  background-color:#191B1E
 
 .position
-  width: 22px
+  min-width: 22px
   display: flex
   align-items: center
   justify-content: center
@@ -16,9 +16,12 @@
   flex-grow: 1
   align-items: center
   padding-left: 5px
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
 
-.kills, .assists, .death, .ping
-  width: 33px
+.statistics
+  min-width: 33px
   display: flex
   align-items: center
   justify-content: center

@@ -9,6 +9,7 @@ import HeaderScoreboard from './HeaderScoreboard/HeaderScoreboard'
 import TeamItem from './Teamitem/TeamItem'
 import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
 import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
+import Footer from './Footer/Footer'
 
 interface Props {
   players: IPlayers[];
@@ -42,6 +43,7 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
 
   const attackPlayers = useFilterPlayersBySide(sortedPlayers, 'attack')
   const defensePlayers = useFilterPlayersBySide(sortedPlayers, 'defense')
+  const spectatorPlayers = useFilterPlayersBySide(sortedPlayers, 'spectator')
   const attackTeam = useFilterTeamBySide(teams, 'attack')
   const defenseTeam = useFilterTeamBySide(teams, 'defense')
 
@@ -53,7 +55,7 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
 
   return (
     <div className={cl(s.scoreboard, s.active)}>
-      <HeaderScoreboard teams={teams} />
+      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />
         <ListOfPlayers>
@@ -78,10 +80,7 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
           )}
         </ListOfPlayers>
       </TeamItem>
-      {/* make boat component */}
-      <div className={cl(s.bottom)}>
-        bottom
-      </div>
+      <Footer spectators={spectatorPlayers}/>
     </div>
   )
 }
