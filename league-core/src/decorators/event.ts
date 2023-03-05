@@ -10,10 +10,10 @@ import { Decorator } from "../types"
  * event("playerJoin")
  * event(["playerDeath", "playerQuit"])
  */
-export const event = <T extends Function>(eventName: string | string[]): MethodDecorator => {
+export const event = (eventName: string | string[]): MethodDecorator => {
   const events = Array.isArray(eventName) ? eventName : [eventName]
 
-  return function(target: T, method: string, descriptor: TypedPropertyDescriptor<any>) {
+  return function(target: Object, method: string, descriptor: TypedPropertyDescriptor<any>) {
     if (typeof descriptor.value !== 'function') {
       throw new Error(`Event(s) ${events.join(', ')} must be callable`)
     }

@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@ragempcommunity/types-server@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@ragempcommunity/types-server/-/types-server-2.1.1.tgz#9f5b667d9394f78a43ae5e7d304dd3ec5d49a028"
+  integrity sha512-prX4R7jECp9D52sIqmezx9Nig3p5QY8NMeJOjEDUUUN4bhEaelb6ARNUL7TGgKN/+qs4TGKG8fBPdk0iY1fhhQ==
+
 "@types/colors@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@types/colors/-/colors-1.2.1.tgz#57703f1a9f7f5fc40afb81eef13e96acdd1016a6"
@@ -13,10 +18,6 @@
   version "18.14.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.0.tgz#94c47b9217bbac49d4a67a967fdcdeed89ebb7d0"
   integrity sha512-5EWrvLmglK+imbCJY0+INViFWUHg1AHel1sq4ZVSfdcNqGy9Edv3UB9IIzzg+xPaUcAgZYcfVs2fBcwDeZzU0A==
-
-"@types/ragemp-s@github:CocaColaBear/types-ragemp-s#master":
-  version "0.2.25"
-  resolved "https://codeload.github.com/CocaColaBear/types-ragemp-s/tar.gz/20bd9fe6b033b48bd36e3b28e8993dd5ebc3f4f6"
 
 colors@*, colors@^1.4.0:
   version "1.4.0"

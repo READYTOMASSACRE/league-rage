@@ -1,8 +1,11 @@
 {
+  "name": "league-tdm",
+  "version": "0.1.1",
+  "license": "ISC",
   "devDependencies": {
+    "@ragempcommunity/types-server": "^2.1.1",
     "@types/colors": "^1.2.1",
-    "@types/node": "^18.14.0",
-    "@types/ragemp-s": "github:CocaColaBear/types-ragemp-s#master"
+    "@types/node": "^18.14.0"
   },
   "dependencies": {
     "colors": "^1.4.0",
@@ -12,7 +15,10 @@
   "scripts": {
     "watch": "tsc -p tsconfig.local.json --watch",
     "build": "tsc -p tsconfig.local.json",
-    "build:external": "rm -rf ../../packages/league-tdm && tsc",
-    "postbuild:external": "cp -R node_modules ../../packages/league-tdm"
+    "prebuild:external": "rm -rf ../../packages/league-tdm",
+    "build:external": "tsc",
+    "postbuild:external": "cp -R node_modules ../../packages/league-tdm",
+    "source:external": "tsc",
+    "watch:external": "tsc --watch"
   }
 }

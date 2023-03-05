@@ -1,5 +1,4 @@
 import 'reflect-metadata'
-import {arenaPath} from './src/helpers'
 import Arena from './src/Arena'
 import BroadcastService from './src/BroadcastService'
 import PermissionService from "./src/PermissionService"
@@ -8,6 +7,9 @@ import RoundService from "./src/RoundService"
 import TdmService from "./src/TdmService"
 import TeamService from './src/TeamService'
 import VoteService from './src/VoteService'
+import WeaponService from './src/WeaponService'
+import { config } from '../league-core'
+import { Events } from '../league-core/src/types'
 
 const main = () => {
   const playerService = new PlayerService()
@@ -15,12 +17,20 @@ const main = () => {
   const teamService = new TeamService(playerService)
   const roundService = new RoundService(playerService, teamService)
   const voteService = new VoteService()
-  const tdmService = new TdmService(roundService, permissionService, playerService, voteService)
-  const broadcastService = new BroadcastService(playerService)
+  const weaponService = new WeaponService(config.weaponConfig, playerService)
+
+  new BroadcastService(playerService)
+  new TdmService(
+    roundService,
+    permissionService,
+    playerService,
+    voteService,
+    weaponService,
+  )
 
   Arena.load()
 
-  mp.events.call('tdm.start')
+  mp.events.call(Events['tdm.start'])
 }
 
 main()

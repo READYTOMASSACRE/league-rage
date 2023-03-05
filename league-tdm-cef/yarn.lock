@@ -715,6 +715,11 @@
     chrome-trace-event "^1.0.2"
     nullthrows "^1.1.1"
 
+"@ragempcommunity/types-cef@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@ragempcommunity/types-cef/-/types-cef-2.1.1.tgz#60197c129773dc865fac68e1995ddcd797262b80"
+  integrity sha512-iW3+aXDDXqBjrAsjNvZR96mmPN7vbaPzkoItm9kg8CTFMuDwKVcAeovoXVe4bX8GjZDXUadxC1Ls0YSznmHYog==
+
 "@swc/helpers@^0.4.12":
   version "0.4.14"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.4.14.tgz#1352ac6d95e3617ccb7c1498ff019654f1e12a74"

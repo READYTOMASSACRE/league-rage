@@ -18,4 +18,4 @@ export const decorate = (arg: any): string => {
   return arg
 }
 
-export const env = typeof mp?.game !== 'undefined' ? Enviroment.client : Enviroment.server
+export const env = typeof (mp as any)?.game !== 'undefined' ? Enviroment.client : Enviroment.server

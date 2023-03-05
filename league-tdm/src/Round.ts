@@ -1,5 +1,5 @@
-import { log, helpers } from "../../league-core"
-import { State, Team } from "./types"
+import { log, helpers, types } from "../../league-core"
+import { Events } from "../../league-core/src/types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -27,7 +27,7 @@ export default class Round {
     this.roundTime = helpers.toMs(this.config.roundSeconds)
     this.prepareTime = helpers.toMs(this.config.prepareSeconds)
 
-    mp.events.call('tdm.round.prepare', this.arena.id)
+    mp.events.call(Events["tdm.round.prepare"], this.arena.id)
     this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
   }
 
@@ -43,7 +43,7 @@ export default class Round {
     this._running = true
     this.watch()
 
-    mp.events.call('tdm.round.start', this.arena.id, this.players)
+    mp.events.call(Events["tdm.round.start"], this.arena.id, this.players)
   }
 
   @log
@@ -59,7 +59,7 @@ export default class Round {
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
 
-    mp.events.call('tdm.round.end', this.arena.id, result)
+    mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
   @log
@@ -67,12 +67,12 @@ export default class Round {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
     this.playerService.spawn(id, vector)
-    this.playerService.setState(id, State.alive)
+    this.playerService.setState(id, types.tdm.State.alive)
     this.playerService.setHealth(id, 99)
 
     this.players.push(id)
 
-    mp.events.call('tdm.round.addPlayer', id, manual)
+    mp.events.call(Events["tdm.round.add"], id, manual)
   }
 
   @log
@@ -82,10 +82,10 @@ export default class Round {
     }
 
     this._players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, State.idle)
+    this.playerService.setState(id, types.tdm.State.idle)
     this.playerService.spawnLobby(id)
 
-    mp.events.call('tdm.round.removePlayer', id, manual)
+    mp.events.call(Events["tdm.round.remove"], id, manual)
   }
 
   @log
@@ -99,7 +99,7 @@ export default class Round {
     this.roundTime = this.timeleft
     this._paused = true
 
-    mp.events.call('tdm.round.pause', true)
+    mp.events.call(Events["tdm.round.pause"], true)
   }
 
   @log
@@ -112,12 +112,12 @@ export default class Round {
     this.date = Date.now()
     this._paused = false
 
-    mp.events.call('tdm.round.pause', false)
+    mp.events.call(Events["tdm.round.pause"], false)
 
   }
 
   @log
-  private getResult(): Team | "draw" {
+  private getResult(): types.tdm.Team | "draw" {
     const result = this.info
 
     if (result.attackers === result.defenders) {
@@ -126,13 +126,13 @@ export default class Round {
       }
 
       return result.attackersHealth > result.defendersHealth
-        ? Team.attackers
-        : Team.defenders
+        ? types.tdm.Team.attackers
+        : types.tdm.Team.defenders
     }
 
     return result.attackers > result.defenders
-      ? Team.attackers
-      : Team.defenders
+      ? types.tdm.Team.attackers
+      : types.tdm.Team.defenders
   }
 
   @log
@@ -154,10 +154,10 @@ export default class Round {
       const teamId = this.playerService.getTeam(id)
       const health = this.playerService.getHealth(id)
 
-      if (teamId === Team.attackers) {
+      if (teamId === types.tdm.Team.attackers) {
         acc.attackers++
         acc.attackersHealth += health
-      } else if (teamId === Team.defenders) {
+      } else if (teamId === types.tdm.Team.defenders) {
         acc.defenders++
         acc.defendersHealth += health
       }

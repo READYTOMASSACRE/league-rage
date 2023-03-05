@@ -1,5 +1,11 @@
 import { log, eventable, event, helpers } from "../../league-core";
-import { VoteConfig } from "./types";
+import { Events } from "../../league-core/src/types";
+
+interface VoteConfig {
+  timer: NodeJS.Timeout
+  players: number[]
+  result: Record<string, number>
+}
 
 @eventable
 export default class VoteService {
@@ -9,7 +15,7 @@ export default class VoteService {
   }
 
   @log
-  @event(RageEnums.EventKey.PLAYER_QUIT)
+  @event("playerQuit")
   playerQuit(player: PlayerMp) {
     for (const[, info] of Object.entries(this.info)) {
       if (info.players.includes(player.id)) {
@@ -56,7 +62,7 @@ export default class VoteService {
 
     info.result[key]++
 
-    mp.events.call('tdm.vote', vote, player.id, key)
+    mp.events.call(Events["tdm.vote"], vote, player.id, key)
   }
 
   @log
@@ -75,7 +81,7 @@ export default class VoteService {
       }, this.getTimeleft(vote))
     }
 
-    mp.events.call('tdm.vote.start', vote, player.id, key)
+    mp.events.call(Events["tdm.vote.start"], vote, player.id, key)
   }
 
   @log
@@ -83,7 +89,7 @@ export default class VoteService {
     clearTimeout(this.info[vote]?.timer)
     delete this.info[vote]
 
-    mp.events.call('tdm.vote.end', vote, result)
+    mp.events.call(Events["tdm.vote.end"], vote, result)
   }
 
   @log

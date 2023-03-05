@@ -1,7 +1,9 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+import { render } from 'react-dom'
+import { Chat } from './components/chat'
 import Scoreboard from './components/scoreboard/Scoreboard'
-import './index.sass'
+import './index.module.sass'
 
 // status (dead/alive) more info for score
 const teamInfo = [
@@ -408,6 +410,7 @@ const App = () => {
   return (
     <>
       <Scoreboard currentPlayerId={currentPlayerInfo} teams={teamInfo} players={playersInfo}/>
+      <Chat />
     </>
   )
 }

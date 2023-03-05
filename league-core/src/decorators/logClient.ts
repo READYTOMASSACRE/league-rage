@@ -6,7 +6,7 @@ export const logClient = function (target: Object, key: string, descriptor: Type
   descriptor.value = function (...args: any[]) {
     const now = Date.now()
 
-    mp.gui.chat.push(
+    mp.console.logInfo(
       format(now, 'HH:mm:ss') + ' [CALL] ' +
       target.constructor.name + '.' + key +
       `::(${args.map(decorate).join(', ')})`
@@ -18,7 +18,7 @@ export const logClient = function (target: Object, key: string, descriptor: Type
       const later = Date.now()
 
       response.then(value => {
-        mp.gui.chat.push(
+        mp.console.logInfo(
           format(later, 'HH:mm:ss') + ' [ASYNC DONE] ' +
           `${target.constructor.name}.${key}` +
           `->(${decorate(value)})` + 
@@ -29,7 +29,7 @@ export const logClient = function (target: Object, key: string, descriptor: Type
       })
     } else {
       const later = Date.now()
-      mp.gui.chat.push(
+      mp.console.logInfo(
         format(later, 'HH:mm:ss') + ' [DONE] ' +
         `${target.constructor.name}.${key}` +
         `-> (${decorate(response)})` +

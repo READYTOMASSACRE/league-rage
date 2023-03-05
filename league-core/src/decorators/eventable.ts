@@ -32,7 +32,7 @@ export const eventable = <T extends ctor>(target: T): T => {
 
 const printEvent = ({constructor, eventName, method}) => {
   if (env === Enviroment.client) {
-    mp.gui.chat.push(`[EVENTS::${eventName}] ${constructor}.${method}::()`)
+    (mp as any).console.logInfo(`[EVENTS::${eventName}] ${constructor}.${method}::()`)
   } else {
     console.log(
       `[EVENTS::${eventName.cyan.underline}]`,

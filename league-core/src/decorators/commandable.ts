@@ -136,11 +136,11 @@ const printCommand = ({constructor, method, group, name}: {
 }) => {
   if (env === Enviroment.server) {
     console.log(
-      `[COMMANDS /${group && group + ' '}${name.cyan.underline}]`,
+      `[COMMANDS /${group && group + ' ' || ''}${name.cyan.underline}]`,
       constructor.green+'.'+method.magenta.underline+'::()'
     )
   } else {
-    mp.gui.chat.push(`[COMMANDS /${group && group || ''}${name}] ${constructor}.${method}::()`)
+    (mp as any).console.logInfo(`[COMMANDS /${group && group || ''}${name}] ${constructor}.${method}::()`)
   }
 }
 
