@@ -16,7 +16,7 @@ export default class UIService {
 
     this.chatToggle = this.chatToggle.bind(this)
 
-    mp.keys.unbind(0x54, true, this.chatToggle)
+    mp.keys.unbind(0x54, true)
     mp.keys.bind(0x54, true, this.chatToggle)
   }
 
