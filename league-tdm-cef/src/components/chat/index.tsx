@@ -37,7 +37,7 @@ const Chat = () => {
 
     return (
         <div>
-            <div className={styles.history}>
+            <div className={styles.history} tabIndex={-1}>
                 {history.map((msg, i) => <p className={styles.item} key={i}>{msg}</p>)}
                 <div ref={ref} />
             </div>

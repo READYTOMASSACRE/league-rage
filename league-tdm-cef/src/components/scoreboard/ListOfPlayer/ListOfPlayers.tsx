@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from 'react'
 import cl from 'classnames'
-import s from './ListOfPlayers.module.sass'
+import * as s from './ListOfPlayers.module.sass'
 
 interface Props {
   children?: | JSX.Element | JSX.Element[] | string | string[] | React.ReactNode;

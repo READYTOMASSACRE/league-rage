@@ -12,7 +12,8 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
+    "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"],
+    "noImplicitAny": false //todo fix
   },
   "references": [
     {"path": "../league-core"}

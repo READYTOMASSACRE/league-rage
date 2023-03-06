@@ -1,6 +1,6 @@
 import React, {FC} from 'react'
 import { IPlayers } from '../../../types'
-import s from './Footer.module.sass'
+import * as s from './Footer.module.sass'
 
 interface Props {
   spectators: IPlayers[];

@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useMemo, useState } from 'react'
-import s from './Scoreboard.module.sass'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import * as s from './Scoreboard.module.sass'
 import cl from 'classnames'
 import ListOfPlayers from './ListOfPlayer/ListOfPlayers'
 import PlayerItem from './PlayerItem/PlayerItem'
@@ -10,6 +10,7 @@ import TeamItem from './Teamitem/TeamItem'
 import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
 import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
 import Footer from './Footer/Footer'
+import { Events } from '../../../../league-core/src/types'
 
 interface Props {
   players: IPlayers[];
@@ -27,7 +28,15 @@ const findCurrentPlayer = (playerId: number, players: IPlayers[]) => {
 
 const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {          
 
+  const [active, setActive] = useState(false)
   const [[sortScoreboard, desSortScorboard], setSortScoreboard] = useState<[string, boolean]>(['kills', true])
+
+  const scoreboardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    mp.events.add(Events['tdm.scoreboard.toggle'], (a: boolean) => setActive(a))
+    
+  }, [])
 
   const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
 
@@ -54,7 +63,7 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
   }
 
   return (
-    <div className={cl(s.scoreboard, s.active)}>
+    <div ref={scoreboardRef} className={cl(s.scoreboard, active && s.active)}>
       <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />
