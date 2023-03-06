@@ -57,9 +57,13 @@ const Chat = () => {
 
                         if (msg.length) {
                             mp.trigger(Events['tdm.chat.push'], input, Enviroment.cef)
-                            mp.trigger(Events['tdm.chat.toggle'], false, FORCE_CHAT_TOGGLE)
                         }
 
+                        mp.trigger(Events['tdm.chat.toggle'], false, FORCE_CHAT_TOGGLE)
+                        setInput('')
+                    }
+                    if (e.key === 'Escape') {
+                        mp.trigger(Events['tdm.chat.toggle'], false, FORCE_CHAT_TOGGLE)
                         setInput('')
                     }
                 }}

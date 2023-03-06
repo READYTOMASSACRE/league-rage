@@ -38,11 +38,6 @@ export default class UIService {
   @event(Events["tdm.chat.push"])
   chatPush(msg: string, from?: Enviroment) {
     if (from === Enviroment.cef) {
-      const [slash, ...input] = msg
-      mp.console.logInfo(slash + ' ' + input.join(''))
-      if (slash === '/') {
-        mp.events.call("playerCommand", input.join(''))
-      }
       mp.events.callRemote(Events["tdm.chat.push"], msg)
     } else if (from === Enviroment.server) {
       this.cef.call(Events["tdm.chat.push"], msg)
@@ -67,5 +62,15 @@ export default class UIService {
     }
 
     return this.chatVisible
+  }
+
+  @event('render')
+  disableControlActions() {
+    mp.game.controls.disableControlAction(24, 37, true)
+    mp.game.controls.disableControlAction(24, 157, true)
+
+    if (this.chatVisible) {
+      mp.game.controls.disableAllControlActions(2)
+    }
   }
 }

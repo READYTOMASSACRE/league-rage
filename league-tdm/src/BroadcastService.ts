@@ -9,27 +9,27 @@ export default class BroadcastService {
   @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(id: number) {
-    mp.players.broadcast(`Подготовка арены ${id}`)
+    this.broadcast(`Подготовка арены ${id}`)
   }
 
   @log
   @event(Events["tdm.round.start"])
   tdmRoundStart(id: number, players: number[]) {
-    mp.players.broadcast(`Запущена арена ${id}`)
+    this.broadcast(`Запущена арена ${id}`)
     this.playerService.call('tdm.round.start', players, [id])
   }
 
   @log
   @event(Events["tdm.round.end"])
   tdmRoundEnd(id: number, result: types.tdm.Team | "draw") {
-    mp.players.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
+    this.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
   }
 
   @log
   @event(Events["tdm.round.add"])
   tdmRoundAdd(id: number, manual?: boolean) {
     if (manual) {
-      mp.players.broadcast(`Игрок ${id} был добавлен в раунд`)
+      this.broadcast(`Игрок ${id} был добавлен в раунд`)
     }
   }
 
@@ -37,7 +37,7 @@ export default class BroadcastService {
   @event(Events["tdm.round.remove"])
   tdmRoundRemove(id: number, manual?: boolean) {
     if (manual) {
-      mp.players.broadcast(`Игрок ${id} был удален из раунда`)
+      this.broadcast(`Игрок ${id} был удален из раунда`)
     }
   }
 
@@ -46,7 +46,7 @@ export default class BroadcastService {
   tdmRoundPause(toggle: boolean) {
     const text = toggle ? 'Раунд остановлен' : 'Раунд возобновлен'
 
-    mp.players.broadcast(text)
+    this.broadcast(text)
   }
 
   @log
@@ -54,7 +54,7 @@ export default class BroadcastService {
   tdmVote(vote: string, id: number, key: string) {
     const player = this.playerService.getById(id)
 
-    mp.players.broadcast(`[${vote}] Игрок ${player?.name} проголосовал за ${key}, ${vote}`)
+    this.broadcast(`[${vote}] Игрок ${player?.name} проголосовал за ${key}, ${vote}`)
   }
 
   @log
@@ -62,18 +62,39 @@ export default class BroadcastService {
   tdmVoteStart(vote: string, id: number, key: string) {
     const player = this.playerService.getById(id)
 
-    mp.players.broadcast(`[${vote}] Запущено голосование игроком ${player?.name}, ${key}`)
+    this.broadcast(`[${vote}] Запущено голосование игроком ${player?.name}, ${key}`)
   }
 
   @log
   @event(Events["tdm.vote.end"])
   tdmVoteEnd(vote: string, result: string) {
-    mp.players.broadcast(`[${vote}] Голосование завершено, результат: ${result}`)
+    this.broadcast(`[${vote}] Голосование завершено, результат: ${result}`)
   }
 
   @log
   @event(Events["tdm.chat.push"])
-  tdmChatPush(player: PlayerMp, msg: string) {
-    mp.players.call(Events["tdm.chat.push"], [msg, Enviroment.server])
+  tdmChatPush(player: PlayerMp, message?: string) {
+    if (message?.[0] === '/') {
+      return
+    }
+
+    if (!mp.players.exists(player)) {
+      return
+    }
+
+    return this.broadcast(`${player.name} [${player.id}]: ${message}`)
+  }
+
+  @log
+  broadcast(message: string) {
+    mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+  }
+
+  @log
+  @event("playerReady")
+  overrideOutputChatBox(player: PlayerMp) {
+    player.outputChatBox = function (message: string) {
+      player.call(Events["tdm.chat.push"], [message, Enviroment.server])
+    }
   }
 }
