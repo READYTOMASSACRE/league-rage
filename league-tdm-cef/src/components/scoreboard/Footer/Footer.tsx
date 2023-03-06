@@ -9,7 +9,7 @@ interface Props {
 
 const Footer: FC<Props> = ( {spectators} ) => {
   return (
-    <div className={s.footer}>
+    <div className={s.footer} tabIndex={-1}>
       {spectators && spectators.map((spectator) => 
         <div key={spectator.id} className={s.spectator}>
           {spectator.name}

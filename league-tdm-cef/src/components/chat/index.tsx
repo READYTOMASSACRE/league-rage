@@ -42,6 +42,7 @@ const Chat = () => {
                 <div ref={ref} />
             </div>
             <input
+                tabIndex={-1}
                 name="input"
                 type="text"
                 value={input}

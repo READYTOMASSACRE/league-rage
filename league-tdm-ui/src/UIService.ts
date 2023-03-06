@@ -6,7 +6,7 @@ import { Enviroment, Events } from "../../league-core/src/types";
 export default class UIService {
   public cef: BrowserMp
   private chatVisible: boolean = false
-
+  private scoreboardVisible: boolean = false
 
   constructor(readonly url: string) {
     mp.gui.chat.activate(false)
@@ -67,6 +67,8 @@ export default class UIService {
       this.cef.call(Events["tdm.chat.toggle"], this.chatVisible)
     }
 
+    mp.gui.cursor.visible = this.chatVisible // todo fixme
+
     return this.chatVisible
   }
 
@@ -83,6 +85,9 @@ export default class UIService {
   @logClient
   @event(Events["tdm.scoreboard.toggle"])
   scoreboardToggle(visible: boolean) {
-   this.cef.call(Events['tdm.scoreboard.toggle'], visible)
+    this.scoreboardVisible = visible
+    mp.gui.cursor.visible = this.scoreboardVisible // todo fixme
+
+    this.cef.call(Events['tdm.scoreboard.toggle'], this.scoreboardVisible)
   }
 }

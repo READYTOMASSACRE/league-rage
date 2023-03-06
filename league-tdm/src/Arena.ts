@@ -1,8 +1,9 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { log, helpers, types } from '../../league-core'
+import { log, helpers, types, command, commandable } from '../../league-core'
 
+@commandable
 export default class Arena {
   readonly arena: types.tdm.Arena
   readonly id: number
@@ -48,6 +49,7 @@ export default class Arena {
   }
 
   @log
+  @command('la') // todo delete me or add check admin rights
   static load() {
     const path = arenaPath
     if (!existsSync(path)) writeFileSync(path, '[]')

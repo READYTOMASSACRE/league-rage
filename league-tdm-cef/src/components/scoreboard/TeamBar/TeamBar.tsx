@@ -21,7 +21,7 @@ const TeamBar: FC<Props> = ({ color, changeSort }) => {
       <div className={s.position}>
         №
       </div>
-      <div className={s.name}>
+      <div onClick={() => changeSort('name')} className={s.name}>
         Player name
       </div>
       <div onClick={() => changeSort('kills')} className={s.statistics}>

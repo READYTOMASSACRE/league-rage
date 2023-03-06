@@ -10,7 +10,7 @@ interface Props {
 const TeamItem: FC<Props> = ( {children, side} ) => {
 
   return (
-    <div className={cl(s.teamItem, side === 'left' ? s.left : s.right)}>
+    <div tabIndex={-1} className={cl(s.teamItem, side === 'left' ? s.left : s.right)}>
       {children}
     </div>
   )
