@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import cl from 'classnames'
-import s from './TeamItem.module.sass'
+import * as s from './TeamItem.module.sass'
 
 interface Props {
   children?: | JSX.Element | JSX.Element | React.ReactNode;

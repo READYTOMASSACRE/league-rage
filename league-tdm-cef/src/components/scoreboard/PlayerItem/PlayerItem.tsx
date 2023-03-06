@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from 'react'
 import cl from 'classnames'
-import s from './PlayerItem.module.sass'
+import * as s from './PlayerItem.module.sass'
 import { IPlayers } from '../../../types'
 
 interface Props {

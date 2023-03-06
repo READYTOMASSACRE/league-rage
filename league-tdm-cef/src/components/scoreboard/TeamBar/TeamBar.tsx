@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import cl from 'classnames'
-import s from './TeamBar.module.sass'
+import * as s from './TeamBar.module.sass'
 import { ITeams } from '../../../types'
 
 interface Props {

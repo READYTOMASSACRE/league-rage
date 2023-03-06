@@ -64,4 +64,6 @@ export const enum Events {
   'tdm.chat.toggle' = 'tdm.chat.toggle',
   /** Fires when player push to chat */
   'tdm.chat.push' = 'tdm.chat.push',
+  /** Fires when player toggle scoreboard */
+  'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle'
 }

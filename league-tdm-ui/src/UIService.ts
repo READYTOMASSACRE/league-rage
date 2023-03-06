@@ -7,6 +7,7 @@ export default class UIService {
   public cef: BrowserMp
   private chatVisible: boolean = false
 
+
   constructor(readonly url: string) {
     mp.gui.chat.activate(false)
     mp.gui.chat.show(false)
@@ -18,6 +19,11 @@ export default class UIService {
 
     mp.keys.unbind(0x54, true)
     mp.keys.bind(0x54, true, this.chatToggle)
+
+    mp.keys.unbind(0x09, true)
+    mp.keys.bind(0x09, true, () => this.scoreboardToggle(true))
+    mp.keys.unbind(0x09, false)
+    mp.keys.bind(0x09, false, () => this.scoreboardToggle(false))
   }
 
   @logClient
@@ -67,5 +73,11 @@ export default class UIService {
     }
 
     return this.chatVisible
+  }
+
+  @logClient
+  @event(Events["tdm.scoreboard.toggle"])
+  scoreboardToggle(visible: boolean) {
+   this.cef.call(Events['tdm.scoreboard.toggle'], visible)
   }
 }

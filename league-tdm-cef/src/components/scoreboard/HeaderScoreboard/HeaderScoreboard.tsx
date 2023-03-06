@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { ITeams } from '../../../types'
 import cl from 'classnames'
-import s from './HeaderScoreboard.module.sass'
+import * as s from './HeaderScoreboard.module.sass'
 
 interface Props {
   attackTeam: ITeams | undefined;

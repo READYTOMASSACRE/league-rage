@@ -4,7 +4,6 @@ import Chat from './components/chat'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
 
-// status (dead/alive) more info for score
 const teamInfo = [
   {
     id: 1,
@@ -396,6 +395,17 @@ const playersInfo = [
     ping: 10,
     role: teamInfo[1].role,
     team: 'CN',
+    lvl: 777
+  },
+  {
+    id: 15235235236,
+    name: 'Player name #123',
+    kills: 5,
+    death: 1,
+    assists: 7,
+    ping: 10,
+    role: teamInfo[0].role,
+    team: 'USA',
     lvl: 777
   }
 ]
