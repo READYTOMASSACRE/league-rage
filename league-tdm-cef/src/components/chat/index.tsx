@@ -36,7 +36,7 @@ const Chat = () => {
     }, [toggle])
 
     return (
-        <div>
+        <div className={styles.container}>
             <div className={styles.history} tabIndex={-1}>
                 {history.map((msg, i) => <p className={styles.item} key={i}>{msg}</p>)}
                 <div ref={ref} />
@@ -54,9 +54,9 @@ const Chat = () => {
                 ref={inputRef}
                 onKeyDown={e => {
                     if (e.key === 'Enter') {
-                        const msg = input.trim().slice(0, MAX_CHAR_SIZE)
+                        const message = input.trim().slice(0, MAX_CHAR_SIZE)
 
-                        if (msg.length) {
+                        if (message.length) {
                             mp.trigger(Events['tdm.chat.push'], input, Enviroment.cef)
                         }
 

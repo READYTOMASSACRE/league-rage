@@ -64,7 +64,7 @@ export default class PlayerService {
   @log
   @ensurePlayer
   spawnLobby(p: number | PlayerMp) {
-    (p as PlayerMp).spawn(new mp.Vector3(0, 0, 0))
+    (p as PlayerMp).spawn(new mp.Vector3(-1367.40576171875, 150.63015747070312, 55.960227966308594)) // todo get from configs
   }
 
   @log

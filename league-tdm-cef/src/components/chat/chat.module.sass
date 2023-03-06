@@ -1,17 +1,32 @@
-.history
-    max-height: 30vh
-    overflow-y: auto
-    padding: 5px
-    font-size: 12px
+.container
+    position: absolute
+    max-height: 40vh
+    max-width: 50vw
+    overflow: hidden
+    font-size: 1em
     color: white
+    padding: 5px
+.history
+    padding: 2px
+    height: 30vh
+    overflow-y: auto
+    overflow-wrap: break-word
+    display: flex
+    flex-direction: column
+    justify-content: end
 
 .item
-    font-size: 2em
     color: white
-    -webkit-text-stroke: 2px transparentize(gray, .5)
+    text-shadow: 0 0 1.5px black, 1px 1px rgba(0, 0, 0, .8)
 
 .input
     opacity: 0
+    font-size: 0.85em
+    border: 2px solid rgba(0, 0, 0, .3)
+    background: rgba(0, 0, 0, .6)
+    color: white
+    &:focus
+        outline: none
 
 .active
     opacity: 1
