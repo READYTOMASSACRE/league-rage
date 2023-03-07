@@ -8,7 +8,7 @@
     "watch": "tsc -p tsconfig.local.json --watch",
     "prebuild:external": "rm -rf ../../packages/league-lang",
     "build:external": "tsc",
-    "postbuild:external": "cp -R lang ../../packages/league-tdm/lang",
+    "postbuild:external": "cp -R lang ../../packages/league-lang/lang",
     "watch:external": "tsc --watch",
     "source:external": "tsc"
   },

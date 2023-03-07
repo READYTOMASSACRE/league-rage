@@ -36,6 +36,7 @@ export const eventable = <T extends ctor>(target: T): T => {
               if (
                 Enviroment.server &&
                 serverOnly.includes(eventName) &&
+                typeof player === 'object' &&
                 mp.players.exists(player)
               ) {
                 console.warn(`Player ${player.name}:${player.id} is trying call server event ${eventName}, avoid`)

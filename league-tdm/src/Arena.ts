@@ -57,7 +57,6 @@ export default class Arena {
     return this.arenas[index]
   }
 
-  @log
   @command('la') // todo delete me or add check admin rights
   static load(lang?: ILanguage) {
     const path = arenaPath

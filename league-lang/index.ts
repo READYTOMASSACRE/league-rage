@@ -18,10 +18,10 @@ class LanguageService {
 
   get(lang: string): Record<Lang, string> {
     lang = lang.replace(/[^a-zA-Z0-9]/, '').toLocaleLowerCase()
-    const path = resolve('./lang', `${lang}.json`)
+    const path = resolve(__dirname, './lang', `${lang}.json`)
 
     try {
-      return JSON.stringify(readFileSync(path).toString()) as any
+      return JSON.parse(readFileSync(path).toString()) as any
     } catch (err) {
       console.error(err)
     }

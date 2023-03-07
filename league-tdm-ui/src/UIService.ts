@@ -27,7 +27,7 @@ export default class UIService {
     mp.keys.bind(0x09, false, () => this.scoreboardToggle(false))
   }
 
-  @event("playerReady")
+  @event(Events["tdm.player.ready"])
   @command('reload')
   loadCef() {
     if (this.cef) {

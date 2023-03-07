@@ -7,7 +7,7 @@
     "install:cef": "yarn --cwd ./league-tdm-cef",
     "install:ui": "yarn --cwd ./league-tdm-ui",
     "build": "yarn build:server && yarn build:client",
-    "build:server": "yarn build:core && yarn build:tdm",
+    "build:server": "yarn build:core && yarn build:tdm && yarn build:lang",
     "build:client": "yarn build:ui && yarn build:cef && yarn build:tdm-client",
     "build:core": "yarn --cwd ./league-core build:external",
     "build:tdm": "yarn --cwd ./league-tdm build:external",
@@ -15,12 +15,14 @@
     "build:cef": "yarn --cwd ./league-tdm-cef build:external",
     "build:lang": "yarn --cwd ./league-lang build:external",
     "build:tdm-client": "cp -R ./league-tdm-client/index.js ../client_packages/index.js",
-    "source:server": "yarn source:core && yarn source:tdm",
+    "source:server": "yarn source:core && yarn source:tdm && yarn source:lang",
     "source:core": "yarn --cwd ./league-core source:external",
     "source:tdm": "yarn --cwd ./league-tdm source:external",
+    "source:lang": "yarn --cwd ./league-lang source:external",
     "watch:tdm": "yarn --cwd ./league-tdm watch:external",
     "watch:ui": "yarn --cwd ./league-tdm-ui watch:external",
-    "watch:cef": "yarn --cwd ./league-tdm-cef watch:external"
+    "watch:cef": "yarn --cwd ./league-tdm-cef watch:external",
+    "watch:lang": "yarn --cwd ./league-lang watch:external"
   },
   "dependencies": {}
 }
