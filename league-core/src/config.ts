@@ -19,6 +19,7 @@ class Config {
 
 const prepareConfig = (config: Partial<IConfig>): IConfig => {
   return {
+    lang: 'ru',
     weaponConfig: {
       ammo: 1,
       slotCount: 3,

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "experimentalDecorators": true,
+        "outDir": "../../packages/league-lang",
+        "preserveConstEnums": true,
+        "allowJs": true,
+        "alwaysStrict": true,
+        "composite": true,
+        "skipLibCheck": true,
+    },
+    "include": ["index.ts", "lang/**/*"],
+    "exclude": ["node_modules"]
+  }

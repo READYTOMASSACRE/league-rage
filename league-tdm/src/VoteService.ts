@@ -1,5 +1,6 @@
 import { log, eventable, event, helpers } from "../../league-core";
 import { Events } from "../../league-core/src/types";
+import { ILanguage, Lang } from "../../league-lang";
 
 interface VoteConfig {
   timer: NodeJS.Timeout
@@ -13,6 +14,8 @@ export default class VoteService {
   private seconds: Record<string, number> = {
     voteArena: 30,
   }
+
+  constructor(readonly lang: ILanguage) {}
 
   @log
   @event("playerQuit")
@@ -57,7 +60,7 @@ export default class VoteService {
     const info = this.info[vote]
 
     if (info.players.includes(player.id)) {
-      return player.outputChatBox('Вы уже проголосовали')
+      return player.outputChatBox(this.lang.get(Lang["error.vote.already_voted"]))
     }
 
     info.result[key]++

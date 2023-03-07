@@ -1,4 +1,5 @@
 import { event, eventable, log } from "../../league-core"
+import { ILanguage, Lang } from "../../league-lang"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
@@ -10,6 +11,7 @@ export default class RoundService {
   constructor(
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
+    readonly lang: ILanguage,
   ) {}
 
   @event("playerDeath")
@@ -42,7 +44,7 @@ export default class RoundService {
   start(id: string, player?: PlayerMp) {
     if (this.running) {
       if (player) {
-        player.outputChatBox('Раунд запущен')
+        player.outputChatBox(this.lang.get(Lang["tdm.round.is_running"]))
       }
       return
     }
@@ -54,14 +56,14 @@ export default class RoundService {
 
     if (!players.length) {
       if (player) {
-        player.outputChatBox('Недостаточно игроков для запуска')
+        player.outputChatBox(this.lang.get(Lang["tdm.round.start_empty"]))
       }
 
       return
     }
 
     this.round = new Round({
-      arena: new Arena(id, player),
+      arena: new Arena(id, this.lang, player),
       players,
       prepareSeconds: 5,
       roundSeconds: 150,
@@ -72,7 +74,7 @@ export default class RoundService {
   stop(player?: PlayerMp) {
     if (!this.running || !this.round) {
       if (player) {
-        player.outputChatBox('Раунд не запущен')
+        player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
       }
 
       return
@@ -84,7 +86,7 @@ export default class RoundService {
   @log
   add(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox('Раунд не запущен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
     }
 
     return this.round.addPlayer(player.id, true)
@@ -93,7 +95,7 @@ export default class RoundService {
   @log
   remove(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox('Раунд не запущен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
     }
 
     return this.round.removePlayer(player.id, true)
@@ -102,10 +104,10 @@ export default class RoundService {
   @log
   pause(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox('Раунд не запущен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
     }
     if (this.paused) {
-      return player.outputChatBox('Раунд уже остановлен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_stopped"]))
     }
 
     return this.round.pause()
@@ -114,10 +116,10 @@ export default class RoundService {
   @log
   unpause(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox('Раунд не запущен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
     }
     if (!this.paused) {
-      return player.outputChatBox('Раунд не остановлен')
+      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_already_paused"]))
     }
 
     return this.round.unpause()

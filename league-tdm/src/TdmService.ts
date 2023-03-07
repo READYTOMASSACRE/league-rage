@@ -6,6 +6,7 @@ import VoteService from "./VoteService";
 import Arena from "./Arena";
 import WeaponService from "./WeaponService";
 import { Procs } from "../../league-core/src/types";
+import { ILanguage, Lang } from "../../league-lang";
 
 @commandable
 @proceable
@@ -16,10 +17,11 @@ export default class TdmService {
     readonly playerService: PlayerService,
     readonly voteService: VoteService,
     readonly weaponService: WeaponService,
+    readonly lang: ILanguage,
   ) {}
 
   @log
-  @command(['start', 'arena', 'a'], {desc: 'Usage /{{cmdName}} <id> - start arena by id or code'})
+  @command(['start', 'arena', 'a'], {desc: Lang["cmd.start_arena"]})
   start(player: PlayerMp, fullText: string, description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.start')
 
@@ -31,7 +33,7 @@ export default class TdmService {
   }
 
   @log
-  @command(['stop', 's'], {desc: 'Usage /{{cmdName}} - stop arena'})
+  @command(['stop', 's'], {desc: Lang["cmd.stop_arena"]})
   stop(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.stop')
 
@@ -39,7 +41,7 @@ export default class TdmService {
   }
 
   @log
-  @command('add', {desc: 'Usage /{{cmdName}} <player> - add player to round'})
+  @command('add', {desc: Lang["cmd.add_player"]})
   add(player: PlayerMp, fullText: string,description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.add')
 
@@ -61,7 +63,7 @@ export default class TdmService {
   }
 
   @log
-  @command('remove', {desc: 'Usage /{{cmdName}} <player> - remove player from round'})
+  @command('remove', {desc: Lang["cmd.remove_player"]})
   remove(player: PlayerMp, fullText: string,description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.remove')
 
@@ -83,7 +85,7 @@ export default class TdmService {
   }
 
   @log
-  @command('pause', {desc: 'Usage /{{cmdName}} - pause round'})
+  @command('pause', {desc: Lang["cmd.pause"]})
   pause(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.pause')
 
@@ -91,7 +93,7 @@ export default class TdmService {
   }
 
   @log
-  @command('unpause', {desc: 'Usage /{{cmdName}} - unpause round'})
+  @command('unpause', {desc: Lang["cmd.unpause"]})
   unpause(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.pause')
 
@@ -99,7 +101,7 @@ export default class TdmService {
   }
 
   @log
-  @command('vote', {desc: 'Usage //{{cmdName}} <id|code> vote for arena'})
+  @command('vote', {desc: Lang["cmd.vote"]})
   vote(player: PlayerMp, fullText: string, description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.vote')
 
@@ -107,7 +109,7 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    const arena = Arena.get(id, player)
+    const arena = Arena.get(id, player, this.lang)
 
     return this.voteService.voteArena(player, arena.id, (result) => {
       return this.roundService.start(result)
@@ -115,7 +117,7 @@ export default class TdmService {
   }
 
   @log
-  @command(['w', 'weapon'], {desc: 'Usage //{{cmdName}} <id|list>'})
+  @command(['w', 'weapon'], {desc: Lang["cmd.weapon"]})
   weaponRequest(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!id) {
       return player.outputChatBox(description)
@@ -138,8 +140,13 @@ export default class TdmService {
     return this.weaponService.weaponRequest(player, availableSet[id])
   }
 
-  @proc(Procs["tdm.arena.getAll"])
-  getAllArenas() {
+  @log
+  @proc(Procs["tdm.arena.get"])
+  getArenas(player: PlayerMp, id?: number) {
+    if (typeof id !== 'undefined') {
+      return Arena.get(id, player, this.lang)
+    }
+
     return Arena.arenas
   }
 }

@@ -2,6 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
 import { log, helpers, types, command, commandable } from '../../league-core'
+import { ILanguage, Lang } from "../../league-lang"
 
 @commandable
 export default class Arena {
@@ -12,11 +13,14 @@ export default class Arena {
   private static indexById: Record<number, number> = {}
   private static indexByCode: Record<string, number> = {}
 
-  constructor(id: number | string, player?: PlayerMp) {
+  private readonly lang: ILanguage
+
+  constructor(id: number | string, lang: ILanguage, player?: PlayerMp) {
     const arena = Arena.get(id, player)
 
     this.arena = arena
     this.id = this.arena.id
+    this.lang = lang
   }
 
   @log
@@ -25,7 +29,7 @@ export default class Arena {
     const vector = this.arena[team][randIndex]
 
     if (!vector) {
-      throw new NotFoundError(`Not found spawn points in arena ${this.arena.id}`)
+      throw new NotFoundError(this.lang.get(Lang["error.arena.not_found_spawn"], { arena: this.arena.id }))
     }
 
     return new mp.Vector3(...vector)
@@ -35,14 +39,19 @@ export default class Arena {
     return this._arenas
   }
 
-  static get(id: number | string, player?: PlayerMp): types.tdm.Arena {
+  static get(id: number | string, player?: PlayerMp, lang?: ILanguage): types.tdm.Arena {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
       : Arena.indexByCode[id]
 
 
     if (!this.arenas[index]) {
-      throw new NotFoundError(`Arena ${id} not found`, player)
+      throw new NotFoundError(
+        lang ?
+          lang.get(Lang["error.arena.not_found"], { arena: id }) :
+          `Arena ${id} not found`,
+        player
+      )
     }
 
     return this.arenas[index]
@@ -50,14 +59,18 @@ export default class Arena {
 
   @log
   @command('la') // todo delete me or add check admin rights
-  static load() {
+  static load(lang?: ILanguage) {
     const path = arenaPath
     if (!existsSync(path)) writeFileSync(path, '[]')
 
     const arenas = JSON.parse(readFileSync(path).toString()) as types.tdm.Arena[]
 
     if (arenas.filter(this.isArenaConfig).length !== arenas.length) {
-      throw new Error('Invalid arenas format')
+      throw new Error(
+        lang ?
+          lang.get(Lang["error.arena.invalid_format"]) :
+          'Invalid arenas format'
+        )
     }
 
     this._arenas = arenas.map(arena => {

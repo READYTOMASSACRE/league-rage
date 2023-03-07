@@ -28,7 +28,7 @@ export default class HudService {
         return arena
     }
 
-    @event([Events["tdm.round.start"], Events["tdm.round.end"]])
+    @event([Events["tdm.round.start"], Events["tdm.round.end"]]) // todo add check in decorator to server_only events
     stopDrawRoundStart() {
         if (this.roundStart) {
             this.roundStart.destroy()

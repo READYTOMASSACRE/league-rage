@@ -1,7 +1,18 @@
 // todo update rage-decorators library
 
 import { env } from "../helpers"
-import { ctor, Decorator, Enviroment, Event } from "../types"
+import { ctor, Decorator, Enviroment, Event, Events } from "../types"
+
+const serverOnly: string[] = [
+  Events["tdm.start"],
+  Events["tdm.vote"],
+  Events["tdm.vote.start"],
+  Events["tdm.vote.end"],
+  Events["tdm.round.prepare"],
+  Events["tdm.round.add"],
+  Events["tdm.round.remove"],
+  Events["tdm.round.pause"],
+]
 
 export const eventable = <T extends ctor>(target: T): T => {
   return class extends target {
@@ -20,7 +31,19 @@ export const eventable = <T extends ctor>(target: T): T => {
 
           events.forEach(eventName => {
             printEvent({constructor: this.constructor.name, eventName, method})
-            mp.events.add(eventName, (...args: any[]) => callback.apply(this, args))
+            mp.events.add(eventName, (...args: any[]) => {
+              const [player] = args
+              if (
+                Enviroment.server &&
+                serverOnly.includes(eventName) &&
+                mp.players.exists(player)
+              ) {
+                console.warn(`Player ${player.name}:${player.id} is trying call server event ${eventName}, avoid`)
+                return
+              }
+
+              return callback.apply(this, args)
+            })
           })
         }
 

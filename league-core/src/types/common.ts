@@ -42,6 +42,7 @@ export type Point2d = [number,number]
 export type Point3d = [number,number,number]
 
 export interface IConfig {
+  lang: string
   weaponConfig: WeaponConfig
 }
 
@@ -73,10 +74,22 @@ export const enum Events {
   /** Fires when player push to chat */
   'tdm.chat.push' = 'tdm.chat.push',
   /** Fires when player toggle scoreboard */
-  'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle'
+  'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle',
+  /** Fires when player is loaded all services and ready to play */
+  'tdm.player.ready' = 'tdm.player.ready',
+  /** Fires when player has changed state */
+  'tdm.player.state' = 'tdm.player.state',
+  /** Fires when player has changed weapon state */
+  'tdm.player.weaponstate' = 'tdm.player.weaponstate',
+  /** Fires when player has changed team */
+  'tdm.player.team' = 'tdm.player.team',
+  /** Fires when clientside should team select */
+  'tdm.team.select' = 'tdm.team.select',
 }
 
 export const enum Procs {
-  /** Returns all arenas indexed by Id */
-  'tdm.arena.getAll' = 'tdm.arena.getAll',
+  /** Returns all arenas or byId indexed by Id */
+  'tdm.arena.get' = 'tdm.arena.get',
+  /** Returns server config */
+  'tdm.config.get' = 'tdm.config.get',
 }
