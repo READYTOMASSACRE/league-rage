@@ -1,6 +1,6 @@
 import { event, eventable, log, types } from "../../league-core";
 import { Enviroment, Events } from "../../league-core/src/types";
-import { ILanguage, Lang } from "../../league-lang";
+import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
 
 @eventable

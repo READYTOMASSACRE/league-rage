@@ -1,4 +1,4 @@
-import { ILanguage, Lang } from "../../../league-lang"
+import { ILanguage, Lang } from "../../../league-lang/language"
 import BroadCastError from "./BroadCastError"
 
 export default class PermissionError extends BroadCastError {

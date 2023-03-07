@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
 import { log, helpers, types, command, commandable } from '../../league-core'
-import { ILanguage, Lang } from "../../league-lang"
+import { ILanguage, Lang } from "../../league-lang/language"
 
 @commandable
 export default class Arena {

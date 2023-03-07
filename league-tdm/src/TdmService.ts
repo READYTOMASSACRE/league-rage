@@ -6,7 +6,7 @@ import VoteService from "./VoteService";
 import Arena from "./Arena";
 import WeaponService from "./WeaponService";
 import { Procs } from "../../league-core/src/types";
-import { ILanguage, Lang } from "../../league-lang";
+import { ILanguage, Lang } from "../../league-lang/language";
 
 @commandable
 @proceable

@@ -1,6 +1,6 @@
 import { event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
-import { ILanguage, Lang } from "../../league-lang";
+import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
 

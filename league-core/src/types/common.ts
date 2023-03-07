@@ -92,4 +92,6 @@ export const enum Procs {
   'tdm.arena.get' = 'tdm.arena.get',
   /** Returns server config */
   'tdm.config.get' = 'tdm.config.get',
+  /** Returns language by id */
+  'tdm.language.get' = 'tdm.language.get',
 }

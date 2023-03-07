@@ -10,6 +10,9 @@
         "composite": true,
         "skipLibCheck": true,
     },
-    "include": ["index.ts", "lang/**/*"],
+    "references": [
+        {"path": "../league-core", "declarationMap": true},
+    ],
+    "include": ["index.ts", "language.ts", "lang/**/*"],
     "exclude": ["node_modules"]
   }

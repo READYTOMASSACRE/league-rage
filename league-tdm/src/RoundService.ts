@@ -1,5 +1,5 @@
 import { event, eventable, log } from "../../league-core"
-import { ILanguage, Lang } from "../../league-lang"
+import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"

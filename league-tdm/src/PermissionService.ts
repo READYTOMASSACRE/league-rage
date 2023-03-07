@@ -1,6 +1,6 @@
 import PermissionError from "./error/PermissionError";
 import { log } from "../../league-core";
-import { ILanguage } from "../../league-lang";
+import { ILanguage } from "../../league-lang/language";
 
 export default class PermissionService {
   constructor(readonly lang: ILanguage) {}

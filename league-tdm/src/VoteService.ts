@@ -1,6 +1,6 @@
 import { log, eventable, event, helpers } from "../../league-core";
 import { Events } from "../../league-core/src/types";
-import { ILanguage, Lang } from "../../league-lang";
+import { ILanguage, Lang } from "../../league-lang/language";
 
 interface VoteConfig {
   timer: NodeJS.Timeout

@@ -1,5 +1,6 @@
 import { command, commandable, event, eventable, logClient } from "../../league-core/client";
 import { Enviroment, Events } from "../../league-core/src/types";
+import { ILanguage } from "../../league-lang/language";
 
 @eventable
 @commandable
@@ -8,7 +9,7 @@ export default class UIService {
   private chatVisible: boolean = false
   private scoreboardVisible: boolean = false
 
-  constructor(readonly url: string) {
+  constructor(readonly url: string, readonly lang: ILanguage) {
     mp.gui.chat.activate(false)
     mp.gui.chat.show(false)
 

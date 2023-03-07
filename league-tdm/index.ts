@@ -1,5 +1,6 @@
 import 'reflect-metadata'
-import { Language } from '../league-lang'
+import { Language } from '../league-lang/language'
+import LanguageService from '../league-lang'
 import Arena from './src/Arena'
 import BroadcastService from './src/BroadcastService'
 import PermissionService from "./src/PermissionService"
@@ -13,8 +14,8 @@ import { config } from '../league-core'
 import { Events } from '../league-core/src/types'
 import ConfigService from './src/ConfigService'
 
-const main = () => {
-  const language = new Language(config.lang)
+const main = async () => {
+  const language = new Language(LanguageService.get(config.lang))
   const playerService = new PlayerService()
   const permissionService = new PermissionService(language)
   const teamService = new TeamService(playerService, language)
