@@ -17,11 +17,19 @@ export interface Command {
   method: string
 }
 
+export interface Proc {
+  procs: string[]
+  method: string
+  descriptor: TypedPropertyDescriptor<any>
+}
+
 export const enum Decorator {
   events = 'rage:events',
   eventsInit = 'rage:events.init',
   commands = 'rage:commands',
   commandsInit = 'rage:commands:init',
+  procs = 'rage:procs',
+  procsInit = 'rage:procs:init',
 }
 
 export const enum Enviroment {
@@ -66,4 +74,9 @@ export const enum Events {
   'tdm.chat.push' = 'tdm.chat.push',
   /** Fires when player toggle scoreboard */
   'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle'
+}
+
+export const enum Procs {
+  /** Returns all arenas indexed by Id */
+  'tdm.arena.getAll' = 'tdm.arena.getAll',
 }

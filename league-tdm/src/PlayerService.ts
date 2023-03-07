@@ -86,17 +86,6 @@ export default class PlayerService {
   }
 
   @log
-  call(eventName: string, players: number[] | PlayerMp[], args: any[]) {
-    for (const id of players) {
-      const player = typeof id === 'number' ? mp.players.at(id) : id
-
-      if (mp.players.exists(player)) {
-        player.call(eventName, args)
-      }
-    }
-  }
-
-  @log
   getByIdOrName(id: string | number, player?: PlayerMp): PlayerMp | PlayerMp[] | undefined {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))

@@ -64,7 +64,7 @@ export default class RoundService {
       arena: new Arena(id, player),
       players,
       prepareSeconds: 5,
-      roundSeconds: 15,
+      roundSeconds: 150,
     }, this.playerService)
   }
 

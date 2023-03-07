@@ -24,4 +24,12 @@ export default class PlayerService {
   get alive(): boolean {
     return mp.players.local.getVariable('state') === types.tdm.State.alive
   }
+
+  setPosition(vector: Vector3) {
+    mp.players.local.position = vector
+  }
+
+  getPosition() {
+    return mp.players.local.position
+  }
 }

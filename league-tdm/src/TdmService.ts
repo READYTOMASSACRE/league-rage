@@ -1,12 +1,14 @@
-import { commandable, command, log } from "../../league-core";
+import { commandable, command, log, proceable, proc } from "../../league-core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
 import VoteService from "./VoteService";
 import Arena from "./Arena";
 import WeaponService from "./WeaponService";
+import { Procs } from "../../league-core/src/types";
 
 @commandable
+@proceable
 export default class TdmService {
   constructor(
     readonly roundService: RoundService,
@@ -134,5 +136,10 @@ export default class TdmService {
     }
 
     return this.weaponService.weaponRequest(player, availableSet[id])
+  }
+
+  @proc(Procs["tdm.arena.getAll"])
+  getAllArenas() {
+    return Arena.arenas
   }
 }

@@ -10,19 +10,24 @@ export default class BroadcastService {
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(id: number) {
     this.broadcast(`Подготовка арены ${id}`)
+
+    mp.players.call(Events["tdm.round.prepare"], [id])
   }
 
   @log
   @event(Events["tdm.round.start"])
   tdmRoundStart(id: number, players: number[]) {
     this.broadcast(`Запущена арена ${id}`)
-    this.playerService.call('tdm.round.start', players, [id])
+
+    mp.players.call(Events["tdm.round.start"], [players, id])
   }
 
   @log
   @event(Events["tdm.round.end"])
   tdmRoundEnd(id: number, result: types.tdm.Team | "draw") {
     this.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
+
+    mp.players.call(Events["tdm.round.end"], [id, result])
   }
 
   @log
