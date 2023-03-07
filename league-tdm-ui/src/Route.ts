@@ -12,7 +12,6 @@ export interface IRoute {
     start(hudColor?: number, displayOnFoot?: boolean, followPlayer?: boolean): void
     /**
      * Add points to the GPS path
-     * @param {CW.TYPES.Vector2} vector
      */
     addPoint(x: number, y: number, z?: number): void
     /**

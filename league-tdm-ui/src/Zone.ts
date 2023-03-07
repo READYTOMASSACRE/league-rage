@@ -6,6 +6,7 @@ export default class Zone {
     in(x: number, y: number) {
         let prevIndex: number = this.area.length - 1
         let index = 0
+        let inPolygon = false
 
         for (const [areaX, areaY] of this.area) {
             const [prevX, prevY] = this.area[prevIndex];
@@ -16,13 +17,13 @@ export default class Zone {
                 areaY > y != prevY > y &&    
                 x < delta
             ) {
-                return true
+                inPolygon = !inPolygon
             }
 
             prevIndex = index++
         }
 
-        return false
+        return inPolygon
     }
 
     get center() {

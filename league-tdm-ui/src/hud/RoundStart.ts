@@ -48,8 +48,8 @@ class RoundStart extends Hud implements IRoundStart {
         },
         alive: 5,
         radius: { current: 0, step: 0.1, max: 50 },
-        angle: { current: 0, step: 0.5 },
-        zOffset: { current: 0, step: 0.05, max: 25 },
+        angle: { current: 0, step: 0.25 },
+        zOffset: { current: 0, step: 0.05, max: 50 },
     }) {
         super(config)
         Object.assign(this, config)

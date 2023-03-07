@@ -26,7 +26,6 @@ export default class UIService {
     mp.keys.bind(0x09, false, () => this.scoreboardToggle(false))
   }
 
-  @logClient
   @event("playerReady")
   @command('reload')
   loadCef() {
@@ -40,7 +39,6 @@ export default class UIService {
     return this.url
   }
 
-  @logClient
   @event(Events["tdm.chat.push"])
   chatPush(msg: string, from?: Enviroment) {
     if (from === Enviroment.cef) {
@@ -50,7 +48,6 @@ export default class UIService {
     }
   }
 
-  @logClient
   @event(Events["tdm.chat.toggle"])
   chatToggle(visible: boolean, force?: boolean) {
     const old = this.chatVisible
@@ -82,7 +79,6 @@ export default class UIService {
     }
   }
 
-  @logClient
   @event(Events["tdm.scoreboard.toggle"])
   scoreboardToggle(visible: boolean) {
     this.scoreboardVisible = visible
