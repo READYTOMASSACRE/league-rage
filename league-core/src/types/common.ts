@@ -98,6 +98,8 @@ export const enum Events {
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when cef is console.log */
   'tdm.cef.log' = 'tdm.cef.log',
+  /** Fires when someone push to popup */
+  'tdm.popup.push' = 'tdm.popup.push',
 }
 
 export const enum Procs {
