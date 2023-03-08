@@ -10,10 +10,6 @@ const ListOfPlayers: FC<Props> = ({ children }) => {
   
   const listOfPlayerRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-console.log(listOfPlayerRef.current)
-  }, [listOfPlayerRef])
-
   return (
     <div ref={listOfPlayerRef} className={cl(s.listOfPlayers)}>
       {children}

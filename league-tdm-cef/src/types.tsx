@@ -21,3 +21,9 @@ export interface ITeams {
 export interface ICurrentPlayer {
   id: number;
 }
+
+export interface IMessage {
+  id: number;
+  title: string;
+  type: string;
+}

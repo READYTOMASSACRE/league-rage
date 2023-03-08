@@ -41,14 +41,13 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
   const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
 
   const sortedPlayers = useMemo(() => {
-    const sortFn = {
+    const sortedPlayers = {
       kills: players.slice().sort((a, b) => desSortScorboard ? b.kills - a.kills : a.kills - b.kills),
       assists: players.slice().sort((a, b) => desSortScorboard ? b.assists - a.assists : a.assists - b.assists),
       death: players.slice().sort((a, b) => desSortScorboard ? b.death - a.death : a.death - b.death),
       name: players.slice().sort((a, b) => desSortScorboard ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)),
     }
-
-    return sortFn[sortScoreboard] ? sortFn[sortScoreboard] : sortFn.death
+    return sortedPlayers[sortScoreboard] ? sortedPlayers[sortScoreboard] : sortedPlayers.death
   }, [players, sortScoreboard, desSortScorboard])
 
   const attackPlayers = useFilterPlayersBySide(sortedPlayers, 'attack')

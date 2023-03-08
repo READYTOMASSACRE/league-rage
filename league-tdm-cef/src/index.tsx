@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import Chat from './components/chat'
+import Popup from './components/popup/Popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
 
@@ -414,12 +415,12 @@ const currentPlayerInfo = {
   id: 15,
 }
 
-// add open/close on TAB
 const App = () => {
   return (
     <>
       <Scoreboard currentPlayerId={currentPlayerInfo} teams={teamInfo} players={playersInfo}/>
       <Chat />
+      <Popup />
     </>
   )
 }
