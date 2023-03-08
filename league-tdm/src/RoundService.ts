@@ -1,4 +1,6 @@
 import { event, eventable, log } from "../../league-core"
+import { IConfig } from "../../league-core/src/types"
+import { RoundConfig } from "../../league-core/src/types/tdm"
 import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
@@ -9,6 +11,7 @@ import TeamService from "./TeamService"
 export default class RoundService {
   private round?: Round
   constructor(
+    readonly config: RoundConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly lang: ILanguage,
@@ -65,8 +68,8 @@ export default class RoundService {
     this.round = new Round({
       arena: new Arena(id, this.lang, player),
       players,
-      prepareSeconds: 5,
-      roundSeconds: 150,
+      prepareSeconds: this.config.prepare,
+      roundSeconds: this.config.timeleft,
     }, this.playerService)
   }
 

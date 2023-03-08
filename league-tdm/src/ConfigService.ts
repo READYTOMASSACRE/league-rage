@@ -6,9 +6,18 @@ export default class ConfigService {
     constructor(readonly config: IConfig) {}
 
     @proc(Procs["tdm.config.get"])
-    get(): Partial<IConfig> {
+    get(): IConfig {
         return {
-            weaponConfig: this.config.weaponConfig,
+            name: this.config.name,
+            gamemode: this.config.gamemode,
+            lang: this.config.lang,
+            lobby: this.config.lobby,
+            cef: this.config.cef,
+            team: this.config.team,
+            weapon: this.config.weapon,
+            round: this.config.round,
+            vote: this.config.vote,
+            hud: this.config.hud,
         }
     }
 }

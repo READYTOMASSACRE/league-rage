@@ -1,4 +1,6 @@
-import {Config as WeaponConfig} from './weapon'
+import { Config as WeaponConfig } from './weapon'
+import { HudConfig } from './ui'
+import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
 export type callable = (...args: any[]) => any
@@ -42,8 +44,16 @@ export type Point2d = [number,number]
 export type Point3d = [number,number,number]
 
 export interface IConfig {
+  name: string
+  gamemode: string
   lang: string
-  weaponConfig: WeaponConfig
+  lobby: [number, number, number]
+  cef: string
+  team: TeamConfig
+  weapon: WeaponConfig
+  round: RoundConfig
+  vote: VoteConfig
+  hud: HudConfig
 }
 
 export const enum Events {

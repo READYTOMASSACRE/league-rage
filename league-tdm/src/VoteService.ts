@@ -1,6 +1,7 @@
 import { log, eventable, event, helpers } from "../../league-core";
 import { Events } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
+import BroadCastError from "./error/BroadCastError";
 
 interface VoteConfig {
   timer: NodeJS.Timeout
@@ -11,11 +12,11 @@ interface VoteConfig {
 @eventable
 export default class VoteService {
   private info: Record<string, VoteConfig> = {}
-  private seconds: Record<string, number> = {
-    voteArena: 30,
-  }
 
-  constructor(readonly lang: ILanguage) {}
+  constructor(
+    readonly config: VoteConfig,
+    readonly lang: ILanguage,
+  ) {}
 
   @log
   @event("playerQuit")
@@ -29,10 +30,14 @@ export default class VoteService {
 
   @log
   voteArena(player: PlayerMp, key: string | number, callback: (result: string) => void) {
-    if (this.isRunning('voteArena')) {
-      this.add('voteArena', key, player)
+    if (typeof this.config["arena"] === 'undefined') {
+      throw new BroadCastError(this.lang.get(Lang["error.vote.not_found_config"], { vote: 'arena' }), player)
+    }
+
+    if (this.isRunning('arena')) {
+      this.add('arena', key, player)
     } else {
-      this.start('voteArena', key, player, callback)
+      this.start('arena', key, player, callback)
     }
   }
 
@@ -97,6 +102,6 @@ export default class VoteService {
 
   @log
   private getTimeleft(vote: string) {
-    return helpers.toMs(this.seconds[vote])
+    return helpers.toMs(this.config[vote])
   }
 }

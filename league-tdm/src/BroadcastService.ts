@@ -1,13 +1,15 @@
 import { event, eventable, log, types } from "../../league-core";
-import { Enviroment, Events } from "../../league-core/src/types";
+import { Enviroment, Events, tdm } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
+import TeamService from "./TeamService";
 
 @eventable
 export default class BroadcastService {
   constructor(
     readonly playerService: PlayerService,
-    readonly lang: ILanguage
+    readonly teamService: TeamService,
+    readonly lang: ILanguage,
   ) {}
 
   @log
@@ -28,10 +30,12 @@ export default class BroadcastService {
 
   @log
   @event(Events["tdm.round.end"])
-  tdmRoundEnd(id: number, result: types.tdm.Team | "draw") {
+  tdmRoundEnd(id: number, team: tdm.Team | "draw") {
+    const result = this.teamService.getName(team)
+
     this.broadcast(this.lang.get(Lang["tdm.round.end"], { arena: id, result }))
 
-    mp.players.call(Events["tdm.round.end"], [id, result])
+    mp.players.call(Events["tdm.round.end"], [id, team])
   }
 
   @log

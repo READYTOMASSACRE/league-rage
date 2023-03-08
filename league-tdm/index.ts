@@ -16,22 +16,18 @@ import ConfigService from './src/ConfigService'
 
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
-  const playerService = new PlayerService()
-  const permissionService = new PermissionService(language)
-  const teamService = new TeamService(playerService, language)
-  const roundService = new RoundService(playerService, teamService, language)
-  const voteService = new VoteService(language)
-  const weaponService = new WeaponService(config.weaponConfig, playerService, language)
-  
   new ConfigService(config)
-  new BroadcastService(playerService, language)
-  new TdmService(
-    roundService,
-    permissionService,
-    playerService,
-    voteService,
-    weaponService,
-    language,
+  
+  const playerService = new PlayerService(config)
+  const permissionService = new PermissionService(language)
+  const teamService = new TeamService(config.team, playerService, language)
+  const roundService = new RoundService(config.round, playerService, teamService, language)
+  const voteService = new VoteService(language)
+  const weaponService = new WeaponService(config.weapon, playerService, language)
+  const broadcastService = new BroadcastService(playerService, teamService, language)
+  const tdmService = new TdmService(
+    roundService, permissionService, playerService,
+    voteService, weaponService, language
   )
 
   Arena.load(language)

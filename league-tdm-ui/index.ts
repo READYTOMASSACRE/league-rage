@@ -18,7 +18,7 @@ const main = async () => {
 
   new UIService("package://league-tdm-cef/index.html", language)
   new WeaponService(playerService)
-  new HudService(roundService)
+  new HudService(roundService, config.hud)
 
   mp.console.logInfo('league-tdm-ui package initialized')
 

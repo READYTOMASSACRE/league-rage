@@ -52,11 +52,12 @@ export default class TdmService {
     const addPlayer = this.playerService.getByIdOrName(id, player)
 
     if (!addPlayer) {
-      return player.outputChatBox(`Игрок ${id} не найден`)
+      return player.outputChatBox(this.lang.get(Lang["error.player.not_found"], { player: id }))
     }
 
     if (Array.isArray(addPlayer)) {
-      return player.outputChatBox('Найдены следующие игроки: ' + addPlayer.map(p => p.name).join(', '))
+      const message = this.lang.get(Lang["tdm.player.find_result"], { players: addPlayer.map(p => p.name).join(', ') })
+      return player.outputChatBox(message)
     }
 
     return this.roundService.add(addPlayer)
@@ -74,11 +75,12 @@ export default class TdmService {
     const removePlayer = this.playerService.getByIdOrName(id, player)
 
     if (!removePlayer) {
-      return player.outputChatBox(`Игрок ${id} не найден`)
+      return player.outputChatBox(this.lang.get(Lang["error.player.not_found"], { player: id }))
     }
 
     if (Array.isArray(removePlayer)) {
-      return player.outputChatBox('Найдены следующие игроки: ' + removePlayer.map(p => p.name).join(', '))
+      const message = this.lang.get(Lang["tdm.player.find_result"], { players: removePlayer.map(p => p.name).join(', ') })
+      return player.outputChatBox(message)
     }
 
     return this.roundService.remove(removePlayer)

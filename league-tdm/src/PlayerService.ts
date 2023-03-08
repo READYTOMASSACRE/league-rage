@@ -1,8 +1,10 @@
 import { event, eventable, log, ensurePlayer } from "../../league-core";
-import { Events, tdm } from "../../league-core/src/types";
+import { Events, IConfig, tdm } from "../../league-core/src/types";
 
 @eventable
 export default class PlayerService {
+  constructor(readonly config: IConfig) {}
+
   @log
   @event("playerReady")
   playerReady(player: PlayerMp) {
@@ -70,7 +72,7 @@ export default class PlayerService {
   @log
   @ensurePlayer
   spawnLobby(p: number | PlayerMp) {
-    (p as PlayerMp).spawn(new mp.Vector3(-1367.40576171875, 150.63015747070312, 55.960227966308594)) // todo get from configs
+    (p as PlayerMp).spawn(new mp.Vector3(this.config.lobby))
   }
 
   @log

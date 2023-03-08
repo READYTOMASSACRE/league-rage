@@ -72,7 +72,7 @@ export default class Round {
 
     this.playerService.spawn(id, vector)
     this.playerService.setState(id, types.tdm.State.alive)
-    this.playerService.setHealth(id, 99)
+    this.playerService.setHealth(id, 100)
 
     this.players.push(id)
 

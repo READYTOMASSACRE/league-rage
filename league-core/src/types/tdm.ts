@@ -27,3 +27,20 @@ export type Arena = {
   [Team.defenders]: Point3d[]
   [Team.spectators]: Point3d[]
 }
+
+export type TeamConfig = {
+  [key in Team]: {
+    name: string
+    color: string
+    skins: string[]
+  }
+}
+
+export type RoundConfig = {
+  prepare: number
+  timeleft: number
+}
+
+export type VoteConfig = {
+  arena: 30
+}

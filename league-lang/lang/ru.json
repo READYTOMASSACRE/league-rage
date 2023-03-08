@@ -17,6 +17,10 @@
   "error.player.not_found": "Player is not exists: :player",
   "error.player.not_in_round": "Not in round",
 
+  "error.vote.not_found_config": "Нет конфига для голосования :vote",
+
+  "tdm.player.find_result": "Найдены следующие игроки: :players",
+
   "tdm.round.arena_prepare": "Подготовка арены :arena",
   "tdm.round.arena_start": "Запущена арена :arena",
   "tdm.round.end": "Раунд завершен, результат: :result, арена :arena",

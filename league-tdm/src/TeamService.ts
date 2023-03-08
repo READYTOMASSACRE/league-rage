@@ -1,5 +1,6 @@
 import { log, eventable, event, ensurePlayer, commandable, command, helpers } from "../../league-core";
-import { Events, tdm } from "../../league-core/src/types";
+import { Events, IConfig, tdm } from "../../league-core/src/types";
+import { TeamConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
 
@@ -7,8 +8,9 @@ import PlayerService from "./PlayerService";
 @commandable
 export default class TeamService {
   constructor(
+    readonly config: TeamConfig,
     readonly playerService: PlayerService,
-    readonly lang: ILanguage
+    readonly lang: ILanguage,
   ) {}
   
   @log
@@ -88,6 +90,14 @@ export default class TeamService {
     this.playerService.setState(p, tdm.State.idle)
 
     player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
+  }
+
+  getName(team: tdm.Team | 'draw') {
+    if (team === 'draw') {
+      return team
+    }
+
+    return this.config[team]?.name || team
   }
 
   get hash() {

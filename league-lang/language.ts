@@ -17,6 +17,10 @@ export const enum Lang {
   "error.player.not_found" = "error.player.not_found",
   "error.player.not_in_round" = "error.player.not_in_round",
 
+  "error.vote.not_found_config" = "error.vote.not_found_config",
+
+  "tdm.player.find_result" = "tdm.player.find_result",
+
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
   "tdm.round.arena_start" = "tdm.round.arena_start",
   "tdm.round.end" = "tdm.round.end",
@@ -53,6 +57,7 @@ export interface ILanguage {
   get(code: Lang, replacements?: Record<string, string | number>): string
   change(lang: Record<Lang, string>): void
 }
+
 export class Language implements ILanguage {
   constructor(private language: Record<Lang, string>) {}
 

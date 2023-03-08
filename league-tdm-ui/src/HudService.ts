@@ -1,5 +1,6 @@
 import { event, eventable, logClient } from "../../league-core/client";
-import { Events, tdm } from "../../league-core/src/types";
+import { Events } from "../../league-core/src/types";
+import { HudConfig } from "../../league-core/src/types/ui";
 import RoundStart from "./hud/RoundStart";
 import RoundService from './RoundService'
 import Zone from "./Zone";
@@ -8,7 +9,10 @@ import Zone from "./Zone";
 export default class HudService {
     private roundStart?: RoundStart
 
-    constructor(readonly roundService: RoundService) {}
+    constructor(
+        readonly roundService: RoundService,
+        readonly config: HudConfig,
+    ) {}
 
     @logClient
     @event(Events["tdm.round.prepare"])
@@ -21,7 +25,7 @@ export default class HudService {
 
         if (arena) {
             const zone = new Zone(arena)
-            this.roundStart = new RoundStart()
+            this.roundStart = new RoundStart(this.config.roundStart)
             this.roundStart.draw(arena.code, zone.center)
         }
 
