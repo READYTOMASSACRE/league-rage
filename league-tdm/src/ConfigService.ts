@@ -18,6 +18,7 @@ export default class ConfigService {
             round: this.config.round,
             vote: this.config.vote,
             hud: this.config.hud,
+            interaction: this.config.interaction,
         }
     }
 }

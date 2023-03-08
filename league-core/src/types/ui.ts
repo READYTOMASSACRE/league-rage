@@ -32,3 +32,22 @@ export interface RoundStartConfig extends IHud {
 export interface HudConfig {
   roundStart: RoundStartConfig
 }
+
+export interface InteractionConfig {
+  selector: TeamSelectorConfig
+}
+
+export interface TeamSelectorConfig {
+  cam: {
+    vector: Array3d
+    rotation: Array3d
+    fov: number
+    pointAt: Array3d
+  }
+  ped: {
+    vector: Array3d
+    heading: number
+    dance: string
+    dimension: number
+  }
+}

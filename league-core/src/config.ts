@@ -91,8 +91,24 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         radius: { current: 0, step: 0.1, max: 50 },
         angle: { current: 0, step: 0.25 },
         zOffset: { current: 0, step: 0.05, max: 50 }
-      }
+      },
     },
+    interaction: {
+      selector: {
+        cam: {
+          vector: [502.24664306640625, 5611.33544921875, 799.14],
+          rotation: [0, 0, 0],
+          fov: 40,
+          pointAt: [501.0116271972656, 5593.58935546875, 795.4794921875],
+        },
+        ped: {
+          vector: [501.6931457519531, 5603.701171875, 797.9105224609375],
+          heading: 0,
+          dance: "",
+          dimension: 0,
+        }
+      },
+    }
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

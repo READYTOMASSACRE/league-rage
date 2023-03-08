@@ -1,5 +1,5 @@
 import { Config as WeaponConfig } from './weapon'
-import { HudConfig } from './ui'
+import { HudConfig, InteractionConfig } from './ui'
 import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
@@ -54,6 +54,7 @@ export interface IConfig {
   round: RoundConfig
   vote: VoteConfig
   hud: HudConfig
+  interaction: InteractionConfig
 }
 
 export const enum Events {

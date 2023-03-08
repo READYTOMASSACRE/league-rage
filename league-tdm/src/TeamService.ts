@@ -21,7 +21,7 @@ export default class TeamService {
 
   @log
   @event(Events["tdm.player.ready"])
-  teamSelect(player: PlayerMp) {
+  clientPlayerReady(player: PlayerMp) {
     const state = this.playerService.getState(player)
     if (state !== tdm.State.idle) {
       player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
@@ -29,6 +29,23 @@ export default class TeamService {
 
     this.playerService.setState(player, tdm.State.select)
     player.call(Events["tdm.team.select"])
+  }
+
+  @log
+  @event(Events["tdm.team.select"])
+  teamSelect(player: PlayerMp, team?: tdm.Team) {
+    if (!this.config[team]) {
+      player.outputChatBox(this.lang.get(Lang["error.team.not_found"], { team }))
+    }
+
+    const state = this.playerService.getState(player)
+    if (state !== tdm.State.select) {
+      player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
+    }
+
+    this.playerService.setState(player, tdm.State.idle)
+    this.playerService.setTeam(player, team)
+    this.playerService.spawnLobby(player)
   }
 
   @log
