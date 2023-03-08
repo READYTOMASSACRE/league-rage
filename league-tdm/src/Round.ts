@@ -41,9 +41,13 @@ export default class Round {
     this.roundTimer = setTimeout(() => this.end(), this.roundTime)
     this.date = Date.now()
     this._running = true
-    this.watch()
 
-    mp.events.call(Events["tdm.round.start"], this.arena.id, this.players)
+    if (this.shouldRunning) {
+      this.watch()
+      mp.events.call(Events["tdm.round.start"], this.arena.id, this.players)
+    } else {
+      this.end()
+    }
   }
 
   @log
@@ -68,7 +72,7 @@ export default class Round {
 
     this.playerService.spawn(id, vector)
     this.playerService.setState(id, types.tdm.State.alive)
-    this.playerService.setHealth(id, 99)
+    this.playerService.setHealth(id, 100)
 
     this.players.push(id)
 
@@ -136,17 +140,25 @@ export default class Round {
   }
 
   @log
-  private async watch() {
+  private async watch() { // todo rewise this lifecycle
     while (this.running) {
-      const {attackers, defenders} = this.info
-
-      if (!attackers || !defenders) {
+      if (!this.shouldRunning) {
         this.end()
         break
       }
 
       await helpers.sleep(0.1)
     }
+  }
+
+  private get shouldRunning(): boolean {
+    const {attackers, defenders} = this.info
+
+    if (!attackers || !defenders) {
+      return false
+    }
+
+    return true
   }
 
   get info() {

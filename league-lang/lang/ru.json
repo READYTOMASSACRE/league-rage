@@ -1,0 +1,55 @@
+{
+  "error.permission.invalid": "Invalid permission :permission",
+
+  "error.arena.invalid_format": "Invalid arenas format",
+  "error.arena.not_found": "Arena :arena not found",
+  "error.arena.not_found_spawn": "Not found spawn points in arena :arena",
+
+  "error.team.not_found": "Команда :team не найдена",
+  "error.team.player_is_busy": "В данный момент вы не можете изменить команду",
+  "error.team.player_not_in_lobby": "Вы не в лобби",
+
+  "error.vote.already_voted": "Вы уже проголосовали",
+
+  "error.weapon.empty_choice": "Choice is empty",
+  "error.weapon.not_configured": "Weapon choice is not in config",
+  "error.weapon.already_equipped": "Already equipped",
+
+  "error.player.not_found": "Player is not exists: :player",
+  "error.player.not_in_round": "Not in round",
+
+  "error.vote.not_found_config": "Нет конфига для голосования :vote",
+
+  "tdm.player.find_result": "Найдены следующие игроки: :players",
+
+  "tdm.round.arena_prepare": "Подготовка арены :arena",
+  "tdm.round.arena_start": "Запущена арена :arena",
+  "tdm.round.end": "Раунд завершен, результат: :result, арена :arena",
+  "tdm.round.add": "Игрок :player был добавлен в раунд",
+  "tdm.round.remove": "Игрок :player был удален из раунда",
+  "tdm.round.start_empty": "Недостаточно игроков для запуска",
+
+  "tdm.round.vote": "[:vote] Игрок :player проголосовал за :key",
+  "tdm.round.vote_start": "[:vote] Запущено голосование игроком :player, :key",
+  "tdm.round.vote_end": "[:vote] Голосование завершено, результат: :result",
+
+  "tdm.round.is_paused": "Раунд остановлен",
+  "tdm.round.is_already_paused": "Раунд уже остановлен",
+  "tdm.round.is_unpaused": "Раунд возобновлен",
+  "tdm.round.is_running": "Раунд запущен",
+  "tdm.round.is_not_running": "Раунд не запущен",
+  "tdm.round.is_not_paused": "Раунд не остановлен",
+  "tdm.round.is_stopped": "Раунд уже остановлен",
+
+  "tdm.team.change": "Команда изменена на :team",
+
+  "cmd.start_arena": "Usage /{{cmdName}} <id> - start arena by id or code",
+  "cmd.stop_arena": "Usage /{{cmdName}} - stop arena",
+  "cmd.add_player": "Usage /{{cmdName}} <player> - add player to round",
+  "cmd.remove_player": "Usage /{{cmdName}} <player> - remove player from round",
+  "cmd.pause": "Usage /{{cmdName}} - pause round",
+  "cmd.unpause": "Usage /{{cmdName}} - unpause round",
+  "cmd.vote": "Usage //{{cmdName}} <id|code> vote for arena",
+  "cmd.weapon": "Usage //{{cmdName}} <id|list>",
+  "cmd.change_team": "Usage /{{cmdName}} <id|string> (optional) to change team. Example: /t att, /t, /t def"
+}

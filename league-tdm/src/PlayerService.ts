@@ -1,8 +1,10 @@
 import { event, eventable, log, ensurePlayer } from "../../league-core";
-import { tdm } from "../../league-core/src/types";
+import { Events, IConfig, tdm } from "../../league-core/src/types";
 
 @eventable
 export default class PlayerService {
+  constructor(readonly config: IConfig) {}
+
   @log
   @event("playerReady")
   playerReady(player: PlayerMp) {
@@ -34,7 +36,10 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setTeam(p: number | PlayerMp, id: tdm.Team) {
-    (p as PlayerMp).setVariable('team', id)
+    const player = <PlayerMp>p
+
+    player.setVariable('team', id)
+    mp.players.call(Events["tdm.player.team"], [player.id, id])
   }
 
   @log
@@ -52,7 +57,10 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setState(p: number | PlayerMp, state: tdm.State) {
-    (p as PlayerMp).setVariable('state', state)
+    const player = <PlayerMp>p
+
+    player.setVariable('state', state)
+    mp.players.call(Events["tdm.player.state"], [player.id, state])
   }
 
   @log
@@ -64,13 +72,16 @@ export default class PlayerService {
   @log
   @ensurePlayer
   spawnLobby(p: number | PlayerMp) {
-    (p as PlayerMp).spawn(new mp.Vector3(-1367.40576171875, 150.63015747070312, 55.960227966308594)) // todo get from configs
+    (p as PlayerMp).spawn(new mp.Vector3(this.config.lobby))
   }
 
   @log
   @ensurePlayer
   setWeaponState(p: number | PlayerMp, state: tdm.WeaponState) {
-    (p as PlayerMp).setVariable('weaponState', state)
+    const player = <PlayerMp>p
+
+    player.setVariable('weaponState', state)
+    mp.players.call(Events["tdm.player.weaponstate"], [player.id, state])
   }
 
   @log

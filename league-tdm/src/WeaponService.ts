@@ -1,5 +1,6 @@
 import { event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
+import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
 
@@ -8,6 +9,7 @@ export default class WeaponService {
   constructor(
     readonly config: weapon.Config,
     readonly playerService: PlayerService,
+    readonly lang: ILanguage,
   ) {}
 
   @log
@@ -36,24 +38,24 @@ export default class WeaponService {
   @log
   private validateRequest(player: PlayerMp, choice: string[]) {
     if (!mp.players.exists(player)) {
-      throw new Error('Player is not exists: ' + player?.id)
+      throw new Error(this.lang.get(Lang["error.player.not_found"], { player: player?.id }))
     }
 
     if (!choice?.length) {
-      throw new BroadCastError('Choice is empty', player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.empty_choice"]), player)
     }
 
     if (!this.isValidChoice(choice)) {
       player.giveWeapon('weapon_bat', 1)
-      throw new BroadCastError('Weapon choice is not in config', player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.not_configured"]), player)
     }
 
     if (!this.playerService.hasState(player, tdm.State.alive)) {
-      throw new BroadCastError('Not in round', player)
+      throw new BroadCastError(this.lang.get(Lang["error.player.not_in_round"]), player)
     }
 
     if (this.playerService.hasWeaponState(player, tdm.WeaponState.has)) {
-      throw new BroadCastError('Already equipped', player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.already_equipped"]), player)
     }
   }
 

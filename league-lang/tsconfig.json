@@ -3,17 +3,16 @@
         "target": "esnext",
         "module": "commonjs",
         "experimentalDecorators": true,
-        "outDir": "../../packages/league-tdm",
+        "outDir": "../../packages/league-lang",
         "preserveConstEnums": true,
         "allowJs": true,
-        "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"]
-        // "alwaysStrict": true, // todo fix errors
-        // "strictNullChecks": true
+        "alwaysStrict": true,
+        "composite": true,
+        "skipLibCheck": true,
     },
     "references": [
         {"path": "../league-core", "declarationMap": true},
-        {"path": "../league-lang"}
     ],
-    "include": ["index.ts", "src/**/*"],
+    "include": ["index.ts", "language.ts", "lang/**/*"],
     "exclude": ["node_modules"]
-}
+  }

@@ -1,4 +1,6 @@
 import 'reflect-metadata'
+import { Language } from '../league-lang/language'
+import LanguageService from '../league-lang'
 import Arena from './src/Arena'
 import BroadcastService from './src/BroadcastService'
 import PermissionService from "./src/PermissionService"
@@ -10,25 +12,25 @@ import VoteService from './src/VoteService'
 import WeaponService from './src/WeaponService'
 import { config } from '../league-core'
 import { Events } from '../league-core/src/types'
+import ConfigService from './src/ConfigService'
 
-const main = () => {
-  const playerService = new PlayerService()
-  const permissionService = new PermissionService()
-  const teamService = new TeamService(playerService)
-  const roundService = new RoundService(playerService, teamService)
-  const voteService = new VoteService()
-  const weaponService = new WeaponService(config.weaponConfig, playerService)
-
-  new BroadcastService(playerService)
-  new TdmService(
-    roundService,
-    permissionService,
-    playerService,
-    voteService,
-    weaponService,
+const main = async () => {
+  const language = new Language(LanguageService.get(config.lang))
+  new ConfigService(config)
+  
+  const playerService = new PlayerService(config)
+  const permissionService = new PermissionService(language)
+  const teamService = new TeamService(config.team, playerService, language)
+  const roundService = new RoundService(config.round, playerService, teamService, language)
+  const voteService = new VoteService(config.vote, language)
+  const weaponService = new WeaponService(config.weapon, playerService, language)
+  const broadcastService = new BroadcastService(playerService, teamService, language)
+  const tdmService = new TdmService(
+    roundService, permissionService, playerService,
+    voteService, weaponService, language
   )
 
-  Arena.load()
+  Arena.load(language)
 
   mp.events.call(Events['tdm.start'])
 }

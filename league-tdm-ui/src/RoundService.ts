@@ -36,7 +36,7 @@ export default class RoundService {
 
 	private async load() {
 		try {
-			const arenas: tdm.Arena[] = await mp.events.callRemoteProc(Procs["tdm.arena.getAll"])
+			const arenas: tdm.Arena[] = await mp.events.callRemoteProc(Procs["tdm.arena.get"])
 	
 			this.arenas = arenas.reduce((acc, current) => {
 				acc[current.id] = current

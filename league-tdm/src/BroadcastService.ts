@@ -1,15 +1,21 @@
 import { event, eventable, log, types } from "../../league-core";
-import { Enviroment, Events } from "../../league-core/src/types";
+import { Enviroment, Events, tdm } from "../../league-core/src/types";
+import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
+import TeamService from "./TeamService";
 
 @eventable
 export default class BroadcastService {
-  constructor(readonly playerService: PlayerService) {}
+  constructor(
+    readonly playerService: PlayerService,
+    readonly teamService: TeamService,
+    readonly lang: ILanguage,
+  ) {}
 
   @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(id: number) {
-    this.broadcast(`Подготовка арены ${id}`)
+    this.broadcast(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: id }))
 
     mp.players.call(Events["tdm.round.prepare"], [id])
   }
@@ -17,24 +23,26 @@ export default class BroadcastService {
   @log
   @event(Events["tdm.round.start"])
   tdmRoundStart(id: number, players: number[]) {
-    this.broadcast(`Запущена арена ${id}`)
+    this.broadcast(this.lang.get(Lang["tdm.round.arena_start"], { arena: id }))
 
     mp.players.call(Events["tdm.round.start"], [players, id])
   }
 
   @log
   @event(Events["tdm.round.end"])
-  tdmRoundEnd(id: number, result: types.tdm.Team | "draw") {
-    this.broadcast(`Раунд завершен, результат: ${result}, арена ${id}`)
+  tdmRoundEnd(id: number, team: tdm.Team | "draw") {
+    const result = this.teamService.getName(team)
 
-    mp.players.call(Events["tdm.round.end"], [id, result])
+    this.broadcast(this.lang.get(Lang["tdm.round.end"], { arena: id, result }))
+
+    mp.players.call(Events["tdm.round.end"], [id, team])
   }
 
   @log
   @event(Events["tdm.round.add"])
   tdmRoundAdd(id: number, manual?: boolean) {
     if (manual) {
-      this.broadcast(`Игрок ${id} был добавлен в раунд`)
+      this.broadcast(this.lang.get(Lang["tdm.round.add"], { player: id }))
     }
   }
 
@@ -42,16 +50,17 @@ export default class BroadcastService {
   @event(Events["tdm.round.remove"])
   tdmRoundRemove(id: number, manual?: boolean) {
     if (manual) {
-      this.broadcast(`Игрок ${id} был удален из раунда`)
+      this.broadcast(this.lang.get(Lang["tdm.round.end"], { player: id }))
     }
   }
 
   @log
   @event(Events["tdm.round.pause"])
   tdmRoundPause(toggle: boolean) {
-    const text = toggle ? 'Раунд остановлен' : 'Раунд возобновлен'
-
-    this.broadcast(text)
+    this.broadcast(toggle ?
+      this.lang.get(Lang["tdm.round.is_paused"]) :
+      this.lang.get(Lang["tdm.round.is_unpaused"])
+    )
   }
 
   @log
@@ -59,7 +68,7 @@ export default class BroadcastService {
   tdmVote(vote: string, id: number, key: string) {
     const player = this.playerService.getById(id)
 
-    this.broadcast(`[${vote}] Игрок ${player?.name} проголосовал за ${key}, ${vote}`)
+    this.broadcast(this.lang.get(Lang["tdm.round.vote"], { vote, player: player?.name, key }))
   }
 
   @log
@@ -67,13 +76,13 @@ export default class BroadcastService {
   tdmVoteStart(vote: string, id: number, key: string) {
     const player = this.playerService.getById(id)
 
-    this.broadcast(`[${vote}] Запущено голосование игроком ${player?.name}, ${key}`)
+    this.broadcast(this.lang.get(Lang["tdm.round.vote_start"], { vote, player: player?.name, key }))
   }
 
   @log
   @event(Events["tdm.vote.end"])
   tdmVoteEnd(vote: string, result: string) {
-    this.broadcast(`[${vote}] Голосование завершено, результат: ${result}`)
+    this.broadcast(this.lang.get(Lang["tdm.round.vote_end"], { vote, result }))
   }
 
   @log

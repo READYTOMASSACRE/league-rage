@@ -2,7 +2,7 @@ import { types } from "../../league-core/client";
 
 export default class PlayerService {
   getState(player?: PlayerMp): types.tdm.State | undefined {
-    player = player || mp.players.local
+    player = player || this.local
 
     if (mp.players.exists(player)) {
       return player.getVariable('state')
@@ -10,10 +10,10 @@ export default class PlayerService {
   }
 
   getTeam(player?: PlayerMp): types.tdm.Team | undefined {
-    player = player || mp.players.local
+    player = player || this.local
     
     if (mp.players.exists(player)) {
-      return mp.players.local.getVariable('team')
+      return this.local.getVariable('team')
     }
   }
 
@@ -22,14 +22,30 @@ export default class PlayerService {
   }
 
   get alive(): boolean {
-    return mp.players.local.getVariable('state') === types.tdm.State.alive
+    return this.local.getVariable('state') === types.tdm.State.alive
   }
 
   setPosition(vector: Vector3) {
-    mp.players.local.position = vector
+    this.local.position = vector
   }
 
   getPosition() {
-    return mp.players.local.position
+    return this.local.position
+  }
+
+  setInvicible(toggle: boolean) {
+    this.local.setInvincible(toggle)
+  }
+
+  freezePosition(toggle: boolean) {
+    this.local.freezePosition(toggle)
+  }
+
+  setAlpha(alphaLevel: number) {
+    this.local.setAlpha(alphaLevel)
+  }
+
+  get local() {
+    return mp.players.local
   }
 }
