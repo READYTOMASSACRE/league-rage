@@ -1,7 +1,7 @@
 export interface TextStyle {
   font: number
   centre: boolean
-  color: RGBA
+  color: [number, number, number, number]
   scale: [number, number]
   outline: boolean
 }
@@ -9,7 +9,7 @@ export interface TextStyle {
 export interface TextElement {
     text: string
     style: TextStyle
-    position?: Array2d | Array3d
+    position?: [number, number] | [number, number, number]
 }
 
 export interface StepOffset {
@@ -39,13 +39,13 @@ export interface InteractionConfig {
 
 export interface TeamSelectorConfig {
   cam: {
-    vector: Array3d
-    rotation: Array3d
+    vector: [number, number, number]
+    rotation: [number, number, number]
     fov: number
-    pointAt: Array3d
+    pointAt: [number, number, number]
   }
   ped: {
-    vector: Array3d
+    vector: [number, number, number]
     heading: number
     dance: string
     dimension: number

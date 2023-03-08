@@ -1,4 +1,4 @@
-import { event, eventable } from "../../league-core/client";
+import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
 import TeamSelector from "./interactions/Selector";
 import PlayerService from "./PlayerService";
@@ -18,8 +18,9 @@ export default class InteractionService {
     )
   }
 
+  @logClient
   @event(Events["tdm.team.select"])
-  teamSelect() {
+  async teamSelect() {
     this.teamSelector.run()
   }
 }

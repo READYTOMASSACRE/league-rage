@@ -43,30 +43,18 @@ export default class TeamService {
       player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
     }
 
-    this.playerService.setState(player, tdm.State.idle)
-    this.playerService.setTeam(player, team)
-    this.playerService.spawnLobby(player)
+    return this.change(player, team)
   }
 
   @log
   @command(['team', 'changeteam', 't'], {desc: Lang["cmd.change_team"]})
   changeTeam(player: PlayerMp, fullText: string, description: string, id: string) {
-    if (!id || !this.hash[id]) {
-      player.outputChatBox(description)
-      return
-    }
-
     if (!id) {
       return this.teamSelect(player)
     }
 
-    return this.change(player, this.hash[id])
-  }
-
-  @log
-  @event(Events["tdm.team.select"])
-  changeTeamRequest(player: PlayerMp, id: string) {
     if (!this.hash[id]) {
+      player.outputChatBox(description)
       return
     }
 
@@ -105,6 +93,7 @@ export default class TeamService {
 
     this.playerService.setTeam(p, team)
     this.playerService.setState(p, tdm.State.idle)
+    this.playerService.spawnLobby(p)
 
     player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
   }

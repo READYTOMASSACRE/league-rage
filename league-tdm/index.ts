@@ -22,7 +22,7 @@ const main = async () => {
   const permissionService = new PermissionService(language)
   const teamService = new TeamService(config.team, playerService, language)
   const roundService = new RoundService(config.round, playerService, teamService, language)
-  const voteService = new VoteService(language)
+  const voteService = new VoteService(config.vote, language)
   const weaponService = new WeaponService(config.weapon, playerService, language)
   const broadcastService = new BroadcastService(playerService, teamService, language)
   const tdmService = new TdmService(

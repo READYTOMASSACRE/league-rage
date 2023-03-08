@@ -1,9 +1,10 @@
 import { log, eventable, event, helpers } from "../../league-core";
 import { Events } from "../../league-core/src/types";
+import { VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 
-interface VoteConfig {
+interface InternalVoteConfig {
   timer: NodeJS.Timeout
   players: number[]
   result: Record<string, number>
@@ -11,7 +12,7 @@ interface VoteConfig {
 
 @eventable
 export default class VoteService {
-  private info: Record<string, VoteConfig> = {}
+  private info: Record<string, InternalVoteConfig> = {}
 
   constructor(
     readonly config: VoteConfig,
