@@ -4,7 +4,6 @@ import * as s from './PopupItem.module.sass'
 
 interface Props {
   message: IMessage;
-  setDeleteMessage: (id: number) => void;
 }
 
 const color = {
@@ -15,38 +14,16 @@ const color = {
   common: '#5c5c5c'
 }
 
-const PopupItem: FC<Props> = ({ message, setDeleteMessage }) => {
-
-  const [active, setActive] = useState<boolean>(false)
-  const div = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setActive(true)
-
-    let timerSetVisible = setTimeout(() => {
-      setActive(false)
-      setDeleteMessage(message.id)
-    }, 3000)
-
-    return () => {
-      clearTimeout(timerSetVisible);
-    }
-  }, [])
+const PopupItem: FC<Props> = ({ message }) => {
+  const style: React.CSSProperties = {
+    backgroundColor: `${color[message.type]}`,
+    opacity: message.active ? 1 : 0,
+  }
 
   return (
-    <div ref={div}
-      style={{
-        backgroundColor: `${color[message.type]}`,
-        visibility: active ? 'visible' : 'hidden'
-      }}
-      className={s.popupitem}
-    >
-      <div></div>
-      {/* <div className={s.type}>
-        {message.type}
-      </div> */}
+    <div style={style} className={s.popupitem}>
       <div className={s.title}>
-        {message.title}
+        {message.text}
       </div>
     </div>
   )

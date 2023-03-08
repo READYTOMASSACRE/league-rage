@@ -87,4 +87,8 @@ export default class UIService {
 
     this.cef.call(Events['tdm.scoreboard.toggle'], this.scoreboardVisible)
   }
+
+  @logClient
+  @event(Events["tdm.cef.log"])
+  cefLof(...args: any[]) {}
 }

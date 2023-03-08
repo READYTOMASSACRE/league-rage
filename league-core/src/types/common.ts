@@ -96,6 +96,8 @@ export const enum Events {
   'tdm.player.team' = 'tdm.player.team',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
+  /** Fires when cef is console.log */
+  'tdm.cef.log' = 'tdm.cef.log',
 }
 
 export const enum Procs {
