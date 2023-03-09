@@ -90,5 +90,10 @@ export default class UIService {
 
   @logClient
   @event(Events["tdm.cef.log"])
-  cefLof(...args: any[]) {}
+  cefLog(...args: any[]) {}
+
+  @event(Events["tdm.team.select_toggle"])
+  teamSelectToggle(team: string, toggle: boolean) {
+    this.cef.call(Events["tdm.team.select_toggle"], team, toggle)
+  }
 }

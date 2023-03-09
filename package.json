@@ -22,6 +22,7 @@
     "watch:tdm": "yarn --cwd ./league-tdm watch:external",
     "watch:ui": "yarn --cwd ./league-tdm-ui watch:external",
     "watch:cef": "yarn --cwd ./league-tdm-cef watch:external",
+    "watch:cef:cache": "yarn --cwd ./league-tdm-cef watch:external:cache",
     "watch:lang": "yarn --cwd ./league-lang watch:external"
   },
   "dependencies": {}

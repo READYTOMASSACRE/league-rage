@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import Chat from './components/chat'
+import Selector from './components/selector'
 import Popup from './components/popup/Popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
@@ -416,11 +417,13 @@ const currentPlayerInfo = {
 }
 
 const App = () => {
+  // todo register and propagane events here
   return (
     <>
       <Scoreboard currentPlayerId={currentPlayerInfo} teams={teamInfo} players={playersInfo}/>
       <Chat />
       <Popup />
+      <Selector />
     </>
   )
 }

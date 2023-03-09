@@ -1,4 +1,4 @@
-import { event, eventable } from "../../../league-core/client";
+import { event, eventable, logClient } from "../../../league-core/client";
 import { toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
@@ -11,7 +11,7 @@ interface TeamSelector extends TeamSelectorConfig {}
 class TeamSelector implements TeamSelectorConfig {
   private running: boolean = false
   private ids: number[] = []
-  private teamPed: Record<tdm.Team, PedMp[]>
+  private teamPed: Record<string, PedMp[]> = {}
   private camera: CameraMp
   private playerService: PlayerService
 
@@ -28,13 +28,18 @@ class TeamSelector implements TeamSelectorConfig {
     Object.assign(this, config)
     this.playerService = playerService
 
-    this.camera = mp.cameras.new("TeamSelector", new mp.Vector3(this.cam.vector), new mp.Vector3(this.cam.rotation), this.cam.fov)
+    this.camera = mp.cameras.new(
+      "TeamSelector",
+      new mp.Vector3(...this.cam.vector),
+      new mp.Vector3(...this.cam.rotation),
+      this.cam.fov
+    )
     this.camera.pointAtCoord(...config.cam.pointAt)
 
     for (const [team, data] of Object.entries(teamConfig)) {
       const peds = data.skins.map(skin => mp.peds.new(
         mp.game.joaat(skin),
-        new mp.Vector3(this.ped.vector),
+        new mp.Vector3(...this.ped.vector),
         this.ped.heading,
         this.ped.dimension
       ))
@@ -67,15 +72,21 @@ class TeamSelector implements TeamSelectorConfig {
         this.ids.includes(entity.id) &&
         entity.id !== this.current.ped
       ) {
-        entity.setAlpha(0)
+        (entity as PedMp).setAlpha(0, false)
       }
     } catch (err) {
       this.running = false
-      mp.console.logError(err)
+      mp.console.logError(err.stack)
     }
   }
 
+  @logClient
   run() {
+    this.current = {
+      team: 0,
+      ped: 0,
+    }
+
     if (this.running) {
       this.stop()
     }
@@ -83,11 +94,13 @@ class TeamSelector implements TeamSelectorConfig {
     this.toggle(true)
 
     this.running = true
+    mp.events.call(Events["tdm.team.select_toggle"], this.currentTeam, true)
   }
 
   stop() {
     this.toggle(false)
     this.running = false
+    mp.events.call(Events["tdm.team.select_toggle"])
   }
 
   private toggle(toggle: boolean) {
@@ -106,18 +119,20 @@ class TeamSelector implements TeamSelectorConfig {
   
       this.refreshPeds(toggle)
     } catch (err) {
-      mp.console.logError(err)
+      mp.console.logError(err.stack)
     }
   }
 
   private refreshPeds(toggle: boolean) {
     for (const [team, peds] of Object.entries(this.teamPed)) {
+      let pedIndex = 0
+
       for (const ped of peds) {
         const current = toggle &&
           this.currentTeam === team &&
-          this.current.ped === ped.id
+          this.current.ped === pedIndex++
 
-        ped.setAlpha(current ? 255 : 0)
+        ped.setAlpha(current ? 255 : 0, false)
         ped.setInvincible(!current)
       }
     }
@@ -152,11 +167,13 @@ class TeamSelector implements TeamSelectorConfig {
       }
   
       this.refreshPeds(true)
+      mp.events.call(Events["tdm.team.select_toggle"], this.currentTeam, true)
     } catch (err) {
-      mp.console.logError(err)
+      mp.console.logError(err.stack)
     }
   }
 
+  @logClient
   private submit() {
     try {
       if (!this.running) {
@@ -168,7 +185,7 @@ class TeamSelector implements TeamSelectorConfig {
       this.playerService.local.model = this.currentPed.model
       mp.events.callRemote(Events["tdm.team.select"], this.currentTeam, this.currentPed.model)
     } catch (err) {
-      mp.console.logError(err)
+      mp.console.logError(err.stack)
     } 
   }
 

@@ -20,7 +20,7 @@ export default class InteractionService {
 
   @logClient
   @event(Events["tdm.team.select"])
-  async teamSelect() {
+  teamSelect() {
     this.teamSelector.run()
   }
 }

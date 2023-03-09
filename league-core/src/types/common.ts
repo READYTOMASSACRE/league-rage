@@ -96,6 +96,8 @@ export const enum Events {
   'tdm.player.team' = 'tdm.player.team',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
+  /** Fires when clientside should team select */
+  'tdm.team.select_toggle' = 'tdm.team.select_toggle',
   /** Fires when cef is console.log */
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when someone push to popup */
