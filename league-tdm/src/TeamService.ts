@@ -22,25 +22,26 @@ export default class TeamService {
   @log
   @event(Events["tdm.player.ready"])
   clientPlayerReady(player: PlayerMp) {
-    const state = this.playerService.getState(player)
-    if (state !== tdm.State.idle) {
-      player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
+    if (this.playerService.getState(player) !== tdm.State.idle) {
+      return player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
     }
 
-    this.playerService.setState(player, tdm.State.select)
-    player.call(Events["tdm.team.select"])
+    return this.teamSelectRequest(player)
   }
 
   @log
   @event(Events["tdm.team.select"])
   teamSelect(player: PlayerMp, team?: tdm.Team) {
-    if (!this.config[team]) {
-      player.outputChatBox(this.lang.get(Lang["error.team.not_found"], { team }))
+    if (typeof team === 'undefined') {
+      return this.teamSelectRequest(player)
     }
 
-    const state = this.playerService.getState(player)
-    if (state !== tdm.State.select) {
-      player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
+    if (!this.config[team]) {
+      return player.outputChatBox(this.lang.get(Lang["error.team.not_found"], { team }))
+    }
+
+    if (this.playerService.getState(player) !== tdm.State.select) {
+      return player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
     }
 
     return this.change(player, team)
@@ -59,6 +60,11 @@ export default class TeamService {
     }
 
     return this.change(player, this.hash[id])
+  }
+
+  private teamSelectRequest(player: PlayerMp) {
+    this.playerService.setState(player, tdm.State.select)
+    return player.call(Events["tdm.team.select"])
   }
 
   @log

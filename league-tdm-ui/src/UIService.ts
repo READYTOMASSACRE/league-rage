@@ -87,4 +87,13 @@ export default class UIService {
 
     this.cef.call(Events['tdm.scoreboard.toggle'], this.scoreboardVisible)
   }
+
+  @logClient
+  @event(Events["tdm.cef.log"])
+  cefLog(...args: any[]) {}
+
+  @event(Events["tdm.team.select_toggle"])
+  teamSelectToggle(team: string, toggle: boolean) {
+    this.cef.call(Events["tdm.team.select_toggle"], team, toggle)
+  }
 }

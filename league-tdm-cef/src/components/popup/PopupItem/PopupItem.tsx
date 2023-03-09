@@ -1,53 +1,27 @@
-import React, { FC, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { FC } from 'react'
 import { IMessage } from '../../../types'
 import * as s from './PopupItem.module.sass'
 
 interface Props {
-  message: IMessage;
-  setDeleteMessage: (id: number) => void;
+  message: IMessage
 }
 
 const color = {
-  info: '#1b57b1',
-  success: '#1bb16b',
-  error: '#b11b1b',
-  warning: '#aeb11b',
-  common: '#5c5c5c'
+  info: '#1b57b194',
+  success: '#0aa15b94',
+  error: '#d3323294',
+  warning: '#cfc52f94',
+  common: '#5c5c5c94'
 }
 
-const PopupItem: FC<Props> = ({ message, setDeleteMessage }) => {
-
-  const [active, setActive] = useState<boolean>(false)
-  const div = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setActive(true)
-
-    let timerSetVisible = setTimeout(() => {
-      setActive(false)
-      setDeleteMessage(message.id)
-    }, 3000)
-
-    return () => {
-      clearTimeout(timerSetVisible);
-    }
-  }, [])
+const PopupItem: FC<Props> = ({ message }) => {
+  const style: React.CSSProperties = {
+    backgroundColor: `${color[message.type]}`,
+  }
 
   return (
-    <div ref={div}
-      style={{
-        backgroundColor: `${color[message.type]}`,
-        visibility: active ? 'visible' : 'hidden'
-      }}
-      className={s.popupitem}
-    >
-      <div></div>
-      {/* <div className={s.type}>
-        {message.type}
-      </div> */}
-      <div className={s.title}>
-        {message.title}
-      </div>
+    <div style={style} className={s.popupitem}>
+      {message.text}
     </div>
   )
 }
