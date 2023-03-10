@@ -2,6 +2,7 @@ import { Events, IConfig, Procs } from "../league-core/src/types"
 import { Language } from '../league-lang/language'
 import HudService from "./src/HudService"
 import InteractionService from "./src/InteractionService"
+import KeybindService from "./src/KeybindService"
 import PlayerService from "./src/PlayerService"
 import RoundService from "./src/RoundService"
 import UIService from "./src/UIService"
@@ -17,8 +18,9 @@ const main = async () => {
     const playerService = new PlayerService()
     const zoneService = new ZoneService(playerService)
     const roundService = new RoundService(zoneService)
-  
-    new UIService("package://league-tdm-cef/index.html", language)
+    const keybindService = new KeybindService()
+
+    new UIService("package://league-tdm-cef/index.html", keybindService, language)
     new WeaponService(playerService)
     new HudService(roundService, config.hud)
     new InteractionService(playerService, config)

@@ -12,12 +12,6 @@ export default class TeamService {
     readonly playerService: PlayerService,
     readonly lang: ILanguage,
   ) {}
-  
-  @log
-  @event("playerReady")
-  playerReady(player: PlayerMp) {
-    this.playerService.setTeam(player, tdm.Team.spectators)
-  }
 
   @log
   @event(Events["tdm.player.ready"])

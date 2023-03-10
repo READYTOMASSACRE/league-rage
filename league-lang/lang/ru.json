@@ -11,9 +11,12 @@
 
   "error.vote.already_voted": "Вы уже проголосовали",
 
-  "error.weapon.empty_choice": "Choice is empty",
+  "error.weapon.weapon_not_found": "Choice is empty",
   "error.weapon.not_configured": "Weapon choice is not in config",
   "error.weapon.already_equipped": "Already equipped",
+  "error.weapon.category_not_found": ":category не найдена",
+  "error.weapon.slot_not_found": "Слот для :category не найден",
+  "error.weapon.slot_is_busy": "Слот :slot занят оружием :weapon",
 
   "error.player.not_found": "Player is not exists: :player",
   "error.player.not_in_round": "Not in round",

@@ -7,7 +7,7 @@
     "install:cef": "yarn --cwd ./league-tdm-cef",
     "install:ui": "yarn --cwd ./league-tdm-ui",
     "build": "yarn build:server && yarn build:client",
-    "build:server": "yarn build:core && yarn build:tdm && yarn build:lang",
+    "build:server": "yarn build:core && yarn build:lang && yarn build:tdm",
     "build:client": "yarn build:ui && yarn build:cef && yarn build:tdm-client",
     "build:core": "yarn --cwd ./league-core build:external",
     "build:tdm": "yarn --cwd ./league-tdm build:external",
