@@ -1,14 +1,15 @@
+before_script:
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
 stages:
   - deploy
 
-build-job:
+deploy_production:
   stage: deploy
   script:
-    - yarn build
+    - ssh root@79.137.203.94 "cd /opt/srv && git checkout main && git pull origin main && yarn && yarn build && systemctl ragesrv restart"
   enviroment: production
-
-restart-job:
-  stage: deploy
-  script:
-    - systemctl ragesrv restart
-  enviroment: production
+  only:
+    - main
