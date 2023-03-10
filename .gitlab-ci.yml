@@ -10,6 +10,6 @@ deploy_production:
   stage: deploy
   script:
     - ssh root@79.137.203.94 "cd /opt/srv && git checkout main && git pull origin main && yarn && yarn build && systemctl ragesrv restart"
-  enviroment: production
+  environment: production
   only:
     - main
