@@ -1,0 +1,14 @@
+stages:
+  - deploy
+
+build-job:
+  stage: deploy
+  script:
+    - yarn build
+  enviroment: production
+
+restart-job:
+  stage: deploy
+  script:
+    - systemctl ragesrv restart
+  enviroment: production
