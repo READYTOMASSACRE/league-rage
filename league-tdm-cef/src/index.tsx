@@ -5,6 +5,7 @@ import Selector from './components/selector'
 import Popup from './components/popup/Popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
+import WeaponSelector from './components/weaponselector/WeaponSelector'
 
 const teamInfo = [
   {
@@ -424,6 +425,7 @@ const App = () => {
       <Chat />
       <Popup />
       <Selector />
+      <WeaponSelector />
     </>
   )
 }

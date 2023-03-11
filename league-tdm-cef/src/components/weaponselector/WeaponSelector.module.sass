@@ -1,0 +1,33 @@
+.container
+  position: absolute
+  width: 80vmin
+  height: 50vmin
+  display: grid
+  justify-content: center
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  grid-template-columns: 1fr 2fr
+  font-size: 15px
+  z-index: 3
+  background: transparentize(#343434, 0.5)
+  color: #FFFFFF
+  
+.listside
+  grid-area: 1 / 1 / 2 / 2 
+  display: flex
+  flex-direction: row
+  padding: 10px 10px 10px 0px
+  gap: 10px
+
+.buttonback
+  width: 20px
+  &:hover
+    background: transparentize(#343434, 0.5)
+
+
+.list
+  display: flex
+  flex-direction: column
+  width: 100%
+  gap: 15px
