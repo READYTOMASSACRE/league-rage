@@ -18,10 +18,7 @@ export default class WeaponService {
     damage: number
   ): boolean | void {
     try {
-      if (
-        this.playerService.alive ||
-        this.playerService.sameTeam(targetPlayer)
-      ) {
+      if (this.playerService.alive && this.playerService.sameTeam(targetPlayer)) {
         return true
       }
 
