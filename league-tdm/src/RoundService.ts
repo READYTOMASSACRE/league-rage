@@ -1,5 +1,4 @@
 import { event, eventable, log } from "../../league-core"
-import { IConfig } from "../../league-core/src/types"
 import { RoundConfig } from "../../league-core/src/types/tdm"
 import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
@@ -70,6 +69,7 @@ export default class RoundService {
       players,
       prepareSeconds: this.config.prepare,
       roundSeconds: this.config.timeleft,
+      weaponSeconds: this.config.weapon,
     }, this.playerService)
   }
 

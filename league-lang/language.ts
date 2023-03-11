@@ -24,6 +24,8 @@ export const enum Lang {
   "error.vote.not_found_config" = "error.vote.not_found_config",
 
   "tdm.player.find_result" = "tdm.player.find_result",
+  "tdm.player.join" = "tdm.player.join",
+  "tdm.player.quit" = "tdm.player.quit",
 
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
   "tdm.round.arena_start" = "tdm.round.arena_start",

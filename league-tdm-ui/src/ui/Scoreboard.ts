@@ -9,7 +9,7 @@ export default class Scoreboard {
 
   constructor(readonly uiService: UIService, readonly keybindService: KeybindService) {
     this.keybindService.unbind(key.tab, [true, false])
-    this.keybindService.bind(key.tab, [true, false], () => this.toggle(true))
+    this.keybindService.bind(key.tab, [true, false], () => this.toggle(mp.keys.isDown(key.tab)))
   }
 
   @event(Events["tdm.scoreboard.toggle"])

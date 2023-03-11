@@ -25,7 +25,7 @@ export default class TeamService {
 
   @log
   @event(Events["tdm.team.select"])
-  teamSelect(player: PlayerMp, team?: tdm.Team) {
+  teamSelect(player: PlayerMp, team?: tdm.Team, model?: number) {
     if (typeof team === 'undefined') {
       return this.teamSelectRequest(player)
     }
@@ -38,7 +38,7 @@ export default class TeamService {
       return player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
     }
 
-    return this.change(player, team)
+    return this.change(player, team, model)
   }
 
   @log
@@ -48,12 +48,16 @@ export default class TeamService {
       return this.teamSelect(player)
     }
 
-    if (!this.hash[id]) {
+    const team = this.hash[id]
+
+    if (!team) {
       player.outputChatBox(description)
       return
     }
 
-    return this.change(player, this.hash[id])
+    const [model] = this.config[team].skins
+
+    return this.change(player, team, mp.joaat(model))
   }
 
   private teamSelectRequest(player: PlayerMp) {
@@ -83,7 +87,7 @@ export default class TeamService {
 
   @log
   @ensurePlayer
-  change(p: number | PlayerMp, team: tdm.Team) {
+  change(p: number | PlayerMp, team: tdm.Team, model: number) {
     const state = this.playerService.getState(p)
     const player = <PlayerMp>p
 
@@ -94,6 +98,7 @@ export default class TeamService {
     this.playerService.setTeam(p, team)
     this.playerService.setState(p, tdm.State.idle)
     this.playerService.spawnLobby(p)
+    this.playerService.setModel(p, model)
 
     player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
   }
@@ -106,7 +111,7 @@ export default class TeamService {
     return this.config[team]?.name || team
   }
 
-  get hash() {
+  get hash(): Record<string | number, tdm.Team> {
     return {
       att: tdm.Team.attackers,
       attackers: tdm.Team.attackers,

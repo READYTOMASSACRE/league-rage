@@ -39,6 +39,7 @@ export type TeamConfig = {
 export type RoundConfig = {
   prepare: number
   timeleft: number
+  weapon: number
 }
 
 export type VoteConfig = {

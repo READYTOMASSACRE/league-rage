@@ -145,4 +145,10 @@ export default class PlayerService {
       return mp.players.at(Number(id))
     }
   }
+
+  @log
+  @ensurePlayer
+  setModel(p: number | PlayerMp, model: number) {
+    (p as PlayerMp).model = model
+  }
 }

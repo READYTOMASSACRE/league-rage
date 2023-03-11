@@ -24,6 +24,8 @@
   "error.vote.not_found_config": "Нет конфига для голосования :vote",
 
   "tdm.player.find_result": "Найдены следующие игроки: :players",
+  "tdm.player.join": "Игрок :player присоединился к серверу",
+  "tdm.player.quit": "Игрок :player отключился от сервера (:reason)",
 
   "tdm.round.arena_prepare": "Подготовка арены :arena",
   "tdm.round.arena_start": "Запущена арена :arena",
