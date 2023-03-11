@@ -14,7 +14,7 @@ const server = <T extends ctor>(target: T): T => {
           if (group) {
             indexByCommand[group] = {
               group: true,
-              descriptions,
+              descriptions: descriptions.map(description => getDescription((<any>this)?.lang, description)),
             }
           }
 
@@ -28,7 +28,7 @@ const server = <T extends ctor>(target: T): T => {
             const commandName = [group, name].filter(Boolean).join('.')
 
             indexByCommand[commandName] = {
-              description: descriptions[index],
+              description: getDescription((<any>this)?.lang, descriptions[index]),
               callback,
             }
 
@@ -91,7 +91,7 @@ const client = <T extends ctor>(target: T): T => {
           if (group) {
             indexByCommand[group] = {
               group: true,
-              descriptions,
+              descriptions: descriptions.map(description => getDescription((<any>this)?.lang, description)),
             }
           }
 
@@ -105,7 +105,7 @@ const client = <T extends ctor>(target: T): T => {
             const commandName = [group, name].filter(Boolean).join('.')
 
             indexByCommand[commandName] = {
-              description: descriptions[index],
+              description: getDescription((<any>this)?.lang, descriptions[index]),
               callback,
             }
 
@@ -151,6 +151,14 @@ const client = <T extends ctor>(target: T): T => {
       }
     }
   }
+}
+
+const getDescription = (lang: any, description: string) => {
+  if (typeof lang?.get !== 'function') {
+    return description
+  }
+
+  return lang.get(description)
 }
 
 const printCommand = ({constructor, method, group, name}: {
