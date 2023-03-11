@@ -35,7 +35,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       defenders: {
         name: "Sentinel",
         skins: ["u_m_y_imporage", "s_m_y_mime"],
-        color: "",
+        color: "#85abce",
       },
       spectators: {
         name: "Spectators",
