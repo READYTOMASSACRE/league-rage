@@ -16,7 +16,11 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "parcel": "^2.8.3",
+    "parcel-reporter-static-files-copy": "^1.5.0",
     "process": "^0.11.10"
+  },
+  "staticFiles": {
+    "staticPath": "public"
   },
   "scripts": {
     "clean": "rm -rf ./dist'",

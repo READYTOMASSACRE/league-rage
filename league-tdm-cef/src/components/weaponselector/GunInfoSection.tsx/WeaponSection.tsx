@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { IWeapon } from '../../../types'
 import * as s from './WeaponSection.module.sass'
-import weaponImg from '../../../../public/assets/weapons/carbinerifle-mk2.webp'
 import WeaponSectionItem from '../WeaponSectionItem/WeaponSectionItem';
 
 
@@ -19,7 +18,7 @@ const WeaponSection: FC<Props> = ({ weapon }) => {
       {weapon && Object.keys(weapon).length > 0 ? (
         <>
           <div className={s.container_img}>
-            <img className={s.img} src={weaponImg} alt='' />
+            <img className={s.img} alt='' src="/assets/weapons/advancedrifle.webp" />
           </div>
           <div>
             <WeaponSectionItem title={'Damage'} value={weapon.damage} barmaxvalue={MAX_DAMAGE}/>

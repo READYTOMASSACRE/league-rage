@@ -26,7 +26,7 @@ const color = {
 const WeaponSelector = () => {
 
   const [category, setCattegory] = useState<string>(' ')
-  const [currentWeapon, setGun] = useState<IWeapon>({})
+  const [currentWeapon, setGun] = useState<Partial<IWeapon>>({})
 
   return (
     <div className={s.container}>
