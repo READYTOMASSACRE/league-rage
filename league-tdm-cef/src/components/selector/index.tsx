@@ -5,18 +5,18 @@ import cls from 'classnames'
 
 const Selector: FC = () => {
   const [classname, setClassname] = useState(styles.item)
-  const [team, setTeam] = useState('')
+  const [{team, color}, setData] = useState({team: '', color: ''})
 
   useEffect(() => {
-    mp.events.add(Events['tdm.team.select_toggle'], (team: string = '', toggle: boolean = false) => {
+    mp.events.add(Events['tdm.team.select_toggle'], (team = '', color = '', toggle = false) => {
       setClassname(toggle ? cls(styles.item, styles.active): styles.item)
-      setTeam(team)
+      setData({team, color})
     })
 
   }, [])
 
   return (
-    <div className={classname}>{team}</div>
+    <div className={classname} style={color?.length ? { color } : {}}>{team}</div>
   )
 }
 

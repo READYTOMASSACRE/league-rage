@@ -10,10 +10,10 @@ export enum Category {
 
 export interface Config {
   ammo: number
-  slotCount: number
+  slot: Record<string, Category[]>
   category: Record<Category, string[]>
   damage: {
     weapon: Record<string, number>
-    category: Record<Category, number>
+    category: Partial<Record<Category, number>>
   }
 }

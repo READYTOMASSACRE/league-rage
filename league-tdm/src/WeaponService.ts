@@ -1,5 +1,6 @@
 import { event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
+import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
@@ -15,7 +16,11 @@ export default class WeaponService {
   @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare() {
-    mp.players.forEachFast((p) => this.playerService.setWeaponState(p, tdm.WeaponState.idle))
+    mp.players.forEachFast((p) => {
+      p.removeAllWeapons()
+      this.playerService.setWeaponSlot(p)
+      this.playerService.setWeaponState(p, tdm.WeaponState.idle)
+    })
   }
   
   @log
@@ -26,28 +31,21 @@ export default class WeaponService {
 
   @log
   @event(Events["tdm.weapon.request"])
-  weaponRequest(player: PlayerMp, choice: string[]) {
-    this.validateRequest(player, choice)
+  weaponRequest(player: PlayerMp, weapon?: string) {
+    const slot = this.validateRequest(player, weapon)
 
-    player.removeAllWeapons()
-    choice.forEach(hash => player.giveWeapon(hash, this.config.ammo))
-
-    this.playerService.setWeaponState(player, tdm.WeaponState.has)
+    this.playerService.setWeaponSlot(player, slot, weapon)
+    player.giveWeapon(weapon, this.config.ammo)
   }
 
   @log
-  private validateRequest(player: PlayerMp, choice: string[]) {
+  private validateRequest(player: PlayerMp, weapon: string) {
     if (!mp.players.exists(player)) {
       throw new Error(this.lang.get(Lang["error.player.not_found"], { player: player?.id }))
     }
 
-    if (!choice?.length) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.empty_choice"]), player)
-    }
-
-    if (!this.isValidChoice(choice)) {
-      player.giveWeapon('weapon_bat', 1)
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.not_configured"]), player)
+    if (!weapon) {
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
     }
 
     if (!this.playerService.hasState(player, tdm.State.alive)) {
@@ -57,14 +55,43 @@ export default class WeaponService {
     if (this.playerService.hasWeaponState(player, tdm.WeaponState.has)) {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.already_equipped"]), player)
     }
+
+    const category = this.getCategory(weapon)
+
+    if (!category) {
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.category_not_found"], { category }), player)
+    }
+
+    const slot = this.getSlotByCategory(category)
+
+    if (!slot) {
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_not_found"], { category }), player)
+    }
+
+    const oldWeapon = this.playerService.getWeaponSlot(player, slot)
+
+    if (oldWeapon) {
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], { slot }), player)
+    }
+
+    return slot
   }
 
   @log
-  private isValidChoice(choice: string[]) {
-    return choice.length > this.config.slotCount && choice.every((hash) => this.flat.includes(hash))
+  getCategory(weapon: string): Category | undefined {
+    for (const [category, weapons] of Object.entries(this.config.category)) {
+      if (weapons.includes(weapon)) {
+        return <Category>category
+      }
+    }
   }
 
-  get flat() {
-    return Object.values(this.config.category).flat()
+  @log
+  getSlotByCategory(category: Category): string | undefined {
+    for (const [slot, categories] of Object.entries(this.config.slot)) {
+      if (categories.includes(category)) {
+        return slot
+      }
+    }
   }
 }

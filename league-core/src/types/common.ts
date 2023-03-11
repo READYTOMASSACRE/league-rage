@@ -90,8 +90,12 @@ export const enum Events {
   'tdm.player.ready' = 'tdm.player.ready',
   /** Fires when player has changed state */
   'tdm.player.state' = 'tdm.player.state',
+  /** Fires when player has set data */
+  'tdm.player.data' = 'tdm.player.data',
   /** Fires when player has changed weapon state */
-  'tdm.player.weaponstate' = 'tdm.player.weaponstate',
+  'tdm.player.weapon_state' = 'tdm.player.weapon_state',
+  /** Fires when player has changed weapon slot */
+  'tdm.player.weapon_slot' = 'tdm.player.weapon_slot',
   /** Fires when player has changed team */
   'tdm.player.team' = 'tdm.player.team',
   /** Fires when clientside should team select */

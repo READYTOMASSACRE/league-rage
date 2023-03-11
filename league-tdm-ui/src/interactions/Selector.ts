@@ -14,6 +14,7 @@ class TeamSelector implements TeamSelectorConfig {
   private teamPed: Record<string, PedMp[]> = {}
   private camera: CameraMp
   private playerService: PlayerService
+  private teamConfig: TeamConfig
 
   private current = {
     team: 0,
@@ -27,6 +28,7 @@ class TeamSelector implements TeamSelectorConfig {
   ) {
     Object.assign(this, config)
     this.playerService = playerService
+    this.teamConfig = teamConfig
 
     this.camera = mp.cameras.new(
       "TeamSelector",
@@ -94,13 +96,13 @@ class TeamSelector implements TeamSelectorConfig {
     this.toggle(true)
 
     this.running = true
-    mp.events.call(Events["tdm.team.select_toggle"], this.currentTeam, true)
+    mp.events.call(Events["tdm.team.select_toggle"], { ...this.currentTeamInfo, toggle: true })
   }
 
   stop() {
     this.toggle(false)
     this.running = false
-    mp.events.call(Events["tdm.team.select_toggle"])
+    mp.events.call(Events["tdm.team.select_toggle"], { ...this.currentTeamInfo, toggle: false })
   }
 
   private toggle(toggle: boolean) {
@@ -167,7 +169,7 @@ class TeamSelector implements TeamSelectorConfig {
       }
   
       this.refreshPeds(true)
-      mp.events.call(Events["tdm.team.select_toggle"], this.currentTeam, true)
+      mp.events.call(Events["tdm.team.select_toggle"], { ...this.currentTeamInfo, toggle: true })
     } catch (err) {
       mp.console.logError(err.stack)
     }
@@ -195,6 +197,12 @@ class TeamSelector implements TeamSelectorConfig {
 
   private get currentPed(): PedMp {
     return this.teamPed[this.currentTeam][this.current.ped]
+  }
+
+  private get currentTeamInfo(): { team: string, color: string } {
+    const { name: team, color } = this.teamConfig[this.currentTeam]
+
+    return { team, color }
   }
 }
 

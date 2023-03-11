@@ -1,99 +1,70 @@
-import { command, commandable, event, eventable, logClient } from "../../league-core/client";
-import { Enviroment, Events } from "../../league-core/src/types";
+import { event, eventable, logClient } from "../../league-core/client";
+import { Events } from "../../league-core/src/types";
 import { ILanguage } from "../../league-lang/language";
+import KeybindService from "./KeybindService";
+import Chat from "./ui/Chat";
+import Scoreboard from "./ui/Scoreboard";
+import TeamSelect from "./ui/TeamSelect";
+import WeaponRequest from "./ui/WeaponRequest";
 
 @eventable
-@commandable
 export default class UIService {
   public cef: BrowserMp
-  private chatVisible: boolean = false
-  private scoreboardVisible: boolean = false
+  public chat: Chat
+  public scoreboard: Scoreboard
+  public weaponRequest: WeaponRequest
+  public teamSelect: TeamSelect
+  public visible: Record<string, boolean> = {}
 
-  constructor(readonly url: string, readonly lang: ILanguage) {
-    mp.gui.chat.activate(false)
-    mp.gui.chat.show(false)
+  constructor(
+    readonly url: string,
+    readonly keybindService: KeybindService,
+    readonly lang: ILanguage
+  ) {
+    this.chat = new Chat(this, keybindService)
+    this.scoreboard = new Scoreboard(this, keybindService)
+    this.weaponRequest = new WeaponRequest(this, keybindService)
+    this.teamSelect = new TeamSelect(this, keybindService)
 
-    mp.console.clear()
-    mp.console.reset()
+    this.disableControlActions()
+  }
 
-    this.chatToggle = this.chatToggle.bind(this)
+  setCursor(visible: boolean, component: string, forceClose?: boolean) {
+    if (forceClose) {
+      this.visible = {}
+    }
 
-    mp.keys.unbind(0x54, true)
-    mp.keys.bind(0x54, true, this.chatToggle)
+    this.visible = {[component]: visible}
 
-    mp.keys.unbind(0x09, true)
-    mp.keys.bind(0x09, true, () => this.scoreboardToggle(true))
-    mp.keys.unbind(0x09, false)
-    mp.keys.bind(0x09, false, () => this.scoreboardToggle(false))
+    if (!visible && Object.values(this.visible).find(Boolean)) {
+      return
+    }
+
+    mp.gui.cursor.visible = visible
   }
 
   @event(Events["tdm.player.ready"])
-  @command('reload')
-  loadCef() {
+  load() {
     if (this.cef) {
       this.cef.destroy()
     }
 
     this.cef = mp.browsers.new(this.url)
-    this.cef.markAsChat()
 
     return this.url
   }
 
-  @event(Events["tdm.chat.push"])
-  chatPush(msg: string, from?: Enviroment) {
-    if (from === Enviroment.cef) {
-      mp.events.callRemote(Events["tdm.chat.push"], msg)
-    } else if (from === Enviroment.server) {
-      this.cef.call(Events["tdm.chat.push"], msg)
-    }
-  }
-
-  @event(Events["tdm.chat.toggle"])
-  chatToggle(visible: boolean, force?: boolean) {
-    const old = this.chatVisible
-
-    visible = typeof visible !== 'undefined' ?
-      visible :
-      !this.chatVisible
-
-    if (force || !this.chatVisible) {
-      this.chatVisible = visible
-    }
-
-    if (old !== this.chatVisible) {
-      this.cef.call(Events["tdm.chat.toggle"], this.chatVisible)
-    }
-
-    mp.gui.cursor.visible = this.chatVisible // todo fixme
-
-    return this.chatVisible
-  }
-
-  @event('render')
+  // @event('render')
   disableControlActions() {
     mp.game.controls.disableControlAction(24, 37, true)
     mp.game.controls.disableControlAction(24, 157, true)
 
-    if (this.chatVisible) {
+    if (this.chat.visible) {
       mp.game.controls.disableAllControlActions(2)
     }
   }
 
-  @event(Events["tdm.scoreboard.toggle"])
-  scoreboardToggle(visible: boolean) {
-    this.scoreboardVisible = visible
-    mp.gui.cursor.visible = this.scoreboardVisible // todo fixme
-
-    this.cef.call(Events['tdm.scoreboard.toggle'], this.scoreboardVisible)
-  }
-
   @logClient
   @event(Events["tdm.cef.log"])
-  cefLog(...args: any[]) {}
-
-  @event(Events["tdm.team.select_toggle"])
-  teamSelectToggle(team: string, toggle: boolean) {
-    this.cef.call(Events["tdm.team.select_toggle"], team, toggle)
-  }
+  log(...args: any[]) {}
 }

@@ -11,9 +11,12 @@ export const enum Lang {
 
   "error.vote.already_voted" = "error.vote.already_voted",
 
-  "error.weapon.empty_choice" = "error.weapon.empty_choice",
+  "error.weapon.weapon_not_found" = "error.weapon.weapon_not_found",
   "error.weapon.not_configured" = "error.weapon.not_configured",
   "error.weapon.already_equipped" = "error.weapon.already_equipped",
+  "error.weapon.category_not_found" = "error.weapon.category_not_found",
+  "error.weapon.slot_not_found" = "error.weapon.slot_not_found",
+  "error.weapon.slot_is_busy" = "error.weapon.slot_is_busy",
 
   "error.player.not_found" = "error.player.not_found",
   "error.player.not_in_round" = "error.player.not_in_round",
@@ -21,6 +24,8 @@ export const enum Lang {
   "error.vote.not_found_config" = "error.vote.not_found_config",
 
   "tdm.player.find_result" = "tdm.player.find_result",
+  "tdm.player.join" = "tdm.player.join",
+  "tdm.player.quit" = "tdm.player.quit",
 
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
   "tdm.round.arena_start" = "tdm.round.arena_start",

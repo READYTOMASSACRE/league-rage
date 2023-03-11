@@ -1,5 +1,6 @@
 import { event, eventable, log, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
+import BroadCastError from "./error/BroadCastError";
 
 @eventable
 export default class PlayerService {
@@ -9,6 +10,9 @@ export default class PlayerService {
   @event("playerReady")
   playerReady(player: PlayerMp) {
     this.setState(player, tdm.State.idle)
+    this.setTeam(player, tdm.Team.spectators)
+    this.setWeaponState(player, tdm.WeaponState.idle)
+    this.setWeaponSlot(player)
   }
 
   @log
@@ -81,7 +85,31 @@ export default class PlayerService {
     const player = <PlayerMp>p
 
     player.setVariable('weaponState', state)
-    mp.players.call(Events["tdm.player.weaponstate"], [player.id, state])
+    mp.players.call(Events["tdm.player.weapon_state"], [player.id, state])
+  }
+
+  @log
+  @ensurePlayer
+  setWeaponSlot(p: number | PlayerMp, slot?: string, weapon?: string) {
+    const player = <PlayerMp>p
+
+    if (!slot) {
+      player.setVariable('weaponSlot', {})  
+    } else {
+      player.setVariable('weaponSlot', {...player.getVariable('weaponSlot'), [slot]: weapon})
+    }
+
+    mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
+  }
+
+  @log
+  @ensurePlayer
+  getWeaponSlot(p: number | PlayerMp, slot?: string) {
+    const player = <PlayerMp>p
+
+    return slot ?
+      player.getVariable('weaponSlot')?.[slot] :
+      player.getVariable('weaponSlot')
   }
 
   @log
@@ -116,5 +144,11 @@ export default class PlayerService {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))
     }
+  }
+
+  @log
+  @ensurePlayer
+  setModel(p: number | PlayerMp, model: number) {
+    (p as PlayerMp).model = model
   }
 }

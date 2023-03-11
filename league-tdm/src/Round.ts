@@ -1,5 +1,5 @@
 import { log, helpers, types } from "../../league-core"
-import { Events } from "../../league-core/src/types"
+import { Events, tdm } from "../../league-core/src/types"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 
@@ -8,27 +8,30 @@ interface RoundConfig {
   players: number[]
   prepareSeconds: number
   roundSeconds: number
+  weaponSeconds: number
 }
 
 export default class Round {
   private prepareTimer: ReturnType<typeof setTimeout>
   private roundTimer: ReturnType<typeof setTimeout>
-  private _players: number[] = []
+  private weaponTimer: ReturnType<typeof setTimeout>
   private date: number = 0
+  private roundTime: number = 0
+  private _players: number[] = []
   private _running: boolean = false
   private _paused: boolean = false
-  private roundTime: number = 0
-  private prepareTime: number = 0
 
   constructor(
     readonly config: RoundConfig,
     readonly playerService: PlayerService
   ) {
     this.roundTime = helpers.toMs(this.config.roundSeconds)
-    this.prepareTime = helpers.toMs(this.config.prepareSeconds)
+    this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
+    this.weaponTimer = setTimeout(() => this.players.forEach((p) => (
+      this.playerService.setWeaponState(p, tdm.WeaponState.has)
+    )), helpers.toMs(this.config.weaponSeconds))
 
     mp.events.call(Events["tdm.round.prepare"], this.arena.id)
-    this.prepareTimer = setTimeout(this.prepare.bind(this), this.prepareTime)
   }
 
   @log
@@ -62,6 +65,7 @@ export default class Round {
 
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
+    clearTimeout(this.weaponTimer)
 
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }

@@ -111,4 +111,21 @@ export default class BroadcastService {
       player.call(Events["tdm.chat.push"], [message, Enviroment.server])
     }
   }
+
+  @log
+  @event("playerJoin")
+  playerJoin(player: PlayerMp) {
+    mp.players.forEachFast(p => p.outputChatBox(this.lang.get(Lang["tdm.player.join"], {
+      player: player.name
+    })))
+  }
+
+  @log
+  @event("playerQuit")
+  playerQuit(player: PlayerMp, exitType: string, reason?: string) {
+    mp.players.forEachFast(p => p.outputChatBox(this.lang.get(Lang["tdm.player.quit"], {
+      player: player.name,
+      reason: [exitType, reason].filter(Boolean).join(', ')
+    })))
+  }
 }

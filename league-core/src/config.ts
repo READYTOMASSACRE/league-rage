@@ -1,5 +1,6 @@
 import { IConfig } from "./types"
 import deepmerge from 'deepmerge'
+import { Category as WeaponCategory } from "./types/weapon"
 
 class Config {
   constructor(readonly _c: Partial<IConfig>) {}
@@ -34,7 +35,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       defenders: {
         name: "Sentinel",
         skins: ["u_m_y_imporage", "s_m_y_mime"],
-        color: "",
+        color: "#85abce",
       },
       spectators: {
         name: "Spectators",
@@ -43,33 +44,46 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       },
     },
     weapon: {
-      ammo: 1,
-      slotCount: 3,
+      ammo: 360,
+      slot: {
+        melee: [WeaponCategory.melee],
+        secondary: [WeaponCategory.handguns],
+        primary: [
+          WeaponCategory.submachine,
+          WeaponCategory.shotguns,
+          WeaponCategory.rifles,
+          WeaponCategory.light_rifles,
+          WeaponCategory.sniper_rifles
+        ],
+      },
       category: {
-        melee: [],
-        handguns: [],
-        submachine: [],
-        shotguns: [],
-        rifles: [],
-        light_rifles: [],
-        sniper_rifles: [],
+        [WeaponCategory.melee]: ["weapon_dagger", "weapon_bat", "weapon_bottle", "weapon_crowbar", "weapon_flashlight", "weapon_golfclub", "weapon_nightstick", "weapon_knuckle"],
+        [WeaponCategory.handguns]: ["weapon_pistol", "weapon_combatpistol", "weapon_pistol50", "weapon_heavypistol", "weapon_revolver_mk2"],
+        [WeaponCategory.submachine]: ["weapon_smg"],
+        [WeaponCategory.shotguns]: ["weapon_pumpshotgun", "weapon_musket"],
+        [WeaponCategory.rifles]: ["weapon_assaultrifle", "weapon_carbinerifle", "weapon_bullpuprifle", "weapon_compactrifle"],
+        [WeaponCategory.light_rifles]: ["weapon_gusenberg"],
+        [WeaponCategory.sniper_rifles]: ["weapon_sniperrifle"],
       },
       damage: {
-        weapon: {},
+        weapon: {
+          weapon_revolver_mk2: 46,
+          weapon_musket: 37,
+        },
         category: {
-          melee: 0,
-          handguns: 0,
-          submachine: 0,
-          shotguns: 0,
-          rifles: 0,
-          light_rifles: 0,
-          sniper_rifles: 0,
+          handguns: 13,
+          submachine: 9,
+          shotguns: 5,
+          rifles: 10,
+          light_rifles: 10,
+          sniper_rifles: 41,
         },
       },
     },
     round: {
       prepare: 5,
       timeleft: 120,
+      weapon: 20,
     },
     vote: {
       arena: 30
