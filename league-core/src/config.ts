@@ -67,18 +67,18 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         ],
       },
       category: {
-        [WeaponCategory.melee]: ["weapon_dagger", "weapon_bat", "weapon_bottle", "weapon_crowbar", "weapon_flashlight", "weapon_golfclub", "weapon_nightstick", "weapon_knuckle"],
-        [WeaponCategory.handguns]: ["weapon_pistol", "weapon_combatpistol", "weapon_pistol50", "weapon_heavypistol", "weapon_revolver_mk2"],
-        [WeaponCategory.submachine]: ["weapon_smg"],
-        [WeaponCategory.shotguns]: ["weapon_pumpshotgun", "weapon_musket"],
-        [WeaponCategory.rifles]: ["weapon_assaultrifle", "weapon_carbinerifle", "weapon_bullpuprifle", "weapon_compactrifle"],
-        [WeaponCategory.light_rifles]: ["weapon_gusenberg"],
-        [WeaponCategory.sniper_rifles]: ["weapon_sniperrifle"],
+        [WeaponCategory.melee]: ["dagger", "bat", "bottle", "crowbar", "flashlight", "golfclub", "nightstick", "knuckle"],
+        [WeaponCategory.handguns]: ["pistol", "combatpistol", "pistol50", "heavypistol", "revolver_mk2"],
+        [WeaponCategory.submachine]: ["smg"],
+        [WeaponCategory.shotguns]: ["pumpshotgun", "musket"],
+        [WeaponCategory.rifles]: ["assaultrifle", "carbinerifle", "bullpuprifle", "compactrifle"],
+        [WeaponCategory.light_rifles]: ["gusenberg"],
+        [WeaponCategory.sniper_rifles]: ["sniperrifle"],
       },
       damage: {
         weapon: {
-          weapon_revolver_mk2: 46,
-          weapon_musket: 37,
+          revolver_mk2: 46,
+          musket: 37,
         },
         category: {
           handguns: 13,

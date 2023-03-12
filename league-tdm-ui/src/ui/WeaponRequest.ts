@@ -20,6 +20,7 @@ export default class WeaponRequest {
 
   @event(Events["tdm.weapon.request"])
   request() {
+    // todo check if round is running and player can choice weapon
     this.uiService.cef.call(Events["tdm.weapon.request"], this.config.category)
   }
 

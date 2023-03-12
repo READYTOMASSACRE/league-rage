@@ -37,7 +37,7 @@ export default class WeaponService {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
     }
 
-    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
+    // weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const slot = this.validateRequest(player, weapon)
 
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
@@ -50,7 +50,7 @@ export default class WeaponService {
       return player.outputChatBox(description)
     }
 
-    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
+    // weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const slot = this.validateRequest(player, weapon)
 
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
@@ -114,7 +114,7 @@ export default class WeaponService {
     const category = this.getCategory(weapon)
 
     if (!category) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.category_not_found"], { category }), player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.category_not_found"], { name: weapon }), player)
     }
 
     const slot = this.getSlotByCategory(category)
@@ -126,7 +126,7 @@ export default class WeaponService {
     const oldWeapon = this.playerService.getWeaponSlot(player, slot)
 
     if (oldWeapon) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], { slot }), player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], { slot, weapon: oldWeapon }), player)
     }
 
     return slot
