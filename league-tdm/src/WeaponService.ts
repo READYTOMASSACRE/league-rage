@@ -39,6 +39,43 @@ export default class WeaponService {
   }
 
   @log
+  @event(Events["tdm.player.damage.outgoing"])
+  weaponDamage(player: PlayerMp, targetPlayer?: number, weapon?: string, damage?: number) {
+    const target = mp.players.at(targetPlayer)
+
+    if (!mp.players.exists(target)) {
+      return false
+    }
+
+    if (
+      !this.config.friendlyfire &&
+      this.playerService.getTeam(player) === this.playerService.getTeam(target) &&
+      this.playerService.hasState(player, tdm.State.alive)
+    ) {
+      return
+    }
+
+    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
+    const category = this.getCategory(weapon)
+
+    if (typeof this.config.damage.weapon[weapon] !== 'undefined') {
+      damage = this.config.damage.weapon[weapon]
+    } else if (typeof this.config.damage.category[category] !== 'undefined') {
+      damage = this.config.damage.category[category]
+    }
+
+    const newHealth = player.health - damage
+    const alive = newHealth > 0
+    player.health = alive ? newHealth : 0
+
+    for (const p of [player, target]) {
+      p.call(Events["tdm.player.damage"], [player.id, target.id, weapon, damage, alive])
+    }
+
+    mp.events.call(Events["tdm.player.damage"], player.id, target.id, weapon, damage, alive)
+  }
+
+  @log
   private validateRequest(player: PlayerMp, weapon: string) {
     if (!mp.players.exists(player)) {
       throw new Error(this.lang.get(Lang["error.player.not_found"], { player: player?.id }))

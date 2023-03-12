@@ -1,16 +1,17 @@
 import { logClient } from "../../../league-core/client"
 import { toMs } from "../../../league-core/src/helpers"
-import { ui } from "../../../league-core/src/types"
+import { IHud } from "../../../league-core/src/types/hud"
 
-abstract class Hud implements ui.IHud {
+abstract class Hud implements IHud {
   public alive: number
   private callback: () => void
   private timeout: number
   private destroyed: boolean = false
+  private rendered: boolean = false
 
   abstract render(): void
 
-  constructor({ alive }: ui.IHud) {
+  constructor({ alive }: IHud) {
     this.alive = alive
     this.callback = () => {
       try {
@@ -24,7 +25,13 @@ abstract class Hud implements ui.IHud {
   @logClient
   draw(..._: any[]) {
     if (this.destroyed) {
-      throw new Error(`${this.constructor.name} is destroyed`)
+      mp.console.logError(`${this.constructor.name} is destroyed`)
+      return
+    }
+
+    if (this.rendered) {
+      mp.console.logError(`${this.constructor.name} is already rendered`)
+      return
     }
 
     if (this.alive > 0) {
@@ -32,6 +39,7 @@ abstract class Hud implements ui.IHud {
     }
 
     mp.events.add('render', this.callback)
+    this.rendered = true
   }
 
   @logClient
@@ -45,7 +53,7 @@ abstract class Hud implements ui.IHud {
     this.destroyed = true
 
     if (err) {
-      mp.console.logError(err.message)
+      mp.console.logError(err.stack)
     }
   }
 }

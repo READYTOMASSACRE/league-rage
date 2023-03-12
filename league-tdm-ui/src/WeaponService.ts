@@ -1,4 +1,5 @@
 import { event, eventable, logClient, types } from "../../league-core/client";
+import { Events } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 import weapons from "./weapons";
 
@@ -18,13 +19,11 @@ export default class WeaponService {
     damage: number
   ): boolean | void {
     try {
-      if (this.playerService.alive && this.playerService.sameTeam(targetPlayer)) {
-        return true
-      }
+      mp.events.callRemote(Events["tdm.player.damage.outgoing"], targetPlayer.remoteId, weapons[weapon], damage)
 
-      const newDamage = this.calculateDamage(weapon, damage)
+      return true
       } catch (err) {
-
+        mp.console.logError(err.stack)
     }
   }
 
