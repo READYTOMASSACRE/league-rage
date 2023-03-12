@@ -38,5 +38,6 @@ export default class KeybindService {
 
 export const key: Record<string, number> = {
   t: 0x54,
+  b: 0x42,
   tab: 0x09,
 }

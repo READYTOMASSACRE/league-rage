@@ -67,6 +67,8 @@ export const enum Events {
   /** Fires when vote has ended */
   'tdm.vote.end' = 'tdm.vote.end',
   /** Fires when player requested weapon */
+  'tdm.weapon.request' = 'tdm.weapon.request',
+  /** Fires when player submit weapon choice */
   'tdm.weapon.submit' = 'tdm.weapon.submit',
   /** Fires when round is preparing */
   'tdm.round.prepare' = 'tdm.round.prepare',
