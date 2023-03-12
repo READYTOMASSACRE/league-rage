@@ -15,8 +15,9 @@ class Damage extends Hud implements DamageConfig {
 
   public in: boolean
   public weapon: string
-  public damage: number
   public distance: number
+
+  private _damage: number
 
   constructor(config: DamageConfig, info: DamageInfo) {
     super(config)
@@ -26,8 +27,6 @@ class Damage extends Hud implements DamageConfig {
     this.weapon = info.weapon
     this.damage = info.damage
     this.distance = info.distance
-
-    mp.game.audio.playSoundFrontend(-1, "TENNIS_MATCH_POINT", "HUD_AWARDS", true)
   }
 
   render() {
@@ -43,6 +42,15 @@ class Damage extends Hud implements DamageConfig {
 
   get text() {
     return `${this.damage}hp / ${this.weapon} / ${this.distance}`
+  }
+
+  get damage() {
+    return this._damage
+  }
+
+  set damage(dmg: number) {
+    mp.game.audio.playSoundFrontend(-1, "TENNIS_MATCH_POINT", "HUD_AWARDS", true)
+    this._damage = dmg
   }
 }
 
