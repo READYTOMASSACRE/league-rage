@@ -1,5 +1,5 @@
 import { event, eventable, logClient } from "../../../league-core/client";
-import { toId } from "../../../league-core/src/helpers";
+import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
@@ -26,7 +26,7 @@ class TeamSelector implements TeamSelectorConfig {
     teamConfig: TeamConfig,
     playerService: PlayerService
   ) {
-    Object.assign(this, config)
+    Object.assign(this, deepclone(config))
     this.playerService = playerService
     this.teamConfig = teamConfig
 

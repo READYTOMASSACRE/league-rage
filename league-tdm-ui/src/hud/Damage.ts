@@ -1,3 +1,4 @@
+import { deepclone } from "../../../league-core/src/helpers";
 import { DamageConfig } from "../../../league-core/src/types/hud";
 import Hud from "./Hud";
 
@@ -22,7 +23,7 @@ class Damage extends Hud implements DamageConfig {
 
   constructor(config: DamageConfig, info: DamageInfo) {
     super(config)
-    Object.assign(this, config)
+    Object.assign(this, deepclone(config))
 
     this.in = info.in
     this.weapon = info.weapon

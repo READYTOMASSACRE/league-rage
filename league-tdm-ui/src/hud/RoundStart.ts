@@ -1,3 +1,5 @@
+import { logClient } from "../../../league-core/client"
+import { deepclone } from "../../../league-core/src/helpers"
 import { hud } from "../../../league-core/src/types"
 import Hud from "./Hud"
 
@@ -6,14 +8,17 @@ interface RoundStart extends hud.RoundStartConfig {}
 class RoundStart extends Hud implements hud.RoundStartConfig {
   static cameraName: string = 'roundStart'
 
-  private camera = mp.cameras.new(RoundStart.cameraName)
+  private camera: CameraMp
   private vector = new mp.Vector3(0, 0, 0)
 
   constructor(config: hud.RoundStartConfig) {
     super(config)
-    Object.assign(this, config)
+    Object.assign(this, deepclone(config))
+
+    this.camera = mp.cameras.new(RoundStart.cameraName)
   }
 
+  @logClient
   draw(code: string, vector: Vector3) {
     this.setCamera(true, vector)
     this.textElement.text = `Arena ${code} is starting`
@@ -23,6 +28,10 @@ class RoundStart extends Hud implements hud.RoundStartConfig {
 
   destroy(err?: Error): void {
     this.setCamera(false)
+
+    if (mp.cameras.exists(this.camera)) {
+      this.camera.destroy()
+    }
 
     return super.destroy(err)
   }

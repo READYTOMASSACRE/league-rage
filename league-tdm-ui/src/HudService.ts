@@ -17,7 +17,6 @@ export default class HudService {
         readonly config: HudConfig,
     ) {}
 
-    @logClient
     @event(Events["tdm.round.prepare"])
     drawRoundStart(id: number) {
         if (this.roundStart) {
