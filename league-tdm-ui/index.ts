@@ -1,5 +1,6 @@
 import { Events, IConfig, Procs } from "../league-core/src/types"
 import { Language } from '../league-lang/language'
+import DummyService from "./src/DummyService"
 import HudService from "./src/HudService"
 import InteractionService from "./src/InteractionService"
 import KeybindService from "./src/KeybindService"
@@ -15,15 +16,23 @@ const main = async () => {
     const lang = await mp.events.callRemoteProc(Procs["tdm.language.get"], config.lang)
     const language = new Language(lang)
   
+    const dummyService = new DummyService()
     const playerService = new PlayerService()
     const zoneService = new ZoneService(playerService)
     const roundService = new RoundService(zoneService)
     const keybindService = new KeybindService()
 
-    new UIService("package://league-tdm-cef/index.html", keybindService, config, language)
+    new UIService(
+      "package://league-tdm-cef/index.html",
+      config,
+      keybindService,
+      dummyService,
+      language
+    )
+
     new WeaponService(playerService)
-    new HudService(roundService, config.hud)
-    new InteractionService(playerService, config)
+    new HudService(config.hud, roundService)
+    new InteractionService(config, playerService)
   
     mp.console.logInfo('league-tdm-ui package initialized')
   

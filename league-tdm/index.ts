@@ -13,6 +13,7 @@ import WeaponService from './src/WeaponService'
 import { config } from '../league-core'
 import { Events } from '../league-core/src/types'
 import ConfigService from './src/ConfigService'
+import DummyService from './src/DummyService'
 
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
@@ -29,6 +30,7 @@ const main = async () => {
     roundService, permissionService, playerService,
     voteService, weaponService, language
   )
+  new DummyService()
 
   Arena.load(language)
 

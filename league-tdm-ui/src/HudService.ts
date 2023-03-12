@@ -13,8 +13,8 @@ export default class HudService {
     private damageOut?: Damage
 
     constructor(
-        readonly roundService: RoundService,
         readonly config: HudConfig,
+        readonly roundService: RoundService,
     ) {}
 
     @event(Events["tdm.round.prepare"])

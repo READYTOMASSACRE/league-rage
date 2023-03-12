@@ -48,3 +48,13 @@ export type RoundConfig = {
 export type VoteConfig = {
   arena: 30
 }
+
+export const enum Entity {
+  ROUND,
+}
+
+export type Dummy = {
+  [Entity.ROUND]: {
+    started: boolean
+  }
+}

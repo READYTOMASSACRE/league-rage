@@ -9,9 +9,9 @@ export default class Scoreboard {
   private visible: boolean = false
 
   constructor(
+    readonly config: TeamConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
-    readonly config: TeamConfig,
   ) {
     this.keybindService.unbind(key.tab, [true, false])
     this.keybindService.bind(key.tab, [true, false], () => this.toggle(mp.keys.isDown(key.tab)))

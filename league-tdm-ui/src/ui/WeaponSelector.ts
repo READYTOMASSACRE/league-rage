@@ -1,7 +1,10 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { decorate } from "../../../league-core/src/helpers";
-import { cef, Events, tdm } from "../../../league-core/src/types";
+import { cef, Events } from "../../../league-core/src/types";
+import { Entity } from "../../../league-core/src/types/tdm";
 import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
+import { ILanguage, Lang } from "../../../league-lang/language";
+import DummyService from "../DummyService";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
 
@@ -9,9 +12,11 @@ import UIService from "../UIService";
 export default class WeaponRequest {
   public visible: boolean = false
   constructor(
+    readonly config: WeaponConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
-    readonly config: WeaponConfig
+    readonly dummyService: DummyService,
+    readonly lang: ILanguage
   ) {
     this.request = this.request.bind(this)
 
@@ -24,6 +29,13 @@ export default class WeaponRequest {
   request(visible?: boolean) {
     // todo check if round is running and player can choice weapon
     try {
+      const started = this.dummyService.get(Entity.ROUND, 'started')
+
+      if (!started) {
+        this.uiService.cef.call(Events["tdm.popup.push"], this.lang.get(Lang["tdm.round.is_not_running"]))
+        return
+      }
+
       this.visible = typeof visible !== 'undefined' ? visible : !this.visible
       this.uiService.cef.call(Events["tdm.weapon.request"], this.getData(), this.visible)
       this.uiService.setCursor(this.visible, 'weapon_request')

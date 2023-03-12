@@ -1,6 +1,7 @@
 import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
 import { ILanguage } from "../../league-lang/language";
+import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import Chat from "./ui/Chat";
 import Scoreboard from "./ui/Scoreboard";
@@ -18,13 +19,14 @@ export default class UIService {
 
   constructor(
     readonly url: string,
-    readonly keybindService: KeybindService,
     readonly config: IConfig,
+    readonly keybindService: KeybindService,
+    readonly dummyService: DummyService,
     readonly lang: ILanguage
   ) {
     this.chat = new Chat(this, keybindService)
-    this.scoreboard = new Scoreboard(this, keybindService, config.team)
-    this.weaponSelector = new WeaponSelector(this, keybindService, config.weapon)
+    this.scoreboard = new Scoreboard(config.team, this, keybindService)
+    this.weaponSelector = new WeaponSelector(config.weapon, this, keybindService, dummyService, lang)
     this.teamSelect = new TeamSelector(this, keybindService)
 
     this.disableControlActions()
