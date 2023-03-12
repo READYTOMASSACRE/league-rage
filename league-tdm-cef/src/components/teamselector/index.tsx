@@ -3,7 +3,7 @@ import { Events } from '../../../../league-core/src/types'
 import * as styles from './selector.module.sass'
 import cls from 'classnames'
 
-const Selector: FC = () => {
+const TeamSelector: FC = () => {
   const [classname, setClassname] = useState(styles.item)
   const [{team, color}, setData] = useState({team: '', color: ''})
 
@@ -20,4 +20,4 @@ const Selector: FC = () => {
   )
 }
 
-export default Selector
+export default TeamSelector

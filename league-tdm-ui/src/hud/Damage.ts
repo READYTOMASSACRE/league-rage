@@ -2,6 +2,7 @@ import { DamageConfig } from "../../../league-core/src/types/hud";
 import Hud from "./Hud";
 
 interface Damage extends DamageConfig {}
+
 export interface DamageInfo {
   in: boolean
   weapon: string

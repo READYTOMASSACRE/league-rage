@@ -4,41 +4,43 @@ import cl from 'classnames'
 import ListOfPlayers from './ListOfPlayer/ListOfPlayers'
 import PlayerItem from './PlayerItem/PlayerItem'
 import TeamBar from './TeamBar/TeamBar'
-import { ICurrentPlayer, IPlayers, ITeams } from '../../types'
 import HeaderScoreboard from './HeaderScoreboard/HeaderScoreboard'
 import TeamItem from './Teamitem/TeamItem'
 import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
 import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
 import Footer from './Footer/Footer'
-import { Events } from '../../../../league-core/src/types'
+import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
+import cefLog from '../../helpers/cefLog'
 
-interface Props {
-  players: IPlayers[];
-  teams: ITeams[];
-  currentPlayerId: ICurrentPlayer;
-}
-
-const findCurrentPlayer = (playerId: number, players: IPlayers[]) => {
-  for (let i = 0; i < players.length; i++) {
-    if (players[i].id === playerId) {
-      return players[i];
-    }
-  }
-}
-
-const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {          
+const Scoreboard: FC = () => {          
 
   const [active, setActive] = useState(false)
   const [[sortScoreboard, desSortScorboard], setSortScoreboard] = useState<[string, boolean]>(['kills', true])
+
+  const [players, setPlayers] = useState<scoreboard.Player[]>([])
+  const [teams, setTeams] = useState<scoreboard.Team[]>([])
 
   const scoreboardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     mp.events.add(Events['tdm.scoreboard.toggle'], (a: boolean) => setActive(a))
-    
+    mp.events.add(Events['tdm.scoreboard.data'], (data: string) => {
+      try {
+        const { players, teams } = JSON.parse(data)
+
+        if (typeof players !== 'undefined' && Array.isArray(players)) {
+          setPlayers(players)
+        }
+        if (typeof teams !== 'undefined' && Array.isArray(teams)) {
+          setTeams(teams)
+        }
+      } catch (err) {
+        cefLog(err)
+      }
+    })
   }, [])
 
-  const currentPlayer = findCurrentPlayer(currentPlayerId.id, players)
+  const currentPlayer = players.find(player => player.current)
 
   const sortedPlayers = useMemo(() => {
     const sortedPlayers = {
@@ -50,11 +52,11 @@ const Scoreboard: FC<Props> = ({ currentPlayerId, players, teams }) => {
     return sortedPlayers[sortScoreboard] ? sortedPlayers[sortScoreboard] : sortedPlayers.death
   }, [players, sortScoreboard, desSortScorboard])
 
-  const attackPlayers = useFilterPlayersBySide(sortedPlayers, 'attack')
-  const defensePlayers = useFilterPlayersBySide(sortedPlayers, 'defense')
-  const spectatorPlayers = useFilterPlayersBySide(sortedPlayers, 'spectator')
-  const attackTeam = useFilterTeamBySide(teams, 'attack')
-  const defenseTeam = useFilterTeamBySide(teams, 'defense')
+  const attackPlayers = useFilterPlayersBySide(sortedPlayers, tdm.Team.attackers)
+  const defensePlayers = useFilterPlayersBySide(sortedPlayers, tdm.Team.defenders)
+  const spectatorPlayers = useFilterPlayersBySide(sortedPlayers, tdm.Team.spectators)
+  const attackTeam = useFilterTeamBySide(teams, tdm.Team.attackers)
+  const defenseTeam = useFilterTeamBySide(teams, tdm.Team.defenders)
 
   const changeSort = (type: string) => {
     type === sortScoreboard ?

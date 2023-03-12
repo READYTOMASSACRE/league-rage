@@ -1,4 +1,4 @@
-import { event, eventable, log } from "../../league-core";
+import { command, commandable, event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
 import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
@@ -6,6 +6,7 @@ import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
 
 @eventable
+@commandable
 export default class WeaponService {
   constructor(
     readonly config: weapon.Config,
@@ -30,12 +31,29 @@ export default class WeaponService {
   }
 
   @log
-  @event(Events["tdm.weapon.request"])
+  @event(Events["tdm.weapon.submit"])
   weaponRequest(player: PlayerMp, weapon?: string) {
+    if (!weapon) {
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
+    }
+
+    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const slot = this.validateRequest(player, weapon)
 
-    this.playerService.setWeaponSlot(player, slot, weapon)
-    player.giveWeapon(weapon, this.config.ammo)
+    this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
+  }
+
+  @log
+  @command(['w', 'weapon'], { desc: Lang["cmd.weapon"] })
+  weaponRequestCmd(player: PlayerMp, fullText: string, description: string, weapon?: string) {
+    if (!weapon) {
+      return player.outputChatBox(description)
+    }
+
+    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
+    const slot = this.validateRequest(player, weapon)
+
+    this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
   }
 
   @log
@@ -90,7 +108,7 @@ export default class WeaponService {
     }
 
     if (this.playerService.hasWeaponState(player, tdm.WeaponState.has)) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.already_equipped"]), player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.is_busy"]), player)
     }
 
     const category = this.getCategory(weapon)

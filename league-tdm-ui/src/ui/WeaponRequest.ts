@@ -8,8 +8,8 @@ export default class WeaponRequest {
   public visible: boolean = false
   constructor(readonly uiService: UIService, keybindService: KeybindService) {}
 
-  @event(Events["tdm.weapon.request"])
+  @event(Events["tdm.weapon.submit"])
   weaponRequest(weapon: string) {
-    mp.events.callRemote(Events["tdm.weapon.request"], weapon)
+    mp.events.callRemote(Events["tdm.weapon.submit"], weapon)
   }
 }

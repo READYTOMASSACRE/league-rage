@@ -67,7 +67,7 @@ export const enum Events {
   /** Fires when vote has ended */
   'tdm.vote.end' = 'tdm.vote.end',
   /** Fires when player requested weapon */
-  'tdm.weapon.request' = 'tdm.weapon.request',
+  'tdm.weapon.submit' = 'tdm.weapon.submit',
   /** Fires when round is preparing */
   'tdm.round.prepare' = 'tdm.round.prepare',
   /** Fires when round is starting */
@@ -84,6 +84,8 @@ export const enum Events {
   'tdm.chat.toggle' = 'tdm.chat.toggle',
   /** Fires when player push to chat */
   'tdm.chat.push' = 'tdm.chat.push',
+  /** Fires when scoreboard recieved data */
+  'tdm.scoreboard.data' = 'tdm.scoreboard.data',
   /** Fires when player toggle scoreboard */
   'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle',
   /** Fires when player is loaded all services and ready to play */
