@@ -94,6 +94,9 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       prepare: 5,
       timeleft: 120,
       weapon: 20,
+      watcher: {
+        alive: false,
+      }
     },
     vote: {
       arena: 30

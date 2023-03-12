@@ -9,6 +9,7 @@ interface RoundConfig {
   prepareSeconds: number
   roundSeconds: number
   weaponSeconds: number
+  aliveWatcher: boolean
 }
 
 export default class Round {
@@ -156,11 +157,13 @@ export default class Round {
   }
 
   private get shouldRunning(): boolean {
-    const {attackers, defenders} = this.info
-
-    // if (!attackers || !defenders) {
-    //   return false
-    // }
+    if (this.config.aliveWatcher) {
+      const {attackers, defenders} = this.info
+  
+      if (!attackers || !defenders) {
+        return false
+      }
+    }
 
     return true
   }

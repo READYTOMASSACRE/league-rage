@@ -70,6 +70,7 @@ export default class RoundService {
       prepareSeconds: this.config.prepare,
       roundSeconds: this.config.timeleft,
       weaponSeconds: this.config.weapon,
+      aliveWatcher: this.config.watcher.alive,
     }, this.playerService)
   }
 
