@@ -10,6 +10,7 @@ export enum Category {
 
 export interface Config {
   ammo: number
+  friendlyfire: boolean
   slot: Record<string, Category[]>
   category: Record<Category, string[]>
   damage: {

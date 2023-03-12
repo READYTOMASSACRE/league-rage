@@ -1,3 +1,5 @@
+import { DamageConfig, RoundStartConfig } from "./hud"
+
 export interface TextStyle {
   font: number
   centre: boolean
@@ -18,21 +20,6 @@ export interface StepOffset {
   max?: number
 }
 
-export interface IHud {
-  alive: number
-}
-
-export interface RoundStartConfig extends IHud {
-  textElement: TextElement
-  radius: StepOffset
-  angle: StepOffset
-  zOffset: StepOffset
-}
-
-export interface HudConfig {
-  roundStart: RoundStartConfig
-}
-
 export interface InteractionConfig {
   selector: TeamSelectorConfig
 }
@@ -50,4 +37,9 @@ export interface TeamSelectorConfig {
     dance: string
     dimension: number
   }
+}
+
+export interface HudConfig {
+  roundStart: RoundStartConfig
+  damage: DamageConfig
 }

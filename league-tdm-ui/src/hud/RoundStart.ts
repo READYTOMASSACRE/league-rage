@@ -1,15 +1,15 @@
-import { ui } from "../../../league-core/src/types"
+import { hud } from "../../../league-core/src/types"
 import Hud from "./Hud"
 
-interface RoundStart extends ui.RoundStartConfig {}
+interface RoundStart extends hud.RoundStartConfig {}
 
-class RoundStart extends Hud implements ui.RoundStartConfig {
+class RoundStart extends Hud implements hud.RoundStartConfig {
   static cameraName: string = 'roundStart'
 
   private camera = mp.cameras.new(RoundStart.cameraName)
   private vector = new mp.Vector3(0, 0, 0)
 
-  constructor(config: ui.RoundStartConfig) {
+  constructor(config: hud.RoundStartConfig) {
     super(config)
     Object.assign(this, config)
   }
@@ -28,13 +28,17 @@ class RoundStart extends Hud implements ui.RoundStartConfig {
   }
 
   render() {
-    this.moveCamera()
-
-    mp.game.graphics.drawText(
-      this.textElement.text,
-      this.textElement.position,
-      this.textElement.style
-    )
+    try {
+      this.moveCamera()
+  
+      mp.game.graphics.drawText(
+        this.textElement.text,
+        this.textElement.position,
+        this.textElement.style
+      )
+    } catch (err) {
+      this.destroy(err)
+    }
   }
 
   private moveCamera() {

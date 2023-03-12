@@ -1,6 +1,6 @@
 import { Config as WeaponConfig } from './weapon'
-import { HudConfig, InteractionConfig } from './ui'
 import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
+import { HudConfig, InteractionConfig } from './ui';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
 export type callable = (...args: any[]) => any
@@ -98,6 +98,10 @@ export const enum Events {
   'tdm.player.weapon_slot' = 'tdm.player.weapon_slot',
   /** Fires when player has changed team */
   'tdm.player.team' = 'tdm.player.team',
+  /** Fires when player recieved damage from another player*/
+  'tdm.player.damage.outgoing' = 'tdm.player.damage.outgoing',
+  /** Fires from server when player gives damage to another player */
+  'tdm.player.damage' = 'tdm.player.damage',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */

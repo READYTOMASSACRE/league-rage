@@ -1,6 +1,7 @@
 import { IConfig } from "./types"
 import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
+import { TextStyle } from "./types/ui"
 
 class Config {
   constructor(readonly _c: Partial<IConfig>) {}
@@ -20,6 +21,14 @@ class Config {
 }
 
 const prepareConfig = (config: Partial<IConfig>): IConfig => {
+  const defaultTextStyle: TextStyle = {
+    font: 4,
+    centre: false,
+    scale: [0.5, 0.5],
+    color: [255, 255, 255, 255],
+    outline: false
+  }
+
   const defaultConfig: IConfig = {
     name: '',
     gamemode: '',
@@ -45,6 +54,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     weapon: {
       ammo: 360,
+      friendlyfire: false,
       slot: {
         melee: [WeaponCategory.melee],
         secondary: [WeaponCategory.handguns],
@@ -94,17 +104,21 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
           text: 'Arena is starting',
           position: [0.5, 0.5],
           style: {
-            font: 4,
-            centre: false,
+            ...defaultTextStyle,
             scale: [0.6, 0.6],
-            color: [255, 255, 255, 255],
-            outline: false
           }
         },
         alive: 5,
         radius: { current: 0, step: 0.1, max: 50 },
         angle: { current: 0, step: 0.25 },
         zOffset: { current: 0, step: 0.05, max: 50 }
+      },
+      damage: {
+        alive: 3,
+        textElement: {
+          text: '',
+          style: {...defaultTextStyle}
+        },
       },
     },
     interaction: {
