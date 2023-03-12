@@ -11,6 +11,7 @@ import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
 import Footer from './Footer/Footer'
 import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
+import RageAPI from '../../helpers/RageAPI'
 
 const Scoreboard: FC = () => {          
 
@@ -23,8 +24,8 @@ const Scoreboard: FC = () => {
   const scoreboardRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    mp.events.add(Events['tdm.scoreboard.toggle'], (a: boolean) => setActive(a))
-    mp.events.add(Events['tdm.scoreboard.data'], (data: string) => {
+    RageAPI.subscribe(Events['tdm.scoreboard.toggle'], 'scoreboard', (a: boolean) => setActive(a))
+    RageAPI.subscribe(Events['tdm.scoreboard.data'], 'scoreboard', (data: string) => {
       try {
         const { players, teams } = JSON.parse(data)
 
@@ -38,6 +39,11 @@ const Scoreboard: FC = () => {
         cefLog(err)
       }
     })
+
+    return () => {
+      RageAPI.unsubscribe(Events['tdm.scoreboard.toggle'], 'scoreboard')
+      RageAPI.unsubscribe(Events['tdm.scoreboard.data'], 'scoreboard')
+    }
   }, [])
 
   const currentPlayer = players.find(player => player.current)

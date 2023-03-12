@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import * as styles from './chat.module.sass'
 import cls from 'classnames'
-import { Enviroment, Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../league-core/src/types'
+import RageAPI from '../../helpers/RageAPI'
 
 const MAX_CHAT_SIZE = 50
 const MAX_CHAR_SIZE = 128
@@ -16,14 +17,19 @@ const Chat = () => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
-        mp.events.add(Events['tdm.chat.toggle'], (t: boolean) => setToggle(t))
-        mp.events.add(Events['tdm.chat.push'], (msg: string) => {
+        RageAPI.subscribe(Events['tdm.chat.toggle'], 'chat', (t: boolean) => setToggle(t))
+        RageAPI.subscribe(Events['tdm.chat.push'], 'chat', (msg: string) => {
             setHistory(prev => {
                 if (prev.length > MAX_CHAT_SIZE) prev.shift()
 
                 return [...prev, msg]
             })
         })
+
+        return () => {
+            RageAPI.unsubscribe(Events['tdm.chat.toggle'], 'chat')
+            RageAPI.unsubscribe(Events['tdm.chat.push'], 'chat')
+        }
     }, [])
 
     useEffect(() => {
@@ -57,14 +63,14 @@ const Chat = () => {
                         const message = input.trim().slice(0, MAX_CHAR_SIZE)
 
                         if (message.length) {
-                            mp.trigger(Events['tdm.chat.push'], input, Enviroment.cef)
+                            RageAPI.chatPush(input)
                         }
 
-                        mp.trigger(Events['tdm.chat.toggle'], false, FORCE_CHAT_TOGGLE)
+                        RageAPI.chatToggle(false, FORCE_CHAT_TOGGLE)
                         setInput('')
                     }
                     if (e.key === 'Escape') {
-                        mp.trigger(Events['tdm.chat.toggle'], false, FORCE_CHAT_TOGGLE)
+                        RageAPI.chatToggle(false, FORCE_CHAT_TOGGLE)
                         setInput('')
                     }
                 }}

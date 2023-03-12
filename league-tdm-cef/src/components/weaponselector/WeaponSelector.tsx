@@ -6,6 +6,7 @@ import * as s from './WeaponSelector.module.sass'
 import WeaponSelectorItem from './WeaponSelectorItem/WeaponSelectorItem'
 import { cef, Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
+import RageAPI from '../../helpers/RageAPI'
 
 const WeaponSelector = () => {
 
@@ -15,7 +16,7 @@ const WeaponSelector = () => {
   const [currentWeapon, setWeapon] = useState<cef.Weapon | undefined>()
 
   useEffect(() => {
-    mp.events.add(Events['tdm.weapon.request'], (jsonData: string, toggle: boolean) => {
+    RageAPI.subscribe(Events['tdm.weapon.request'], 'weaponselector', (jsonData: string, toggle: boolean) => {
       try {
         const data = JSON.parse(jsonData)
         setActive(toggle)
@@ -26,6 +27,10 @@ const WeaponSelector = () => {
         cefLog(err)
       }
     })
+
+    return () => {
+      RageAPI.unsubscribe(Events['tdm.weapon.request'], 'weaponselector')
+    }
   }, [])
 
   if (!active) return <></>

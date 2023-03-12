@@ -3,6 +3,7 @@ import cl from 'classnames'
 import * as s from './HeaderScoreboard.module.sass'
 import { Events, scoreboard } from '../../../../../league-core/src/types';
 import { helpers } from '../../../../../league-core/client';
+import RageAPI from '../../../helpers/RageAPI';
 
 interface Props {
   attackTeam?: scoreboard.Team
@@ -14,9 +15,13 @@ const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam, arena = 'Not_fou
   const [time, setTime] = useState('00:00')
 
   useEffect(() => {
-    mp.events.add(Events['tdm.scoreboard.data'], (time: string) => {
+    RageAPI.subscribe(Events['tdm.scoreboard.time'], 'scoreboard_header', (time: string) => {
       setTime(time)
     })
+
+    return () => {
+      RageAPI.unsubscribe(Events['tdm.scoreboard.time'], 'scoreboard_header')
+    }
   }, [])
 
   const defaultColor = 'white'
