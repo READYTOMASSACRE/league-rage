@@ -9,7 +9,8 @@ import Zone from "./Zone";
 @eventable
 export default class HudService {
     private roundStart?: RoundStart
-    private damage?: Damage
+    private damageIn?: Damage
+    private damageOut?: Damage
 
     constructor(
         readonly roundService: RoundService,
@@ -45,38 +46,67 @@ export default class HudService {
 
     @logClient
     @event(Events["tdm.player.damage"])
-    playerDamage(recieved: number, source: number, weapon: string, damage: number, alive: boolean) {
+    playerDamage(recievedPlayer: number, sourcePlayer: number, weapon: string, damage: number, alive: boolean) {
         try {
-            const recievedPlayer = mp.players.atRemoteId(recieved)
-            const sourcePlayer = mp.players.atRemoteId(source)
-
-            if (
-                !mp.players.exists(sourcePlayer) ||
-                !mp.players.exists(recievedPlayer)
-            ) {
+            const source = mp.players.atRemoteId(sourcePlayer)
+            const recieved = mp.players.atRemoteId(recievedPlayer)
+    
+            if (!mp.players.exists(source) || !mp.players.exists(recieved)) {
                 return false
             }
-    
-            if (this.damage) {
-                this.damage.destroy()
-            }
-    
-            const vectorSource = sourcePlayer.position
-            const vectorTarget = recievedPlayer.position
-    
-            this.damage = new Damage(this.config.damage, {
-                in: mp.players.local.remoteId === recieved,
-                weapon,
-                damage,
-                distance: +(mp.game.system.vdist(
-                    vectorSource.x, vectorSource.y, vectorSource.z,
-                    vectorTarget.x, vectorTarget.y, vectorTarget.z,
-                )).toFixed(2),
-            })
 
-            this.damage.draw()
+            if (recievedPlayer === mp.players.local.remoteId) {
+                if (!this.damageIn || this.damageIn.isDestroyed) {
+                    this.damageIn = this.getDamageComponent({
+                        source, recieved, damageIn: true,
+                        weapon, damage, alive
+                    })
+    
+                    this.damageIn.draw()
+                }
+
+                if (this.damageIn) {
+                    this.damageIn.damage += damage
+                    this.damageIn.refreshAlive()
+                }
+            } else {
+                if (!this.damageOut || this.damageOut.isDestroyed) {
+                    this.damageOut = this.getDamageComponent({
+                        source, recieved, damageIn: false,
+                        weapon, damage, alive
+                    })
+    
+                    this.damageOut.draw()
+                }
+
+                if (this.damageOut) {
+                    this.damageOut.damage += damage
+                    this.damageOut.refreshAlive()
+                }
+            }
+
         } catch (err) {
             mp.console.logError(err.stack)
         }
+    }
+
+    private getDamageComponent({
+        source, recieved, damage, weapon, alive, damageIn
+    }: { source: PlayerMp, recieved: PlayerMp, damageIn: boolean
+        damage: number, weapon: string, alive: boolean
+    }): Damage {
+
+        const vectorSource = source.position
+        const vectorTarget = recieved.position
+
+        return new Damage(this.config.damage, {
+            in: damageIn,
+            weapon,
+            damage,
+            distance: +(mp.game.system.vdist(
+                vectorSource.x, vectorSource.y, vectorSource.z,
+                vectorTarget.x, vectorTarget.y, vectorTarget.z,
+            )).toFixed(2),
+        })
     }
 }

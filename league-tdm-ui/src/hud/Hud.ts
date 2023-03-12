@@ -56,6 +56,20 @@ abstract class Hud implements IHud {
       mp.console.logError(err.stack)
     }
   }
+
+  refreshAlive(alive?: number) {
+    if (this.destroyed) {
+      return
+    }
+
+    this.alive = typeof alive !== 'undefined' ? alive: this.alive
+    clearTimeout(this.timeout)
+    setTimeout(() => this.destroy(), toMs(this.alive))
+  }
+
+  get isDestroyed() {
+    return this.destroyed
+  }
 }
 
 export default Hud
