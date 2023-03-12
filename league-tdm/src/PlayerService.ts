@@ -99,10 +99,12 @@ export default class PlayerService {
       player.setVariable('weaponSlot', {...player.getVariable('weaponSlot'), [slot]: weapon})
     }
 
-    mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
+    if (weapon) {
+      weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
 
-    console.log('giveWeapon', weapon, ammo)
-    player.giveWeapon(weapon, ammo)
+      player.giveWeapon(mp.joaat(weapon), Number(ammo) || 0)
+      mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
+    }
   }
 
   @log
