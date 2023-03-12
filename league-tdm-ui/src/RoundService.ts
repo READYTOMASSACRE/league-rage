@@ -10,7 +10,6 @@ export default class RoundService {
 		this.load()
 	}
 
-	@logClient
 	@event(Events["tdm.round.start"])
 	roundStart(id: number, players: number[]) {
 		const arena = this.getArenaById(id)
@@ -22,7 +21,6 @@ export default class RoundService {
 		return arena
 	}
 
-	@logClient
 	@event(Events["tdm.round.end"])
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
