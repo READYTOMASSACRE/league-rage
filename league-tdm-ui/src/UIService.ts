@@ -24,7 +24,7 @@ export default class UIService {
   ) {
     this.chat = new Chat(this, keybindService)
     this.scoreboard = new Scoreboard(this, keybindService, config.team)
-    this.weaponRequest = new WeaponRequest(this, keybindService)
+    this.weaponRequest = new WeaponRequest(this, keybindService, config.weapon)
     this.teamSelect = new TeamSelect(this, keybindService)
 
     this.disableControlActions()

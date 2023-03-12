@@ -2,10 +2,11 @@ import React, { FC, useEffect, useState } from 'react'
 import { IWeapon } from '../../../types'
 import * as s from './WeaponSection.module.sass'
 import WeaponSectionItem from '../WeaponSectionItem/WeaponSectionItem';
+import { cef } from '../../../../../league-core/src/types';
 
 
 interface Props {
-  weapon?: IWeapon;
+  weapon?: cef.Weapon;
 }
 
 const MAX_DAMAGE = 100
@@ -13,12 +14,15 @@ const MAX_FIRERATE = 1000
 
 const WeaponSection: FC<Props> = ({ weapon }) => {
 
+
+  console.log(weapon)
+
   return (
     <div className={s.container}>
-      {weapon && Object.keys(weapon).length > 0 ? (
+      {weapon ? (
         <>
           <div className={s.container_img}>
-            <img className={s.img} alt='' src="/assets/weapons/advancedrifle.webp" />
+            <img src={`/assets/weapons/${weapon.name}.webp`} alt={`${weapon.name}`}/>
           </div>
           <div>
             <WeaponSectionItem title={'Damage'} value={weapon.damage} barmaxvalue={MAX_DAMAGE}/>
@@ -26,7 +30,7 @@ const WeaponSection: FC<Props> = ({ weapon }) => {
           </div>
         </>
       ) :
-        <div>Choose categoty</div>
+        <div>Choose category</div>
       }
     </div>
   )
