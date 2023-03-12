@@ -40,6 +40,9 @@ export type RoundConfig = {
   prepare: number
   timeleft: number
   weapon: number
+  watcher: {
+    alive: boolean
+  }
 }
 
 export type VoteConfig = {

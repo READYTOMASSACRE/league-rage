@@ -27,7 +27,11 @@ export default class WeaponService {
   @log
   @event(Events["tdm.round.end"])
   tdmRoundEnd() {
-    mp.players.forEachFast((p) => this.playerService.setWeaponState(p, tdm.WeaponState.has))
+    mp.players.forEachFast((p) => {
+      p.removeAllWeapons()
+      this.playerService.setWeaponSlot(p)
+      this.playerService.setWeaponState(p, tdm.WeaponState.has)
+    })
   }
 
   @log
@@ -37,7 +41,6 @@ export default class WeaponService {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
     }
 
-    // weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const slot = this.validateRequest(player, weapon)
 
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
@@ -50,7 +53,6 @@ export default class WeaponService {
       return player.outputChatBox(description)
     }
 
-    // weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const slot = this.validateRequest(player, weapon)
 
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
