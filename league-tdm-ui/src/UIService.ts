@@ -4,16 +4,16 @@ import { ILanguage } from "../../league-lang/language";
 import KeybindService from "./KeybindService";
 import Chat from "./ui/Chat";
 import Scoreboard from "./ui/Scoreboard";
-import TeamSelect from "./ui/TeamSelect";
-import WeaponRequest from "./ui/WeaponRequest";
+import TeamSelector from "./ui/TeamSelector";
+import WeaponSelector from "./ui/WeaponSelector";
 
 @eventable
 export default class UIService {
   public cef: BrowserMp
   public chat: Chat
   public scoreboard: Scoreboard
-  public weaponRequest: WeaponRequest
-  public teamSelect: TeamSelect
+  public weaponSelector: WeaponSelector
+  public teamSelect: TeamSelector
   public visible: Record<string, boolean> = {}
 
   constructor(
@@ -24,8 +24,8 @@ export default class UIService {
   ) {
     this.chat = new Chat(this, keybindService)
     this.scoreboard = new Scoreboard(this, keybindService, config.team)
-    this.weaponRequest = new WeaponRequest(this, keybindService, config.weapon)
-    this.teamSelect = new TeamSelect(this, keybindService)
+    this.weaponSelector = new WeaponSelector(this, keybindService, config.weapon)
+    this.teamSelect = new TeamSelector(this, keybindService)
 
     this.disableControlActions()
   }
