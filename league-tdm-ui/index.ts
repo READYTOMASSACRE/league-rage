@@ -20,7 +20,7 @@ const main = async () => {
     const roundService = new RoundService(zoneService)
     const keybindService = new KeybindService()
 
-    new UIService("package://league-tdm-cef/index.html", keybindService, language)
+    new UIService("package://league-tdm-cef/index.html", keybindService, config, language)
     new WeaponService(playerService)
     new HudService(roundService, config.hud)
     new InteractionService(playerService, config)

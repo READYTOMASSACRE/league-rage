@@ -119,30 +119,6 @@ export default class TdmService {
   }
 
   @log
-  @command(['w', 'weapon'], {desc: Lang["cmd.weapon"]})
-  weaponRequest(player: PlayerMp, fullText: string, description: string, id?: string) {
-    if (!id) {
-      return player.outputChatBox(description)
-    }
-
-    const availableSet = {
-      1: ['weapon_sniperrifle', 'weapon_revolver_mk2', 'weapon_bat'],
-      2: ['weapon_assaultrifle', 'weapon_revolver_mk2', 'weapon_bat'],
-      3: ['weapon_pumpshotgun', 'weapon_revolver_mk2', 'weapon_bat'],
-    }
-
-    if (id === 'list' || !availableSet[id]) {
-      player.outputChatBox('Available weapon sets:')
-      player.outputChatBox('1. Sniper Rifle + Deagle + Bat')
-      player.outputChatBox('2. Assault Rifle + Deagle + Bat')
-      player.outputChatBox('3. Pump Shotgun + Deagle + Bat')
-      return
-    }
-
-    return this.weaponService.weaponRequest(player, availableSet[id])
-  }
-
-  @log
   @proc(Procs["tdm.arena.get"])
   getArenas(player: PlayerMp, id?: number) {
     if (typeof id !== 'undefined') {

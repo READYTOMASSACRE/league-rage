@@ -13,7 +13,7 @@ export const enum Lang {
 
   "error.weapon.weapon_not_found" = "error.weapon.weapon_not_found",
   "error.weapon.not_configured" = "error.weapon.not_configured",
-  "error.weapon.already_equipped" = "error.weapon.already_equipped",
+  "error.weapon.is_busy" = "error.weapon.is_busy",
   "error.weapon.category_not_found" = "error.weapon.category_not_found",
   "error.weapon.slot_not_found" = "error.weapon.slot_not_found",
   "error.weapon.slot_is_busy" = "error.weapon.slot_is_busy",

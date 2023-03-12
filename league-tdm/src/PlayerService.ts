@@ -90,7 +90,7 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  setWeaponSlot(p: number | PlayerMp, slot?: string, weapon?: string) {
+  setWeaponSlot(p: number | PlayerMp, slot?: string, weapon?: string, ammo?: number) {
     const player = <PlayerMp>p
 
     if (!slot) {
@@ -100,6 +100,9 @@ export default class PlayerService {
     }
 
     mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
+
+    console.log('giveWeapon', weapon, ammo)
+    player.giveWeapon(weapon, ammo)
   }
 
   @log

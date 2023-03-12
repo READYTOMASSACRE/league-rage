@@ -158,9 +158,9 @@ export default class Round {
   private get shouldRunning(): boolean {
     const {attackers, defenders} = this.info
 
-    if (!attackers || !defenders) {
-      return false
-    }
+    // if (!attackers || !defenders) {
+    //   return false
+    // }
 
     return true
   }
