@@ -83,4 +83,9 @@ export default class WeaponRequest {
       magazine: 0
     }
   }
+
+  @event(Events['tdm.weapon.toggle'])
+  toggle() {
+    this.request(false)
+  }
 }

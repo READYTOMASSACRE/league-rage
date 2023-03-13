@@ -70,6 +70,8 @@ export const enum Events {
   'tdm.weapon.request' = 'tdm.weapon.request',
   /** Fires when player submit weapon choice */
   'tdm.weapon.submit' = 'tdm.weapon.submit',
+  /** Fires when player toggle weapon selector */
+  'tdm.weapon.toggle' = 'tdm.weapon.toggle',
   /** Fires when round is preparing */
   'tdm.round.prepare' = 'tdm.round.prepare',
   /** Fires when round is starting */

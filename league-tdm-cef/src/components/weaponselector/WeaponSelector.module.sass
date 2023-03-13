@@ -1,33 +1,30 @@
 .container
   position: absolute
-  width: 80vmin
-  height: 50vmin
+  width:  70vw
+  height: 70vh
   display: grid
-  justify-content: center
   top: 50%
   left: 50%
   transform: translate(-50%, -50%)
+  grid-template-rows: 60px 1fr
   grid-template-columns: 1fr 2fr
-  font-size: 15px
-  z-index: 3
-  background: transparentize(#343434, 0.5)
+  row-gap: 5px
+  font-size: 1em
   color: #FFFFFF
-  
-.listside
-  grid-area: 1 / 1 / 2 / 2 
+
+.header
+  grid-area: 1 / 1 / 2 / 3
+  padding: 5px
+  font-size: 30px
   display: flex
-  flex-direction: row
-  padding: 10px 10px 10px 0px
-  gap: 10px
-
-.buttonback
-  width: 20px
-  &:hover
-    background: transparentize(#343434, 0.5)
-
+  align-items: center
+  background: transparentize(#000000, 0.5)
 
 .list
+  grid-area: 2 / 1 / 3 / 2 
+  padding: 15px
   display: flex
   flex-direction: column
   width: 100%
-  gap: 15px
+  gap: 10px
+  background: transparentize(#000000, 0.5)
