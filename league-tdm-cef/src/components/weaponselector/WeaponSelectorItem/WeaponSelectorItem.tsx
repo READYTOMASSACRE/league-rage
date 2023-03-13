@@ -1,37 +1,41 @@
 import React, { CSSProperties, FC } from 'react'
-import { cef } from '../../../../../league-core/src/types';
+import { cef, Events } from '../../../../../league-core/src/types';
 import RageAPI from '../../../helpers/RageAPI';
 import weaponNameForUI from '../../../weaponNameForUI';
 import * as s from './WeaponSelectorItem.module.sass'
 
 interface Props {
-  weapon?: cef.Weapon;
-  position?: number;
+  weapon?: cef.Weapon
+  position?: number
   category?: string
-  setCategory?: (value: string) => void;
-  setWeapon?: (value?: cef.Weapon) => void;
+  text?: string
+  setCategory?: (value: string | undefined) => void
+  setCurrentWeapon?: (value?: cef.Weapon) => void
+  setActive?: (value: boolean) => void
 }
 
-const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setWeapon, category }) => {
+const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurrentWeapon, category, text, setActive }) => {
 
   const style: CSSProperties = {
-    marginTop: category === ' ' ? 'auto' : undefined
+    marginTop: text ? 'auto' : undefined
   }
 
   const name = () => {
     if(category) return category[0].toUpperCase() + category.slice(1).replace('_', ' ')
     if(weapon)  return weapon.name ? weaponNameForUI[weapon.name] : 'none'
+    if(!weapon && !category) return text
   }
 
   return (
     <div
       className={s.container}
       style={style}
-      onMouseOver={() => setWeapon && weapon && setWeapon(weapon)}
-      onMouseOut={() => setWeapon && setWeapon()}
+      onMouseOver={() => setCurrentWeapon && weapon && setCurrentWeapon(weapon)}
+      onMouseOut={() => setCurrentWeapon && setCurrentWeapon(undefined)}
       onClick={() => {
         setCategory && category && setCategory(category);
-        weapon && RageAPI.weaponSubmit(weapon?.name)
+        weapon && RageAPI.weaponSubmit(weapon?.name);
+        text && text === 'Cancel' ? setCategory && setCategory(undefined) : setActive && setActive(false)
       }}
     >
       {position} {name()}

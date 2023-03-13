@@ -70,6 +70,8 @@ const Scoreboard: FC = () => {
       setSortScoreboard([type, true])
   }
 
+  if(!active) return <></>
+
   return (
     <div ref={scoreboardRef} className={cl(s.scoreboard, active && s.active)}>
       <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
