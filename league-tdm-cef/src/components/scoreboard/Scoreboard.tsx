@@ -73,7 +73,7 @@ const Scoreboard: FC = () => {
   if(!active) return <></>
 
   return (
-    <div ref={scoreboardRef} className={cl(s.scoreboard, active && s.active)}>
+    <div ref={scoreboardRef} className={cl(s.scoreboard)}>
       <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />

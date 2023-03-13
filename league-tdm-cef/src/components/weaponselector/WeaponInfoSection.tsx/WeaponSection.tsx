@@ -21,7 +21,7 @@ const WeaponSection: FC<Props> = ({ weapon }) => {
       {weapon ? (
         <>
           <div className={s.container_img}>
-            <img className={s.img} src={`/assets/weapons/${weapon.name}.webp`} alt={`${weapon.name}`}/>
+            <img src={`/assets/weapons/${weapon.name}.webp`} alt={`${weapon.name}`}/>
           </div>
           <div className={s.weapon_info}>
             <WeaponSectionItem title={'Damage'} value={weapon.damage} barmaxvalue={MAX_DAMAGE}/>

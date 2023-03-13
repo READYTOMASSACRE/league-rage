@@ -9,12 +9,12 @@ import RageAPI from '../../helpers/RageAPI'
 
 const typeCategory = {
   melee: 'Buy Melle (Melle Weapon)',
-  handguns: 'Buy Pistol (Second Weapond)',
+  handguns: 'Buy Pistol (Secondary Weapond)',
   submachine: 'Buy SMG (Primary Weapond)',
-  shotguns: 'But Shotgun (Primary Weapond)',
-  rifles: 'But Rifle (Primary Weapond)',
-  light_rifles: 'But Light Rifle (Primary Weapond)',
-  sniper_rifles: 'But Sniper Rofle (Primary Weapond)',
+  shotguns: 'Buy Shotgun (Primary Weapond)',
+  rifles: 'Buy Rifle (Primary Weapond)',
+  light_rifles: 'Buy Light Rifle (Primary Weapond)',
+  sniper_rifles: 'Buy Sniper Rifle (Primary Weapond)',
 }
 
 const WeaponSelector = () => {
@@ -49,18 +49,17 @@ const WeaponSelector = () => {
   return (
     <div className={s.container}>
       <div className={s.header}>
-        {category ? category && typeCategory[category] : 'Buy Weapon'}
+        {category ? typeCategory[category] : 'Buy Weapon'}
       </div>
       <div className={s.list}>
         {!category ? Object.keys(data).map((categoryName, index) =>
           <WeaponSelectorItem key={nanoid(5)} setCategory={setCategory} position={index + 1} category={categoryName} />
         ) :
-          
           data[category].map((weapon, index) =>
             <WeaponSelectorItem key={nanoid(5)} setCurrentWeapon={setCurrentWeapon} position={index + 1} weapon={weapon} />
           )
         }
-        <WeaponSelectorItem setCurrentWeapon={setCurrentWeapon} setActive={setActive} position={0} text={category ? 'Cancel' : 'Close'}/>
+        <WeaponSelectorItem setCategory={setCategory} position={0} text={category ? 'Cancel' : 'Close'}/>
       </div>
       <WeaponSection weapon={currentWeapon} />
     </div>

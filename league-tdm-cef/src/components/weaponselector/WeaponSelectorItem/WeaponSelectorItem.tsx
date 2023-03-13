@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC } from 'react'
 import { cef, Events } from '../../../../../league-core/src/types';
+import cefLog from '../../../helpers/cefLog';
 import RageAPI from '../../../helpers/RageAPI';
 import weaponNameForUI from '../../../weaponNameForUI';
 import * as s from './WeaponSelectorItem.module.sass'
@@ -14,7 +15,7 @@ interface Props {
   setActive?: (value: boolean) => void
 }
 
-const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurrentWeapon, category, text, setActive }) => {
+const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurrentWeapon, category, text}) => {
 
   const style: CSSProperties = {
     marginTop: text ? 'auto' : undefined
@@ -26,6 +27,11 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
     if(!weapon && !category) return text
   }
 
+  const toggle = () => {
+    if(text === 'Cancel') setCategory && setCategory(undefined)
+    if(text === 'Close') RageAPI.weaponToggle()
+  }
+
   return (
     <div
       className={s.container}
@@ -33,9 +39,9 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
       onMouseOver={() => setCurrentWeapon && weapon && setCurrentWeapon(weapon)}
       onMouseOut={() => setCurrentWeapon && setCurrentWeapon(undefined)}
       onClick={() => {
-        setCategory && category && setCategory(category);
+        category && setCategory && setCategory(category);
         weapon && RageAPI.weaponSubmit(weapon?.name);
-        text && text === 'Cancel' ? setCategory && setCategory(undefined) : setActive && setActive(false)
+        toggle()
       }}
     >
       {position} {name()}

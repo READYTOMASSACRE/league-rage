@@ -32,4 +32,8 @@ export default new class RageAPI {
   weaponSubmit(weapon?: string) {
     mp.trigger(Events['tdm.weapon.submit'], weapon)
   }
+
+  weaponToggle() {
+    mp.trigger(Events['tdm.weapon.toggle'])
+  }
 }
