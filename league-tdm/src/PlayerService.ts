@@ -1,6 +1,6 @@
 import { event, eventable, log, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
-import BroadCastError from "./error/BroadCastError";
+import { PlayerData } from "../../league-core/src/types/tdm";
 
 @eventable
 export default class PlayerService {
@@ -18,12 +18,15 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setHealth(p: number | PlayerMp, health: number) {
-    (p as PlayerMp).health = health
+    const player = <PlayerMp>p
+
+    this.setVariable(player, 'health', health)
+    player.health = health
   }
 
   @ensurePlayer
   getHealth(p: number | PlayerMp) {
-    return (p as PlayerMp).health
+    return this.getVariable(<PlayerMp>p, 'health')
   }
 
   @log
@@ -34,7 +37,7 @@ export default class PlayerService {
 
   @ensurePlayer
   getTeam(p: number | PlayerMp): tdm.Team {
-    return (p as PlayerMp).getVariable('team')
+    return this.getVariable(<PlayerMp>p, 'team')
   }
 
   @log
@@ -42,7 +45,7 @@ export default class PlayerService {
   setTeam(p: number | PlayerMp, id: tdm.Team) {
     const player = <PlayerMp>p
 
-    player.setVariable('team', id)
+    this.setVariable(player, 'team', id)
     mp.players.call(Events["tdm.player.team"], [player.id, id])
   }
 
@@ -54,8 +57,8 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  getState(p: number | PlayerMp): tdm.State {
-    return (p as PlayerMp).getVariable('state')
+  getState(p: number | PlayerMp) {
+    return this.getVariable(<PlayerMp>p, 'state')
   }
 
   @log
@@ -63,7 +66,7 @@ export default class PlayerService {
   setState(p: number | PlayerMp, state: tdm.State) {
     const player = <PlayerMp>p
 
-    player.setVariable('state', state)
+    this.setVariable(player, 'state', state)
     mp.players.call(Events["tdm.player.state"], [player.id, state])
   }
 
@@ -84,7 +87,7 @@ export default class PlayerService {
   setWeaponState(p: number | PlayerMp, state: tdm.WeaponState) {
     const player = <PlayerMp>p
 
-    player.setVariable('weaponState', state)
+    this.setVariable(player, 'weaponState', state)
     mp.players.call(Events["tdm.player.weapon_state"], [player.id, state])
   }
 
@@ -94,9 +97,12 @@ export default class PlayerService {
     const player = <PlayerMp>p
 
     if (!slot) {
-      player.setVariable('weaponSlot', {})  
+      this.setVariable(player, 'weaponSlot', {})
     } else {
-      player.setVariable('weaponSlot', {...player.getVariable('weaponSlot'), [slot]: weapon})
+      this.setVariable(player, 'weaponSlot', {
+        ...this.getVariable(player, 'weaponSlot'),
+        [slot]: weapon,
+      })
     }
 
     if (weapon) {
@@ -110,17 +116,15 @@ export default class PlayerService {
   @log
   @ensurePlayer
   getWeaponSlot(p: number | PlayerMp, slot?: string) {
-    const player = <PlayerMp>p
-
     return slot ?
-      player.getVariable('weaponSlot')?.[slot] :
-      player.getVariable('weaponSlot')
+      this.getVariable(<PlayerMp>p, 'weaponSlot')?.[slot] :
+      this.getVariable(<PlayerMp>p, 'weaponSlot')
   }
 
   @log
   @ensurePlayer
   getWeaponState(p: number | PlayerMp): tdm.WeaponState {
-    return (p as PlayerMp).getVariable('weaponState')
+    return this.getVariable(<PlayerMp>p, 'weaponState')
   }
 
   @log
@@ -154,6 +158,22 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setModel(p: number | PlayerMp, model: number) {
-    (p as PlayerMp).model = model
+    const player = <PlayerMp>p
+
+    player.model = model
+
+    mp.players.call(Events["tdm.player.model"], [player.id, model])
+  }
+
+  setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(
+    player: PlayerMp, key: K, value: V
+  ) {
+    player.setVariable(String(key), value)
+  }
+
+  getVariable<_, K extends keyof PlayerData>(
+    player: PlayerMp, key: K
+  ): PlayerData[K] {
+    return player.getVariable(String(key))
   }
 }

@@ -1,31 +1,38 @@
 import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
-import { ILanguage } from "../../league-lang/language";
+import { ILanguage, Lang } from "../../league-lang/language";
+import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
+import PlayerService from "./PlayerService";
 import Chat from "./ui/Chat";
 import Scoreboard from "./ui/Scoreboard";
-import TeamSelect from "./ui/TeamSelect";
-import WeaponRequest from "./ui/WeaponRequest";
+import TeamSelector from "./ui/TeamSelector";
+import WeaponSelector from "./ui/WeaponSelector";
 
 @eventable
 export default class UIService {
   public cef: BrowserMp
   public chat: Chat
   public scoreboard: Scoreboard
-  public weaponRequest: WeaponRequest
-  public teamSelect: TeamSelect
+  public weaponSelector: WeaponSelector
+  public teamSelect: TeamSelector
   public visible: Record<string, boolean> = {}
 
   constructor(
     readonly url: string,
-    readonly keybindService: KeybindService,
     readonly config: IConfig,
+    readonly keybindService: KeybindService,
+    readonly playerService: PlayerService,
+    readonly dummyService: DummyService,
     readonly lang: ILanguage
   ) {
     this.chat = new Chat(this, keybindService)
-    this.scoreboard = new Scoreboard(this, keybindService, config.team)
-    this.weaponRequest = new WeaponRequest(this, keybindService, config.weapon)
-    this.teamSelect = new TeamSelect(this, keybindService)
+    this.scoreboard = new Scoreboard(config.team, this, keybindService, playerService)
+    this.weaponSelector = new WeaponSelector(
+      config.weapon, this, keybindService,
+      playerService, dummyService
+    )
+    this.teamSelect = new TeamSelector(this, keybindService)
 
     this.disableControlActions()
   }
@@ -67,4 +74,8 @@ export default class UIService {
   @logClient
   @event(Events["tdm.cef.log"])
   log(...args: any[]) {}
+
+  popup(message: Lang | string, type: string = 'info') {
+    this.cef.call(Events["tdm.popup.push"], this.lang.get(<Lang>message), type)
+  }
 }

@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC } from 'react'
-import { cef, Events } from '../../../../../league-core/src/types';
-import { IWeapon } from '../../../types';
+import { cef } from '../../../../../league-core/src/types';
+import RageAPI from '../../../helpers/RageAPI';
 import weaponNameForUI from '../../../weaponNameForUI';
 import * as s from './WeaponSelectorItem.module.sass'
 
@@ -31,7 +31,7 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setWeapo
       onMouseOut={() => setWeapon && setWeapon()}
       onClick={() => {
         setCategory && category && setCategory(category);
-        weapon && mp.trigger(Events['tdm.weapon.submit'], weapon?.name)
+        weapon && RageAPI.weaponSubmit(weapon?.name)
       }}
     >
       {position} {name()}

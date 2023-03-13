@@ -54,7 +54,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     weapon: {
       ammo: 360,
-      friendlyfire: false,
+      friendlyfire: true,
       slot: {
         melee: [WeaponCategory.melee],
         secondary: [WeaponCategory.handguns],

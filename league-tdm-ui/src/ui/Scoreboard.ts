@@ -2,6 +2,7 @@ import { event, eventable, logClient } from "../../../league-core/client";
 import { Events, scoreboard } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
 import KeybindService, { key } from "../KeybindService";
+import PlayerService from "../PlayerService";
 import UIService from "../UIService";
 
 @eventable
@@ -9,9 +10,10 @@ export default class Scoreboard {
   private visible: boolean = false
 
   constructor(
+    readonly config: TeamConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
-    readonly config: TeamConfig,
+    readonly playerService: PlayerService,
   ) {
     this.keybindService.unbind(key.tab, [true, false])
     this.keybindService.bind(key.tab, [true, false], () => this.toggle(mp.keys.isDown(key.tab)))
@@ -44,8 +46,8 @@ export default class Scoreboard {
       death: 0,
       assists: 0,
       ping: player.ping,
-      role: player.getVariable('team'),
-      team: player.getVariable('team'),
+      role: this.playerService.getVariable(player, 'team'),
+      team: this.playerService.getVariable(player, 'team'),
       lvl: 0
     }))
   }

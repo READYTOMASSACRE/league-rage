@@ -1,19 +1,22 @@
-import { types } from "../../league-core/client";
+import { event, eventable } from "../../league-core/client";
+import { Events } from "../../league-core/src/types";
+import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
 
+@eventable
 export default class PlayerService {
-  getState(player?: PlayerMp): types.tdm.State | undefined {
+  getState(player?: PlayerMp): State | undefined {
     player = player || this.local
 
     if (mp.players.exists(player)) {
-      return player.getVariable('state')
+      return this.getVariable(player, 'state')
     }
   }
 
-  getTeam(player?: PlayerMp): types.tdm.Team | undefined {
+  getTeam(player?: PlayerMp): Team | undefined {
     player = player || this.local
     
     if (mp.players.exists(player)) {
-      return this.local.getVariable('team')
+      return this.getVariable(player, 'team')
     }
   }
 
@@ -22,7 +25,15 @@ export default class PlayerService {
   }
 
   get alive(): boolean {
-    return this.local.getVariable('state') === types.tdm.State.alive
+    return this.getVariable(this.local, 'state') === State.alive
+  }
+
+  get select(): boolean {
+    return this.getVariable(this.local, 'state') === State.select
+  }
+
+  get canSelectWeapon(): boolean {
+    return this.getVariable(this.local, 'weaponState') === WeaponState.idle
   }
 
   setPosition(vector: Vector3) {
@@ -43,6 +54,27 @@ export default class PlayerService {
 
   setAlpha(alphaLevel: number) {
     this.local.setAlpha(alphaLevel)
+  }
+
+  @event(Events["tdm.player.model"])
+  playerSetModel(id: number, model: number) {
+    if (this.local.remoteId === id) {
+      return
+    }
+
+    const player = mp.players.atRemoteId(id)
+
+    if (!mp.players.exists(player)) {
+      return
+    }
+
+    // player.model = model
+  }
+
+  getVariable<_, K extends keyof PlayerData>(
+    player: PlayerMp, key: K
+  ): PlayerData[K] {
+    return player.getVariable(String(key))
   }
 
   get local() {

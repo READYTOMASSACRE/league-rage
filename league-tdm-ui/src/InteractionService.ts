@@ -8,8 +8,8 @@ export default class InteractionService {
   private teamSelector: TeamSelector
 
   constructor(
+    readonly config: IConfig,
     readonly playerService: PlayerService,
-    readonly config: IConfig
   ) {
     this.teamSelector = new TeamSelector(
       this.config.interaction.selector,

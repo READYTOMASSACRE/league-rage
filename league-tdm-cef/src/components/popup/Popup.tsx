@@ -5,6 +5,7 @@ import * as s from './Popup.module.sass'
 import PopupItem from './PopupItem/PopupItem'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { nanoid } from 'nanoid'
+import RageAPI from '../../helpers/RageAPI'
 
 const MAX_ACTIVE = 3
 const ALIVE_INTERVAL = 3000
@@ -13,7 +14,7 @@ const Popup: FC = ({ }) => {
   const [messages, set] = useState<IMessage[]>([])
 
   useEffect(() => {
-    mp.events.add(Events['tdm.popup.push'], (text: string, type: string = 'success') => {
+    RageAPI.subscribe(Events['tdm.popup.push'], 'popup', (text: string, type: string = 'success') => {
       set(prev => [...prev, { text, type, active: true, alive: Date.now(), id: nanoid(10) }])
     })
 
@@ -27,7 +28,10 @@ const Popup: FC = ({ }) => {
       return prev
     }), 1000)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      RageAPI.unsubscribe(Events['tdm.popup.push'], 'popup')
+    }
   }, [])
 
   useEffect(() => {
