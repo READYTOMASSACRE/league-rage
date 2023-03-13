@@ -52,14 +52,14 @@ const WeaponSelector = () => {
         {category ? typeCategory[category] : 'Buy Weapon'}
       </div>
       <div className={s.list}>
-        {!category ? Object.keys(data).map((categoryName, index) =>
-          <WeaponSelectorItem key={nanoid(5)} setCategory={setCategory} position={index + 1} category={categoryName} />
+        {!category ? Object.keys(data).map((categoryName) =>
+          <WeaponSelectorItem key={nanoid(5)} setCategory={setCategory} category={categoryName} />
         ) :
-          data[category].map((weapon, index) =>
-            <WeaponSelectorItem key={nanoid(5)} setCurrentWeapon={setCurrentWeapon} position={index + 1} weapon={weapon} />
+          data[category].map((weapon) =>
+            <WeaponSelectorItem key={nanoid(5)} setCurrentWeapon={setCurrentWeapon} weapon={weapon} />
           )
         }
-        <WeaponSelectorItem setCategory={setCategory} position={0} text={category ? 'Cancel' : 'Close'}/>
+        <WeaponSelectorItem setCategory={setCategory} text={category ? 'Cancel' : 'Close'} />
       </div>
       <WeaponSection weapon={currentWeapon} />
     </div>

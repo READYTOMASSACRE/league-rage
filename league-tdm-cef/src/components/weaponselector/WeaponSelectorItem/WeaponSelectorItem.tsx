@@ -44,7 +44,7 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
         toggle()
       }}
     >
-      {position} {name()}
+      {name()}
     </div>
   )
 }
