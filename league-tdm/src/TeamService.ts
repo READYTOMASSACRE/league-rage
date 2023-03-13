@@ -25,7 +25,7 @@ export default class TeamService {
 
   @log
   @event(Events["tdm.team.select"])
-  teamSelect(player: PlayerMp, team?: tdm.Team, model?: number) {
+  teamSelect(player: PlayerMp, team?: tdm.Team, model?: string) {
     if (typeof team === 'undefined') {
       return this.teamSelectRequest(player)
     }
@@ -57,7 +57,7 @@ export default class TeamService {
 
     const [model] = this.config[team].skins
 
-    return this.change(player, team, mp.joaat(model))
+    return this.change(player, team, model)
   }
 
   private teamSelectRequest(player: PlayerMp) {
@@ -87,7 +87,7 @@ export default class TeamService {
 
   @log
   @ensurePlayer
-  change(p: number | PlayerMp, team: tdm.Team, model: number) {
+  change(p: number | PlayerMp, team: tdm.Team, model: string) {
     const state = this.playerService.getState(p)
     const player = <PlayerMp>p
 
@@ -98,7 +98,7 @@ export default class TeamService {
     this.playerService.setTeam(p, team)
     this.playerService.setState(p, tdm.State.idle)
     this.playerService.spawnLobby(p)
-    this.playerService.setModel(p, model)
+    this.playerService.setModel(p, mp.joaat(model))
 
     player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
   }

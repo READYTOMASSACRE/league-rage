@@ -20,13 +20,21 @@ export default class PlayerService {
   setHealth(p: number | PlayerMp, health: number) {
     const player = <PlayerMp>p
 
+    health = health > 0 ? health : 0
     this.setVariable(player, 'health', health)
+    this.setVariable(player, 'alive', health > 0)
+
     player.health = health
   }
 
   @ensurePlayer
   getHealth(p: number | PlayerMp) {
     return this.getVariable(<PlayerMp>p, 'health')
+  }
+
+  @ensurePlayer
+  isAlive(p: number | PlayerMp) {
+    return this.getVariable(<PlayerMp>p, 'alive')
   }
 
   @log
