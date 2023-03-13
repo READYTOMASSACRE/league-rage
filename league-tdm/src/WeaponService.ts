@@ -62,17 +62,17 @@ export default class WeaponService {
   }
 
   @log
-  @event(Events["tdm.player.damage.outgoing"])
-  weaponDamage(player: PlayerMp, targetPlayer?: number, weapon?: string, damage?: number) {
-    const target = mp.players.at(targetPlayer)
+  @event(Events["tdm.player.incoming_damage"])
+  weaponDamage(player: PlayerMp, sourcePlayer?: number, weapon?: string, hit?: number, damage?: number) {
+    const source = mp.players.at(sourcePlayer)
 
-    if (!mp.players.exists(target)) {
+    if (!mp.players.exists(source)) {
       return false
     }
 
     if (
       !this.config.friendlyfire &&
-      this.playerService.getTeam(player) === this.playerService.getTeam(target) &&
+      this.playerService.getTeam(player) === this.playerService.getTeam(source) &&
       this.playerService.hasState(player, tdm.State.alive)
     ) {
       return
@@ -81,20 +81,19 @@ export default class WeaponService {
     const category = this.getCategory(weapon)
 
     if (typeof this.config.damage.weapon[weapon] !== 'undefined') {
-      damage = this.config.damage.weapon[weapon]
+      damage = this.config.damage.weapon[weapon] * hit
     } else if (typeof this.config.damage.category[category] !== 'undefined') {
-      damage = this.config.damage.category[category]
+      damage = this.config.damage.category[category] * hit
     }
 
-    const newHealth = player.health - damage
+    const newHealth = this.playerService.getHealth(player) - damage
     const alive = newHealth > 0
-    player.health = alive ? newHealth : 0
+    this.playerService.setHealth(player, alive ? newHealth : 0)
 
-    for (const p of [player, target]) {
-      p.call(Events["tdm.player.damage"], [player.id, target.id, weapon, damage, alive])
-    }
+    source.call(Events["tdm.player.damage"], [player.id, source.id, weapon, damage, alive])
+    mp.events.call(Events["tdm.player.damage"], player.id, source.id, weapon, damage, alive)
 
-    mp.events.call(Events["tdm.player.damage"], player.id, target.id, weapon, damage, alive)
+    return [player.id, source.id, weapon, damage, alive, player.health, newHealth, player.getVariable('health')]
   }
 
   @log
@@ -138,7 +137,6 @@ export default class WeaponService {
     return slot
   }
 
-  @log
   getCategory(weapon: string): Category | undefined {
     for (const [category, weapons] of Object.entries(this.config.category)) {
       if (weapons.includes(weapon)) {
@@ -147,7 +145,6 @@ export default class WeaponService {
     }
   }
 
-  @log
   getSlotByCategory(category: Category): string | undefined {
     for (const [slot, categories] of Object.entries(this.config.slot)) {
       if (categories.includes(category)) {

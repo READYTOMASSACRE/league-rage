@@ -105,9 +105,11 @@ export const enum Events {
   /** Fires when player has changed team */
   'tdm.player.team' = 'tdm.player.team',
   /** Fires when player recieved damage from another player*/
-  'tdm.player.damage.outgoing' = 'tdm.player.damage.outgoing',
+  'tdm.player.incoming_damage' = 'tdm.player.incoming_damage',
   /** Fires from server when player gives damage to another player */
   'tdm.player.damage' = 'tdm.player.damage',
+  /** Fires when player changed model */
+  'tdm.player.model' = 'tdm.player.model',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */

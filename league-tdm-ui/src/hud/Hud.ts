@@ -1,4 +1,3 @@
-import { logClient } from "../../../league-core/client"
 import { toMs } from "../../../league-core/src/helpers"
 import { IHud } from "../../../league-core/src/types/hud"
 
@@ -22,7 +21,6 @@ abstract class Hud implements IHud {
     }
   }
 
-  @logClient
   draw(..._: any[]) {
     if (this.destroyed) {
       mp.console.logError(`${this.constructor.name} is destroyed`)
@@ -42,7 +40,6 @@ abstract class Hud implements IHud {
     this.rendered = true
   }
 
-  @logClient
   destroy(err?: Error) {
     if (this.destroyed) {
       return
@@ -64,7 +61,10 @@ abstract class Hud implements IHud {
 
     this.alive = typeof alive !== 'undefined' ? alive: this.alive
     clearTimeout(this.timeout)
-    setTimeout(() => this.destroy(), toMs(this.alive))
+
+    if (this.alive > 0) {
+      this.timeout = setTimeout(() => this.destroy(), toMs(this.alive))
+    }
   }
 
   get isDestroyed() {

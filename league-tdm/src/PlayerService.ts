@@ -18,12 +18,15 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setHealth(p: number | PlayerMp, health: number) {
-    (p as PlayerMp).health = health
+    const player = <PlayerMp>p
+
+    this.setVariable(player, 'health', health)
+    player.health = health
   }
 
   @ensurePlayer
   getHealth(p: number | PlayerMp) {
-    return (p as PlayerMp).health
+    return this.getVariable(<PlayerMp>p, 'health')
   }
 
   @log
@@ -155,7 +158,11 @@ export default class PlayerService {
   @log
   @ensurePlayer
   setModel(p: number | PlayerMp, model: number) {
-    (p as PlayerMp).model = model
+    const player = <PlayerMp>p
+
+    player.model = model
+
+    mp.players.call(Events["tdm.player.model"], [player.id, model])
   }
 
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(

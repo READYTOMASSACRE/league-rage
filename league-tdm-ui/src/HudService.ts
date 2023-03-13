@@ -3,6 +3,7 @@ import { Events } from "../../league-core/src/types";
 import { HudConfig } from "../../league-core/src/types/ui";
 import Damage from "./hud/Damage";
 import RoundStart from "./hud/RoundStart";
+import PlayerService from "./PlayerService";
 import RoundService from './RoundService'
 import Zone from "./Zone";
 
@@ -15,10 +16,15 @@ export default class HudService {
     constructor(
         readonly config: HudConfig,
         readonly roundService: RoundService,
+        readonly playerService: PlayerService,
     ) {}
 
     @event(Events["tdm.round.prepare"])
     drawRoundStart(id: number) {
+        if (this.playerService.select) {
+            return
+        }
+
         if (this.roundStart) {
             this.roundStart.destroy()
         }
@@ -58,7 +64,7 @@ export default class HudService {
                 if (!this.damageIn || this.damageIn.isDestroyed) {
                     this.damageIn = this.getDamageComponent({
                         source, recieved, damageIn: true,
-                        weapon, damage, alive
+                        weapon, damage: 0, alive
                     })
     
                     this.damageIn.draw()
@@ -72,7 +78,7 @@ export default class HudService {
                 if (!this.damageOut || this.damageOut.isDestroyed) {
                     this.damageOut = this.getDamageComponent({
                         source, recieved, damageIn: false,
-                        weapon, damage, alive
+                        weapon, damage: 0, alive
                     })
     
                     this.damageOut.draw()

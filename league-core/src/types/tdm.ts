@@ -64,4 +64,5 @@ export type PlayerData = {
   team: Team
   weaponState: WeaponState
   weaponSlot: Record<string, string>
+  health: number
 }
