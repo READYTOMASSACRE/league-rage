@@ -37,12 +37,12 @@ export default class WeaponRequest {
 
       const started = this.dummyService.get(Entity.ROUND, 'started')
 
-      if (!this.playerService.canSelectWeapon) {
-        throw new PopupError(Lang["error.weapon.is_busy"])
-      }
-
       if (!started) {
         throw new PopupError(Lang["tdm.round.is_not_running"])
+      }
+
+      if (!this.playerService.canSelectWeapon) {
+        throw new PopupError(Lang["error.weapon.is_busy"])
       }
 
       this.visible = visible
