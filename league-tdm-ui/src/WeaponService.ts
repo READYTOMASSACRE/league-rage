@@ -1,4 +1,4 @@
-import { event, eventable, logClient, helpers } from "../../league-core/client";
+import { event, eventable, helpers } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 import weapons from "./weapons";
@@ -15,7 +15,6 @@ export default class WeaponService {
     this.throttledIncomingUpdate = helpers.throttle(() => this.incomingUpdate(), 100)
   }
 
-  @logClient
   @event("incomingDamage")
   incomingDamage(
     sourceEntity: EntityMp,
