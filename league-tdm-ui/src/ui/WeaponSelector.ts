@@ -5,42 +5,57 @@ import { Entity } from "../../../league-core/src/types/tdm";
 import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../../league-lang/language";
 import DummyService from "../DummyService";
+import PopupError from "../error/PopupError";
 import KeybindService, { key } from "../KeybindService";
+import PlayerService from "../PlayerService";
 import UIService from "../UIService";
 
 @eventable
 export default class WeaponRequest {
   public visible: boolean = false
+  private data: Record<string, cef.Weapon[]>
+
   constructor(
     readonly config: WeaponConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
+    readonly playerService: PlayerService,
     readonly dummyService: DummyService,
-    readonly lang: ILanguage
   ) {
     this.request = this.request.bind(this)
 
     this.keybindService.unbind(key.b, true)
     this.keybindService.bind(key.b, true, this.request)
+    this.data = this.getData()
   }
   
-  @logClient
   @event(Events["tdm.weapon.request"])
   request(visible?: boolean) {
     // todo check if round is running and player can choice weapon
     try {
+      visible = typeof visible !== 'undefined' ? visible : !this.visible
+
       const started = this.dummyService.get(Entity.ROUND, 'started')
 
-      if (!started) {
-        this.uiService.cef.call(Events["tdm.popup.push"], this.lang.get(Lang["tdm.round.is_not_running"]))
-        return
+      if (!this.playerService.canSelectWeapon) {
+        throw new PopupError(Lang["error.weapon.is_busy"])
       }
 
-      this.visible = typeof visible !== 'undefined' ? visible : !this.visible
-      this.uiService.cef.call(Events["tdm.weapon.request"], this.getData(), this.visible)
-      this.uiService.setCursor(this.visible, 'weapon_request')
+      if (!started) {
+        throw new PopupError(Lang["tdm.round.is_not_running"])
+      }
+
+      this.visible = visible
     } catch (err) {
-      mp.console.logError(err.stack)
+      if (err instanceof PopupError) {
+        this.uiService.popup(err.message, 'error')
+        this.visible = false
+      } else {
+        mp.console.logError(err.stack)
+      }
+    } finally {
+      this.uiService.cef.call(Events["tdm.weapon.request"], this.data, this.visible)
+      this.uiService.setCursor(this.visible, 'weapon_request')
     }
   }
 
@@ -48,6 +63,7 @@ export default class WeaponRequest {
   @event(Events["tdm.weapon.submit"])
   submit(weapon: string) {
     mp.events.callRemote(Events["tdm.weapon.submit"], weapon)
+    this.request(false)
   }
 
   private getData() {

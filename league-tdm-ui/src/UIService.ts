@@ -1,8 +1,9 @@
 import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
-import { ILanguage } from "../../league-lang/language";
+import { ILanguage, Lang } from "../../league-lang/language";
 import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
+import PlayerService from "./PlayerService";
 import Chat from "./ui/Chat";
 import Scoreboard from "./ui/Scoreboard";
 import TeamSelector from "./ui/TeamSelector";
@@ -21,12 +22,16 @@ export default class UIService {
     readonly url: string,
     readonly config: IConfig,
     readonly keybindService: KeybindService,
+    readonly playerService: PlayerService,
     readonly dummyService: DummyService,
     readonly lang: ILanguage
   ) {
     this.chat = new Chat(this, keybindService)
-    this.scoreboard = new Scoreboard(config.team, this, keybindService)
-    this.weaponSelector = new WeaponSelector(config.weapon, this, keybindService, dummyService, lang)
+    this.scoreboard = new Scoreboard(config.team, this, keybindService, playerService)
+    this.weaponSelector = new WeaponSelector(
+      config.weapon, this, keybindService,
+      playerService, dummyService
+    )
     this.teamSelect = new TeamSelector(this, keybindService)
 
     this.disableControlActions()
@@ -69,4 +74,8 @@ export default class UIService {
   @logClient
   @event(Events["tdm.cef.log"])
   log(...args: any[]) {}
+
+  popup(message: Lang | string, type: string = 'info') {
+    this.cef.call(Events["tdm.popup.push"], this.lang.get(<Lang>message), type)
+  }
 }

@@ -58,3 +58,10 @@ export type Dummy = {
     started: boolean
   }
 }
+
+export type PlayerData = {
+  state: State
+  team: Team
+  weaponState: WeaponState
+  weaponSlot: Record<string, string>
+}

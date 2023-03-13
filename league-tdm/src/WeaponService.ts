@@ -1,7 +1,9 @@
 import { command, commandable, event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
+import { Entity } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
+import DummyService from "./DummyService";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
 
@@ -11,6 +13,7 @@ export default class WeaponService {
   constructor(
     readonly config: weapon.Config,
     readonly playerService: PlayerService,
+    readonly dummService: DummyService,
     readonly lang: ILanguage,
   ) {}
 
@@ -75,7 +78,6 @@ export default class WeaponService {
       return
     }
 
-    weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
     const category = this.getCategory(weapon)
 
     if (typeof this.config.damage.weapon[weapon] !== 'undefined') {
@@ -105,11 +107,11 @@ export default class WeaponService {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
     }
 
-    if (!this.playerService.hasState(player, tdm.State.alive)) {
-      throw new BroadCastError(this.lang.get(Lang["error.player.not_in_round"]), player)
+    if (!this.dummService.get(Entity.ROUND, 'started')) {
+      throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
     }
 
-    if (this.playerService.hasWeaponState(player, tdm.WeaponState.has)) {
+    if (!this.playerService.hasWeaponState(player, tdm.WeaponState.idle)) {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.is_busy"]), player)
     }
 
@@ -128,7 +130,9 @@ export default class WeaponService {
     const oldWeapon = this.playerService.getWeaponSlot(player, slot)
 
     if (oldWeapon) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], { slot, weapon: oldWeapon }), player)
+      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], {
+        slot, weapon: typeof oldWeapon === 'string' ? oldWeapon : ''
+      }), player)
     }
 
     return slot

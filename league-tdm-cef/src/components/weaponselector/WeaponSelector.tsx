@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid'
 import React, { useEffect, useState } from 'react'
-import { Categories, IWeapon } from '../../types'
 import WeaponSection from './WeaponInfoSection.tsx/WeaponSection'
 import * as s from './WeaponSelector.module.sass'
 import WeaponSelectorItem from './WeaponSelectorItem/WeaponSelectorItem'
@@ -12,7 +11,7 @@ const WeaponSelector = () => {
 
   const [active, setActive] = useState<boolean>(false)
   const [data, setData] = useState<Record<string, cef.Weapon[]>>({})
-  const [category, setCategory] = useState<string>(' ')
+  const [category, setCategory] = useState<string>('')
   const [currentWeapon, setWeapon] = useState<cef.Weapon | undefined>()
 
   useEffect(() => {
@@ -20,9 +19,11 @@ const WeaponSelector = () => {
       try {
         const data = JSON.parse(jsonData)
         setActive(toggle)
-        if (typeof data === 'object') {
-          setData(data)
+        if (!toggle) {
+          setCategory('')
+          setWeapon(undefined)
         }
+        if (typeof data === 'object') setData(data)
       } catch (err) {
         cefLog(err)
       }
@@ -42,7 +43,7 @@ const WeaponSelector = () => {
           {'<-'}
         </div>
         <div className={s.list}>
-          {category === ' ' ? Object.keys(data).map((categoryName, index) =>
+          {category === '' ? Object.keys(data).map((categoryName, index) =>
             <WeaponSelectorItem key={nanoid(5)} setCategory={setCategory} position={index + 1} category={categoryName} />
           ) :
             data[category].map((weapon, index) =>

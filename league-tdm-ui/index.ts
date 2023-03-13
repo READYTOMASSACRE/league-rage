@@ -26,6 +26,7 @@ const main = async () => {
       "package://league-tdm-cef/index.html",
       config,
       keybindService,
+      playerService,
       dummyService,
       language
     )
