@@ -11,7 +11,7 @@ const WeaponSelector = () => {
 
   const [active, setActive] = useState<boolean>(false)
   const [data, setData] = useState<Record<string, cef.Weapon[]>>({})
-  const [category, setCategory] = useState<string>('')
+  const [category, setCategory] = useState<string>()
   const [currentWeapon, setWeapon] = useState<cef.Weapon | undefined>()
 
   useEffect(() => {
@@ -39,11 +39,11 @@ const WeaponSelector = () => {
   return (
     <div className={s.container}>
       <div className={s.listside}>
-        <div className={s.buttonback} onClick={() => setCategory(' ')}>
+        <div className={s.buttonback} onClick={() => setCategory(undefined)}>
           {'<-'}
         </div>
         <div className={s.list}>
-          {category === '' ? Object.keys(data).map((categoryName, index) =>
+          {!category ? Object.keys(data).map((categoryName, index) =>
             <WeaponSelectorItem key={nanoid(5)} setCategory={setCategory} position={index + 1} category={categoryName} />
           ) :
             data[category].map((weapon, index) =>
