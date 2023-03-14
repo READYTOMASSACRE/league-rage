@@ -1,6 +1,6 @@
 import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
-import TeamSelector from "./interactions/Selector";
+import TeamSelector from "./interactions/TeamSelector";
 import PlayerService from "./PlayerService";
 
 @eventable

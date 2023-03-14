@@ -11,7 +11,7 @@ interface TeamSelector extends TeamSelectorConfig {}
 class TeamSelector implements TeamSelectorConfig {
   private running: boolean = false
   private ids: number[] = []
-  private teamPed: Record<string, PedMp[]> = {}
+  private teamPed: Record<string, { skin: string, ped: PedMp }[]> = {}
   private camera: CameraMp
   private playerService: PlayerService
   private teamConfig: TeamConfig
@@ -39,14 +39,17 @@ class TeamSelector implements TeamSelectorConfig {
     this.camera.pointAtCoord(...config.cam.pointAt)
 
     for (const [team, data] of Object.entries(teamConfig)) {
-      const peds = data.skins.map(skin => mp.peds.new(
-        mp.game.joaat(skin),
-        new mp.Vector3(...this.ped.vector),
-        this.ped.heading,
-        this.ped.dimension
-      ))
+      const peds = data.skins.map(skin => ({
+        skin,
+        ped: mp.peds.new(
+          mp.game.joaat(skin),
+          new mp.Vector3(...this.ped.vector),
+          this.ped.heading,
+          this.ped.dimension
+        )
+      }))
 
-      this.ids.push(...peds.map(toId))
+      this.ids.push(...peds.map(({ ped }) => toId(ped)))
       this.teamPed[team] = peds
     }
 
@@ -129,7 +132,7 @@ class TeamSelector implements TeamSelectorConfig {
     for (const [team, peds] of Object.entries(this.teamPed)) {
       let pedIndex = 0
 
-      for (const ped of peds) {
+      for (const { ped } of peds) {
         const current = toggle &&
           this.currentTeam === team &&
           this.current.ped === pedIndex++
@@ -184,8 +187,7 @@ class TeamSelector implements TeamSelectorConfig {
 
       this.stop()
 
-      this.playerService.local.model = this.currentPed.model
-      mp.events.callRemote(Events["tdm.team.select"], this.currentTeam, this.currentPed.model)
+      mp.events.callRemote(Events["tdm.team.select"], this.currentTeam, this.currentPedSkin)
     } catch (err) {
       mp.console.logError(err.stack)
     } 
@@ -196,7 +198,11 @@ class TeamSelector implements TeamSelectorConfig {
   }
 
   private get currentPed(): PedMp {
-    return this.teamPed[this.currentTeam][this.current.ped]
+    return this.teamPed[this.currentTeam][this.current.ped].ped
+  }
+
+  private get currentPedSkin(): string {
+    return this.teamPed[this.currentTeam][this.current.ped].skin
   }
 
   private get currentTeamInfo(): { team: string, color: string } {

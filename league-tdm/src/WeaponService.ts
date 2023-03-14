@@ -86,14 +86,20 @@ export default class WeaponService {
       damage = this.config.damage.category[category] * hit
     }
 
-    const newHealth = this.playerService.getHealth(player) - damage
-    const alive = newHealth > 0
-    this.playerService.setHealth(player, alive ? newHealth : 0)
+    const alive = this.playerService.isAlive(player)
 
-    source.call(Events["tdm.player.damage"], [player.id, source.id, weapon, damage, alive])
-    mp.events.call(Events["tdm.player.damage"], player.id, source.id, weapon, damage, alive)
-
-    return [player.id, source.id, weapon, damage, alive, player.health, newHealth, player.getVariable('health')]
+    if (alive) {
+      const newHealth = this.playerService.getHealth(player) - damage
+      this.playerService.setHealth(player, newHealth)
+  
+      for (const p of [player, source]) {
+        p.call(Events["tdm.player.damage"], [player.id, source.id, weapon, damage])
+      }
+  
+      mp.events.call(Events["tdm.player.damage"], player.id, source.id, weapon, damage)
+  
+      return [player.id, source.id, weapon, damage, newHealth, player.getVariable('health')]
+    }
   }
 
   @log
