@@ -14,6 +14,13 @@ export enum State {
   select = 'select',
 }
 
+export enum RoundState {
+  prepare = 'prepare',
+  running = 'running',
+  stopped = 'stopped',
+  paused = 'paused',
+}
+
 export enum WeaponState {
   idle = 'idle',
   has = 'has',
@@ -53,10 +60,16 @@ export const enum Entity {
   ROUND,
 }
 
+export type RoundData = {
+  arena: string
+  state: RoundState
+  date: number
+  time: number
+  players: string
+}
+
 export type Dummy = {
-  [Entity.ROUND]: {
-    started: boolean
-  }
+  [Entity.ROUND]: RoundData
 }
 
 export type PlayerData = {

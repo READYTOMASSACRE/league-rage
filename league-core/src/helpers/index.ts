@@ -13,14 +13,26 @@ export const toId = (e: any): number => {
 
 export const rand = (max: number): number => Math.floor(Math.random() * Math.floor(max))
 export const decorate = (arg: any): string => {
-  if (typeof arg ==='undefined') return 'undefined'
-  if (isEntity(arg)) return `${arg.type}_${arg.id}`
-  if (typeof arg === 'object') return JSON.stringify(arg)
-
-  return arg
+  try {
+    if (typeof arg === 'boolean') return arg ? 'true' : 'false'
+    if (typeof arg === 'undefined') return 'undefined'
+    if (isEntity(arg)) return `${arg.type}_${arg.id}`
+    if (typeof arg === 'object') return JSON.stringify(arg)
+  
+    return arg
+  } catch (err) {
+    mp.console.logError(err.stack)
+  }
 }
 export const hexregex = /#([a-f0-9]{3}|[a-f0-9]{4}(?:[a-f0-9]{2}){0,2})\b/gi
 export const rgabregex = /^(?:rgba?)?[\s]?[\(]?[\s+]?(\d+)[(\s)|(,)]+[\s+]?(\d+)[(\s)|(,)]+[\s+]?(\d+)[(\s)|(,)]+[\s+]?([0-1]?(?:\.\d+)?)$/
 export const deepclone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj))
+export const toColor = (color: any, defaultColor: string = 'white') => (
+  typeof color === 'string' && (
+    color.match(hexregex) || color.match(rgabregex)
+  ) ?
+    color :
+    defaultColor
+)
 
 export { throttle }

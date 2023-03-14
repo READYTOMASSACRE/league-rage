@@ -1,9 +1,8 @@
 import { event, eventable, logClient } from "../../../league-core/client";
-import { decorate } from "../../../league-core/src/helpers";
 import { cef, Events } from "../../../league-core/src/types";
-import { Entity } from "../../../league-core/src/types/tdm";
+import { Entity, RoundState } from "../../../league-core/src/types/tdm";
 import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
-import { ILanguage, Lang } from "../../../league-lang/language";
+import { Lang } from "../../../league-lang/language";
 import DummyService from "../DummyService";
 import PopupError from "../error/PopupError";
 import KeybindService, { key } from "../KeybindService";
@@ -35,9 +34,9 @@ export default class WeaponRequest {
     try {
       visible = typeof visible !== 'undefined' ? visible : !this.visible
 
-      const started = this.dummyService.get(Entity.ROUND, 'started')
+      const state = this.dummyService.get(Entity.ROUND, 'state')
 
-      if (!started) {
+      if (![RoundState.running, RoundState.prepare, RoundState.paused].includes(state)) {
         throw new PopupError(Lang["tdm.round.is_not_running"])
       }
 

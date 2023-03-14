@@ -120,6 +120,10 @@ export const enum Events {
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
+  /** Fires when infopanel gets data */
+  'tdm.infopanel.data' = 'tdm.infopanel.data',
+  /** Fires when ui is ready */
+  'tdm.ui.ready' = 'tdm.ui.ready',
 }
 
 export const enum Procs {

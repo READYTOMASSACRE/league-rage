@@ -5,6 +5,7 @@ import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
 import Chat from "./ui/Chat";
+import Infopanel from "./ui/Infopanel";
 import Scoreboard from "./ui/Scoreboard";
 import TeamSelector from "./ui/TeamSelector";
 import WeaponSelector from "./ui/WeaponSelector";
@@ -17,6 +18,7 @@ export default class UIService {
   public weaponSelector: WeaponSelector
   public teamSelect: TeamSelector
   public visible: Record<string, boolean> = {}
+  public infoPanel: Infopanel
 
   constructor(
     readonly url: string,
@@ -33,6 +35,7 @@ export default class UIService {
       playerService, dummyService
     )
     this.teamSelect = new TeamSelector(this, keybindService)
+    this.infoPanel = new Infopanel(config.team, this, this.dummyService)
 
     this.disableControlActions()
   }

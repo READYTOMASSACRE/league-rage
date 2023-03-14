@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import * as s from './WeaponSection.module.sass'
 import WeaponSectionItem from '../WeaponSectionItem/WeaponSectionItem';
 import { cef } from '../../../../../league-core/src/types';

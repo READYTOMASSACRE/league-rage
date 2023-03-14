@@ -93,7 +93,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     round: {
       prepare: 5,
       timeleft: 120,
-      weapon: 20,
+      weapon: 25,
       watcher: {
         alive: false,
       }

@@ -2,8 +2,8 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import cl from 'classnames'
 import * as s from './HeaderScoreboard.module.sass'
 import { Events, scoreboard } from '../../../../../league-core/src/types';
-import { helpers } from '../../../../../league-core/client';
 import RageAPI from '../../../helpers/RageAPI';
+import { toColor } from '../../../../../league-core/src/helpers';
 
 interface Props {
   attackTeam?: scoreboard.Team
@@ -29,14 +29,8 @@ const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam, arena = 'Not_fou
   let { color: attackColor = '' } = attackTeam || {}
   let { color: defenseColor = '' } = defenseTeam || {}
 
-  attackColor = (
-    attackColor.match(helpers.hexregex) ||
-    attackColor.match(helpers.rgabregex)
-  ) ? attackColor : defaultColor
-  defenseColor = (
-    defenseColor.match(helpers.hexregex) ||
-    defenseColor.match(helpers.rgabregex)
-  ) ? defenseColor : defaultColor
+  attackColor = toColor(attackColor, defaultColor)
+  defenseColor = toColor(defenseColor, defaultColor)
 
   // rgba(0,5,255,0.6) attack
   // rgba(255,0,0,0.6) defense

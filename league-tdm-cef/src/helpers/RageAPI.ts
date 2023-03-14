@@ -1,6 +1,7 @@
 import { Enviroment, Events } from "../../../league-core/src/types"
 
 export default new class RageAPI {
+  private ready: boolean = false
   private events: Map<string, Function> = new Map()
 
   subscribe(event: string, component: string, handler: Function) {
@@ -35,5 +36,14 @@ export default new class RageAPI {
 
   weaponToggle() {
     mp.trigger(Events['tdm.weapon.toggle'])
+  }
+
+  sendReady() {
+    if (this.ready) {
+      return
+    }
+
+    this.ready = true
+    mp.trigger(Events["tdm.ui.ready"])
   }
 }

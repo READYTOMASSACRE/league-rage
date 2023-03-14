@@ -1,36 +1,26 @@
-import { event, eventable, log } from "../../league-core"
-import { Events } from "../../league-core/src/types"
-import { Dummy, Entity } from "../../league-core/src/types/tdm"
+import { eventable } from "../../league-core"
+import { Dummy, Entity, RoundState } from "../../league-core/src/types/tdm"
 
 @eventable
 export default class DummyService {
-  public round: DummyMp
+  private dummies: {
+    [Entity.ROUND]: DummyMp
+  }
 
   constructor() {
-    this.setDefault(Entity.ROUND, { started: false })
-  }
-
-  @log
-  @event(Events["tdm.round.prepare"])
-  roundPrepare() {
-    this.set(Entity.ROUND, 'started', true)
-  }
-
-  @event(Events["tdm.round.end"])
-  roundEnd() {
-    this.set(Entity.ROUND, 'started', false)
+    this.dummies = {
+      [Entity.ROUND]: this.setDefault(Entity.ROUND, {
+        arena: '',
+        state: RoundState.stopped,
+        date: 0,
+        time: 0,
+        players: '[]',
+      }),
+    }
   }
 
   getOne(type: Entity): DummyMp | undefined {
-    let dummy = undefined
-
-    mp.dummies.forEachByType(type, d => {
-      if (!dummy) {
-        dummy = d
-      }
-    })
-
-    return dummy
+    return this.dummies[type]
   }
 
   get<E extends Entity, K extends keyof Dummy[E]>(type: E, key: K, dummy?: DummyMp): Dummy[E][K] | undefined {
