@@ -22,4 +22,5 @@ export interface Team {
 export type Data = {
   players: Player[]
   teams: Team[]
+  arena: string
 }

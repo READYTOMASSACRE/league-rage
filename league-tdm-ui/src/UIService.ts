@@ -5,6 +5,7 @@ import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
 import Chat from "./ui/Chat";
+import Controls from "./ui/Controls";
 import Infopanel from "./ui/Infopanel";
 import Scoreboard from "./ui/Scoreboard";
 import TeamSelector from "./ui/TeamSelector";
@@ -19,6 +20,7 @@ export default class UIService {
   public teamSelect: TeamSelector
   public visible: Record<string, boolean> = {}
   public infoPanel: Infopanel
+  public controls: Controls
 
   constructor(
     readonly url: string,
@@ -29,13 +31,17 @@ export default class UIService {
     readonly lang: ILanguage
   ) {
     this.chat = new Chat(this, keybindService)
-    this.scoreboard = new Scoreboard(config.team, this, keybindService, playerService)
+    this.scoreboard = new Scoreboard(
+      config.team, this, keybindService,
+      playerService, dummyService
+    )
     this.weaponSelector = new WeaponSelector(
       config.weapon, this, keybindService,
       playerService, dummyService
     )
     this.teamSelect = new TeamSelector(this, keybindService)
     this.infoPanel = new Infopanel(config.team, this, this.dummyService)
+    this.controls = new Controls(this, lang)
 
     this.disableControlActions()
   }

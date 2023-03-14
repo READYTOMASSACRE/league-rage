@@ -56,5 +56,10 @@
   "cmd.unpause": "Usage /{{cmdName}} - unpause round",
   "cmd.vote": "Usage //{{cmdName}} <id|code> vote for arena",
   "cmd.weapon": "Usage //{{cmdName}} <id|list>",
-  "cmd.change_team": "Usage /{{cmdName}} <id|string> (optional) to change team. Example: /t att, /t, /t def"
+  "cmd.change_team": "Usage /{{cmdName}} <id|string> (optional) to change team. Example: /t att, /t, /t def",
+
+  "controls.t": " - открыть чат",
+  "controls.b": " - выбор оружия",
+  "controls.tab": " - статистика",
+  "controls.f4": " - смена команды"
 }

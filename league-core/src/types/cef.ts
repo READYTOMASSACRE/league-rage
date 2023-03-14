@@ -22,3 +22,8 @@ export type InfoPanel = {
   timeleft: number
   pause: boolean
 }
+
+export type Control = {
+  key: string
+  description: string
+}

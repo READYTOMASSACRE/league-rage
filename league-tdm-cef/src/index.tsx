@@ -8,6 +8,7 @@ import './index.module.sass'
 import WeaponSelector from './components/weaponselector/WeaponSelector'
 import Infopanel from './components/infopanel'
 import RageAPI from './helpers/RageAPI'
+import Controls from './components/controls'
 
 const App = () => {
 
@@ -19,6 +20,7 @@ const App = () => {
       <TeamSelector />
       <WeaponSelector />
       <Infopanel />
+      <Controls />
       {RageAPI.sendReady()}
     </>
   )

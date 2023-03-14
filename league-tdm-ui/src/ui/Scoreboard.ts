@@ -1,6 +1,7 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { Events, scoreboard } from "../../../league-core/src/types";
-import { TeamConfig } from "../../../league-core/src/types/tdm";
+import { Entity, TeamConfig } from "../../../league-core/src/types/tdm";
+import DummyService from "../DummyService";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
 import UIService from "../UIService";
@@ -14,6 +15,7 @@ export default class Scoreboard {
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService,
+    readonly dummyService: DummyService,
   ) {
     this.keybindService.unbind(key.tab, [true, false])
     this.keybindService.bind(key.tab, [true, false], () => this.toggle(mp.keys.isDown(key.tab)))
@@ -33,7 +35,8 @@ export default class Scoreboard {
   private getData(): scoreboard.Data {
     return {
       players: this.getPlayersData(),
-      teams: this.getTeamsData()
+      teams: this.getTeamsData(),
+      arena: this.dummyService.get(Entity.ROUND, 'arena')
     }
   }
 
