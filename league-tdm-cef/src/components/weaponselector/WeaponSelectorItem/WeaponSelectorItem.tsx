@@ -14,26 +14,25 @@ interface Props {
   setActive?: (value: boolean) => void
 }
 
-const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurrentWeapon, category, text}) => {
+const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurrentWeapon, category, text }) => {
 
   const style: CSSProperties = {
     marginTop: text ? 'auto' : undefined
   }
 
   const name = () => {
-    if(category) return category[0].toUpperCase() + category.slice(1).replace('_', ' ')
-    if(weapon)  return weapon.name ? weaponNameForUI[weapon.name] : 'none'
-    if(!weapon && !category) return text
+    if (category) return category[0].toUpperCase() + category.slice(1).replace('_', ' ')
+    if (weapon) return weapon.name ? weaponNameForUI[weapon.name] : 'none'
+    if (!weapon && !category) return text
   }
 
   const toggle = () => {
-    if(text === 'Cancel') setCategory && setCategory(undefined)
-    if(text === 'Close') RageAPI.weaponToggle()
+    if (text === 'Cancel') setCategory && setCategory(undefined)
+    if (text === 'Close') RageAPI.weaponToggle()
   }
 
   return (
-    //fix tabindex problem
-    <div tabIndex={0}
+    <div
       className={s.container}
       style={style}
       onMouseOver={() => setCurrentWeapon && weapon && setCurrentWeapon(weapon)}
@@ -42,13 +41,6 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
         category && setCategory && setCategory(category);
         weapon && RageAPI.weaponSubmit(weapon?.name);
         toggle()
-      }}
-      onKeyDown={(e) => {
-        if(e.key === position?.toString()) {
-          category && setCategory && setCategory(category);
-          weapon && RageAPI.weaponSubmit(weapon?.name);
-          toggle()
-        }
       }}
     >
       {position} {name()}
