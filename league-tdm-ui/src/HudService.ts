@@ -1,7 +1,7 @@
 import { event, eventable, logClient } from "../../league-core/client";
-import { Events } from "../../league-core/src/types";
-import { HudConfig } from "../../league-core/src/types/ui";
+import { Events, IConfig } from "../../league-core/src/types";
 import Damage from "./hud/Damage";
+import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";
 import PlayerService from "./PlayerService";
 import RoundService from './RoundService'
@@ -12,9 +12,10 @@ export default class HudService {
     private roundStart?: RoundStart
     private damageIn?: Damage
     private damageOut?: Damage
+    private nametag?: Nametag
 
     constructor(
-        readonly config: HudConfig,
+        readonly config: IConfig,
         readonly roundService: RoundService,
         readonly playerService: PlayerService,
     ) {}
@@ -33,11 +34,9 @@ export default class HudService {
 
         if (arena) {
             const zone = new Zone(arena)
-            this.roundStart = new RoundStart(this.config.roundStart)
+            this.roundStart = new RoundStart(this.config.hud.roundStart)
             this.roundStart.draw(arena.code, zone.center)
         }
-
-        return arena
     }
 
     @event([Events["tdm.round.start"], Events["tdm.round.end"]]) // todo add check in decorator to server_only events
@@ -104,7 +103,7 @@ export default class HudService {
         const vectorSource = source.position
         const vectorTarget = recieved.position
 
-        return new Damage(this.config.damage, {
+        return new Damage(this.config.hud.damage, {
             in: damageIn,
             weapon,
             damage,
@@ -113,5 +112,16 @@ export default class HudService {
                 vectorTarget.x, vectorTarget.y, vectorTarget.z,
             )).toFixed(2),
         })
+    }
+
+    @event(Events["tdm.player.ready"])
+    drawNametag() {
+        if (this.nametag) {
+            this.nametag.destroy()
+        }
+
+        mp.nametags.enabled = false
+        this.nametag = new Nametag(this.config.hud.nametag, this.config.team, this.playerService)
+        this.nametag.draw()
     }
 }

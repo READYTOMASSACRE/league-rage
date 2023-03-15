@@ -2,6 +2,7 @@ import { event, eventable, log } from "../../league-core"
 import { RoundConfig } from "../../league-core/src/types/tdm"
 import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
+import DummyService from "./DummyService"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
@@ -13,6 +14,7 @@ export default class RoundService {
     readonly config: RoundConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
+    readonly dummyService: DummyService,
     readonly lang: ILanguage,
   ) {}
 
@@ -71,7 +73,7 @@ export default class RoundService {
       roundSeconds: this.config.timeleft,
       weaponSeconds: this.config.weapon,
       aliveWatcher: this.config.watcher.alive,
-    }, this.playerService)
+    }, this.playerService, this.dummyService)
   }
 
   @log
@@ -137,8 +139,14 @@ export default class RoundService {
     delete this.round
   }
 
+  get state() {
+    return this.round?.state
+  }
+
   get running() {
-    return Boolean(this.round?.running)
+    if (!this.round) return false
+
+    return this.round.running || this.round.prepared || this.round.paused
   }
 
   get paused() {

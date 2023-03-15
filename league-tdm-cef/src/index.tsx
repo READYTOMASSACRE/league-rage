@@ -6,6 +6,9 @@ import Popup from './components/popup/Popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import './index.module.sass'
 import WeaponSelector from './components/weaponselector/WeaponSelector'
+import Infopanel from './components/infopanel'
+import RageAPI from './helpers/RageAPI'
+import Controls from './components/controls'
 
 const App = () => {
 
@@ -16,6 +19,9 @@ const App = () => {
       <Popup />
       <TeamSelector />
       <WeaponSelector />
+      <Infopanel />
+      <Controls />
+      {RageAPI.sendReady()}
     </>
   )
 }

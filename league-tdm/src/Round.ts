@@ -1,6 +1,8 @@
-import { log, helpers, types } from "../../league-core"
-import { Events, tdm } from "../../league-core/src/types"
+import { log, helpers } from "../../league-core"
+import { Events } from "../../league-core/src/types"
+import { Entity, RoundState, State, Team, WeaponState } from "../../league-core/src/types/tdm"
 import Arena from "./Arena"
+import DummyService from "./DummyService"
 import PlayerService from "./PlayerService"
 
 interface RoundConfig {
@@ -16,22 +18,22 @@ export default class Round {
   private prepareTimer: ReturnType<typeof setTimeout>
   private roundTimer: ReturnType<typeof setTimeout>
   private weaponTimer: ReturnType<typeof setTimeout>
-  private date: number = 0
-  private roundTime: number = 0
   private _players: number[] = []
-  private _running: boolean = false
-  private _paused: boolean = false
+  private date: number = 0
 
   constructor(
     readonly config: RoundConfig,
-    readonly playerService: PlayerService
+    readonly playerService: PlayerService,
+    readonly dummyService: DummyService,
   ) {
-    this.roundTime = helpers.toMs(this.config.roundSeconds)
+    this.time = helpers.toMs(this.config.roundSeconds)
     this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
     this.weaponTimer = setTimeout(() => this.players.forEach((p) => (
-      this.playerService.setWeaponState(p, tdm.WeaponState.has)
+      this.playerService.setWeaponState(p, WeaponState.has)
     )), helpers.toMs(this.config.weaponSeconds))
-
+    this.state = RoundState.prepare
+    
+    this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
     mp.events.call(Events["tdm.round.prepare"], this.arena.id)
   }
 
@@ -42,9 +44,9 @@ export default class Round {
     }
 
     this.config.players.map(id => this.addPlayer(id))
-    this.roundTimer = setTimeout(() => this.end(), this.roundTime)
+    this.roundTimer = setTimeout(() => this.end(), this.time)
     this.date = Date.now()
-    this._running = true
+    this.state = RoundState.running
 
     if (this.shouldRunning) {
       this.watch()
@@ -56,13 +58,17 @@ export default class Round {
 
   @log
   end() {
-    if (!this.running) {
+    if (!this.prepared && !this.running && !this.paused) {
       return
     }
 
     const result = this.getResult()
+
+    this.state = RoundState.stopped
+    this.time = 0
+    this.dummyService.set(Entity.ROUND, 'arena', '')
+
     this.players.forEach(id => this.removePlayer(id))
-    this._running = false
 
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
@@ -76,7 +82,7 @@ export default class Round {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
     this.playerService.spawn(id, vector)
-    this.playerService.setState(id, types.tdm.State.alive)
+    this.playerService.setState(id, State.alive)
     this.playerService.setHealth(id, 100)
 
     this.players.push(id)
@@ -90,8 +96,8 @@ export default class Round {
       return
     }
 
-    this._players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, types.tdm.State.idle)
+    this.players = this.players.filter(playerId => playerId !== id)
+    this.playerService.setState(id, State.idle)
     this.playerService.spawnLobby(id)
 
     mp.events.call(Events["tdm.round.remove"], id, manual)
@@ -99,15 +105,16 @@ export default class Round {
 
   @log
   playerQuit(id: number) {
-    this._players = this.players.filter(playerId => playerId !== id)
+    this.players = this.players.filter(playerId => playerId !== id)
   }
 
   @log
   pause() {
     clearTimeout(this.roundTimer)
-    this.roundTime = this.timeleft
-    this._paused = true
+    this.time = this.timeleft
+    this.state = RoundState.paused
 
+    this.playerService.call(this.players, Events["tdm.round.pause"], true)
     mp.events.call(Events["tdm.round.pause"], true)
   }
 
@@ -117,16 +124,17 @@ export default class Round {
       return this.end()
     }
 
-    this.roundTimer = setTimeout(() => this.end(), this.roundTime)
+    this.roundTimer = setTimeout(() => this.end(), this.time)
     this.date = Date.now()
-    this._paused = false
+    this.state = RoundState.running
 
+    this.playerService.call(this.players, Events["tdm.round.pause"], false)
     mp.events.call(Events["tdm.round.pause"], false)
 
   }
 
   @log
-  private getResult(): types.tdm.Team | "draw" {
+  private getResult(): Team | "draw" {
     const result = this.info
 
     if (result.attackers === result.defenders) {
@@ -135,13 +143,13 @@ export default class Round {
       }
 
       return result.attackersHealth > result.defendersHealth
-        ? types.tdm.Team.attackers
-        : types.tdm.Team.defenders
+        ? Team.attackers
+        : Team.defenders
     }
 
     return result.attackers > result.defenders
-      ? types.tdm.Team.attackers
-      : types.tdm.Team.defenders
+      ? Team.attackers
+      : Team.defenders
   }
 
   @log
@@ -173,10 +181,10 @@ export default class Round {
       const teamId = this.playerService.getTeam(id)
       const health = this.playerService.getHealth(id)
 
-      if (teamId === types.tdm.Team.attackers) {
+      if (teamId === Team.attackers) {
         acc.attackers++
         acc.attackersHealth += health
-      } else if (teamId === types.tdm.Team.defenders) {
+      } else if (teamId === Team.defenders) {
         acc.defenders++
         acc.defendersHealth += health
       }
@@ -191,7 +199,7 @@ export default class Round {
   }
 
   get timeleft() {
-    const ms = this.roundTime - Date.now() - this.date
+    const ms = this.time - (Date.now() - this.date)
 
     return ms > 0 ? ms : 0
   }
@@ -201,14 +209,39 @@ export default class Round {
   }
 
   get running() {
-    return this._running
+    return this.state === RoundState.running
   }
 
   get paused() {
-    return this._paused
+    return this.state === RoundState.paused
   }
 
-  get players() {
+  get prepared() {
+    return this.state === RoundState.prepare
+  }
+
+  get players(): number[] {
     return this._players
+  }
+
+  private set players(p: number[]) {
+    this.dummyService.set(Entity.ROUND, 'players', JSON.stringify(p))
+    this._players = p
+  }
+
+  get time() {
+    return this.dummyService.get(Entity.ROUND, 'time')
+  }
+
+  private set time(t: number) {
+    this.dummyService.set(Entity.ROUND, 'time', t)
+  }
+
+  get state() {
+    return this.dummyService.get(Entity.ROUND, 'state')
+  }
+
+  private set state(s: RoundState) {
+    this.dummyService.set(Entity.ROUND, 'state', s)
   }
 }

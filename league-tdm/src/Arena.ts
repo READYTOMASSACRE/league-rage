@@ -8,6 +8,7 @@ import { ILanguage, Lang } from "../../league-lang/language"
 export default class Arena {
   readonly arena: types.tdm.Arena
   readonly id: number
+  readonly code: string
 
   private static _arenas: types.tdm.Arena[] = []
   private static indexById: Record<number, number> = {}
@@ -20,6 +21,7 @@ export default class Arena {
 
     this.arena = arena
     this.id = this.arena.id
+    this.code = this.arena.code
     this.lang = lang
   }
 

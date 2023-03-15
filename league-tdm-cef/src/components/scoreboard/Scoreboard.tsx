@@ -20,6 +20,7 @@ const Scoreboard: FC = () => {
 
   const [players, setPlayers] = useState<scoreboard.Player[]>([])
   const [teams, setTeams] = useState<scoreboard.Team[]>([])
+  const [arena, setArena] = useState('')
 
   const scoreboardRef = useRef<HTMLDivElement>(null)
 
@@ -27,7 +28,7 @@ const Scoreboard: FC = () => {
     RageAPI.subscribe(Events['tdm.scoreboard.toggle'], 'scoreboard', (a: boolean) => setActive(a))
     RageAPI.subscribe(Events['tdm.scoreboard.data'], 'scoreboard', (data: string) => {
       try {
-        const { players, teams } = JSON.parse(data)
+        const { players, teams, arena = '' } = JSON.parse(data)
 
         if (typeof players !== 'undefined' && Array.isArray(players)) {
           setPlayers(players)
@@ -35,6 +36,9 @@ const Scoreboard: FC = () => {
         if (typeof teams !== 'undefined' && Array.isArray(teams)) {
           setTeams(teams)
         }
+
+        setArena(arena)
+
       } catch (err) {
         cefLog(err)
       }
@@ -74,7 +78,7 @@ const Scoreboard: FC = () => {
 
   return (
     <div ref={scoreboardRef} className={cl(s.scoreboard)}>
-      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam} />
+      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam} arena={arena}/>
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />
         <ListOfPlayers>

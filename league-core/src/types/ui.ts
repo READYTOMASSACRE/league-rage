@@ -1,4 +1,4 @@
-import { DamageConfig, RoundStartConfig } from "./hud"
+import { DamageConfig, NametagConfig, RoundStartConfig } from "./hud"
 
 export interface TextStyle {
   font: number
@@ -40,6 +40,7 @@ export interface TeamSelectorConfig {
 }
 
 export interface HudConfig {
+  nametag: NametagConfig
   roundStart: RoundStartConfig
   damage: DamageConfig
 }

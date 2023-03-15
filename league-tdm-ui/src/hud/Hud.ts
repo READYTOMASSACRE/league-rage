@@ -8,13 +8,13 @@ abstract class Hud implements IHud {
   private destroyed: boolean = false
   private rendered: boolean = false
 
-  abstract render(): void
+  abstract render(...args: any[]): void
 
   constructor({ alive }: IHud) {
     this.alive = alive
-    this.callback = () => {
+    this.callback = (...args: any[]) => {
       try {
-        this.render()
+        this.render(...args)
       } catch (err) {
         this.destroy(err)
       }

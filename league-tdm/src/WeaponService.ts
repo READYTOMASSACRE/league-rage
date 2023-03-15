@@ -1,11 +1,10 @@
 import { command, commandable, event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
-import { Entity } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
-import DummyService from "./DummyService";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
+import RoundService from "./RoundService";
 
 @eventable
 @commandable
@@ -13,7 +12,7 @@ export default class WeaponService {
   constructor(
     readonly config: weapon.Config,
     readonly playerService: PlayerService,
-    readonly dummService: DummyService,
+    readonly roundService: RoundService,
     readonly lang: ILanguage,
   ) {}
 
@@ -112,7 +111,7 @@ export default class WeaponService {
       throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
     }
 
-    if (!this.dummService.get(Entity.ROUND, 'started')) {
+    if (!this.roundService.running) {
       throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
     }
 

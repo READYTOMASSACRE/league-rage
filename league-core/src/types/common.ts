@@ -92,8 +92,6 @@ export const enum Events {
   'tdm.scoreboard.data' = 'tdm.scoreboard.data',
   /** Fires when player toggle scoreboard */
   'tdm.scoreboard.toggle' = 'tdm.scoreboard.toggle',
-  /** Fires when scoreboard recieved data */
-  'tdm.scoreboard.time' = 'tdm.scoreboard.time',
   /** Fires when player is loaded all services and ready to play */
   'tdm.player.ready' = 'tdm.player.ready',
   /** Fires when player has changed state */
@@ -120,6 +118,12 @@ export const enum Events {
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
+  /** Fires when infopanel gets data */
+  'tdm.infopanel.data' = 'tdm.infopanel.data',
+  /** Fires when ui is ready */
+  'tdm.ui.ready' = 'tdm.ui.ready',
+  /** Fires when cef recieves controls data */
+  'tdm.controls.data' = 'tdm.controls.data',
 }
 
 export const enum Procs {

@@ -57,6 +57,11 @@ export const enum Lang {
   "cmd.vote" = "cmd.vote",
   "cmd.weapon" = "cmd.weapon",
   "cmd.change_team" = "cmd.change_team",
+
+  "controls.t" = "controls.t",
+  "controls.b" = "controls.b",
+  "controls.tab" = "controls.tab",
+  "controls.f4" = "controls.f4",
 }
 
 export interface ILanguage {
