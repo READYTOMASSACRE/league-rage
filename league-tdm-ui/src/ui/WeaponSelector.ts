@@ -34,23 +34,15 @@ export default class WeaponRequest {
     try {
       visible = typeof visible !== 'undefined' ? visible : !this.visible
 
-<<<<<<< HEAD
-      // const started = this.dummyService.get(Entity.ROUND, 'started')
-
-      // if (!started) {
-      //   throw new PopupError(Lang["tdm.round.is_not_running"])
-      // }
-=======
       const state = this.dummyService.get(Entity.ROUND, 'state')
 
       if (![RoundState.running, RoundState.prepare, RoundState.paused].includes(state)) {
         throw new PopupError(Lang["tdm.round.is_not_running"])
       }
->>>>>>> 15b12f439bf7a46e847e4fd8745da6304c08a80d
 
-      // if (!this.playerService.canSelectWeapon) {
-      //   throw new PopupError(Lang["error.weapon.is_busy"])
-      // }
+      if (!this.playerService.canSelectWeapon) {
+        throw new PopupError(Lang["error.weapon.is_busy"])
+      }
 
       this.visible = visible
     } catch (err) {
