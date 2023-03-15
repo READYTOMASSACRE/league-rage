@@ -14,3 +14,16 @@ export interface RoundStartConfig extends IHud {
 export interface DamageConfig extends IHud {
   textElement: TextElement
 }
+
+export interface NametagConfig extends IHud {
+  textElement: TextElement
+  health: {
+    width: number
+    height: number
+    border: number
+    gradient: {
+      empty: [number, number, number]
+      full: [number, number, number]
+    }
+  }
+}

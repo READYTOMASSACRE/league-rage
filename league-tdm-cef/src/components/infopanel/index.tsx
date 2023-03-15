@@ -48,7 +48,7 @@ export default () => {
   const [timeleftColor, timeleftText] = useMemo(() => {
     const minutes = Math.floor(timeleft / 60)
     const seconds = timeleft - (minutes * 60)
-    const color = minutes <= 1 && seconds < 30 && timeleft > 0 ? '#f15151' : 'white'
+    const color = minutes < 1 && seconds < 30 && timeleft > 0 ? '#f15151' : 'white'
 
     return [color, `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2,'0')}`]
   }, [timeleft])

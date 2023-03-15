@@ -34,5 +34,28 @@ export const toColor = (color: any, defaultColor: string = 'white') => (
     color :
     defaultColor
 )
+export const hex2rgba = (hex: string, alpha = 255): [number, number, number, number] => {
+  const matched = hex.match(/\w\w/g)
+  if (!matched) throw new Error("Invalid hex")
+
+  const [r, g, b] = matched.map(x => parseInt(x, 16))
+
+  return [r, g, b, alpha]
+}
+
+/**
+ * Calculate the gradient by fadeFraction range [0...1]
+ */
+export const colorGradient = (fadeFraction: number, color1: [number, number, number], color2: [number, number, number]) => {
+  const diffRed   = color2[0] - color1[0]
+  const diffGreen = color2[1] - color1[1]
+  const diffBlue  = color2[2] - color1[2]
+
+  return [
+    Math.floor(color1[0] + (diffRed * fadeFraction)),
+    Math.floor(color1[1] + (diffGreen * fadeFraction)),
+    Math.floor(color1[2] + (diffBlue * fadeFraction)),
+  ]
+}
 
 export { throttle }

@@ -92,7 +92,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     round: {
       prepare: 5,
-      timeleft: 120,
+      timeleft: 300,
       weapon: 25,
       watcher: {
         alive: false,
@@ -123,6 +123,22 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
           style: {...defaultTextStyle}
         },
       },
+      nametag: {
+        alive: 0,
+        textElement: {
+          text: '',
+          style: {...defaultTextStyle},
+        },
+        health: {
+          width: 0.06,
+          height: 0.0105,
+          border: 0.0030,
+          gradient: {
+            full: [69, 243, 25],
+            empty: [226, 14, 15],
+          },
+        },
+      }
     },
     interaction: {
       selector: {

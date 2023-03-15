@@ -37,7 +37,7 @@ export default class Infopanel {
         score: 0,
       },
       arena: this.dummyService.get(Entity.ROUND, 'arena'),
-      timeleft: this.dummyService.get(Entity.ROUND, 'time') / 1000,
+      timeleft: this.dummyService.get(Entity.ROUND, 'time') / 1000 - 1,
       pause: this.dummyService.get(Entity.ROUND, 'state') === RoundState.paused,
     }
   }
