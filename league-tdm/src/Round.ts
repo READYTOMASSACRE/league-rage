@@ -19,6 +19,7 @@ export default class Round {
   private roundTimer: ReturnType<typeof setTimeout>
   private weaponTimer: ReturnType<typeof setTimeout>
   private _players: number[] = []
+  private date: number = 0
 
   constructor(
     readonly config: RoundConfig,
@@ -113,6 +114,7 @@ export default class Round {
     this.time = this.timeleft
     this.state = RoundState.paused
 
+    this.playerService.call(this.players, Events["tdm.round.pause"], true)
     mp.events.call(Events["tdm.round.pause"], true)
   }
 
@@ -126,6 +128,7 @@ export default class Round {
     this.date = Date.now()
     this.state = RoundState.running
 
+    this.playerService.call(this.players, Events["tdm.round.pause"], false)
     mp.events.call(Events["tdm.round.pause"], false)
 
   }
@@ -196,7 +199,7 @@ export default class Round {
   }
 
   get timeleft() {
-    const ms = this.time - Date.now() - this.date
+    const ms = this.time - (Date.now() - this.date)
 
     return ms > 0 ? ms : 0
   }
@@ -240,13 +243,5 @@ export default class Round {
 
   private set state(s: RoundState) {
     this.dummyService.set(Entity.ROUND, 'state', s)
-  }
-
-  get date() {
-    return this.dummyService.get(Entity.ROUND, 'date')
-  }
-
-  private set date(d: number) {
-    this.dummyService.set(Entity.ROUND, 'date', d)
   }
 }

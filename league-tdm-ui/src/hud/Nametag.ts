@@ -82,7 +82,7 @@ class Nametag extends Hud implements NametagConfig {
   private drawHealth(x: number, y: number, health: number) {
     y += 0.042
 
-    const { width, height, border }   = this.healthParams
+    const { width, height, border }   = this.health
     const healthWidth                 = this.calculateHealthWidth(health, width)
     const healthOffsetx               = this.calculateHealthOffsetX(health, width)
     const [r, g, b]                   = this.getColorHealth(health)
@@ -103,13 +103,9 @@ class Nametag extends Hud implements NametagConfig {
   }
 
   private getColorHealth(health: number) {
-    const { empty, full } = this.healthParams.gradient
+    const { empty, full } = this.health.gradient
 
     return colorGradient(health / 100, empty, full)
-  }
-
-  private get healthParams() {
-    return this.health
   }
 }
 

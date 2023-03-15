@@ -12,7 +12,6 @@ export default class DummyService {
       [Entity.ROUND]: this.setDefault(Entity.ROUND, {
         arena: '',
         state: RoundState.stopped,
-        date: 0,
         time: 0,
         players: '[]',
       }),

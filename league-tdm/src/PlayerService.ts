@@ -184,4 +184,11 @@ export default class PlayerService {
   ): PlayerData[K] {
     return player.getVariable(String(key))
   }
+
+  call(players: number[], eventName: string, ...args: any[]) {
+    players
+      .map(player => mp.players.at(player))
+      .filter(player => mp.players.exists(player))
+      .forEach(player => player.call(eventName, [...args]))
+  }
 }

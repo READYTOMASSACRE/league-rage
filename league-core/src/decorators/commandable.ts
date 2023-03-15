@@ -113,8 +113,15 @@ const client = <T extends ctor>(target: T): T => {
           })          
         }
 
-        mp.events.add(Events["tdm.chat.push"], (input: string) => {
+        mp.events.add(Events["tdm.chat.push"], (fullText: string) => {
           try {
+            const slash = fullText.slice(0, 1)
+            const input = fullText.slice(1)
+  
+            if (slash !== '/') {
+              return
+            }
+
             const args = input.split(' ')
             const [groupName, ...commandArgs] = args
             const commandInfo = indexByCommand[groupName]
@@ -143,7 +150,7 @@ const client = <T extends ctor>(target: T): T => {
               return callback.apply(this, [description, ...commandArgs])
             }
           } catch (err) {
-            (mp as any).gui.chat.push('Invalid register command: ' + err.message)
+            (mp as any).console.logError('Invalid register command: ' + err.stack)
           }
         })
 

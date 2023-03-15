@@ -63,7 +63,6 @@ export const enum Entity {
 export type RoundData = {
   arena: string
   state: RoundState
-  date: number
   time: number
   players: string
 }

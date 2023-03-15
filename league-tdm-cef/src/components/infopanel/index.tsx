@@ -9,17 +9,14 @@ import cls from 'classnames'
 export default () => {
   const [active, setActive] = useState(false)
   const [data, setData] = useState<cef.InfoPanel>()
-  const [timeleft, setTimeleft] = useState(0)
 
   React.useEffect(() => {
     RageAPI.subscribe(Events['tdm.infopanel.data'], 'infopanel', (d: string, toggle: boolean) => {
       try {
-        const _data = JSON.parse(d)
+        const data = JSON.parse(d)
 
-        setData({ round: { arena: 'zero_arena', time: '00:00' }, ..._data })
+        setData(() => ({ ...data }))
         setActive(toggle)
-        setTimeleft(_data.timeleft || 0)
-
       } catch (err) {
         cefLog(err)
       }
@@ -29,29 +26,21 @@ export default () => {
     }
   }, [])
 
-  React.useEffect(() => {
-    let timeout: number | undefined = undefined
-
-    if (!data) {
-      return
-    }
-
-    if (!data.pause && timeleft > 0) {
-      timeout = setTimeout(() => {
-        setTimeleft(prev => prev - 1)
-      }, 1000)
-    }
-
-    return () => clearTimeout(timeout)
-  }, [data?.pause, timeleft])
-
   const [timeleftColor, timeleftText] = useMemo(() => {
-    const minutes = Math.floor(timeleft / 60)
-    const seconds = timeleft - (minutes * 60)
-    const color = minutes < 1 && seconds < 30 && timeleft > 0 ? '#f15151' : 'white'
+    if (typeof data?.timeleft !== 'number') {
+      return ['white', '00:00']
+    }
 
+    const minutes = Math.floor(data.timeleft / 60)
+    const seconds = data.timeleft - (minutes * 60)
+
+    if (seconds < 0) {
+      return ['white', '00:00']
+    }
+
+    const color = minutes < 1 && seconds < 30 && data.timeleft > 0 ? '#f15151' : 'white'
     return [color, `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2,'0')}`]
-  }, [timeleft])
+  }, [data?.timeleft])
 
   return (
     <div className={active ? styles.root : cls(styles.root, styles.hidden)}>
