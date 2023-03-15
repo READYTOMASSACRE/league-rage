@@ -1,17 +1,10 @@
 import React, { FC } from 'react'
-import cl from 'classnames'
 import * as s from './TeamBar.module.sass'
-import { ITeams } from '../../../types'
 
 interface Props {
   color: string | undefined;
   changeSort:(type: string) => void;
 }
-
-// const backStyle = (color: string | undefined) => {
-//   const style = { backgroundColor: `${color}` }
-//   return style;
-// }
 
 const TeamBar: FC<Props> = ({ color, changeSort }) => {
 

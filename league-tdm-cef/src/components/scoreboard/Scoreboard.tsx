@@ -13,7 +13,7 @@ import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 
-const Scoreboard: FC = () => {          
+const Scoreboard: FC = () => {
 
   const [active, setActive] = useState(false)
   const [[sortScoreboard, desSortScorboard], setSortScoreboard] = useState<[string, boolean]>(['kills', true])
@@ -70,11 +70,11 @@ const Scoreboard: FC = () => {
       setSortScoreboard([type, true])
   }
 
-  if(!active) return <></>
+  if (!active) return <></>
 
   return (
     <div ref={scoreboardRef} className={cl(s.scoreboard)}>
-      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
+      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam} />
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />
         <ListOfPlayers>
@@ -99,7 +99,7 @@ const Scoreboard: FC = () => {
           )}
         </ListOfPlayers>
       </TeamItem>
-      <Footer spectators={spectatorPlayers}/>
+      <Footer spectators={spectatorPlayers} />
     </div>
   )
 }
