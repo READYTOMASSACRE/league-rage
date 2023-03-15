@@ -3,7 +3,7 @@ import { toColor } from '../../../../league-core/src/helpers'
 import { cef, Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
-import styles from './infopanel.module.sass'
+import * as styles from './infopanel.module.sass'
 import cls from 'classnames'
 
 export default () => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { cef, Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
-import styles from './controls.module.sass'
+import * as styles from './controls.module.sass'
 import cls from 'classnames'
 
 export default () => {
