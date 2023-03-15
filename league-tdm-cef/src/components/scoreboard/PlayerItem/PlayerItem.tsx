@@ -1,10 +1,11 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC } from 'react'
 import cl from 'classnames'
 import * as s from './PlayerItem.module.sass'
+import { scoreboard } from '../../../../../league-core/src/types';
 
 
 interface Props {
-  player: IPlayers;
+  player: scoreboard.Player;
   currentPlayer: boolean;
   position: number;
 }

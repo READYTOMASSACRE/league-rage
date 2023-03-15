@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { IPlayers } from "../types";
+import { scoreboard } from "../../../league-core/src/types";
 
-export default function useFilterPlayersBySide(arrayPlayers: IPlayers[], rolePlayers: string) {
+export default function useFilterPlayersBySide(arrayPlayers: scoreboard.Player[], rolePlayers: string) {
   const sortedPlayers = useMemo(() => {
     const sortedPlayers = arrayPlayers.filter(player =>
       player.role === rolePlayers && player
