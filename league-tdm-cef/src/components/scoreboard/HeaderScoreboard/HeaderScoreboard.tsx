@@ -19,7 +19,6 @@ const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam, arena = '' }) =>
   attackColor = toColor(attackColor, defaultColor)
   defenseColor = toColor(defenseColor, defaultColor)
 
-  // clown? potribno zrobiti oirmal'no
   return (
     <div
       style={{ background: `linear-gradient(90deg, ${attackColor} 0%, rgba(52,52,52,1) 50%, rgba(52,52,52,1) 50%, ${defenseColor} 100%)` }}

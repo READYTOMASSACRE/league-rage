@@ -2,24 +2,27 @@
   display: flex
   flex-direction: row
   gap: 3px
+  justify-content: center
 
 .playerItem div
-  background-color: transparentize(grey, 0.7)
+  background-color: transparentize(#000000, 0.3)
 
 .position
-  min-width: 22px
+  min-width: 24px
   display: flex
   align-items: center
   justify-content: center
-  padding: 2px 2px
+  padding: 0
+  height: 30px
 
 .name
-  align-items: center
-  padding: 5px
+  display: flex
   flex-grow: 1
+  align-items: center
   text-overflow: ellipsis
   white-space: nowrap
   overflow: hidden
+  padding: 0 5px
 
 .name.current
   color: #00ff00
@@ -28,5 +31,5 @@
   display: flex
   align-items: center
   justify-content: center
-  min-width: 33px
-  padding: 2px 2px
+  min-width: 35px
+  padding: 0

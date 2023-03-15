@@ -32,7 +32,8 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
   }
 
   return (
-    <div
+    //fix tabindex problem
+    <div tabIndex={0}
       className={s.container}
       style={style}
       onMouseOver={() => setCurrentWeapon && weapon && setCurrentWeapon(weapon)}
@@ -42,8 +43,15 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
         weapon && RageAPI.weaponSubmit(weapon?.name);
         toggle()
       }}
+      onKeyDown={(e) => {
+        if(e.key === position?.toString()) {
+          category && setCategory && setCategory(category);
+          weapon && RageAPI.weaponSubmit(weapon?.name);
+          toggle()
+        }
+      }}
     >
-      {name()}
+      {position} {name()}
     </div>
   )
 }
