@@ -13,9 +13,7 @@ export default () => {
   React.useEffect(() => {
     RageAPI.subscribe(Events['tdm.infopanel.data'], 'infopanel', (d: string, toggle: boolean) => {
       try {
-        const data = JSON.parse(d)
-
-        setData(() => ({ ...data }))
+        setData(JSON.parse(d))
         setActive(toggle)
       } catch (err) {
         cefLog(err)
