@@ -1,4 +1,5 @@
 import { event, eventable } from "../../../league-core/client"
+import { Events } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
@@ -34,10 +35,16 @@ export default class Spectate {
     this.gameplayCamera = mp.cameras.new('gameplay')
   }
 
-  run() {
+  run(remoteId?: number) {
     try {
       if (this.running) {
-        this.stop()
+        return
+      }
+
+      const player = mp.players.atRemoteId(remoteId)
+
+      if (mp.players.exists(player)) {
+        this.streamingPlayer = player
       }
   
       this.toggle(true)
@@ -55,6 +62,7 @@ export default class Spectate {
       console.error(err.stack)
     } finally {
       this.running = false
+      mp.events.callRemote(Events["tdm.spectate.stop"])
     }
   }
 
@@ -73,6 +81,8 @@ export default class Spectate {
         this.playerService.setInvicible(false, player)
         this.playerService.setAlpha(255, player)
       })
+    } else {
+      this.prepare()
     }
   }
 
@@ -140,7 +150,7 @@ export default class Spectate {
   }
 
   private prepare() {
-    if (!this.running || this.prepared) {
+    if (!this.prepared) {
       return
     }
 

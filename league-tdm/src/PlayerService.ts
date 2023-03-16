@@ -142,7 +142,7 @@ export default class PlayerService {
   }
 
   @log
-  getByIdOrName(id: string | number, player?: PlayerMp): PlayerMp | PlayerMp[] | undefined {
+  getByIdOrName(id: string | number): PlayerMp | PlayerMp[] | undefined {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))
     }

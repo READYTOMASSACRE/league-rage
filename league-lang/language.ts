@@ -23,6 +23,9 @@ export const enum Lang {
 
   "error.vote.not_found_config" = "error.vote.not_found_config",
 
+  "error.spectate.not_same_team" = "error.spectate.not_same_team",
+  "error.spectate.player_is_busy" = "error.spectate.player_is_busy",
+
   "tdm.player.find_result" = "tdm.player.find_result",
   "tdm.player.join" = "tdm.player.join",
   "tdm.player.quit" = "tdm.player.quit",
@@ -55,6 +58,7 @@ export const enum Lang {
   "cmd.pause" = "cmd.pause",
   "cmd.unpause" = "cmd.unpause",
   "cmd.vote" = "cmd.vote",
+  "cmd.spectate" = "cmd.spectate",
   "cmd.weapon" = "cmd.weapon",
   "cmd.change_team" = "cmd.change_team",
 

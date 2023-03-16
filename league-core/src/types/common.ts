@@ -124,6 +124,10 @@ export const enum Events {
   'tdm.ui.ready' = 'tdm.ui.ready',
   /** Fires when cef recieves controls data */
   'tdm.controls.data' = 'tdm.controls.data',
+  /** Fires when player start spectating */
+  'tdm.spectate.start' = 'tdm.spectate.start',
+  /** Fires when player stop spectating */
+  'tdm.spectate.stop' = 'tdm.spectate.stop',
 }
 
 export const enum Procs {
