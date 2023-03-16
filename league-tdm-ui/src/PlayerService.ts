@@ -36,39 +36,32 @@ export default class PlayerService {
     return this.getVariable(this.local, 'weaponState') === WeaponState.idle
   }
 
-  setPosition(vector: Vector3) {
-    this.local.position = vector
+  setPosition(vector: Vector3, player?: PlayerMp) {
+    (player || this.local).position = vector
   }
 
-  getPosition() {
-    return this.local.position
+  setCoordsNoOffset(x: number, y: number, z: number, xAxis: boolean = false, yAxis: boolean = false, zAxis: boolean = false) {
+    this.local.setCoordsNoOffset(x, y, z, xAxis, yAxis, zAxis)
   }
 
-  setInvicible(toggle: boolean) {
-    this.local.setInvincible(toggle)
+  getPosition(player?: PlayerMp) {
+    return (player || this.local).position
   }
 
-  freezePosition(toggle: boolean) {
-    this.local.freezePosition(toggle)
+  getDimension(player?: PlayerMp) {
+    return (player || this.local).dimension
   }
 
-  setAlpha(alphaLevel: number) {
-    this.local.setAlpha(alphaLevel)
+  setInvicible(toggle: boolean, player?: PlayerMp) {
+    (player || this.local).setInvincible(toggle)
   }
 
-  @event(Events["tdm.player.model"])
-  playerSetModel(id: number, model: number) {
-    if (this.local.remoteId === id) {
-      return
-    }
+  freezePosition(toggle: boolean, player?: PlayerMp) {
+    (player || this.local).freezePosition(toggle)
+  }
 
-    const player = mp.players.atRemoteId(id)
-
-    if (!mp.players.exists(player)) {
-      return
-    }
-
-    // player.model = model
+  setAlpha(alphaLevel: number, player?: PlayerMp) {
+    (player || this.local).setAlpha(alphaLevel)
   }
 
   getVariable<_, K extends keyof PlayerData>(
