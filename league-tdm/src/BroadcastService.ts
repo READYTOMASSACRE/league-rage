@@ -50,7 +50,7 @@ export default class BroadcastService {
   @event(Events["tdm.round.remove"])
   tdmRoundRemove(id: number, manual?: boolean) {
     if (manual) {
-      this.broadcast(this.lang.get(Lang["tdm.round.end"], { player: id }))
+      this.broadcast(this.lang.get(Lang["tdm.round.remove"], { player: id }))
     }
   }
 

@@ -1,3 +1,5 @@
+$transparentBlack: rgba(0, 0, 0, .8)
+
 .container
     position: absolute
     max-height: 40vh
@@ -19,8 +21,7 @@
 
 .item
     color: white
-    -webkit-text-stroke: 1px #f8f8f828
-    text-shadow: 0 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
+    text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
 
 .input
     opacity: 0

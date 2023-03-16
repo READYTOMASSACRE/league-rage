@@ -41,36 +41,46 @@ const WeaponSelector = () => {
       }
     })
 
-    if(listRef.current) listRef.current.focus()
-
     return () => {
       RageAPI.unsubscribe(Events['tdm.weapon.request'], 'weaponselector')
     }
   }, [])
 
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.focus()
+    }
+  }, [category, active, currentWeapon])
+
   if (!active) return <></>
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const categoryIndex = +e.key
+
+    if (Number.isNaN(categoryIndex)) {
+      return
+    }
+
+    if (categoryIndex >= 1 && categoryIndex <= 9) {
+      if (category && data[category][categoryIndex - 1]) {
+        RageAPI.weaponSubmit(data[category][categoryIndex - 1].name)
+        return setCategory(undefined)
+      }
+
+      return setCategory(Object.keys(data)[categoryIndex - 1])
+    }
+
+    if (categoryIndex === 0) {
+      return category ? setCategory(undefined) : RageAPI.weaponToggle()
+    }
+  }
+
   return (
-    <div className={s.container}>
+    <div tabIndex={0} className={s.container} ref={listRef} onKeyDown={(e) => onKeyDown(e)}>
       <div className={s.header}>
         {category ? typeCategory[category] : 'Buy Weapon'}
       </div>
-      <div tabIndex={0} ref={listRef} className={s.list}
-        onKeyDown={(e) => {
-          if (+e.key >= 1 && +e.key <= 9) {
-            if (!category) {
-              setCategory(Object.keys(data)[+e.key - 1])
-            }
-            if (category) {
-              RageAPI.weaponSubmit(data[category][+e.key - 1].name)
-              setCategory(undefined)
-            }
-          }
-          if(+e.key === 0) {
-            category ? setCategory(undefined) : RageAPI.weaponToggle()
-          }
-        }}
-      >
+      <div className={s.list}>
         {!category ? Object.keys(data).map((categoryName, index) =>
           <WeaponSelectorItem key={nanoid(5)} position={index + 1} setCategory={setCategory} category={categoryName} />
         ) :

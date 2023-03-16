@@ -14,6 +14,7 @@ import { config } from '../league-core'
 import { Events } from '../league-core/src/types'
 import ConfigService from './src/ConfigService'
 import DummyService from './src/DummyService'
+import DebugService from './src/DebugService'
 
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
@@ -31,6 +32,8 @@ const main = async () => {
     roundService, permissionService, playerService,
     voteService, weaponService, language
   )
+
+  new DebugService(playerService, dummyService)
 
   Arena.load(language)
 
