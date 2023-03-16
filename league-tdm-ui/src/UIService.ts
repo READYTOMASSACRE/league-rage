@@ -4,9 +4,11 @@ import { ILanguage, Lang } from "../../league-lang/language";
 import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
+import RoundService from "./RoundService";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
 import Infopanel from "./ui/Infopanel";
+import NotifyText from "./ui/Notifytext";
 import Scoreboard from "./ui/Scoreboard";
 import TeamSelector from "./ui/TeamSelector";
 import WeaponSelector from "./ui/WeaponSelector";
@@ -21,6 +23,7 @@ export default class UIService {
   public visible: Record<string, boolean> = {}
   public infoPanel: Infopanel
   public controls: Controls
+  public notifyText: NotifyText
 
   constructor(
     readonly url: string,
@@ -28,6 +31,7 @@ export default class UIService {
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService,
     readonly dummyService: DummyService,
+    readonly roundService: RoundService,
     readonly lang: ILanguage
   ) {
     this.chat = new Chat(this, keybindService)
@@ -42,6 +46,7 @@ export default class UIService {
     this.teamSelect = new TeamSelector(this, keybindService)
     this.infoPanel = new Infopanel(config.team, this, this.dummyService)
     this.controls = new Controls(this, lang)
+    this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
 
     this.disableControlActions()
   }

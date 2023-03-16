@@ -12,6 +12,9 @@ import ZoneService from "./src/ZoneService"
 
 const main = async () => {
   try {
+    mp.console.reset()
+    mp.console.clear()
+
     const config: IConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
     const lang = await mp.events.callRemoteProc(Procs["tdm.language.get"], config.lang)
     const language = new Language(lang)
@@ -28,6 +31,7 @@ const main = async () => {
       keybindService,
       playerService,
       dummyService,
+      roundService,
       language
     )
 

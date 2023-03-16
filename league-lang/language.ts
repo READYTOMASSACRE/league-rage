@@ -32,6 +32,7 @@ export const enum Lang {
   "tdm.player.quit" = "tdm.player.quit",
 
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
+  "tdm.round.arena_prepare_timer" = "tdm.round.arena_prepare_timer",
   "tdm.round.arena_start" = "tdm.round.arena_start",
   "tdm.round.end" = "tdm.round.end",
   "tdm.round.add" = "tdm.round.add",

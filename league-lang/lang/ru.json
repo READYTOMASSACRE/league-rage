@@ -32,6 +32,7 @@
   "tdm.player.quit": "Игрок :player отключился от сервера (:reason)",
 
   "tdm.round.arena_prepare": "Подготовка арены :arena",
+  "tdm.round.arena_prepare_timer": "Арена :arena запускается %ss",
   "tdm.round.arena_start": "Запущена арена :arena",
   "tdm.round.end": "Раунд завершен, результат: :result, арена :arena",
   "tdm.round.add": "Игрок :player был добавлен в раунд",

@@ -9,6 +9,7 @@ import WeaponSelector from './components/weaponselector/WeaponSelector'
 import Infopanel from './components/infopanel'
 import RageAPI from './helpers/RageAPI'
 import Controls from './components/controls'
+import Notifytext from './components/notifytext'
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
       <WeaponSelector />
       <Infopanel />
       <Controls />
+      <Notifytext />
       {RageAPI.sendReady()}
     </>
   )
