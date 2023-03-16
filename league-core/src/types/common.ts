@@ -137,6 +137,8 @@ export const enum Procs {
   'tdm.config.get' = 'tdm.config.get',
   /** Returns language by id */
   'tdm.language.get' = 'tdm.language.get',
-  /** Moves player positino while spectating */
+  /** Moves player position while spectating */
   'tdm.spectate.move' = 'tdm.spectate.move',
+  /** Returns player position while spectating */
+  'tdm.spectate.get' = 'tdm.spectate.get',
 }

@@ -204,7 +204,7 @@ export default class TdmService {
   moveSpectate(player: PlayerMp, x: number, y: number, z: number, dimension: number) {
     try {
       if (!this.playerService.hasState(player, State.spectate)) {
-        return false
+        return
       }
   
       player.position = new mp.Vector3(x, y, z)
@@ -213,7 +213,23 @@ export default class TdmService {
       return true
     } catch (err) {
       console.error(err)
-      return false
+      return
     }
+  }
+
+  @log
+  @proc(Procs["tdm.spectate.get"])
+  getSpectateData(player: PlayerMp, id?: number) {
+    if (!this.playerService.hasState(player, State.spectate)) {
+      return
+    }
+
+    const targetPlayer = mp.players.at(id)
+
+    if (!mp.players.exists(targetPlayer)) {
+      return
+    }
+
+    return [...targetPlayer.position.toArray(), targetPlayer.dimension]
   }
 }

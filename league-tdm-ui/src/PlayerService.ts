@@ -1,8 +1,6 @@
-import { event, eventable } from "../../league-core/client";
-import { Events } from "../../league-core/src/types";
+import { Procs } from "../../league-core/src/types";
 import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
 
-@eventable
 export default class PlayerService {
   getState(player?: PlayerMp): State | undefined {
     player = player || this.local
@@ -46,6 +44,11 @@ export default class PlayerService {
 
   getPosition(player?: PlayerMp) {
     return (player || this.local).position
+  }
+
+  async getPositionProc(player: PlayerMp): Promise<[number, number, number, number]> {
+    const position = await mp.events.callRemoteProc(Procs["tdm.spectate.get"], player.remoteId)
+    return position ? position : [0, 0, 0, 0]
   }
 
   getDimension(player?: PlayerMp) {
