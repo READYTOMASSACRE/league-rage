@@ -74,10 +74,6 @@ export default class UIService {
   disableControlActions() {
     mp.game.controls.disableControlAction(24, 37, true)
     mp.game.controls.disableControlAction(24, 157, true)
-
-    if (this.chat.visible) {
-      mp.game.controls.disableAllControlActions(2)
-    }
   }
 
   @logClient

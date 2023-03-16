@@ -26,8 +26,8 @@ export default class Spectate {
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService
   ) {
-    this.keybindService.unbind(key.a, true, this.turn('left'), Spectate.key)
-    this.keybindService.unbind(key.d, true, this.turn('left'), Spectate.key)
+    this.keybindService.unbind(key.a, true, Spectate.key)
+    this.keybindService.unbind(key.d, true, Spectate.key)
     this.keybindService.bind(key.a, true, this.turn('left'), Spectate.key)
     this.keybindService.bind(key.d, true, this.turn('right'), Spectate.key)
 

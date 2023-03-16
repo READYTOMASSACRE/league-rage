@@ -24,6 +24,7 @@ export const enum Lang {
   "error.vote.not_found_config" = "error.vote.not_found_config",
 
   "error.spectate.not_same_team" = "error.spectate.not_same_team",
+  "error.spectate.same_player" = "error.spectate.same_player",
   "error.spectate.player_is_busy" = "error.spectate.player_is_busy",
 
   "tdm.player.find_result" = "tdm.player.find_result",

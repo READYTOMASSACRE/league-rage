@@ -1,4 +1,5 @@
 export default class KeybindService {
+  public typing: boolean = false
   private bindings: Map<string, Function> = new Map()
 	/**
 	 * Binds the key
@@ -10,6 +11,14 @@ export default class KeybindService {
   bind(keyCode: number | number[], keyHold: boolean | boolean[], handler: Function, component?: string) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
+
+    const oldHandler = handler
+    const self = this
+
+    handler = function () {
+      if (self.typing) return
+      return oldHandler.apply(this, arguments)
+    }
 
     for (const code of keyCode) {
       for (const upOrDown of keyHold) {
@@ -35,7 +44,7 @@ export default class KeybindService {
 	 * @param keyHold True triggers on keydown, false triggers on keyup (bool)
 	 * @param handler Only unbind this function handler
 	 */
-  unbind(keyCode: number | number[], keyHold: boolean | boolean[], handler?: Function, component?: string) {
+  unbind(keyCode: number | number[], keyHold: boolean | boolean[], component?: string) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
 
@@ -46,7 +55,7 @@ export default class KeybindService {
         if (component && typeof componentFn === 'function') {
           mp.keys.unbind(code, upOrDown, componentFn)
         } else {
-          mp.keys.unbind(code, upOrDown, handler)
+          mp.keys.unbind(code, upOrDown)
         }
 
         this.bindings.delete(component)

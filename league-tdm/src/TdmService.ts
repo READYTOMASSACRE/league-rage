@@ -132,7 +132,7 @@ export default class TdmService {
   }
 
   @log
-  @command(['spec', 'spectate'], { desc: Lang["cmd.vote"] })
+  @command(['spec', 'spectate'], { desc: Lang["cmd.spectate"] })
   spectate(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!this.roundService.running) {
       throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
@@ -173,6 +173,10 @@ export default class TdmService {
         this.lang.get(Lang["error.player.not_in_round"], { player: spectatePlayer.name }),
         player
       )
+    }
+
+    if (spectatePlayer.id === player.id) {
+      throw new BroadCastError(this.lang.get(Lang["error.spectate.same_player"]), player)
     }
 
     this.playerService.setState(player, State.spectate)

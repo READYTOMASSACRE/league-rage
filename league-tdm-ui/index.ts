@@ -33,7 +33,7 @@ const main = async () => {
 
     new WeaponService(playerService)
     new HudService(config, roundService, playerService)
-    new InteractionService(config, playerService)
+    new InteractionService(config, playerService, dummyService, keybindService)
   
     mp.console.logInfo('league-tdm-ui package initialized')
   

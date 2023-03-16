@@ -24,6 +24,7 @@
   "error.vote.not_found_config": "Нет конфига для голосования :vote",
 
   "error.spectate.not_same_team": "Можно наблюдать только за игроками своей команды",
+  "error.spectate.same_player": "Вы не можете наблюдать за собой",
   "error.spectate.player_is_busy": "Вы должны быть мертвы, либо не в раунде для наблюдения",
 
   "tdm.player.find_result": "Найдены следующие игроки: :players",

@@ -5,6 +5,7 @@ import UIService from "../UIService";
 
 @eventable
 export default class Chat {
+  static key = 'chat'
   public visible: boolean = false
 
   constructor(readonly uiService: UIService, readonly keybindService: KeybindService) {
@@ -13,8 +14,8 @@ export default class Chat {
 
     this.toggle = this.toggle.bind(this)
 
-    this.keybindService.unbind(key.t, true)
-    this.keybindService.bind(key.t, true, this.toggle)
+    this.keybindService.unbind(key.t, true, Chat.key)
+    this.keybindService.bind(key.t, true, this.toggle, Chat.key)
   }
 
   @event(Events["tdm.chat.push"])
@@ -43,7 +44,17 @@ export default class Chat {
     }
 
     this.uiService.setCursor(this.visible, 'chat')
+    this.keybindService.typing = this.visible
 
     return this.visible
+  }
+
+  @event('render')
+  render() {
+    if (!this.visible) {
+      return
+    }
+
+    mp.game.controls.disableAllControlActions(2)
   }
 }
