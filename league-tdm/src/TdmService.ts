@@ -198,4 +198,22 @@ export default class TdmService {
     this.playerService.setState(player, State.idle)
     this.playerService.spawnLobby(player)
   }
+
+  @log
+  @proc(Procs["tdm.spectate.move"])
+  moveSpectate(player: PlayerMp, x: number, y: number, z: number, dimension: number) {
+    try {
+      if (!this.playerService.hasState(player, State.spectate)) {
+        return false
+      }
+  
+      player.position = new mp.Vector3(x, y, z)
+      player.dimension = dimension
+  
+      return true
+    } catch (err) {
+      console.error(err)
+      return false
+    }
+  }
 }

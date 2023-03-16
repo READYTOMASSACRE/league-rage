@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client"
-import { Events } from "../../../league-core/src/types"
+import { Events, Procs } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
@@ -149,7 +149,7 @@ export default class Spectate {
     return x >= 1 || y >= 1 || x <= -1 || y <= -1
   }
 
-  private prepare() {
+  private async prepare() {
     if (!this.prepared) {
       return
     }
@@ -159,7 +159,7 @@ export default class Spectate {
       const dimension = this.playerService.getDimension(this.streamingPlayer)
 
       if (!vector || typeof dimension === 'undefined') {
-        this.stop()
+        return this.stop()
       }
 
       this.gameplayCamera.setActive(false)
@@ -167,7 +167,11 @@ export default class Spectate {
       this.spectateCamera.setCoord(vector.x + 2, vector.y + 2, vector.z + 10)
       this.spectateCamera.pointAtCoord(vector.x, vector.y, vector.z)
 
-      // await promise setPosition
+      const moved = await mp.events.callRemoteProc(Procs["tdm.spectate.move"], vector.x, vector.y, vector.z, dimension)
+
+      if (!moved) {
+        return this.stop()
+      }
 
       this.streamingPlayer.forceStreamingUpdate()
       this.streamingVector = vector
