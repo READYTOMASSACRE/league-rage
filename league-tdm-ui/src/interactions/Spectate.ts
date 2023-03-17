@@ -61,7 +61,6 @@ export default class Spectate {
     } finally {
       this.running = false
       this.prepared = false
-      mp.events.callRemote(Events["tdm.spectate.stop"])
     }
   }
 

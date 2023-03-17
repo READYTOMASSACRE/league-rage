@@ -39,7 +39,7 @@ export default class InteractionService {
   }
 
   @logClient
-  @event(Events["tdm.spectate.stop"])
+  @event([Events["tdm.spectate.stop"], Events["tdm.round.end"]])
   stopSpectate() {
     this.spectate.stop()
   }

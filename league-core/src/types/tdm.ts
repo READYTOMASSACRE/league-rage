@@ -78,4 +78,5 @@ export type PlayerData = {
   weaponSlot: Record<string, string>
   health: number
   alive: boolean
+  spectate?: number
 }
