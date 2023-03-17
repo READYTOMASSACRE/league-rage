@@ -39,9 +39,11 @@
   "tdm.round.remove": "Игрок :player был удален из раунда",
   "tdm.round.start_empty": "Недостаточно игроков для запуска",
 
-  "tdm.round.vote": "[:vote] Игрок :player проголосовал за :key",
-  "tdm.round.vote_start": "[:vote] Запущено голосование игроком :player, :key",
-  "tdm.round.vote_end": "[:vote] Голосование завершено, результат: :result",
+  "tdm.vote.text": "[:vote] Голосование за :key %ss начато игроком :player",
+  "tdm.vote.end": "[:vote] Голосование завершено, результат: :result",
+  "tdm.vote.add": "[:vote] Игрок :player проголосовал за :key",
+  "tdm.vote.text_arena": "[:vote] Голосование за арену :key начато игроком :player",
+  "tdm.vote.text_arena_notify": "Голосование за арену :key %ss",
 
   "tdm.round.is_paused": "Раунд остановлен",
   "tdm.round.is_already_paused": "Раунд уже остановлен",

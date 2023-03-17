@@ -53,7 +53,7 @@ export type RoundConfig = {
 }
 
 export type VoteConfig = {
-  arena: 30
+  [Vote.arena]: number
 }
 
 export const enum Entity {
@@ -79,4 +79,8 @@ export type PlayerData = {
   health: number
   alive: boolean
   spectate?: number
+}
+
+export enum Vote {
+  arena = 'arena'
 }

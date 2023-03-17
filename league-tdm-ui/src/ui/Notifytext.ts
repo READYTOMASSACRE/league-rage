@@ -35,8 +35,26 @@ export default class NotifyText {
     this.hide('arena')
   }
 
-  private show(text: string, alive: number, component: string, template: string = 'default') {
-    this.items[component] = [text, template, toMs(alive) + Date.now() + this.tickMs]
+  @event(Events["tdm.notify.text"])
+  text(message: string, alive: number, component: string, template: string = 'default', keepAlive: boolean = false) {
+    const [,,end] = this.items[component] || []
+
+    this.show(
+      message,
+      alive,
+      component,
+      template,
+      keepAlive ? end : undefined
+    )
+  }
+
+  @event(Events["tdm.notify.stop"])
+  stop(component: string) {
+    this.hide(component)
+  }
+
+  private show(text: string, alive: number, component: string, template: string = 'default', end?: number) {
+    this.items[component] = [text, template, typeof end !== 'undefined' ? end : toMs(alive) + Date.now() + this.tickMs]
     this.tick()
   }
 

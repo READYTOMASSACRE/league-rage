@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client"
-import { Events, Procs } from "../../../league-core/src/types"
+import { Procs } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
@@ -144,12 +144,12 @@ export default class Spectate {
     return x >= 1 || y >= 1 || x <= -1 || y <= -1
   }
 
-  private async prepare(force?: boolean) {
+  private async prepare() {
     if (this.prepared) {
       return
     }
 
-    if (!this.streamingPlayerInStream) { // (!this.streamingPlayerInStream || force)
+    if (!this.streamingPlayerInStream) {
       const [x, y, z, dimension] = await this.playerService.getPositionProc(this.streamingPlayer)
       const vector = new mp.Vector3(x, y, z)
 
@@ -167,7 +167,6 @@ export default class Spectate {
       this.streamingPlayer.forceStreamingUpdate()
       this.streamingVector = vector
       
-      // if (force) this.prepare()
       return
     }
 
@@ -199,7 +198,7 @@ export default class Spectate {
         this.current = nextCurrent
         this.streamingPlayer = players[this.current]
         this.prepared = false
-        this.prepare(true)
+        this.prepare()
       } catch (err) {
         this.stop(err)
       }

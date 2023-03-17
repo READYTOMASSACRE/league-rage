@@ -39,9 +39,12 @@ export const enum Lang {
   "tdm.round.remove" = "tdm.round.remove",
   "tdm.round.start_empty" = "tdm.round.start_empty",
 
-  "tdm.round.vote" = "tdm.round.vote",
-  "tdm.round.vote_start" = "tdm.round.vote_start",
-  "tdm.round.vote_end" = "tdm.round.vote_end",
+  "tdm.vote.text" = "tdm.vote.text",
+  "tdm.vote.end" = "tdm.vote.end",
+  "tdm.vote.add" = "tdm.vote.add",
+  "tdm.vote.text_arena" = "tdm.vote.text_arena",
+  "tdm.vote.text_arena_notify" = "tdm.vote.text_arena_notify",
+  "tdm.vote.end_arena" = "tdm.vote.end_arena",
 
   "tdm.round.is_paused" = "tdm.round.is_paused",
   "tdm.round.is_already_paused" = "tdm.round.is_already_paused",

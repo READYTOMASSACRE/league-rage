@@ -128,8 +128,10 @@ export const enum Events {
   'tdm.spectate.start' = 'tdm.spectate.start',
   /** Fires when player stop spectating */
   'tdm.spectate.stop' = 'tdm.spectate.stop',
-  /** Fires when cef recieves text */
+  /** Fires when cef/client recieves text */
   'tdm.notify.text' = 'tdm.notify.text',
+  /** Fires when client stops notify text */
+  'tdm.notify.stop' = 'tdm.notify.stop',
 }
 
 export const enum Procs {

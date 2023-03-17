@@ -1,12 +1,18 @@
 import { event, eventable, log, types } from "../../league-core";
 import { Enviroment, Events, tdm } from "../../league-core/src/types";
+import { Vote, VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
+import Arena from "./Arena";
 import PlayerService from "./PlayerService";
 import TeamService from "./TeamService";
 
 @eventable
 export default class BroadcastService {
+  private arenas: string[] = []
+  private defaultNotifyAlive = 5
+
   constructor(
+    readonly config: VoteConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly lang: ILanguage,
@@ -65,24 +71,58 @@ export default class BroadcastService {
 
   @log
   @event(Events["tdm.vote"])
-  tdmVote(vote: string, id: number, key: string) {
+  tdmVote(vote: Vote, id: number, key: string) {
     const player = this.playerService.getById(id)
+    const alive = this.config[vote] || this.defaultNotifyAlive
+    const replacements = { vote, player: player?.name, key }
+    const message = this.getMessage(vote, Lang["tdm.vote.add"], replacements)
 
-    this.broadcast(this.lang.get(Lang["tdm.round.vote"], { vote, player: player?.name, key }))
+    this.broadcast(message.replace('%ss', ''))
+
+    if (vote == Vote.arena) {
+      const arena = Arena.get(key)
+      if (!this.arenas.includes(arena.code)) {
+        this.arenas.push(arena.code)
+      }
+
+      replacements.key = this.arenas.join(', ')
+      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'top', true)
+    } else {
+      this.notify(message, alive, vote, 'top', true)
+    }
   }
 
   @log
   @event(Events["tdm.vote.start"])
-  tdmVoteStart(vote: string, id: number, key: string) {
+  tdmVoteStart(vote: Vote, id: number, key: string) {
     const player = this.playerService.getById(id)
 
-    this.broadcast(this.lang.get(Lang["tdm.round.vote_start"], { vote, player: player?.name, key }))
+    if (vote == Vote.arena) {
+      this.arenas = [key]
+    }
+
+    const alive = this.config[vote] || this.defaultNotifyAlive
+    const replacements = { vote, player: player?.name, key }
+    const message = this.getMessage(vote, Lang["tdm.vote.text"], replacements)
+
+    this.broadcast(message.replace('%ss', ''))
+
+    if (vote == Vote.arena) {
+      const arena = Arena.get(key)
+      this.arenas = [arena.code]
+      replacements.key = arena.code
+      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'top')
+    } else {
+      this.notify(message, alive, vote, 'top')
+    }
   }
 
   @log
   @event(Events["tdm.vote.end"])
-  tdmVoteEnd(vote: string, result: string) {
-    this.broadcast(this.lang.get(Lang["tdm.round.vote_end"], { vote, result }))
+  tdmVoteEnd(vote: Vote, result: string) {
+    this.arenas = []
+    this.broadcast(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
+    this.notifyStop(vote)
   }
 
   @log
@@ -102,6 +142,16 @@ export default class BroadcastService {
   @log
   broadcast(message: string) {
     mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+  }
+
+  @log
+  notify(text: string, alive: number, component: string, template: string = 'default', keepAlive?: boolean) {
+    mp.players.call(Events["tdm.notify.text"], [text, alive, component, template, keepAlive])
+  }
+
+  @log
+  notifyStop(component: string) {
+    mp.players.call(Events["tdm.notify.stop"], [component])
   }
 
   @log
@@ -127,5 +177,12 @@ export default class BroadcastService {
       player: player.name,
       reason: [exitType, reason].filter(Boolean).join(', ')
     })))
+  }
+
+  private getMessage(vote: Vote, lang: Lang, replacements?: Record<string, string | number>) {
+    const langCode = `${lang}_${vote}`
+    let message = this.lang.get(<Lang>langCode, replacements)
+
+    return message !== langCode ? message : this.lang.get(<Lang>lang, replacements)
   }
 }
