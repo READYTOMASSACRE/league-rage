@@ -7,9 +7,11 @@ import { hhmmss } from '../../helpers/format'
 
 const MAX_DEBUG_SIZE = 100
 
+type DebugMessage = [string, string, string]
+
 export default () => {
   const [active, setActive] = useState(false)
-  const [messages, set] = useState<[string, string, string][]>([])
+  const [messages, set] = useState<DebugMessage[]>([])
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -18,40 +20,48 @@ export default () => {
       setActive(active)
     })
 
+    const addError = (prev: DebugMessage[], err: Error) => {
+      const error: DebugMessage = [hhmmss(), err?.stack || err.message, 'fatal']
+
+      prev = [...prev, error]
+
+      if (prev.length > MAX_DEBUG_SIZE) {
+        prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
+      }
+
+      return prev
+    }
+
     RageAPI.subscribe(Events['tdm.cef.debug'], 'debug', (a: string, type: string = 'log') => {
       try {
         const args: string[] = JSON.parse(a)
   
         set(prev => {
-          if (!args.length) return []
+          try {
+            if (!args.length) return []
+  
+            const dateNow = hhmmss()
+            const next: [string, string, string][] = args.map((input) => {
+              input = String(input)
 
-          const dateNow = hhmmss()
-          const next: [string, string, string][] = args.map(input => {
-            const [,now = dateNow, arg = input] = input.match(/(\d{2}:\d{2}:\d{2})(.+)/) || []
-            return [now, arg.trim(), type]
-          })
-  
-          prev = [...prev, ...next]
-          
-          if (prev.length > MAX_DEBUG_SIZE) {
-            prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
+              const [,now = dateNow, arg = input] = input.match(/(\d{2}:\d{2}:\d{2})(.+)/) || []
+              return [now, arg.trim(), type]
+            })
+    
+            prev = [...prev, ...next]
+            
+            if (prev.length > MAX_DEBUG_SIZE) {
+              prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
+            }
+    
+            return prev
+          } catch (err) {
+
+            return addError(prev, err as Error)
           }
-  
-          return prev
         })
       } catch (err) {
-        set(prev => {
-          const _err = err as Error
-          const error: [string, string, string] = [hhmmss(), _err?.stack || _err.message, 'fatal']
-
-          prev = [...prev, error]
-
-          if (prev.length > MAX_DEBUG_SIZE) {
-            prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
-          }
-
-          return prev
-        })
+        set(prev => addError(prev, err as Error))
       }
     })
 

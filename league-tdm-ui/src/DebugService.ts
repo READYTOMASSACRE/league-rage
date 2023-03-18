@@ -1,5 +1,6 @@
 import { command, commandable } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
+import console from "./helpers/console";
 import PlayerService from "./PlayerService";
 
 @commandable
@@ -19,7 +20,7 @@ export default class DebugService {
     }
   }
 
-  @command('clear', { group: 'cdebug'})
+  @command('clear', { group: 'cdebug' })
   clear() {
     mp.events.call(Events["tdm.cef.debug"], [])
   }
