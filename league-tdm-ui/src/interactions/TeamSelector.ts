@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
@@ -85,7 +85,6 @@ class TeamSelector implements TeamSelectorConfig {
     }
   }
 
-  @logClient
   run() {
     this.current = {
       team: 0,
@@ -178,7 +177,6 @@ class TeamSelector implements TeamSelectorConfig {
     }
   }
 
-  @logClient
   private submit() {
     try {
       if (!this.running) {

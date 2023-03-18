@@ -118,6 +118,10 @@ export const enum Events {
   'tdm.team.select_toggle' = 'tdm.team.select_toggle',
   /** Fires when cef is console.log */
   'tdm.cef.log' = 'tdm.cef.log',
+  /** Fires when cef should add debug message */
+  'tdm.cef.debug' = 'tdm.cef.debug',
+  /** Fires when cef should show debug window */
+  'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */

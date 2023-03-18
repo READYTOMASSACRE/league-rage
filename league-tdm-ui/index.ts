@@ -1,4 +1,5 @@
 import { Events, IConfig, Procs } from "../league-core/src/types"
+import './src/helpers/console'
 import { Language } from '../league-lang/language'
 import DebugService from "./src/DebugService"
 import DummyService from "./src/DummyService"
@@ -23,7 +24,7 @@ const main = async () => {
     const dummyService = new DummyService()
     const playerService = new PlayerService()
     const zoneService = new ZoneService(playerService)
-    const roundService = new RoundService(zoneService)
+    const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
     const keybindService = new KeybindService()
 
     new UIService(

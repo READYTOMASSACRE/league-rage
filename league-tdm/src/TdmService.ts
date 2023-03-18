@@ -126,7 +126,7 @@ export default class TdmService {
       return Arena.get(id, player, this.lang)
     }
 
-    return Arena.arenas
+    return JSON.stringify(Arena.arenas)
   }
 
   @command('name', { desc: Lang["cmd.change_name"]})

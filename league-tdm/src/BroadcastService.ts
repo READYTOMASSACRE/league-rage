@@ -22,16 +22,12 @@ export default class BroadcastService {
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(id: number) {
     this.broadcast(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: id }))
-
-    mp.players.call(Events["tdm.round.prepare"], [id])
   }
 
   @log
   @event(Events["tdm.round.start"])
   tdmRoundStart(id: number, players: number[]) {
     this.broadcast(this.lang.get(Lang["tdm.round.arena_start"], { arena: id }))
-
-    mp.players.call(Events["tdm.round.start"], [players, id])
   }
 
   @log
@@ -40,8 +36,6 @@ export default class BroadcastService {
     const result = this.teamService.getName(team)
 
     this.broadcast(this.lang.get(Lang["tdm.round.end"], { arena: id, result }))
-
-    mp.players.call(Events["tdm.round.end"], [id, team])
   }
 
   @log

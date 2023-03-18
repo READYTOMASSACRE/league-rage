@@ -119,6 +119,7 @@ export default class PlayerService {
     const player = <PlayerMp>p
 
     if (!slot) {
+      player.removeAllWeapons()
       this.setVariable(player, 'weaponSlot', {})
     } else {
       this.setVariable(player, 'weaponSlot', {

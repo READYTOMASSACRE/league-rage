@@ -6,7 +6,7 @@ export const logClient = function (target: Object, key: string, descriptor: Type
   descriptor.value = function (...args: any[]) {
     const now = Date.now()
 
-    mp.console.logInfo(
+    print(
       format(now, 'HH:mm:ss') + ' [CALL] ' +
       target.constructor.name + '.' + key +
       `::(${args.map(decorate).join(', ')})`
@@ -18,8 +18,8 @@ export const logClient = function (target: Object, key: string, descriptor: Type
       const later = Date.now()
 
       response.then(value => {
-        mp.console.logInfo(
-          format(later, 'HH:mm:ss') + ' [ASYNC DONE] ' +
+        print(
+          format(later, 'HH:mm:ss') + '----> [ASYNC DONE] ' +
           `${target.constructor.name}.${key}` +
           `->(${decorate(value)})` + 
           ` ${later - now} ms`
@@ -29,8 +29,8 @@ export const logClient = function (target: Object, key: string, descriptor: Type
       })
     } else {
       const later = Date.now()
-      mp.console.logInfo(
-        format(later, 'HH:mm:ss') + ' [DONE] ' +
+      print(
+        format(later, 'HH:mm:ss') + '----> [DONE] ' +
         `${target.constructor.name}.${key}` +
         `-> (${decorate(response)})` +
         ` ${later - now} ms`
@@ -41,4 +41,9 @@ export const logClient = function (target: Object, key: string, descriptor: Type
   }
 
   return descriptor
+}
+
+const print = (input: string) => {
+  const log = typeof (mp as any).console.log === 'function' ? (mp as any).console.log : mp.console.logInfo
+  return log(input)
 }

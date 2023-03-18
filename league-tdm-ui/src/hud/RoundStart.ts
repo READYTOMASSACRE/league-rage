@@ -1,4 +1,3 @@
-import { logClient } from "../../../league-core/client"
 import { deepclone } from "../../../league-core/src/helpers"
 import { hud } from "../../../league-core/src/types"
 import Hud from "./Hud"
@@ -18,7 +17,6 @@ class RoundStart extends Hud implements hud.RoundStartConfig {
     this.camera = mp.cameras.new(RoundStart.cameraName)
   }
 
-  @logClient
   draw(code: string, vector: Vector3) {
     this.setCamera(true, vector)
     this.textElement.text = `Arena ${code} is starting`

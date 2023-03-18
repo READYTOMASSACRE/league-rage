@@ -7,6 +7,7 @@ import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
+import Debug from "./ui/Debug";
 import Infopanel from "./ui/Infopanel";
 import NotifyText from "./ui/Notifytext";
 import Scoreboard from "./ui/Scoreboard";
@@ -15,6 +16,7 @@ import WeaponSelector from "./ui/WeaponSelector";
 
 @eventable
 export default class UIService {
+  public debug: Debug
   public cef: BrowserMp
   public chat: Chat
   public scoreboard: Scoreboard
@@ -34,6 +36,7 @@ export default class UIService {
     readonly roundService: RoundService,
     readonly lang: ILanguage
   ) {
+    this.debug = new Debug(this, keybindService)
     this.chat = new Chat(this, keybindService)
     this.scoreboard = new Scoreboard(
       config.team, this, keybindService,

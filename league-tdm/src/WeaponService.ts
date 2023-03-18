@@ -70,6 +70,13 @@ export default class WeaponService {
   }
 
   @log
+  @event(Events["tdm.round.remove"])
+  tdmRoundRemove(id: number, manual?: boolean) {
+    this.playerService.setWeaponSlot(id)
+    this.playerService.setWeaponState(id, tdm.WeaponState.idle)
+  }
+
+  @log
   @event(Events["tdm.weapon.submit"])
   weaponRequest(player: PlayerMp, weapon?: string) {
     if (!weapon) {

@@ -5,5 +5,5 @@ export const isEntity = (o: any): o is EntityMp => {
     Boolean(o?.type)
 }
 export const isPlayer = (o: any): o is PlayerMp => {
-  return isEntity(o) && o.type === 'player' && mp.players.exists(o as PlayerMp)
+  return o?.type === 'player' && mp.players.exists(o as PlayerMp)
 }

@@ -1,5 +1,6 @@
-import { event, eventable } from "../../league-core/client"
+import { event, eventable, logClient } from "../../league-core/client"
 import { tdm } from "../../league-core/src/types"
+import console from "./helpers/console"
 import PlayerService from "./PlayerService"
 import { IRoute, Route } from "./Route"
 import Zone from "./Zone"
@@ -16,6 +17,7 @@ export default class ZoneService {
 
     constructor(readonly playerService: PlayerService) {}
 
+    @logClient
     enable(arena: tdm.Arena) {
         this.zone = new Zone(arena)
         this.route = new Route()
@@ -29,7 +31,7 @@ export default class ZoneService {
 
     }
 
-    disable() {
+    disable(err?: Error) {
         this.enabled = false
 
         if (this.route) {
@@ -38,26 +40,32 @@ export default class ZoneService {
 
         this.zone = undefined
         this.route = undefined
+
+        if (err) console.error(err)
     }
 
     @event('render')
     inspectZone() {
-        if (!this.enabled || !this.zone) {
-            return
-        }
-
-        const vector = this.playerService.getPosition()
-
-        this.outOfZone(vector) ?
-            this.rollback() :
-            this.commit(vector)
-
-        if (this.zone && this.route) {
-            for (const [x, y] of this.zone.area) {
-                this.route.addPoint(x, y)
+        try {
+            if (!this.enabled || !this.zone) {
+                return
             }
-
-            this.route.setRender(true)
+    
+            const vector = this.playerService.getPosition()
+    
+            this.outOfZone(vector) ?
+                this.rollback() :
+                this.commit(vector)
+    
+            if (this.zone && this.route) {
+                for (const [x, y] of this.zone.area) {
+                    this.route.addPoint(x, y)
+                }
+    
+                this.route.setRender(true)
+            }
+        } catch (err) {
+            this.disable(err)
         }
     }
 

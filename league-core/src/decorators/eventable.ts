@@ -56,7 +56,8 @@ export const eventable = <T extends ctor>(target: T): T => {
 
 const printEvent = ({constructor, eventName, method}) => {
   if (env === Enviroment.client) {
-    (mp as any).console.logInfo(`[EVENTS::${eventName}] ${constructor}.${method}::()`)
+    const log = typeof (mp as any).console.log === 'function' ? (mp as any).console.log : (mp as any).console.logInfo
+    log(`[EVENTS::${eventName}] ${constructor}.${method}::()`)
   } else {
     console.log(
       `[EVENTS::${eventName.cyan.underline}]`,

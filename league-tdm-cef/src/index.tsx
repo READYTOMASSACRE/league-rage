@@ -10,6 +10,7 @@ import Infopanel from './components/infopanel'
 import RageAPI from './helpers/RageAPI'
 import Controls from './components/controls'
 import Notifytext from './components/notifytext'
+import Debug from './components/debug'
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
       <Infopanel />
       <Controls />
       <Notifytext />
+      <Debug />
       {RageAPI.sendReady()}
     </>
   )

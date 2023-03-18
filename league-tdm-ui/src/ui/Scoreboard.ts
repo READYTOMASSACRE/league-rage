@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { Events, scoreboard } from "../../../league-core/src/types";
 import { Entity, TeamConfig } from "../../../league-core/src/types/tdm";
 import DummyService from "../DummyService";

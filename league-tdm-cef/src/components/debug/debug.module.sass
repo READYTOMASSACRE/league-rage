@@ -1,0 +1,39 @@
+.root
+  display: flex
+  flex-direction: column
+  position: absolute
+  background: rgba(0, 0, 0, .8)
+  width: 70vw
+  max-width: 70vw
+  height: 30vh
+  max-height: 30vh
+  right: 0
+  bottom: 0
+  color: white
+  padding: 5px
+  overflow-y: auto
+  z-index: 2
+
+  & .item:hover
+    background: rgba(80, 80, 80, .8)
+
+  & span
+    font-family: consolas, monospace
+    word-break: break-all
+    font-size: 0.6em
+    letter-spacing: -0.5px
+  & .date
+    color: darkcyan
+    margin-right: 5px
+
+  & .log
+    color: white
+
+  & .error
+    color: coral
+
+  & .warning
+    color: antiquewhite
+
+  & .fatal
+    color: red

@@ -1,27 +1,28 @@
-import { event, eventable, logClient } from "../../league-core/client";
+import { event, eventable } from "../../league-core/client";
 import { Events, Procs, tdm } from "../../league-core/src/types";
+import console from "./helpers/console";
+import PlayerService from "./PlayerService";
 import ZoneService from "./ZoneService";
 
 @eventable
 export default class RoundService {
-	public arenas: Record<number, tdm.Arena> = {}
-
-	constructor(readonly zoneService: ZoneService) {
-		this.load()
-	}
+	constructor(
+		readonly zoneService: ZoneService,
+		readonly playerService: PlayerService,
+		readonly arenas: Record<number, tdm.Arena>,
+	) {}
 
 	@event(Events["tdm.round.start"])
 	roundStart(id: number, players: number[]) {
-		const arena = this.getArenaById(id)
-
-		if (arena) {
-			this.zoneService.enable(arena)
-		}
-
-		return arena
+		this.enable(id)
 	}
 
-	@event(Events["tdm.round.end"])
+	@event(Events["tdm.round.add"])
+	roundAdd(_: number, manual: boolean, arenaId: number) {
+		this.enable(arenaId)
+	}
+
+	@event([Events["tdm.round.end"], Events["tdm.round.remove"]])
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
 
@@ -32,17 +33,28 @@ export default class RoundService {
 		return this.arenas[id]
 	}
 
-	private async load() {
+	private enable(id: number) {
+		const arena = this.getArenaById(id)
+		
+		if (arena && this.playerService.alive) {
+			this.zoneService.disable()
+			this.zoneService.enable(arena)
+		}
+
+		return arena
+	}
+
+	static async getArenas() {
 		try {
-			const arenas: tdm.Arena[] = await mp.events.callRemoteProc(Procs["tdm.arena.get"])
+			const arenas: tdm.Arena[] = JSON.parse(await mp.events.callRemoteProc(Procs["tdm.arena.get"]))
 	
-			this.arenas = arenas.reduce((acc, current) => {
+			return arenas.reduce((acc, current) => {
 				acc[current.id] = current
 	
 				return acc
 			}, {} as Record<number, tdm.Arena>)
 		} catch (err) {
-			mp.console.logError(err)
+			console.error(err)
 		}
 	}
 }

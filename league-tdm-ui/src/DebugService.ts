@@ -1,5 +1,4 @@
 import { command, commandable } from "../../league-core/client";
-import { decorate } from "../../league-core/src/helpers";
 import { Events } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 

@@ -31,6 +31,7 @@ export default class Round {
 
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
     mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.players)
+    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.players])
   }
 
   @log
@@ -46,6 +47,7 @@ export default class Round {
 
     if (this.shouldRunning) {
       this.watch()
+      mp.players.call(Events["tdm.round.start"], [this.arena.id, this.players])
       mp.events.call(Events["tdm.round.start"], this.arena.id, this.players)
     } else {
       this.end()
@@ -69,6 +71,7 @@ export default class Round {
     clearTimeout(this.roundTimer)
     clearTimeout(this.weaponTimer)
 
+    mp.players.call(Events["tdm.round.end"], [this.arena.id, result])
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
@@ -82,6 +85,7 @@ export default class Round {
 
     this.players.push(id)
 
+    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
     mp.events.call(Events["tdm.round.add"], id, manual)
   }
 
@@ -95,6 +99,7 @@ export default class Round {
     this.playerService.setState(id, State.idle)
     this.playerService.spawnLobby(id)
 
+    this.playerService.call([id], Events["tdm.round.remove"], id, manual, this.arena.id)
     mp.events.call(Events["tdm.round.remove"], id, manual)
   }
 
