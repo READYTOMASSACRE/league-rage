@@ -19,6 +19,11 @@ export default class DebugService {
     }
   }
 
+  @command('clear', { group: 'cdebug'})
+  clear() {
+    mp.events.call(Events["tdm.cef.debug"], [])
+  }
+
   private get data() {
     return {}
   }

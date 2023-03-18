@@ -19,23 +19,40 @@ export default () => {
     })
 
     RageAPI.subscribe(Events['tdm.cef.debug'], 'debug', (a: string, type: string = 'log') => {
-      const args: string[] = JSON.parse(a)
+      try {
+        const args: string[] = JSON.parse(a)
+  
+        set(prev => {
+          if (!args.length) return []
 
-      set(prev => {
-        const dateNow = hhmmss()
-        const next: [string, string, string][] = args.map(input => {
-          const [,now = dateNow, arg = input] = input.match(/(\d{2}:\d{2}:\d{2})(.+)/) || []
-          return [now, arg.trim(), type]
+          const dateNow = hhmmss()
+          const next: [string, string, string][] = args.map(input => {
+            const [,now = dateNow, arg = input] = input.match(/(\d{2}:\d{2}:\d{2})(.+)/) || []
+            return [now, arg.trim(), type]
+          })
+  
+          prev = [...prev, ...next]
+          
+          if (prev.length > MAX_DEBUG_SIZE) {
+            prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
+          }
+  
+          return prev
         })
+      } catch (err) {
+        set(prev => {
+          const _err = err as Error
+          const error: [string, string, string] = [hhmmss(), _err?.stack || _err.message, 'fatal']
 
-        prev = [...prev, ...next]
-        
-        if (prev.length > MAX_DEBUG_SIZE) {
-          prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
-        }
+          prev = [...prev, error]
 
-        return prev
-      })
+          if (prev.length > MAX_DEBUG_SIZE) {
+            prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
+          }
+
+          return prev
+        })
+      }
     })
 
     return () => {
