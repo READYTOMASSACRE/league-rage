@@ -1,4 +1,4 @@
-import { event, eventable, log, types } from "../../league-core";
+import { event, eventable, log } from "../../league-core";
 import { Enviroment, Events, tdm } from "../../league-core/src/types";
 import { Vote, VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
@@ -177,6 +177,12 @@ export default class BroadcastService {
       player: player.name,
       reason: [exitType, reason].filter(Boolean).join(', ')
     })))
+  }
+
+  @log
+  @event(Events["tdm.player.change_name"])
+  onChangeName(id: number, old: string, newName: string) {
+    this.broadcast(this.lang.get(Lang["tdm.player.change_name"], { player: old, new: newName }))
   }
 
   private getMessage(vote: Vote, lang: Lang, replacements?: Record<string, string | number>) {

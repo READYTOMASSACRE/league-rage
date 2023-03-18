@@ -21,6 +21,7 @@ export const enum Lang {
   "error.player.not_found" = "error.player.not_found",
   "error.player.not_in_round" = "error.player.not_in_round",
   "error.player.in_round" = "error.player.in_round",
+  "error.player.name_too_long" = "error.player.name_too_long",
 
   "error.round.add.player_is_busy" = "error.round.add.player_is_busy",
 
@@ -33,6 +34,7 @@ export const enum Lang {
   "tdm.player.find_result" = "tdm.player.find_result",
   "tdm.player.join" = "tdm.player.join",
   "tdm.player.quit" = "tdm.player.quit",
+  "tdm.player.change_name" = "tdm.player.change_name",
 
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
   "tdm.round.arena_prepare_timer" = "tdm.round.arena_prepare_timer",
@@ -59,6 +61,7 @@ export const enum Lang {
 
   "tdm.team.change" = "tdm.team.change",
 
+  "cmd.cmdlist" = "cmd.cmdlist",
   "cmd.start_arena" = "cmd.start_arena",
   "cmd.stop_arena" = "cmd.stop_arena",
   "cmd.add_player" = "cmd.add_player",
@@ -69,6 +72,10 @@ export const enum Lang {
   "cmd.spectate" = "cmd.spectate",
   "cmd.weapon" = "cmd.weapon",
   "cmd.change_team" = "cmd.change_team",
+  "cmd.change_name" = "cmd.change_name",
+
+  "cmdlist.page" = "cmdlist.page",
+  "cmdlist.not_found" = "cmdlist.not_found",
 
   "controls.t" = "controls.t",
   "controls.b" = "controls.b",

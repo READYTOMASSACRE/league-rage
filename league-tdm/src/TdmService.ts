@@ -5,8 +5,9 @@ import PlayerService from "./PlayerService";
 import VoteService from "./VoteService";
 import Arena from "./Arena";
 import WeaponService from "./WeaponService";
-import { Procs } from "../../league-core/src/types";
+import { Events, Procs } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
+import BroadCastError from "./error/BroadCastError";
 
 @commandable
 @proceable
@@ -126,5 +127,90 @@ export default class TdmService {
     }
 
     return Arena.arenas
+  }
+
+  @command('name', { desc: Lang["cmd.change_name"]})
+  changeName(player: PlayerMp, fullText: string, description: string, name?: string) {
+    if (!name) {
+      return player.outputChatBox(description)
+    }
+
+    const max = 16
+    if (name.length > max) {
+      throw new BroadCastError(this.lang.get(Lang["error.player.name_too_long"], { max }))
+    }
+
+    const old = player.name
+    player.name = name.trim()
+
+    mp.events.call(Events["tdm.player.change_name"], player.id, old, player.name)
+  }
+
+  @log
+  @command('cmdlist')
+  cmdlistCmd(player: PlayerMp, fullText: string, description: string, p: string = "0", l: string | number = 7) {
+    l = Number(l) || 7
+    const maxLimit = 10
+    const limit = l > maxLimit ? maxLimit : l
+    const page = (Number(p) || 1)
+    const [first, last, nextPage, lastPage] = this.getCmdlistOffset(page, this.cmdlist.length, limit)
+    const commands = this.cmdlist.slice(first - 1, last)
+
+    if (commands.length) {
+      for (const cmd of commands) {
+        player.outputChatBox(this.lang.get(cmd))
+      }
+
+      player.outputChatBox(
+        this.lang.get(Lang["cmdlist.page"], {
+          offset: `${first}-${last}`,
+          page,
+          next: page === lastPage ? 1 : nextPage,
+          last: lastPage,
+        })
+      )
+    } else {
+      player.outputChatBox(this.lang.get(Lang["cmdlist.not_found"]))
+    }
+  }
+
+  private getCmdlistOffset(page: number, total: number, limit: number) {
+    const [first, last] = this.getOffsetRange(page, limit)
+    const [, nextLast] = this.getOffsetRange(page + 1, limit)
+    const lastPage = Math.ceil(total / limit)
+
+    if (last >= total) {
+      return [first, last - (last - total), lastPage, lastPage]
+    }
+
+    if (nextLast < total) {
+      return [first, last, page + 1, lastPage]
+    }
+
+    return [first, last, lastPage, lastPage]
+  }
+
+  private getOffsetRange(page: number, limit: number): [number, number] {
+    const first = (page - 1) * limit + 1
+    const last = first + limit - 1
+    
+    return [first, last]
+  }
+
+  private get cmdlist() {
+    return [
+      Lang["cmd.cmdlist"],
+      Lang["cmd.start_arena"],
+      Lang["cmd.stop_arena"],
+      Lang["cmd.add_player"],
+      Lang["cmd.remove_player"],
+      Lang["cmd.pause"],
+      Lang["cmd.unpause"],
+      Lang["cmd.vote"],
+      Lang["cmd.spectate"],
+      Lang["cmd.weapon"],
+      Lang["cmd.change_team"],
+      Lang["cmd.change_name"],
+    ]
   }
 }

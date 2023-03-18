@@ -128,7 +128,7 @@ export default class Spectate {
         if (!this.running) {
           return
         }
-  
+
         if (entity.handle === this.streamingPlayer.handle) {
           this.prepare()
         }

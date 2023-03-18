@@ -110,6 +110,8 @@ export const enum Events {
   'tdm.player.damage' = 'tdm.player.damage',
   /** Fires when player changed model */
   'tdm.player.model' = 'tdm.player.model',
+  /** Fires when player has changed name */
+  'tdm.player.change_name' = 'tdm.player.change_name',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */
