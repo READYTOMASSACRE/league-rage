@@ -92,8 +92,10 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  hasState(p: number | PlayerMp, state: tdm.State) {
-    return this.getState(p) === state
+  hasState(p: number | PlayerMp, state: tdm.State | tdm.State[]) {
+    return Array.isArray(state) ?
+      state.includes(this.getState(p)) :
+      this.getState(p) === state
   }
 
   @log

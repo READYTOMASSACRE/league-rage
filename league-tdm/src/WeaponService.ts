@@ -1,14 +1,18 @@
 import { command, commandable, event, eventable, log } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
+import { State, WeaponState } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
+import TaskManager, { Task } from "./TaskManager";
 
 @eventable
 @commandable
 export default class WeaponService {
+  private delayedTasks: Task[] = []
+
   constructor(
     readonly config: weapon.Config,
     readonly playerService: PlayerService,
@@ -18,7 +22,18 @@ export default class WeaponService {
 
   @log
   @event(Events["tdm.round.prepare"])
-  tdmRoundPrepare() {
+  tdmRoundPrepare(_: number, players: number[]) {
+    this.clearDelayedTasks()
+    this.delayedTasks = [TaskManager.add(() => {
+      players.forEach((p) => {
+        if (!mp.players.exists(p)) return
+
+        if (this.playerService.hasState(p, State.alive)) {
+          this.playerService.setWeaponState(p, WeaponState.has)
+        }
+      })
+    }, this.config.selectTime)]
+
     mp.players.forEachFast((p) => {
       p.removeAllWeapons()
       this.playerService.setWeaponSlot(p)
@@ -29,11 +44,29 @@ export default class WeaponService {
   @log
   @event(Events["tdm.round.end"])
   tdmRoundEnd() {
+    this.clearDelayedTasks()
     mp.players.forEachFast((p) => {
       p.removeAllWeapons()
       this.playerService.setWeaponSlot(p)
       this.playerService.setWeaponState(p, tdm.WeaponState.has)
     })
+  }
+
+  @log
+  @event(Events["tdm.round.add"])
+  tdmRoundAdd(id: number, manual?: boolean) {
+    this.playerService.setWeaponSlot(id)
+    this.playerService.setWeaponState(id, tdm.WeaponState.idle)
+
+    if (manual) {
+      this.delayedTasks.push(
+        TaskManager.add(() => {
+          if (!this || !mp.players.exists(id)) return
+  
+          this.playerService.setWeaponState(id, WeaponState.has)
+        }, this.config.selectTime)
+      )
+    }
   }
 
   @log
@@ -156,5 +189,10 @@ export default class WeaponService {
         return slot
       }
     }
+  }
+
+  private clearDelayedTasks() {
+    this.delayedTasks.forEach(fn => TaskManager.remove(fn))
+    this.delayedTasks = []
   }
 }

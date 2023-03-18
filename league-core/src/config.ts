@@ -55,6 +55,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     weapon: {
       ammo: 360,
       friendlyfire: true,
+      selectTime: 25,
       slot: {
         melee: [WeaponCategory.melee],
         secondary: [WeaponCategory.handguns],
@@ -93,7 +94,6 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     round: {
       prepare: 5,
       timeleft: 300,
-      weapon: 25,
       watcher: {
         alive: false,
       }

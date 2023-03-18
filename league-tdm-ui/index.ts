@@ -1,5 +1,6 @@
 import { Events, IConfig, Procs } from "../league-core/src/types"
 import { Language } from '../league-lang/language'
+import DebugService from "./src/DebugService"
 import DummyService from "./src/DummyService"
 import HudService from "./src/HudService"
 import InteractionService from "./src/InteractionService"
@@ -38,7 +39,8 @@ const main = async () => {
     new WeaponService(playerService)
     new HudService(config, roundService, playerService)
     new InteractionService(config, playerService, dummyService, keybindService)
-  
+    new DebugService(playerService)
+
     mp.console.logInfo('league-tdm-ui package initialized')
   
     mp.events.call(Events["tdm.player.ready"])

@@ -15,7 +15,7 @@ const PlayerItem: FC<Props> = ({ player, currentPlayer, position }) => {
   return (
     <div className={s.playerItem}>
       <div className={s.position}>
-        {position}
+        {player.id}
       </div>
       <div className={cl(s.name, currentPlayer && s.current)}>
         {player.name}

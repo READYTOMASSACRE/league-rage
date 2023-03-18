@@ -20,6 +20,9 @@ export const enum Lang {
 
   "error.player.not_found" = "error.player.not_found",
   "error.player.not_in_round" = "error.player.not_in_round",
+  "error.player.in_round" = "error.player.in_round",
+
+  "error.round.add.player_is_busy" = "error.round.add.player_is_busy",
 
   "error.vote.not_found_config" = "error.vote.not_found_config",
 

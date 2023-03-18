@@ -1,5 +1,5 @@
 import { log, eventable, event, ensurePlayer, commandable, command, helpers } from "../../league-core";
-import { Events, IConfig, tdm } from "../../league-core/src/types";
+import { Events, tdm } from "../../league-core/src/types";
 import { TeamConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";

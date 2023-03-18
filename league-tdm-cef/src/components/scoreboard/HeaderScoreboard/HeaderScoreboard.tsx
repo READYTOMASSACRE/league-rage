@@ -7,10 +7,9 @@ import { toColor } from '../../../../../league-core/src/helpers';
 interface Props {
   attackTeam?: scoreboard.Team
   defenseTeam?: scoreboard.Team
-  arena?: string
 }
 
-const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam, arena = '' }) => {
+const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam }) => {
   const defaultColor = 'white'
 
   let { color: attackColor = '' } = attackTeam || {}
@@ -25,10 +24,7 @@ const HeaderScoreboard: FC<Props> = ({ attackTeam, defenseTeam, arena = '' }) =>
       className={cl(s.top)}
     >
       <div className={s.left_team_name}>{attackTeam?.name === '' ? attackTeam.role : attackTeam?.name}</div>
-      <div className={s.left_team_score}>{attackTeam?.score}</div>
-      <div className={s.arena_name}>{arena}</div>
       <div className={s.right_team_name}>{defenseTeam?.name === '' ? defenseTeam.role : defenseTeam?.name}</div>
-      <div className={s.right_team_score}>{defenseTeam?.score}</div>
     </div>
   )
 }

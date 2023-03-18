@@ -20,6 +20,9 @@
 
   "error.player.not_found": "Player is not exists: :player",
   "error.player.not_in_round": "Not in round",
+  "error.player.in_round": "Игрок :player уже в раунде",
+
+  "error.round.add.player_is_busy": "В данный момент игрока нельзя добавить в раунд",
 
   "error.vote.not_found_config": "Нет конфига для голосования :vote",
 

@@ -61,6 +61,12 @@ export default class SpectateService {
   }
 
   @log
+  @event(Events["tdm.round.add"])
+  onPlayerAdd(id: number) {
+    this.stopSpectate(id)
+  }
+
+  @log
   @command(['spec', 'spectate'], { desc: Lang["cmd.spectate"] })
   spectate(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!this.roundService.running) {

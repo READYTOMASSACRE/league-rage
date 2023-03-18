@@ -10,7 +10,6 @@ interface RoundConfig {
   players: number[]
   prepareSeconds: number
   roundSeconds: number
-  weaponSeconds: number
   aliveWatcher: boolean
 }
 
@@ -28,13 +27,10 @@ export default class Round {
   ) {
     this.time = helpers.toMs(this.config.roundSeconds)
     this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
-    this.weaponTimer = setTimeout(() => this.players.forEach((p) => (
-      this.playerService.setWeaponState(p, WeaponState.has)
-    )), helpers.toMs(this.config.weaponSeconds))
     this.state = RoundState.prepare
-    
+
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
-    mp.events.call(Events["tdm.round.prepare"], this.arena.id)
+    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.players)
   }
 
   @log
@@ -67,7 +63,6 @@ export default class Round {
     this.state = RoundState.stopped
     this.time = 0
     this.dummyService.set(Entity.ROUND, 'arena', '')
-
     this.players.forEach(id => this.removePlayer(id))
 
     clearTimeout(this.prepareTimer)

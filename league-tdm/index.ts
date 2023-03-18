@@ -16,6 +16,7 @@ import ConfigService from './src/ConfigService'
 import DummyService from './src/DummyService'
 import DebugService from './src/DebugService'
 import SpectateService from './src/SpectateService'
+import TaskManager from './src/TaskManager'
 
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
@@ -38,6 +39,8 @@ const main = async () => {
   new DebugService(playerService, dummyService)
 
   Arena.load(language)
+
+  TaskManager.start()
 
   mp.events.call(Events['tdm.start'])
 }

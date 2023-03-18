@@ -46,7 +46,6 @@ export type TeamConfig = {
 export type RoundConfig = {
   prepare: number
   timeleft: number
-  weapon: number
   watcher: {
     alive: boolean
   }
