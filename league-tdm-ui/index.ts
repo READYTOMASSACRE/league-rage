@@ -20,7 +20,7 @@ const main = async () => {
   
     const dummyService = new DummyService()
     const playerService = new PlayerService()
-    const zoneService = new ZoneService(playerService)
+    const zoneService = new ZoneService(playerService, dummyService)
     const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
     const keybindService = new KeybindService()
 
