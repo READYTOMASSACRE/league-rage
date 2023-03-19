@@ -14,9 +14,6 @@ import ZoneService from "./src/ZoneService"
 
 const main = async () => {
   try {
-    mp.console.reset()
-    mp.console.clear()
-
     const config: IConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
     const lang = await mp.events.callRemoteProc(Procs["tdm.language.get"], config.lang)
     const language = new Language(lang)
@@ -42,7 +39,7 @@ const main = async () => {
     new InteractionService(config, playerService, dummyService, keybindService)
     new DebugService(playerService)
 
-    mp.console.logInfo('league-tdm-ui package initialized')
+    mp.console.log('league-tdm-ui package initialized')
   
     mp.events.call(Events["tdm.player.ready"])
     mp.events.callRemote(Events["tdm.player.ready"])
