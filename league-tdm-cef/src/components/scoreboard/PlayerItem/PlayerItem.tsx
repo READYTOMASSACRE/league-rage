@@ -13,7 +13,7 @@ interface Props {
 const PlayerItem: FC<Props> = ({ player, currentPlayer, position }) => {
 
   return (
-    <div className={s.playerItem}>
+    <div className={cl(s.playerItem, currentPlayer && s.currentPlayerItem)}>
       <div className={s.position}>
         {player.id}
       </div>
@@ -24,10 +24,10 @@ const PlayerItem: FC<Props> = ({ player, currentPlayer, position }) => {
         {player.kills}
       </div>
       <div className={s.statistics}>
-        {player.assists}
+        {player.death}
       </div>
       <div className={s.statistics}>
-        {player.death}
+        {player.assists}
       </div>
       <div className={s.statistics}>
         {player.lvl}

@@ -1,4 +1,4 @@
-import { command, commandable } from "../../league-core/client";
+import { command, commandable, logClient } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
 import console from "./helpers/console";
 import PlayerService from "./PlayerService";
@@ -7,14 +7,15 @@ import PlayerService from "./PlayerService";
 export default class DebugService {
   constructor(readonly playerService: PlayerService) {}
 
+  @logClient
   @command('data', { group: 'cdebug'})
-  getData(fullText: string, description: string, key: string) {
+  getData(description: string, key: string) {
     try {
       if (!key) {
-        return mp.events.call(Events["tdm.chat.push"], this.data)
+        return console.log(this.data)
       }
 
-      return mp.events.call(Events["tdm.chat.push"], this.playerService.local[key])
+      console.log(key, this.playerService.local[key])
     } catch (err) {
       console.error(err.stack)
     }

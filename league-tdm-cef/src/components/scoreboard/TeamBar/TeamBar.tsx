@@ -20,11 +20,11 @@ const TeamBar: FC<Props> = ({ color, changeSort }) => {
       <div onClick={() => changeSort('kills')} className={s.statistics}>
         K
       </div>
-      <div onClick={() => changeSort('assists')} className={s.statistics}>
-        A
-      </div>
       <div onClick={() => changeSort('death')} className={s.statistics}>
         D
+      </div>
+      <div onClick={() => changeSort('assists')} className={s.statistics}>
+        A
       </div>
       <div className={s.statistics}>
         LVL
