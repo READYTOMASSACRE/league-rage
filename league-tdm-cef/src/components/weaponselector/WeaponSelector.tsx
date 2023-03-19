@@ -8,13 +8,13 @@ import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 
 const typeCategory = {
-  melee: 'Buy Melle (Melle Weapon)',
-  handguns: 'Buy Pistol (Secondary Weapond)',
-  submachine: 'Buy SMG (Primary Weapond)',
-  shotguns: 'Buy Shotgun (Primary Weapond)',
-  rifles: 'Buy Rifle (Primary Weapond)',
-  light_rifles: 'Buy Light Rifle (Primary Weapond)',
-  sniper_rifles: 'Buy Sniper Rifle (Primary Weapond)',
+  melee: 'Buy Melee (Melee Weapon)',
+  handguns: 'Buy Pistol (Secondary Weapon)',
+  submachine: 'Buy SMG (Primary Weapon)',
+  shotguns: 'Buy Shotgun (Primary Weapon)',
+  rifles: 'Buy Rifle (Primary Weapon)',
+  light_rifles: 'Buy Light Rifle (Primary Weapon)',
+  sniper_rifles: 'Buy Sniper Rifle (Primary Weapon)',
 }
 
 const WeaponSelector = () => {
@@ -65,9 +65,9 @@ const WeaponSelector = () => {
       if (category && data[category][categoryIndex - 1]) {
         RageAPI.weaponSubmit(data[category][categoryIndex - 1].name)
         return setCategory(undefined)
+      } else if (!category) {
+        return setCategory(Object.keys(data)[categoryIndex - 1])
       }
-
-      return setCategory(Object.keys(data)[categoryIndex - 1])
     }
 
     if (categoryIndex === 0) {
