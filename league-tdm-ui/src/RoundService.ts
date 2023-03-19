@@ -33,9 +33,8 @@ export default class RoundService {
 
 	@event(Events["tdm.round.remove"])
 	roundRemove(id: number, manual?: boolean) {
-		if (manual) {
-			this.zoneService.disable()
-		}
+		this.zoneService.disable()
+		this.playerService.spawnLobby()
 	}
 
 	getArenaById(id: number): tdm.Arena | undefined {

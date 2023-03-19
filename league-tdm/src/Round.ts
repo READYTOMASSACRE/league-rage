@@ -97,7 +97,6 @@ export default class Round {
 
     this.players = this.players.filter(playerId => playerId !== id)
     this.playerService.setState(id, State.idle)
-    this.playerService.spawnLobby(id)
 
     this.playerService.call([id], Events["tdm.round.remove"], id, manual, this.arena.id)
     mp.events.call(Events["tdm.round.remove"], id, manual)

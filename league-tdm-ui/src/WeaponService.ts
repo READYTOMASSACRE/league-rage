@@ -1,20 +1,45 @@
-import { event, eventable, helpers } from "../../league-core/client";
+import { event, eventable, helpers, logClient } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
+import console from "./helpers/console";
 import PlayerService from "./PlayerService";
 import weapons from "./weapons";
 
 @eventable
 export default class WeaponService {
+  static isPedArmed = '0x475768A975D5AD17'
+  static expectFists = 7
+
   private throttledIncomingUpdate: Function
   private damage: number = 0
   private hit: number = 0
   private source?: number
   private weapon?: string
+  private rendering: boolean = true
 
   constructor(readonly playerService: PlayerService) {
     this.throttledIncomingUpdate = helpers.throttle(() => this.incomingUpdate(), 100)
   }
 
+  @event('render')
+  render() {
+    if (!this.rendering) return
+
+    try {
+      mp.game.player.setHealthRechargeMultiplier(0.0);
+		  mp.game.player.restoreStamina(100)
+
+      if (mp.game.invoke(WeaponService.isPedArmed, this.playerService.local.handle, WeaponService.expectFists)) {
+        mp.game.controls.disableControlAction(0, 140, true)
+        mp.game.controls.disableControlAction(0, 141, true)
+        mp.game.controls.disableControlAction(0, 142, true)
+      }
+    } catch (err) {
+      console.error(err)
+      this.rendering = false
+    }
+  }
+
+  @logClient
   @event("incomingDamage")
   incomingDamage(
     sourceEntity: EntityMp,

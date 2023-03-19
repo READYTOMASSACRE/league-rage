@@ -12,6 +12,17 @@ export default class DebugService {
     readonly dummyService: DummyService,
   ) {}
 
+  @command('health')
+  setHealth(player: PlayerMp, fullText: string, description: string, health: string = "100", id?: string) {
+    const debugPlayer = this.playerService.getByIdOrName(id) || player
+
+    if (Array.isArray(debugPlayer)) {
+      return player.outputChatBox(debugPlayer.map(p => p.name).join(', '))
+    }
+
+    debugPlayer.health = Number(health)
+  }
+
   @log
   @command('state', { group: 'debug'})
   getStateCmd(player: PlayerMp) {
@@ -64,13 +75,33 @@ export default class DebugService {
       return
     }
 
-    const debugPlayer = this.playerService.getByIdOrName(id)
+    const debugPlayer = this.playerService.getByIdOrName(id) || player
 
     if (Array.isArray(debugPlayer)) {
       return player.outputChatBox(debugPlayer.map(p => p.name).join(', '))
     }
 
     const data = this.playerData(debugPlayer)
+
+    player.outputChatBox(decorate(data))
+
+    return data
+  }
+
+  @log
+  @command('get', { group: 'debug'})
+  get(player: PlayerMp, fullText: string, description?: string, key?: string, id?: string) {
+    if (!key) {
+      return
+    }
+
+    const debugPlayer = this.playerService.getByIdOrName(id) || player
+
+    if (Array.isArray(debugPlayer)) {
+      return player.outputChatBox(debugPlayer.map(p => p.name).join(', '))
+    }
+
+    const data = debugPlayer[key]
 
     player.outputChatBox(decorate(data))
 

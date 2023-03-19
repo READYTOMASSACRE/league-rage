@@ -8,8 +8,8 @@ export default class DebugService {
   constructor(readonly playerService: PlayerService) {}
 
   @logClient
-  @command('data', { group: 'cdebug'})
-  getData(description: string, key: string) {
+  @command('get', { group: 'cdebug'})
+  get(description: string, key: string) {
     try {
       if (!key) {
         return console.log(this.data)

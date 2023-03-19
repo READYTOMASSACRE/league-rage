@@ -1,7 +1,14 @@
-import { Procs } from "../../league-core/src/types";
+import { Events, Procs } from "../../league-core/src/types";
 import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
 
 export default class PlayerService {
+  private interval: number = 0
+  private syncMs: number = 500
+
+  constructor() {
+    this.interval = setInterval(() => this.syncHealth(), this.syncMs)
+  }
+
   getState(player?: PlayerMp): State | undefined {
     player = player || this.local
 
@@ -67,6 +74,16 @@ export default class PlayerService {
     (player || this.local).setAlpha(alphaLevel)
   }
 
+  spawnLobby() {
+    mp.events.callRemote(Events["tdm.player.spawn_lobby"])
+  }
+
+  setVariable<K extends keyof PlayerData, V extends PlayerData[K]>(
+    key: K, value: V
+  ) {
+    this.local.setVariable(String(key), value)
+  }
+
   getVariable<_, K extends keyof PlayerData>(
     player: PlayerMp, key: K
   ): PlayerData[K] {
@@ -75,5 +92,14 @@ export default class PlayerService {
 
   get local() {
     return mp.players.local
+  }
+
+  private syncHealth() {
+    if (
+      typeof this.getVariable(this.local, 'health') !== 'number' ||
+      this.getVariable(this.local, 'health') > (this.local.getHealth() + 1)
+    ) {
+      mp.events.callRemote(Events["tdm.player.sync_health"])
+    }
   }
 }
