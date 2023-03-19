@@ -62,6 +62,7 @@ export const enum Lang {
   "tdm.team.change" = "tdm.team.change",
 
   "cmd.cmdlist" = "cmd.cmdlist",
+  "cmd.kill" = "cmd.kill",
   "cmd.start_arena" = "cmd.start_arena",
   "cmd.stop_arena" = "cmd.stop_arena",
   "cmd.add_player" = "cmd.add_player",
