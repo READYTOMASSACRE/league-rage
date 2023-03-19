@@ -55,10 +55,10 @@ export default class WeaponService {
   @log
   @event(Events["tdm.round.add"])
   tdmRoundAdd(id: number, manual?: boolean) {
-    this.playerService.setWeaponSlot(id)
-    this.playerService.setWeaponState(id, tdm.WeaponState.idle)
-
     if (manual) {
+      this.playerService.setWeaponSlot(id)
+      this.playerService.setWeaponState(id, tdm.WeaponState.idle)
+
       this.delayedTasks.push(
         TaskManager.add(() => {
           if (!this || !mp.players.exists(id)) return
