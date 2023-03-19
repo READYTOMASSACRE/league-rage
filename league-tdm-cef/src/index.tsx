@@ -1,16 +1,20 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
+
+import './index.module.sass'
+
+import RageAPI from './helpers/RageAPI'
+
 import Chat from './components/chat'
 import TeamSelector from './components/teamselector'
 import Popup from './components/popup/Popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
-import './index.module.sass'
 import WeaponSelector from './components/weaponselector/WeaponSelector'
 import Infopanel from './components/infopanel'
-import RageAPI from './helpers/RageAPI'
 import Controls from './components/controls'
 import Notifytext from './components/notifytext'
 import Debug from './components/debug'
+import DeathLog from './components/deathlog/DeathLog'
 
 const App = () => {
 
@@ -25,6 +29,7 @@ const App = () => {
       <Controls />
       <Notifytext />
       <Debug />
+      <DeathLog />
       {RageAPI.sendReady()}
     </>
   )
