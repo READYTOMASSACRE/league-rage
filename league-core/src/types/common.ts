@@ -98,6 +98,8 @@ export const enum Events {
   'tdm.player.state' = 'tdm.player.state',
   /** Fires when player has set data */
   'tdm.player.data' = 'tdm.player.data',
+  /** Fires when player has set data */
+  'tdm.player.sync_health' = 'tdm.player.sync_health',
   /** Fires when player has changed weapon state */
   'tdm.player.weapon_state' = 'tdm.player.weapon_state',
   /** Fires when player has changed weapon slot */
@@ -112,6 +114,8 @@ export const enum Events {
   'tdm.player.model' = 'tdm.player.model',
   /** Fires when player has changed name */
   'tdm.player.change_name' = 'tdm.player.change_name',
+  /** Fires when player have to spawn in lobby */
+  'tdm.player.spawn_lobby' = 'tdm.player.spawn_lobby',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */

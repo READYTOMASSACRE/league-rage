@@ -61,6 +61,7 @@
   "tdm.team.change": "Команда изменена на :team",
 
   "cmd.cmdlist": "Usage /cmdlist <page> (optional) <limit> (optional) - to paging through commands",
+  "cmd.kill": "Usage /kill to kill yourself",
   "cmd.start_arena": "Usage /a, /arena <id> - start arena by id or code",
   "cmd.stop_arena": "Usage /s, /stop - stop arena",
   "cmd.add_player": "Usage /add <player> - add player to round",

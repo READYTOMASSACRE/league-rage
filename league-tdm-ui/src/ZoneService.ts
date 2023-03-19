@@ -1,5 +1,7 @@
 import { event, eventable } from "../../league-core/client"
 import { tdm } from "../../league-core/src/types"
+import { Entity, RoundState } from "../../league-core/src/types/tdm"
+import DummyService from "./DummyService"
 import console from "./helpers/console"
 import PlayerService from "./PlayerService"
 import { IRoute, Route } from "./Route"
@@ -15,7 +17,10 @@ export default class ZoneService {
     private zone?: Zone
     private route?: IRoute
 
-    constructor(readonly playerService: PlayerService) {}
+    constructor(
+        readonly playerService: PlayerService,
+        readonly dummyService: DummyService,
+    ) {}
 
     enable(arena: tdm.Arena) {
         this.zone = new Zone(arena)
@@ -62,6 +67,10 @@ export default class ZoneService {
                 }
     
                 this.route.setRender(true)
+            }
+
+            if (this.dummyService.get(Entity.ROUND, 'state') === RoundState.paused) {
+                mp.game.controls.disableAllControlActions(2)
             }
         } catch (err) {
             this.disable(err)

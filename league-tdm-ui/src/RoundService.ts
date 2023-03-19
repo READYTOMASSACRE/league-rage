@@ -27,19 +27,23 @@ export default class RoundService {
 	@event(Events["tdm.round.end"])
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
-
-		return result
+		this.playerService.freezePosition(false)
 	}
 
 	@event(Events["tdm.round.remove"])
 	roundRemove(id: number, manual?: boolean) {
-		if (manual) {
-			this.zoneService.disable()
-		}
+		this.zoneService.disable()
+		this.playerService.spawnLobby()
+		this.playerService.freezePosition(false)
 	}
 
 	getArenaById(id: number): tdm.Arena | undefined {
 		return this.arenas[id]
+	}
+
+	@event(Events["tdm.round.pause"])
+	roundPause(toggle: boolean) {
+		this.playerService.freezePosition(toggle)
 	}
 
 	private enable(id: number) {

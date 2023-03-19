@@ -174,6 +174,12 @@ export default class TdmService {
     }
   }
 
+  @log
+  @command('kill')
+  kill(player: PlayerMp) {
+    this.playerService.setHealth(player, 0)
+  }
+
   private getCmdlistOffset(page: number, total: number, limit: number) {
     const [first, last] = this.getOffsetRange(page, limit)
     const [, nextLast] = this.getOffsetRange(page + 1, limit)
@@ -200,6 +206,7 @@ export default class TdmService {
   private get cmdlist() {
     return [
       Lang["cmd.cmdlist"],
+      Lang["cmd.kill"],
       Lang["cmd.start_arena"],
       Lang["cmd.stop_arena"],
       Lang["cmd.add_player"],

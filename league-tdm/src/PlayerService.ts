@@ -1,4 +1,4 @@
-import { event, eventable, log, ensurePlayer } from "../../league-core";
+import { event, eventable, log, ensurePlayer, command, commandable } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
 import { PlayerData } from "../../league-core/src/types/tdm";
 
@@ -7,12 +7,26 @@ export default class PlayerService {
   constructor(readonly config: IConfig) {}
 
   @log
+  @event(Events["tdm.player.sync_health"])
+  syncHealth(player: PlayerMp) {
+    this.setHealth(player, player.health)
+
+    return [player.health, this.getVariable(player, 'health')]
+  }
+
+  @log
   @event("playerReady")
   playerReady(player: PlayerMp) {
     this.setState(player, tdm.State.idle)
     this.setTeam(player, tdm.Team.spectators)
     this.setWeaponState(player, tdm.WeaponState.idle)
     this.setWeaponSlot(player)
+  }
+
+  @log
+  @event("playerDeath")
+  playerDeath(player: PlayerMp) {
+    this.spawnLobby(player)
   }
 
   @log
@@ -100,6 +114,7 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
+  @event(Events["tdm.player.spawn_lobby"])
   spawnLobby(p: number | PlayerMp) {
     (p as PlayerMp).spawn(new mp.Vector3(this.config.lobby))
   }
