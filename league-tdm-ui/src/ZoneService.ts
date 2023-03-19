@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../league-core/client"
+import { event, eventable } from "../../league-core/client"
 import { tdm } from "../../league-core/src/types"
 import console from "./helpers/console"
 import PlayerService from "./PlayerService"
@@ -17,7 +17,6 @@ export default class ZoneService {
 
     constructor(readonly playerService: PlayerService) {}
 
-    @logClient
     enable(arena: tdm.Arena) {
         this.zone = new Zone(arena)
         this.route = new Route()

@@ -19,14 +19,23 @@ export default class RoundService {
 
 	@event(Events["tdm.round.add"])
 	roundAdd(_: number, manual: boolean, arenaId: number) {
-		this.enable(arenaId)
+		if (manual) {
+			this.enable(arenaId)
+		}
 	}
 
-	@event([Events["tdm.round.end"], Events["tdm.round.remove"]])
+	@event(Events["tdm.round.end"])
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
 
 		return result
+	}
+
+	@event(Events["tdm.round.remove"])
+	roundRemove(id: number, manual?: boolean) {
+		if (manual) {
+			this.zoneService.disable()
+		}
 	}
 
 	getArenaById(id: number): tdm.Arena | undefined {
@@ -40,8 +49,6 @@ export default class RoundService {
 			this.zoneService.disable()
 			this.zoneService.enable(arena)
 		}
-
-		return arena
 	}
 
 	static async getArenas() {

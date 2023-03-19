@@ -27,13 +27,13 @@ export default class NotifyText {
     this.show(
       this.lang.get(Lang["tdm.round.arena_prepare_timer"], { arena: arena.code }),
       this.config.prepare,
-      'arena'
+      'round'
     )
   }
 
   @event([Events["tdm.round.start"], Events["tdm.round.end"]])
   roundEnd() {
-    this.hide('arena')
+    this.hide('round')
   }
 
   @event(Events["tdm.notify.text"])
