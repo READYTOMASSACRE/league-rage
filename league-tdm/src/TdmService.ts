@@ -1,4 +1,4 @@
-import { commandable, command, log, proceable, proc, eventable, event } from "../../league-core";
+import { commandable, command, log, proceable, proc } from "../../league-core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
@@ -8,11 +8,9 @@ import WeaponService from "./WeaponService";
 import { Events, Procs } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
-import { State, Team } from "../../league-core/src/types/tdm";
 
 @commandable
 @proceable
-@eventable
 export default class TdmService {
   constructor(
     readonly roundService: RoundService,
@@ -128,92 +126,91 @@ export default class TdmService {
       return Arena.get(id, player, this.lang)
     }
 
-    return Arena.arenas
+    return JSON.stringify(Arena.arenas)
   }
 
-  @log
-  @command(['spec', 'spectate'], { desc: Lang["cmd.spectate"] })
-  spectate(player: PlayerMp, fullText: string, description: string, id?: string) {
-    if (!this.roundService.running) {
-      throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
-    }
-
-    if (![State.dead, State.idle, State.spectate].includes(this.playerService.getState(player))) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.not_same_team"]), player)
-    }
-
-    if (!id) {
+  @command('name', { desc: Lang["cmd.change_name"]})
+  changeName(player: PlayerMp, fullText: string, description: string, name?: string) {
+    if (!name) {
       return player.outputChatBox(description)
     }
 
-    if (this.playerService.hasState(player, State.spectate) && id === 'off') {
-      return this.playerService.call([player.id], Events["tdm.spectate.stop"])
+    const max = 16
+    if (name.length > max) {
+      throw new BroadCastError(this.lang.get(Lang["error.player.name_too_long"], { max }))
     }
 
-    const spectatePlayer = this.playerService.getByIdOrName(id)
+    const old = player.name
+    player.name = name.trim()
 
-    if (!spectatePlayer) {
-      throw new BroadCastError(this.lang.get(Lang["error.player.not_found"], { player: id }), player)
-    }
-
-    if (Array.isArray(spectatePlayer)) {
-      const message = this.lang.get(Lang["tdm.player.find_result"], { players: spectatePlayer.map(p => p.name).join(', ') })
-      throw new BroadCastError(message, player)
-    }
-
-    if (
-      this.playerService.getTeam(player) !== Team.spectators &&
-      this.playerService.getTeam(player) !== this.playerService.getTeam(spectatePlayer)
-    ) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.not_same_team"]), player)
-    }
-
-    if (!this.playerService.hasState(spectatePlayer, State.alive)) {
-      throw new BroadCastError(
-        this.lang.get(Lang["error.player.not_in_round"], { player: spectatePlayer.name }),
-        player
-      )
-    }
-
-    if (spectatePlayer.id === player.id) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.same_player"]), player)
-    }
-
-    this.playerService.setState(player, State.spectate)
-    this.playerService.call([player.id], Events["tdm.spectate.start"], spectatePlayer.id)
+    mp.events.call(Events["tdm.player.change_name"], player.id, old, player.name)
   }
 
   @log
-  @event(Events["tdm.spectate.stop"])
-  stopSpectate(player: PlayerMp | number) {
-    player = typeof player === 'number' ? mp.players.at(player) : player
+  @command('cmdlist')
+  cmdlistCmd(player: PlayerMp, fullText: string, description: string, p: string = "0", l: string | number = 7) {
+    l = Number(l) || 7
+    const maxLimit = 10
+    const limit = l > maxLimit ? maxLimit : l
+    const page = (Number(p) || 1)
+    const [first, last, nextPage, lastPage] = this.getCmdlistOffset(page, this.cmdlist.length, limit)
+    const commands = this.cmdlist.slice(first - 1, last)
 
-    if (
-      !mp.players.exists(player) ||
-      !this.playerService.hasState(player, State.spectate)
-    ) {
-      return
-    }
-
-    this.playerService.setState(player, State.idle)
-    this.playerService.spawnLobby(player)
-  }
-
-  @log
-  @proc(Procs["tdm.spectate.move"])
-  moveSpectate(player: PlayerMp, x: number, y: number, z: number, dimension: number) {
-    try {
-      if (!this.playerService.hasState(player, State.spectate)) {
-        return false
+    if (commands.length) {
+      for (const cmd of commands) {
+        player.outputChatBox(this.lang.get(cmd))
       }
-  
-      player.position = new mp.Vector3(x, y, z)
-      player.dimension = dimension
-  
-      return true
-    } catch (err) {
-      console.error(err)
-      return false
+
+      player.outputChatBox(
+        this.lang.get(Lang["cmdlist.page"], {
+          offset: `${first}-${last}`,
+          page,
+          next: page === lastPage ? 1 : nextPage,
+          last: lastPage,
+        })
+      )
+    } else {
+      player.outputChatBox(this.lang.get(Lang["cmdlist.not_found"]))
     }
+  }
+
+  private getCmdlistOffset(page: number, total: number, limit: number) {
+    const [first, last] = this.getOffsetRange(page, limit)
+    const [, nextLast] = this.getOffsetRange(page + 1, limit)
+    const lastPage = Math.ceil(total / limit)
+
+    if (last >= total) {
+      return [first, last - (last - total), lastPage, lastPage]
+    }
+
+    if (nextLast < total) {
+      return [first, last, page + 1, lastPage]
+    }
+
+    return [first, last, lastPage, lastPage]
+  }
+
+  private getOffsetRange(page: number, limit: number): [number, number] {
+    const first = (page - 1) * limit + 1
+    const last = first + limit - 1
+    
+    return [first, last]
+  }
+
+  private get cmdlist() {
+    return [
+      Lang["cmd.cmdlist"],
+      Lang["cmd.start_arena"],
+      Lang["cmd.stop_arena"],
+      Lang["cmd.add_player"],
+      Lang["cmd.remove_player"],
+      Lang["cmd.pause"],
+      Lang["cmd.unpause"],
+      Lang["cmd.vote"],
+      Lang["cmd.spectate"],
+      Lang["cmd.weapon"],
+      Lang["cmd.change_team"],
+      Lang["cmd.change_name"],
+    ]
   }
 }

@@ -1,0 +1,23 @@
+@use '../../variables' as *
+
+.root
+  position: absolute
+  color: white
+  display: flex
+  font-size: 1.2em
+  text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
+  width: 100%
+  height: 100vh
+
+.default
+  align-items: center
+  justify-content: center
+
+.top
+  justify-content: center
+  padding-top: 15vh
+
+.bottom
+  justify-content: center
+  align-items: end
+  padding-bottom: 15vh

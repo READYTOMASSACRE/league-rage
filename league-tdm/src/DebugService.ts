@@ -3,6 +3,7 @@ import { decorate } from "../../league-core/src/helpers";
 import { Entity } from "../../league-core/src/types/tdm";
 import DummyService from "./DummyService";
 import PlayerService from "./PlayerService";
+import TaskManager from "./TaskManager";
 
 @commandable
 export default class DebugService {
@@ -29,6 +30,16 @@ export default class DebugService {
     player.outputChatBox(decorate(data))
 
     return data
+  }
+
+  @log
+  @command('tasks', { group: 'debug'})
+  tasks(player: PlayerMp) {
+    const message = `Task size: ${TaskManager.size}, Running: ${TaskManager.isRunning ? 'true' : 'false'}`
+
+    player.outputChatBox(message)
+
+    return message
   }
 
   @log
@@ -78,6 +89,7 @@ export default class DebugService {
       team: this.playerService.getVariable(player, 'team'),
       weaponSlot: this.playerService.getVariable(player, 'weaponSlot'),
       weaponState: this.playerService.getVariable(player, 'weaponState'),
+      position: player.position,
     }
   }
 }

@@ -110,12 +110,18 @@ export const enum Events {
   'tdm.player.damage' = 'tdm.player.damage',
   /** Fires when player changed model */
   'tdm.player.model' = 'tdm.player.model',
+  /** Fires when player has changed name */
+  'tdm.player.change_name' = 'tdm.player.change_name',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */
   'tdm.team.select_toggle' = 'tdm.team.select_toggle',
   /** Fires when cef is console.log */
   'tdm.cef.log' = 'tdm.cef.log',
+  /** Fires when cef should add debug message */
+  'tdm.cef.debug' = 'tdm.cef.debug',
+  /** Fires when cef should show debug window */
+  'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
@@ -128,6 +134,10 @@ export const enum Events {
   'tdm.spectate.start' = 'tdm.spectate.start',
   /** Fires when player stop spectating */
   'tdm.spectate.stop' = 'tdm.spectate.stop',
+  /** Fires when cef/client recieves text */
+  'tdm.notify.text' = 'tdm.notify.text',
+  /** Fires when client stops notify text */
+  'tdm.notify.stop' = 'tdm.notify.stop',
 }
 
 export const enum Procs {
@@ -137,6 +147,8 @@ export const enum Procs {
   'tdm.config.get' = 'tdm.config.get',
   /** Returns language by id */
   'tdm.language.get' = 'tdm.language.get',
-  /** Moves player positino while spectating */
+  /** Moves player position while spectating */
   'tdm.spectate.move' = 'tdm.spectate.move',
+  /** Returns player position while spectating */
+  'tdm.spectate.get' = 'tdm.spectate.get',
 }

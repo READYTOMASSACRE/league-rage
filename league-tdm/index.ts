@@ -15,6 +15,8 @@ import { Events } from '../league-core/src/types'
 import ConfigService from './src/ConfigService'
 import DummyService from './src/DummyService'
 import DebugService from './src/DebugService'
+import SpectateService from './src/SpectateService'
+import TaskManager from './src/TaskManager'
 
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
@@ -27,15 +29,18 @@ const main = async () => {
   const roundService = new RoundService(config.round, playerService, teamService, dummyService, language)
   const voteService = new VoteService(config.vote, language)
   const weaponService = new WeaponService(config.weapon, playerService, roundService, language)
-  const broadcastService = new BroadcastService(playerService, teamService, language)
-  const tdmService = new TdmService(
+
+  new BroadcastService(config.vote, playerService, teamService, language)
+  new SpectateService(playerService, roundService, language)
+  new TdmService(
     roundService, permissionService, playerService,
     voteService, weaponService, language
   )
-
   new DebugService(playerService, dummyService)
 
   Arena.load(language)
+
+  TaskManager.start()
 
   mp.events.call(Events['tdm.start'])
 }

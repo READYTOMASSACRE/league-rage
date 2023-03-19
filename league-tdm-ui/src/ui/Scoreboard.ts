@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { Events, scoreboard } from "../../../league-core/src/types";
 import { Entity, TeamConfig } from "../../../league-core/src/types/tdm";
 import DummyService from "../DummyService";
@@ -29,19 +29,19 @@ export default class Scoreboard {
     this.uiService.cef.call(Events['tdm.scoreboard.toggle'], this.visible)
 
     if (this.visible) {
-      this.uiService.cef.call(Events["tdm.scoreboard.data"], this.getData())
+      this.uiService.cef.call(Events["tdm.scoreboard.data"], this.data)
     }
   }
 
-  private getData(): scoreboard.Data {
+  private get data(): scoreboard.Data {
     return {
-      players: this.getPlayersData(),
-      teams: this.getTeamsData(),
+      players: this.playersData,
+      teams: this.teamsData,
       arena: this.dummyService.get(Entity.ROUND, 'arena')
     }
   }
 
-  private getPlayersData(): scoreboard.Player[] {
+  private get playersData(): scoreboard.Player[] {
     return mp.players.toArray().map(player => ({
       id: player.remoteId,
       name: player.name,
@@ -49,14 +49,14 @@ export default class Scoreboard {
       kills: 0,
       death: 0,
       assists: 0,
-      ping: player.ping,
+      ping: player.ping, // todo fetch from server
       role: this.playerService.getVariable(player, 'team'),
       team: this.playerService.getVariable(player, 'team'),
       lvl: 0
     }))
   }
 
-  private getTeamsData(): scoreboard.Team[] {
+  private get teamsData(): scoreboard.Team[] {
     return Object.entries(this.config).map(([team, config], index) => ({
       id: index,
       name: config.name,

@@ -13,13 +13,6 @@ import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 
-const data = [{title: 'safsadfsdjdalda'},{title: 'sajdadsafdslda'},{title: 'sajdgsdgalda'},{title: 'sajdasdggsdglda'},
-{title: 'sajssdgsgdalda'},{title: 'sajdafasdelda'},{title: 'sajdagfhdfvlda'},{title: 'sajxzczxcdalda'},
-{title: 'sajdxzcsdfsdvalda'},{title: 'saxzcqawsfdsgjdalda'},{title: 'sajdalgrffcwda'},{title: 'sajdalascxacvdsafda'},{title: 'sajddasfasdalda'},
-{title: 'sajdasfvdalda'},{title: 'sajdalfdgfweda'},{title: 'sajdaasdwqregglda'},{title: 'saasddsadajdaasczlda'},
-{title: 'sajddasdasdfsdfalda'},{title: 'sasdafdsgsdgsdjdalda'},{title: 'sajdgdsafqddalda'},{title: 'sajdaldwqasdcasa'},{title: 'sajdadsadsafaslda'},
-{title: 'sajdaqwerwelda'},{title: 'sajdvdsvsdvsalda'},{title: 'sajdscsacscvsalda'},]
-
 const Scoreboard: FC = () => {
 
   const [active, setActive] = useState(false)
@@ -27,7 +20,6 @@ const Scoreboard: FC = () => {
 
   const [players, setPlayers] = useState<scoreboard.Player[]>([])
   const [teams, setTeams] = useState<scoreboard.Team[]>([])
-  const [arena, setArena] = useState('')
 
   const scoreboardRef = useRef<HTMLDivElement>(null)
 
@@ -35,7 +27,7 @@ const Scoreboard: FC = () => {
     RageAPI.subscribe(Events['tdm.scoreboard.toggle'], 'scoreboard', (a: boolean) => setActive(a))
     RageAPI.subscribe(Events['tdm.scoreboard.data'], 'scoreboard', (data: string) => {
       try {
-        const { players, teams, arena = '' } = JSON.parse(data)
+        const { players, teams } = JSON.parse(data)
 
         if (typeof players !== 'undefined' && Array.isArray(players)) {
           setPlayers(players)
@@ -43,9 +35,6 @@ const Scoreboard: FC = () => {
         if (typeof teams !== 'undefined' && Array.isArray(teams)) {
           setTeams(teams)
         }
-
-        setArena(arena)
-
       } catch (err) {
         cefLog(err)
       }
@@ -85,7 +74,7 @@ const Scoreboard: FC = () => {
 
   return (
     <div ref={scoreboardRef} className={cl(s.scoreboard)}>
-      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam} arena={arena}/>
+      <HeaderScoreboard attackTeam={attackTeam} defenseTeam={defenseTeam}/>
       <TeamItem side={'left'}>
         <TeamBar changeSort={changeSort} color={attackTeam?.color} />
         <ListOfPlayers>
@@ -96,9 +85,6 @@ const Scoreboard: FC = () => {
               currentPlayer={currentPlayer?.id === player.id ? true : false} position={index + 1}
             />
           )}
-          {
-            data.map(el => <div key={el.title} style={{background: "rgba(255,255,0,0.3)", height: "30px", borderBottom: "1px solid #d8c451"}}>{el.title}</div>)
-          }
         </ListOfPlayers>
       </TeamItem>
       <TeamItem side={'right'}>

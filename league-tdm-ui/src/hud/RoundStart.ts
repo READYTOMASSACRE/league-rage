@@ -1,4 +1,3 @@
-import { logClient } from "../../../league-core/client"
 import { deepclone } from "../../../league-core/src/helpers"
 import { hud } from "../../../league-core/src/types"
 import Hud from "./Hud"
@@ -18,7 +17,6 @@ class RoundStart extends Hud implements hud.RoundStartConfig {
     this.camera = mp.cameras.new(RoundStart.cameraName)
   }
 
-  @logClient
   draw(code: string, vector: Vector3) {
     this.setCamera(true, vector)
     this.textElement.text = `Arena ${code} is starting`
@@ -38,36 +36,26 @@ class RoundStart extends Hud implements hud.RoundStartConfig {
 
   render() {
     try {
-      this.moveCamera()
+      const {x, y, z} = this.vector
+
+      const rad = this.angle.current * Math.PI / 180
+      const offsetX = this.radius.current * Math.cos(rad)
+      const offsetY = this.radius.current * Math.sin(rad)
   
-      mp.game.graphics.drawText(
-        this.textElement.text,
-        this.textElement.position,
-        this.textElement.style
-      )
+      this.angle.current += this.angle.step
+  
+      if (!this.radius.max || this.radius.max > this.radius.current) {
+        this.radius.current += this.radius.step
+      }
+  
+      if (!this.zOffset.max || this.zOffset.max > this.zOffset.current) {
+        this.zOffset.current += this.zOffset.step
+      }
+  
+      this.camera.setCoord(x + offsetX, y + offsetY, z + this.zOffset.current)
     } catch (err) {
       this.destroy(err)
     }
-  }
-
-  private moveCamera() {
-    const {x, y, z} = this.vector
-
-    const rad = this.angle.current * Math.PI / 180
-    const offsetX = this.radius.current * Math.cos(rad)
-    const offsetY = this.radius.current * Math.sin(rad)
-
-    this.angle.current += this.angle.step
-
-    if (!this.radius.max || this.radius.max > this.radius.current) {
-      this.radius.current += this.radius.step
-    }
-
-    if (!this.zOffset.max || this.zOffset.max > this.zOffset.current) {
-      this.zOffset.current += this.zOffset.step
-    }
-
-    this.camera.setCoord(x + offsetX, y + offsetY, z + this.zOffset.current)
   }
 
   private setCamera(toggle: boolean, vector?: Vector3) {

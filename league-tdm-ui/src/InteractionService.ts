@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../league-core/client";
+import { event, eventable } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
 import DummyService from "./DummyService";
 import Spectate from "./interactions/Spectate";
@@ -26,20 +26,17 @@ export default class InteractionService {
     this.spectate = new Spectate(dummyService, keybindService, playerService)
   }
 
-  @logClient
   @event(Events["tdm.team.select"])
   teamSelect() {
     this.teamSelector.run()
   }
 
-  @logClient
   @event(Events["tdm.spectate.start"])
   startSpectate(player: number) {
     this.spectate.run(player)
   }
 
-  @logClient
-  @event(Events["tdm.spectate.stop"])
+  @event([Events["tdm.spectate.stop"], Events["tdm.round.end"]])
   stopSpectate() {
     this.spectate.stop()
   }

@@ -1,5 +1,7 @@
 import { Events, IConfig, Procs } from "../league-core/src/types"
+import './src/helpers/console'
 import { Language } from '../league-lang/language'
+import DebugService from "./src/DebugService"
 import DummyService from "./src/DummyService"
 import HudService from "./src/HudService"
 import InteractionService from "./src/InteractionService"
@@ -19,7 +21,7 @@ const main = async () => {
     const dummyService = new DummyService()
     const playerService = new PlayerService()
     const zoneService = new ZoneService(playerService)
-    const roundService = new RoundService(zoneService)
+    const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
     const keybindService = new KeybindService()
 
     new UIService(
@@ -28,14 +30,16 @@ const main = async () => {
       keybindService,
       playerService,
       dummyService,
+      roundService,
       language
     )
 
     new WeaponService(playerService)
     new HudService(config, roundService, playerService)
     new InteractionService(config, playerService, dummyService, keybindService)
-  
-    mp.console.logInfo('league-tdm-ui package initialized')
+    new DebugService(playerService)
+
+    mp.console.log('league-tdm-ui package initialized')
   
     mp.events.call(Events["tdm.player.ready"])
     mp.events.callRemote(Events["tdm.player.ready"])

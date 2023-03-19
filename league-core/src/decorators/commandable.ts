@@ -177,7 +177,8 @@ const printCommand = ({constructor, method, group, name}: {
       constructor.green+'.'+method.magenta.underline+'::()'
     )
   } else {
-    (mp as any).console.logInfo(`[COMMANDS /${group && group || ''}${name}] ${constructor}.${method}::()`)
+    const log = typeof (mp as any).console.log === 'function' ? (mp as any).console.log : (mp as any).console.logInfo
+    log(`[COMMANDS /${group ? group + ' ' : ''}${name}] ${constructor}.${method}::()`)
   }
 }
 

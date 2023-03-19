@@ -85,4 +85,5 @@ export const key: Record<string, number> = {
   w: 0x57,
   tab: 0x09,
   return: 0x0D,
+  vk_f9: 0x78,
 }

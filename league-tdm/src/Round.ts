@@ -10,7 +10,6 @@ interface RoundConfig {
   players: number[]
   prepareSeconds: number
   roundSeconds: number
-  weaponSeconds: number
   aliveWatcher: boolean
 }
 
@@ -28,13 +27,11 @@ export default class Round {
   ) {
     this.time = helpers.toMs(this.config.roundSeconds)
     this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
-    this.weaponTimer = setTimeout(() => this.players.forEach((p) => (
-      this.playerService.setWeaponState(p, WeaponState.has)
-    )), helpers.toMs(this.config.weaponSeconds))
     this.state = RoundState.prepare
-    
+
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
-    mp.events.call(Events["tdm.round.prepare"], this.arena.id)
+    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.players)
+    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.players])
   }
 
   @log
@@ -50,6 +47,7 @@ export default class Round {
 
     if (this.shouldRunning) {
       this.watch()
+      mp.players.call(Events["tdm.round.start"], [this.arena.id, this.players])
       mp.events.call(Events["tdm.round.start"], this.arena.id, this.players)
     } else {
       this.end()
@@ -67,13 +65,13 @@ export default class Round {
     this.state = RoundState.stopped
     this.time = 0
     this.dummyService.set(Entity.ROUND, 'arena', '')
-
     this.players.forEach(id => this.removePlayer(id))
 
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
     clearTimeout(this.weaponTimer)
 
+    mp.players.call(Events["tdm.round.end"], [this.arena.id, result])
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
@@ -87,6 +85,7 @@ export default class Round {
 
     this.players.push(id)
 
+    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
     mp.events.call(Events["tdm.round.add"], id, manual)
   }
 
@@ -100,6 +99,7 @@ export default class Round {
     this.playerService.setState(id, State.idle)
     this.playerService.spawnLobby(id)
 
+    this.playerService.call([id], Events["tdm.round.remove"], id, manual, this.arena.id)
     mp.events.call(Events["tdm.round.remove"], id, manual)
   }
 

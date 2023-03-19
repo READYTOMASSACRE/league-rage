@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client"
-import { Events, Procs } from "../../../league-core/src/types"
+import { Procs } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
@@ -14,7 +14,6 @@ export default class Spectate {
 
   private running: boolean = false
   private readonly setPlayerGamecam = '0x8BBACBF51DA047A8'
-  private spectateCamera: CameraMp
   private gameplayCamera: CameraMp
   private streamingPlayer: PlayerMp = mp.players.local
   private streamingVector: Vector3 = mp.players.local.position
@@ -30,8 +29,6 @@ export default class Spectate {
     this.keybindService.unbind(key.d, true, Spectate.key)
     this.keybindService.bind(key.a, true, this.turn('left'), Spectate.key)
     this.keybindService.bind(key.d, true, this.turn('right'), Spectate.key)
-
-    this.spectateCamera = mp.cameras.new(Spectate.key)
     this.gameplayCamera = mp.cameras.new('gameplay')
   }
 
@@ -43,10 +40,11 @@ export default class Spectate {
 
       const player = mp.players.atRemoteId(remoteId)
 
-      if (mp.players.exists(player)) {
-        this.streamingPlayer = player
+      if (!mp.players.exists(player)) {
+        return
       }
-  
+
+      this.streamingPlayer = player
       this.toggle(true)
       this.running = true
     } catch (err) {
@@ -62,7 +60,7 @@ export default class Spectate {
       console.error(err.stack)
     } finally {
       this.running = false
-      mp.events.callRemote(Events["tdm.spectate.stop"])
+      this.prepared = false
     }
   }
 
@@ -71,12 +69,9 @@ export default class Spectate {
     this.playerService.setAlpha(t ? 0 : 255)
     mp.game.ui.displayRadar(!t)
     mp.game.ui.displayHud(!t)
-    mp.game.cam.renderScriptCams(t, false, 0, true, false, 0)
 
     if (!t) {
       this.gameplayCamera.setActive(false)
-      this.spectateCamera.setActive(false)
-
       mp.players.forEach(player => {
         this.playerService.setInvicible(false, player)
         this.playerService.setAlpha(255, player)
@@ -133,7 +128,7 @@ export default class Spectate {
         if (!this.running) {
           return
         }
-  
+
         if (entity.handle === this.streamingPlayer.handle) {
           this.prepare()
         }
@@ -150,23 +145,19 @@ export default class Spectate {
   }
 
   private async prepare() {
-    if (!this.prepared) {
+    if (this.prepared) {
       return
     }
 
     if (!this.streamingPlayerInStream) {
-      const vector = this.playerService.getPosition(this.streamingPlayer)
-      const dimension = this.playerService.getDimension(this.streamingPlayer)
+      const [x, y, z, dimension] = await this.playerService.getPositionProc(this.streamingPlayer)
+      const vector = new mp.Vector3(x, y, z)
 
       if (!vector || typeof dimension === 'undefined') {
         return this.stop()
       }
 
       this.gameplayCamera.setActive(false)
-      this.spectateCamera.setActive(true)
-      this.spectateCamera.setCoord(vector.x + 2, vector.y + 2, vector.z + 10)
-      this.spectateCamera.pointAtCoord(vector.x, vector.y, vector.z)
-
       const moved = await mp.events.callRemoteProc(Procs["tdm.spectate.move"], vector.x, vector.y, vector.z, dimension)
 
       if (!moved) {
@@ -175,15 +166,11 @@ export default class Spectate {
 
       this.streamingPlayer.forceStreamingUpdate()
       this.streamingVector = vector
-
+      
       return
     }
 
-    this.setGamecam()
-    this.spectateCamera.stopPointing()
-    this.spectateCamera.setActive(false)
     this.gameplayCamera.setActive(true)
-
     this.prepared = true
   }
 
@@ -207,10 +194,6 @@ export default class Spectate {
         
         const [next, last] = side[direction]
         const nextCurrent = typeof players[next] !== 'undefined' ? next : last
-
-        if (nextCurrent === this.current) {
-          return
-        }
 
         this.current = nextCurrent
         this.streamingPlayer = players[this.current]

@@ -46,14 +46,13 @@ export type TeamConfig = {
 export type RoundConfig = {
   prepare: number
   timeleft: number
-  weapon: number
   watcher: {
     alive: boolean
   }
 }
 
 export type VoteConfig = {
-  arena: 30
+  [Vote.arena]: number
 }
 
 export const enum Entity {
@@ -78,4 +77,9 @@ export type PlayerData = {
   weaponSlot: Record<string, string>
   health: number
   alive: boolean
+  spectate?: number
+}
+
+export enum Vote {
+  arena = 'arena'
 }

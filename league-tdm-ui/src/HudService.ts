@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../league-core/client";
+import { event, eventable } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
@@ -48,7 +48,6 @@ export default class HudService {
         this.roundStart = undefined
     }
 
-    @logClient
     @event(Events["tdm.player.damage"])
     playerDamage(recievedPlayer: number, sourcePlayer: number, weapon: string, damage: number, alive: boolean) {
         try {

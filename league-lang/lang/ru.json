@@ -20,6 +20,10 @@
 
   "error.player.not_found": "Player is not exists: :player",
   "error.player.not_in_round": "Not in round",
+  "error.player.in_round": "Игрок :player уже в раунде",
+  "error.player.name_too_long": "Длина имени не должна превышать :max символов",
+
+  "error.round.add.player_is_busy": "В данный момент игрока нельзя добавить в раунд",
 
   "error.vote.not_found_config": "Нет конфига для голосования :vote",
 
@@ -30,17 +34,21 @@
   "tdm.player.find_result": "Найдены следующие игроки: :players",
   "tdm.player.join": "Игрок :player присоединился к серверу",
   "tdm.player.quit": "Игрок :player отключился от сервера (:reason)",
+  "tdm.player.change_name": "Игрока :player сменил имя на :new",
 
   "tdm.round.arena_prepare": "Подготовка арены :arena",
+  "tdm.round.arena_prepare_timer": "Арена :arena запускается %ss",
   "tdm.round.arena_start": "Запущена арена :arena",
   "tdm.round.end": "Раунд завершен, результат: :result, арена :arena",
   "tdm.round.add": "Игрок :player был добавлен в раунд",
   "tdm.round.remove": "Игрок :player был удален из раунда",
   "tdm.round.start_empty": "Недостаточно игроков для запуска",
 
-  "tdm.round.vote": "[:vote] Игрок :player проголосовал за :key",
-  "tdm.round.vote_start": "[:vote] Запущено голосование игроком :player, :key",
-  "tdm.round.vote_end": "[:vote] Голосование завершено, результат: :result",
+  "tdm.vote.text": "[:vote] Голосование за :key %ss начато игроком :player",
+  "tdm.vote.end": "[:vote] Голосование завершено, результат: :result",
+  "tdm.vote.add": "[:vote] Игрок :player проголосовал за :key",
+  "tdm.vote.text_arena": "[:vote] Голосование за арену :key начато игроком :player",
+  "tdm.vote.text_arena_notify": "Голосование за арену :key %ss",
 
   "tdm.round.is_paused": "Раунд остановлен",
   "tdm.round.is_already_paused": "Раунд уже остановлен",
@@ -52,16 +60,21 @@
 
   "tdm.team.change": "Команда изменена на :team",
 
-  "cmd.start_arena": "Usage /{{cmdName}} <id> - start arena by id or code",
-  "cmd.stop_arena": "Usage /{{cmdName}} - stop arena",
-  "cmd.add_player": "Usage /{{cmdName}} <player> - add player to round",
-  "cmd.remove_player": "Usage /{{cmdName}} <player> - remove player from round",
-  "cmd.pause": "Usage /{{cmdName}} - pause round",
-  "cmd.unpause": "Usage /{{cmdName}} - unpause round",
-  "cmd.vote": "Usage //{{cmdName}} <id|code> vote for arena",
-  "cmd.spectate": "Usage //{{cmdName}} <id|name> to spectate for a player",
-  "cmd.weapon": "Usage //{{cmdName}} <id|list>",
-  "cmd.change_team": "Usage /{{cmdName}} <id|string> (optional) to change team. Example: /t att, /t, /t def",
+  "cmd.cmdlist": "Usage /cmdlist <page> (optional) <limit> (optional) - to paging through commands",
+  "cmd.start_arena": "Usage /a, /arena <id> - start arena by id or code",
+  "cmd.stop_arena": "Usage /s, /stop - stop arena",
+  "cmd.add_player": "Usage /add <player> - add player to round",
+  "cmd.remove_player": "Usage /remove <player> - remove player from round",
+  "cmd.pause": "Usage /pause - pause round",
+  "cmd.unpause": "Usage /unpause - unpause round",
+  "cmd.vote": "Usage /vote <id|code> vote for arena",
+  "cmd.spectate": "Usage /spec, /spectate <id|name> to spectate for a player",
+  "cmd.weapon": "Usage /w, /weapon <id|list>",
+  "cmd.change_team": "Usage /t, /team, /changeteam <id|string> (optional) to change team. Example: /t att, /t, /t def",
+  "cmd.change_name": "Usage /name <new_name> to change nick name",
+
+  "cmdlist.page": "Viewing :offset, page: :page, next: :next, last: :last",
+  "cmdlist.not_found": "Page doesnt exist",
 
   "controls.t": " - открыть чат",
   "controls.b": " - выбор оружия",

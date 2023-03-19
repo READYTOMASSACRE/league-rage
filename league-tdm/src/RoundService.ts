@@ -1,5 +1,5 @@
 import { event, eventable, log } from "../../league-core"
-import { RoundConfig } from "../../league-core/src/types/tdm"
+import { RoundConfig, State, Team } from "../../league-core/src/types/tdm"
 import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
 import DummyService from "./DummyService"
@@ -71,7 +71,6 @@ export default class RoundService {
       players,
       prepareSeconds: this.config.prepare,
       roundSeconds: this.config.timeleft,
-      weaponSeconds: this.config.weapon,
       aliveWatcher: this.config.watcher.alive,
     }, this.playerService, this.dummyService)
   }
@@ -95,6 +94,17 @@ export default class RoundService {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
     }
 
+    if (this.playerService.hasState(player, State.alive)) {
+      return player.outputChatBox(this.lang.get(Lang["error.player.in_round"], { player: player.name }))
+    }
+
+    if (
+      !this.playerService.hasState(player, [State.dead, State.idle, State.spectate]) ||
+      this.playerService.getTeam(player) === Team.spectators
+    ) {
+      return player.outputChatBox(this.lang.get(Lang["error.round.add.player_is_busy"]))
+    }
+
     return this.round.addPlayer(player.id, true)
   }
 
@@ -102,6 +112,10 @@ export default class RoundService {
   remove(player: PlayerMp) {
     if (!this.running || !this.round) {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+    }
+
+    if (!this.playerService.hasState(player, State.alive)) {
+      return player.outputChatBox(this.lang.get(Lang["error.player.not_in_round"], { player: player.name }))
     }
 
     return this.round.removePlayer(player.id, true)

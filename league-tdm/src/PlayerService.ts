@@ -69,6 +69,18 @@ export default class PlayerService {
     return this.getVariable(<PlayerMp>p, 'state')
   }
 
+  getWithState(state: tdm.State): PlayerMp[] {
+    const players: PlayerMp[] = []
+
+    mp.players.forEachFast(player => {
+      if (this.hasState(player, state) && mp.players.exists(player)) {
+        players.push(player)
+      }
+    })
+
+    return players
+  }
+
   @log
   @ensurePlayer
   setState(p: number | PlayerMp, state: tdm.State) {
@@ -80,8 +92,10 @@ export default class PlayerService {
 
   @log
   @ensurePlayer
-  hasState(p: number | PlayerMp, state: tdm.State) {
-    return this.getState(p) === state
+  hasState(p: number | PlayerMp, state: tdm.State | tdm.State[]) {
+    return Array.isArray(state) ?
+      state.includes(this.getState(p)) :
+      this.getState(p) === state
   }
 
   @log
@@ -105,6 +119,7 @@ export default class PlayerService {
     const player = <PlayerMp>p
 
     if (!slot) {
+      player.removeAllWeapons()
       this.setVariable(player, 'weaponSlot', {})
     } else {
       this.setVariable(player, 'weaponSlot', {
@@ -171,6 +186,11 @@ export default class PlayerService {
     player.model = model
 
     mp.players.call(Events["tdm.player.model"], [player.id, model])
+  }
+
+  @ensurePlayer
+  getSpectateId(p: number | PlayerMp) {
+    return this.getVariable(<PlayerMp>p, 'spectate')
   }
 
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(

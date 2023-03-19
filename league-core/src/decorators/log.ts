@@ -20,7 +20,7 @@ export const log = function (target: Object, key: string, descriptor: TypedPrope
 
       response.then(value => {
         console.log(
-          format(later, 'HH:mm:ss').green + ' [ASYNC DONE] '.magenta +
+          format(later, 'HH:mm:ss').green + '   --> [ASYNC DONE] '.magenta +
           target.constructor.name.green + '.' + key.underline.magenta +
           `->(${decorate(value)})`.blue + 
           ` ${later - now} ms`
@@ -31,7 +31,7 @@ export const log = function (target: Object, key: string, descriptor: TypedPrope
     } else {
       const later = Date.now()
       console.log(
-        format(later, 'HH:mm:ss').green + ' [DONE] '.magenta +
+        format(later, 'HH:mm:ss').green + '   --> [DONE] '.magenta +
         target.constructor.name.green + '.' + key.underline.magenta +
         `->(${decorate(response)})`.blue +
         ` ${later - now} ms`

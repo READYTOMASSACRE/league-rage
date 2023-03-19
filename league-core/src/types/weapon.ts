@@ -13,6 +13,7 @@ export interface Config {
   friendlyfire: boolean
   slot: Record<string, Category[]>
   category: Record<Category, string[]>
+  selectTime: number
   damage: {
     weapon: Record<string, number>
     category: Partial<Record<Category, number>>
