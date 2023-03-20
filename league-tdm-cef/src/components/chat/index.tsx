@@ -10,7 +10,7 @@ import cefLog from '../../helpers/cefLog'
 const MAX_CHAT_SIZE = 50
 const MAX_CHAR_SIZE = 128
 const FORCE_CHAT_TOGGLE = true
-const MAX_CHAT_ALIVE = 10000
+const MAX_CHAT_ALIVE = 15000
 
 const Chat = () => {
     const [input, setInput] = useState('')
