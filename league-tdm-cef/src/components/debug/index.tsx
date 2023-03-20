@@ -50,9 +50,7 @@ export default () => {
     
             prev = [...prev, ...next]
             
-            if (prev.length > MAX_DEBUG_SIZE) {
-              prev = prev.slice(Math.abs(MAX_DEBUG_SIZE - messages.length))
-            }
+            if (prev.length > MAX_DEBUG_SIZE) prev.shift()
     
             return prev
           } catch (err) {

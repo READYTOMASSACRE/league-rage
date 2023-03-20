@@ -27,3 +27,7 @@ export type Control = {
   key: string
   description: string
 }
+
+export type ChatPart = [string, string]
+export type ChatMessage = ChatPart[]
+export type ChatItem = { message: ChatPart[] }
