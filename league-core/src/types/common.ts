@@ -110,6 +110,8 @@ export const enum Events {
   'tdm.player.incoming_damage' = 'tdm.player.incoming_damage',
   /** Fires from server when player gives damage to another player */
   'tdm.player.damage' = 'tdm.player.damage',
+  /** Fires from server when player kills another player */
+  'tdm.player.kill' = 'tdm.player.kill',
   /** Fires when player changed model */
   'tdm.player.model' = 'tdm.player.model',
   /** Fires when player has changed name */
