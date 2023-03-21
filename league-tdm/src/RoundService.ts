@@ -99,7 +99,7 @@ export default class RoundService {
     }
 
     if (
-      !this.playerService.hasState(player, [State.dead, State.idle, State.spectate]) ||
+      !this.playerService.hasState(player, [State.dead, State.idle]) ||
       this.playerService.getTeam(player) === Team.spectators
     ) {
       return player.outputChatBox(this.lang.get(Lang["error.round.add.player_is_busy"]))
