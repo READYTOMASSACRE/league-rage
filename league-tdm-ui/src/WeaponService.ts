@@ -7,7 +7,7 @@ import weapons from "./weapons";
 @eventable
 export default class WeaponService {
   static isPedArmed = '0x475768A975D5AD17'
-  static expectFists = 7
+  static exceptFists = 7
 
   private throttledIncomingUpdate: Function
   private damage: number = 0
@@ -28,7 +28,7 @@ export default class WeaponService {
       mp.game.player.setHealthRechargeMultiplier(0.0);
 		  mp.game.player.restoreStamina(100)
 
-      if (mp.game.invoke(WeaponService.isPedArmed, this.playerService.local.handle, WeaponService.expectFists)) {
+      if (mp.game.invoke(WeaponService.isPedArmed, this.playerService.local.handle, WeaponService.exceptFists)) {
         mp.game.controls.disableControlAction(0, 140, true)
         mp.game.controls.disableControlAction(0, 141, true)
         mp.game.controls.disableControlAction(0, 142, true)

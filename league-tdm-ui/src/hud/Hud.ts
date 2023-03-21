@@ -3,6 +3,8 @@ import { IHud } from "../../../league-core/src/types/hud"
 
 abstract class Hud implements IHud {
   public alive: number
+  public avoidRender?: boolean
+
   private callback: () => void
   private timeout: number
   private destroyed: boolean = false
@@ -10,8 +12,9 @@ abstract class Hud implements IHud {
 
   abstract render(...args: any[]): void
 
-  constructor({ alive }: IHud) {
+  constructor({ alive, avoidRender = false }: IHud) {
     this.alive = alive
+    this.avoidRender = avoidRender
     this.callback = (...args: any[]) => {
       try {
         this.render(...args)
@@ -19,6 +22,8 @@ abstract class Hud implements IHud {
         this.destroy(err)
       }
     }
+
+    if (this.avoidRender) this.draw()
   }
 
   draw(..._: any[]) {
@@ -36,7 +41,10 @@ abstract class Hud implements IHud {
       this.timeout = setTimeout(() => this.destroy(), toMs(this.alive))
     }
 
-    mp.events.add('render', this.callback)
+    if (!this.avoidRender) {
+      mp.events.add('render', this.callback)
+    }
+
     this.rendered = true
   }
 

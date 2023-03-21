@@ -1,5 +1,6 @@
-import { event, eventable } from "../../league-core/client";
+import { event, eventable, logClient } from "../../league-core/client";
 import { Events, IConfig } from "../../league-core/src/types";
+import console from "./helpers/console";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";
@@ -10,8 +11,8 @@ import Zone from "./Zone";
 @eventable
 export default class HudService {
     private roundStart?: RoundStart
-    private damageIn?: Damage
-    private damageOut?: Damage
+    private incomeDamage?: Damage
+    private outcomeDamage?: Damage
     private nametag?: Nametag
 
     constructor(
@@ -49,66 +50,61 @@ export default class HudService {
     }
 
     @event(Events["tdm.player.damage"])
-    playerDamage(recievedPlayer: number, sourcePlayer: number, weapon: string, damage: number, alive: boolean) {
+    playerDamage(victimId: number, killerId: number, weapon: string, damage: number, alive: boolean) {
         try {
-            const source = mp.players.atRemoteId(sourcePlayer)
-            const recieved = mp.players.atRemoteId(recievedPlayer)
+            const victim = mp.players.atRemoteId(victimId)
+            const killer = mp.players.atRemoteId(killerId)
     
-            if (!mp.players.exists(source) || !mp.players.exists(recieved)) {
+            if (!mp.players.exists(victim) || !mp.players.exists(killer)) {
                 return false
             }
 
-            if (recievedPlayer === mp.players.local.remoteId) {
-                if (!this.damageIn || this.damageIn.isDestroyed) {
-                    this.damageIn = this.getDamageComponent({
-                        source, recieved, damageIn: true,
+            if (victimId === mp.players.local.remoteId) {
+                if (!this.incomeDamage || this.incomeDamage.isDestroyed) {
+                    this.incomeDamage = this.getDamageComponent({
+                        killer, victim, direction: 'income',
                         weapon, damage: 0, alive
                     })
-    
-                    this.damageIn.draw()
                 }
 
-                if (this.damageIn) {
-                    this.damageIn.damage += damage
-                    this.damageIn.refreshAlive()
+                if (this.incomeDamage) {
+                    this.incomeDamage.damage += damage
+                    this.incomeDamage.refreshAlive()
                 }
             } else {
-                if (!this.damageOut || this.damageOut.isDestroyed) {
-                    this.damageOut = this.getDamageComponent({
-                        source, recieved, damageIn: false,
+                if (!this.outcomeDamage || this.outcomeDamage.isDestroyed) {
+                    this.outcomeDamage = this.getDamageComponent({
+                        killer, victim, direction: 'outcome',
                         weapon, damage: 0, alive
                     })
-    
-                    this.damageOut.draw()
                 }
-
-                if (this.damageOut) {
-                    this.damageOut.damage += damage
-                    this.damageOut.refreshAlive()
+    
+                if (this.outcomeDamage) {
+                    this.outcomeDamage.damage += damage
+                    this.outcomeDamage.refreshAlive()
                 }
             }
-
         } catch (err) {
             mp.console.logError(err.stack)
         }
     }
 
     private getDamageComponent({
-        source, recieved, damage, weapon, alive, damageIn
-    }: { source: PlayerMp, recieved: PlayerMp, damageIn: boolean
+        killer, victim, damage, weapon, alive, direction
+    }: { killer: PlayerMp, victim: PlayerMp, direction: 'income' | 'outcome'
         damage: number, weapon: string, alive: boolean
     }): Damage {
 
-        const vectorSource = source.position
-        const vectorTarget = recieved.position
+        const killerVector = killer.position
+        const victimVector = victim.position
 
         return new Damage(this.config.hud.damage, {
-            in: damageIn,
+            in: direction === 'income',
             weapon,
             damage,
             distance: +(mp.game.system.vdist(
-                vectorSource.x, vectorSource.y, vectorSource.z,
-                vectorTarget.x, vectorTarget.y, vectorTarget.z,
+                killerVector.x, killerVector.y, killerVector.z,
+                victimVector.x, victimVector.y, victimVector.z,
             )).toFixed(2),
         })
     }

@@ -2,9 +2,10 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import { nanoid } from 'nanoid'
 import * as s from './DeathLog.module.sass'
 import DeathLogItem from './DeathLogItem'
-import { deathlog } from '../../../../league-core/src/types'
+import { deathlog, Events } from '../../../../league-core/src/types'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-
+import RageAPI from '../../helpers/RageAPI'
+import cefLog from '../../helpers/cefLog'
 
 const ALIVE = 3000
 
@@ -13,8 +14,14 @@ const DeathLog: FC = ({ }) => {
   const [log, setLog] = useState<deathlog.DeathLogData[]>([])
 
   useEffect(() => {
-
-    // setLog(prev => [{ deathlog: data, alive: Date.now(), id: nanoid(10)}, ...prev])
+    RageAPI.subscribe(Events['tdm.player.kill'], 'deathlog', (data: string) => {
+      try {
+        const deathlog = JSON.parse(data)
+        setLog(prev => [{ deathlog, alive: Date.now(), id: nanoid(10)}, ...prev])
+      } catch (err) {
+        cefLog(err)
+      }
+    })
 
     const interval = setInterval(() => {
       setLog(prev => [...prev.filter(item => Date.now() - item.alive < ALIVE)])
@@ -22,6 +29,7 @@ const DeathLog: FC = ({ }) => {
 
     return () => {
       clearInterval(interval)
+      RageAPI.unsubscribe(Events['tdm.player.kill'], 'deathlog')
     }
   }, [])
 

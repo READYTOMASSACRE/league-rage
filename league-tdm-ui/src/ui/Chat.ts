@@ -1,5 +1,6 @@
 import { event, eventable } from "../../../league-core/client";
 import { Enviroment, Events } from "../../../league-core/src/types";
+import { ChatItem } from "../../../league-core/src/types/cef";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
 
@@ -19,10 +20,14 @@ export default class Chat {
   }
 
   @event(Events["tdm.chat.push"])
-  push(msg: string, from?: Enviroment) {
+  push(msg: string | ChatItem, from?: Enviroment) {
     if (from === Enviroment.cef) {
       mp.events.callRemote(Events["tdm.chat.push"], msg)
     } else if (from === Enviroment.server) {
+      if (typeof msg === 'string') {
+        msg = { message: [[msg, '#fff']]}
+      }
+
       this.uiService.cef.call(Events["tdm.chat.push"], msg)
     }
   }

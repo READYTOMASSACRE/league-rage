@@ -7,6 +7,7 @@ import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
+import Deathlog from "./ui/Deathlog";
 import Debug from "./ui/Debug";
 import Infopanel from "./ui/Infopanel";
 import NotifyText from "./ui/Notifytext";
@@ -26,6 +27,7 @@ export default class UIService {
   public infoPanel: Infopanel
   public controls: Controls
   public notifyText: NotifyText
+  public deathlog: Deathlog
 
   constructor(
     readonly url: string,
@@ -50,6 +52,7 @@ export default class UIService {
     this.infoPanel = new Infopanel(config.team, this, this.dummyService)
     this.controls = new Controls(this, lang)
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
+    this.deathlog = new Deathlog(config.team, this, playerService)
 
     this.disableControlActions()
   }

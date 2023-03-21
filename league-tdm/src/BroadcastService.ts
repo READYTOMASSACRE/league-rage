@@ -1,6 +1,7 @@
 import { event, eventable, log } from "../../league-core";
-import { Enviroment, Events, tdm } from "../../league-core/src/types";
-import { Vote, VoteConfig } from "../../league-core/src/types/tdm";
+import { Enviroment, Events, IConfig, tdm } from "../../league-core/src/types";
+import { ChatItem } from "../../league-core/src/types/cef";
+import { Vote } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import Arena from "./Arena";
 import PlayerService from "./PlayerService";
@@ -12,7 +13,7 @@ export default class BroadcastService {
   private defaultNotifyAlive = 5
 
   constructor(
-    readonly config: VoteConfig,
+    readonly config: IConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly lang: ILanguage,
@@ -67,7 +68,7 @@ export default class BroadcastService {
   @event(Events["tdm.vote"])
   tdmVote(vote: Vote, id: number, key: string) {
     const player = this.playerService.getById(id)
-    const alive = this.config[vote] || this.defaultNotifyAlive
+    const alive = this.config.vote[vote] || this.defaultNotifyAlive
     const replacements = { vote, player: player?.name, key }
     const message = this.getMessage(vote, Lang["tdm.vote.add"], replacements)
 
@@ -95,7 +96,7 @@ export default class BroadcastService {
       this.arenas = [key]
     }
 
-    const alive = this.config[vote] || this.defaultNotifyAlive
+    const alive = this.config.vote[vote] || this.defaultNotifyAlive
     const replacements = { vote, player: player?.name, key }
     const message = this.getMessage(vote, Lang["tdm.vote.text"], replacements)
 
@@ -130,12 +131,21 @@ export default class BroadcastService {
       return
     }
 
-    return this.broadcast(`${player.name} [${player.id}]: ${message}`)
+    const team = this.playerService.getTeam(player)
+
+    return this.broadcast({
+      message: [
+        [`${player.name} [${player.id}]:`, this.config.team[team].color],
+        [message, '#fff'],
+      ]
+    })
   }
 
   @log
-  broadcast(message: string) {
+  broadcast(message: string | ChatItem) {
     mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+
+    return message
   }
 
   @log

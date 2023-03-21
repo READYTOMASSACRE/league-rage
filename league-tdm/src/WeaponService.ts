@@ -136,6 +136,11 @@ export default class WeaponService {
       }
   
       mp.events.call(Events["tdm.player.damage"], player.id, source.id, weapon, damage)
+
+      if (newHealth <= 0) {
+        mp.events.call(Events["tdm.player.kill"], player.id, source.id, weapon)
+        mp.players.call(Events["tdm.player.kill"], [player.id, source.id, weapon])
+      }
   
       return [player.id, source.id, weapon, damage, newHealth, player.getVariable('health')]
     }

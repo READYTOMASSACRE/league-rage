@@ -30,7 +30,7 @@ const main = async () => {
   const voteService = new VoteService(config.vote, language)
   const weaponService = new WeaponService(config.weapon, playerService, roundService, language)
 
-  new BroadcastService(config.vote, playerService, teamService, language)
+  new BroadcastService(config, playerService, teamService, language)
   new SpectateService(playerService, roundService, language)
   new TdmService(
     roundService, permissionService, playerService,
