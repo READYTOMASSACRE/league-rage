@@ -22,12 +22,14 @@ export default () => {
   }, [])
 
   return (
-    <>{Array.isArray(items) && items.map(([text, template]) => {
-      return (
-        <span key={nanoid(10)} className={cls(styles.root, styles[template] || styles.default)}>
-          {text}
-        </span>
-      )
-    })}</>
+    <div className={styles.root}>
+      {Array.isArray(items) && items.map(([text, template]) => {
+        return (
+          <span key={nanoid(10)} className={cls(styles.item, styles[template] || styles.default)}>
+            {text}
+          </span>
+        )
+      })}
+    </div>
   )
 }

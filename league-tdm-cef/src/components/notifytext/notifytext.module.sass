@@ -2,22 +2,51 @@
 
 .root
   position: absolute
+  width: 100%
+  height: 100vh
+  overflow: hidden
+
+.item
+  position: absolute
   color: white
   display: flex
   font-size: 1.2em
   text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
-  width: 100%
-  height: 100vh
 
 .default
+  width: 100%
+  height: inherit
   align-items: center
   justify-content: center
 
 .top
+  width: 100%
   justify-content: center
   padding-top: 15vh
 
 .bottom
+  width: 100%
   justify-content: center
   align-items: end
+  bottom: 0
   padding-bottom: 15vh
+
+.damage_in
+  font-weight: 600
+  font-size: 0.8em
+  top: 48vh
+  left: 48vw
+  color: #f32828
+  align-items: center
+  justify-content: center
+  text-shadow: none
+
+.damage_out
+  font-weight: 600
+  font-size: 0.8em
+  top: 46vh
+  left: 48vw
+  color: greenyellow
+  align-items: center
+  justify-content: center
+  text-shadow: none

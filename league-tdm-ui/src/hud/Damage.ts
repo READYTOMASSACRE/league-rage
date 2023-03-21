@@ -1,4 +1,5 @@
 import { deepclone } from "../../../league-core/src/helpers";
+import { Events } from "../../../league-core/src/types";
 import { DamageConfig } from "../../../league-core/src/types/hud";
 import Hud from "./Hud";
 
@@ -22,7 +23,7 @@ class Damage extends Hud implements DamageConfig {
   private _damage: number
 
   constructor(config: DamageConfig, info: DamageInfo) {
-    super(config)
+    super({ avoidRender: true, ...config })
     Object.assign(this, deepclone(config))
 
     this.in = info.in
@@ -32,18 +33,15 @@ class Damage extends Hud implements DamageConfig {
   }
 
   render() {
-    try {
-      mp.game.graphics.drawText(
-        this.text,
-        this.in ? [0.55, 0.55] : [0.55, 0.5],
-        { ...this.textElement.style, color: this.in ? this.red : this.green})
-    } catch (err) {
-      this.destroy(err)
-    }
+    this.destroy()
   }
 
   get text() {
     return `${this.damage}hp / ${this.weapon} / ${this.distance}`
+  }
+
+  get component() {
+    return this.in ? 'damage_in' : 'damage_out'
   }
 
   get damage() {
@@ -51,8 +49,10 @@ class Damage extends Hud implements DamageConfig {
   }
 
   set damage(dmg: number) {
-    mp.game.audio.playSoundFrontend(-1, "TENNIS_MATCH_POINT", "HUD_AWARDS", true)
     this._damage = dmg
+    
+    mp.game.audio.playSoundFrontend(-1, "TENNIS_MATCH_POINT", "HUD_AWARDS", true)
+    mp.events.call(Events["tdm.notify.text"], this.text, this.alive, this.component, this.component)
   }
 }
 

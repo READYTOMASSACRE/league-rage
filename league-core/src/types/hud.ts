@@ -2,6 +2,7 @@ import { StepOffset, TextElement, TextStyle } from "./ui"
 
 export interface IHud {
   alive: number
+  avoidRender?: boolean
 }
 
 export interface RoundStartConfig extends IHud {
