@@ -57,6 +57,7 @@ export type VoteConfig = {
 
 export const enum Entity {
   ROUND,
+  TEAM,
 }
 
 export type RoundData = {
@@ -66,8 +67,15 @@ export type RoundData = {
   players: string
 }
 
+export type TeamData = {
+  score: number
+}
+
 export type Dummy = {
   [Entity.ROUND]: RoundData
+  [Entity.TEAM]: {
+    [key in Team]: TeamData
+  }
 }
 
 export type PlayerData = {

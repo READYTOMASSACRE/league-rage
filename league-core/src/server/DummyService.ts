@@ -1,4 +1,4 @@
-import { Dummy, Entity, RoundState } from "../types/tdm"
+import { Dummy, Entity, RoundState, Team } from "../types/tdm"
 
 export interface IDummyService {
   getOne(type: Entity): DummyMp | undefined
@@ -11,6 +11,7 @@ export interface IDummyService {
 export default new class DummyService implements IDummyService {
   readonly dummies: {
     [Entity.ROUND]: DummyMp
+    [Entity.TEAM]: DummyMp
   }
 
   constructor() {
@@ -20,6 +21,11 @@ export default new class DummyService implements IDummyService {
         state: RoundState.stopped,
         time: 0,
         players: '[]',
+      }),
+      [Entity.TEAM]: this.setDefault(Entity.TEAM, {
+        [Team.attackers]: { score: 0 },
+        [Team.defenders]: { score: 0 },
+        [Team.spectators]: { score: 0 },
       }),
     }
   }
