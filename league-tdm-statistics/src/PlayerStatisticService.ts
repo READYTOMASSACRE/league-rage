@@ -7,6 +7,18 @@ import PlayerService from './PlayerService'
 export default class PlayerStatisticService {
   constructor(readonly playerService: PlayerService) {}
 
+  @event("playerReady")
+  playerReady(player: PlayerMp) {
+    this.playerService.setVariable(player, 'statistic', {
+      kill: 0,
+      death: 0,
+      assists: 0,
+      damageDone: 0,
+      damageRecieved: 0,
+      hit: 0,
+    })
+  }
+
   @event(Events['tdm.player.kill'])
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
     this.setStat(killerId, 'kill', prev => prev + 1)
