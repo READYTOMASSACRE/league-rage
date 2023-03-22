@@ -57,6 +57,7 @@ export type VoteConfig = {
 
 export const enum Entity {
   ROUND,
+  ROUND_STAT,
   TEAM,
 }
 
@@ -67,15 +68,29 @@ export type RoundData = {
   players: string
 }
 
-export type TeamData = {
-  score: number
+export type TeamData = Record<Team, { score: number }>
+
+export type PlayerStat = {
+  kill: number
+  death: number
+  assists: number
+  damageDone: number
+  damageRecieved: number
+  hit: number
+}
+
+export type RoundStatData = {
+  result: Team | 'draw'
+  players: {
+    [Team.attackers]: Record<number, PlayerStat>
+    [Team.defenders]: Record<number, PlayerStat>
+  }
 }
 
 export type Dummy = {
   [Entity.ROUND]: RoundData
-  [Entity.TEAM]: {
-    [key in Team]: TeamData
-  }
+  [Entity.TEAM]: TeamData
+  [Entity.ROUND_STAT]: RoundStatData
 }
 
 export type PlayerData = {
@@ -86,6 +101,7 @@ export type PlayerData = {
   health: number
   alive: boolean
   spectate?: number
+  statistic: PlayerStat
 }
 
 export enum Vote {
