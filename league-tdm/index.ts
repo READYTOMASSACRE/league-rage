@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { Language } from '../league-lang/language'
+import DummyService from '../league-core/src/server/DummyService'
 import LanguageService from '../league-lang'
 import Arena from './src/Arena'
 import BroadcastService from './src/BroadcastService'
@@ -13,7 +14,6 @@ import WeaponService from './src/WeaponService'
 import { config } from '../league-core'
 import { Events } from '../league-core/src/types'
 import ConfigService from './src/ConfigService'
-import DummyService from './src/DummyService'
 import DebugService from './src/DebugService'
 import SpectateService from './src/SpectateService'
 import TaskManager from './src/TaskManager'
@@ -21,12 +21,11 @@ import TaskManager from './src/TaskManager'
 const main = async () => {
   const language = new Language(LanguageService.get(config.lang))
   new ConfigService(config)
-  
-  const dummyService = new DummyService()
+
   const playerService = new PlayerService(config)
   const permissionService = new PermissionService(language)
   const teamService = new TeamService(config.team, playerService, language)
-  const roundService = new RoundService(config.round, playerService, teamService, dummyService, language)
+  const roundService = new RoundService(config.round, playerService, teamService, DummyService, language)
   const voteService = new VoteService(config.vote, language)
   const weaponService = new WeaponService(config.weapon, playerService, roundService, language)
 
@@ -36,7 +35,7 @@ const main = async () => {
     roundService, permissionService, playerService,
     voteService, weaponService, language
   )
-  new DebugService(playerService, dummyService)
+  new DebugService(playerService, DummyService)
 
   Arena.load(language)
 

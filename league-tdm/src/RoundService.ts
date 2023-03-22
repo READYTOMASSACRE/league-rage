@@ -1,8 +1,8 @@
 import { event, eventable, log } from "../../league-core"
 import { RoundConfig, State, Team } from "../../league-core/src/types/tdm"
+import { IDummyService } from '../../league-core/src/server/DummyService'
 import { ILanguage, Lang } from "../../league-lang/language"
 import Arena from "./Arena"
-import DummyService from "./DummyService"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
@@ -14,7 +14,7 @@ export default class RoundService {
     readonly config: RoundConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
-    readonly dummyService: DummyService,
+    readonly dummyService: IDummyService,
     readonly lang: ILanguage,
   ) {}
 

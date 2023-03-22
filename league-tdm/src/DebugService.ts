@@ -1,7 +1,7 @@
 import { command, commandable, log } from "../../league-core";
 import { decorate } from "../../league-core/src/helpers";
+import { IDummyService } from "../../league-core/src/server/DummyService";
 import { Entity } from "../../league-core/src/types/tdm";
-import DummyService from "./DummyService";
 import PlayerService from "./PlayerService";
 import TaskManager from "./TaskManager";
 
@@ -9,7 +9,7 @@ import TaskManager from "./TaskManager";
 export default class DebugService {
   constructor(
     readonly playerService: PlayerService,
-    readonly dummyService: DummyService,
+    readonly dummyService: IDummyService,
   ) {}
 
   @command('health')

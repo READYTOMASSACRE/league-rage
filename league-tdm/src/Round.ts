@@ -1,8 +1,8 @@
 import { log, helpers } from "../../league-core"
+import { IDummyService } from "../../league-core/src/server/DummyService"
 import { Events } from "../../league-core/src/types"
 import { Entity, RoundState, State, Team, WeaponState } from "../../league-core/src/types/tdm"
 import Arena from "./Arena"
-import DummyService from "./DummyService"
 import PlayerService from "./PlayerService"
 
 interface RoundConfig {
@@ -23,7 +23,7 @@ export default class Round {
   constructor(
     readonly config: RoundConfig,
     readonly playerService: PlayerService,
-    readonly dummyService: DummyService,
+    readonly dummyService: IDummyService,
   ) {
     this.time = helpers.toMs(this.config.roundSeconds)
     this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
