@@ -1,4 +1,4 @@
 import { Profile } from "../../@types";
-import LowdbRepository from "./LowdbRepository";
+import MongodbRepository from "./MongodbRepository";
 
-export default class ProfileRepository extends LowdbRepository<Profile> {}
+export default class ProfileRepository extends MongodbRepository<Profile> {}

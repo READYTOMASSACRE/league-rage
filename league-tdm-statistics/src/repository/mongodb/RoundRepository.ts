@@ -1,4 +1,4 @@
 import { Round } from "../../@types";
-import LowdbRepository from "./LowdbRepository";
+import MongodbRepository from "./MongodbRepository";
 
-export default class RoundRepository extends LowdbRepository<Round> {}
+export default class RoundRepository extends MongodbRepository<Round> {}
