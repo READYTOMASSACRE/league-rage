@@ -1,0 +1,84 @@
+{
+  "error.permission.invalid": "Invalid permission :permission",
+
+  "error.arena.invalid_format": "Invalid arenas format",
+  "error.arena.not_found": "Arena :arena not found",
+  "error.arena.not_found_spawn": "Not found spawn points in arena :arena",
+
+  "error.team.not_found": "Команда :team не знайдена",
+  "error.team.player_is_busy": "В данный момент вы не можете изменить команду",
+  "error.team.player_not_in_lobby": "Вы не в лобби",
+
+  "error.vote.already_voted": "Вы уже проголосовали",
+
+  "error.weapon.weapon_not_found": "Choice is empty",
+  "error.weapon.not_configured": "Weapon choice is not in config",
+  "error.weapon.is_busy": "At this time weapon cant be equipped",
+  "error.weapon.category_not_found": "Категория для оружия :name не найдена",
+  "error.weapon.slot_not_found": "Слот для :category не найден",
+  "error.weapon.slot_is_busy": "Слот :slot занят оружием :weapon",
+
+  "error.player.not_found": "Player is not exists: :player",
+  "error.player.not_in_round": "Not in round",
+  "error.player.in_round": "Игрок :player уже в раунде",
+  "error.player.name_too_long": "Длина имени не должна превышать :max символов",
+
+  "error.round.add.player_is_busy": "В данный момент игрока нельзя добавить в раунд",
+
+  "error.vote.not_found_config": "Нет конфига для голосования :vote",
+
+  "error.spectate.not_same_team": "Можно наблюдать только за игроками своей команды",
+  "error.spectate.same_player": "Вы не можете наблюдать за собой",
+  "error.spectate.player_is_busy": "Вы должны быть мертвы, либо не в раунде для наблюдения",
+
+  "tdm.player.find_result": "Найдены следующие игроки: :players",
+  "tdm.player.join": "Игрок :player присоединился к серверу",
+  "tdm.player.quit": "Игрок :player отключился от сервера (:reason)",
+  "tdm.player.change_name": "Игрока :player сменил имя на :new",
+
+  "tdm.round.arena_prepare": "Подготовка арены :arena",
+  "tdm.round.arena_prepare_timer": "Арена :arena запускается %ss",
+  "tdm.round.arena_start": "Запущена арена :arena",
+  "tdm.round.end": "Раунд завершен, результат: :result, арена :arena",
+  "tdm.round.add": "Игрок :player был добавлен в раунд",
+  "tdm.round.remove": "Игрок :player был удален из раунда",
+  "tdm.round.start_empty": "Недостаточно игроков для запуска",
+
+  "tdm.vote.text": "[:vote] Голосование за :key %ss начато игроком :player",
+  "tdm.vote.end": "[:vote] Голосование завершено, результат: :result",
+  "tdm.vote.add": "[:vote] Игрок :player проголосовал за :key",
+  "tdm.vote.text_arena": "[:vote] Голосование за арену :key начато игроком :player",
+  "tdm.vote.text_arena_notify": "Голосование за арену :key %ss",
+
+  "tdm.round.is_paused": "Раунд остановлен",
+  "tdm.round.is_already_paused": "Раунд уже остановлен",
+  "tdm.round.is_unpaused": "Раунд возобновлен",
+  "tdm.round.is_running": "Раунд запущен",
+  "tdm.round.is_not_running": "Раунд не запущен",
+  "tdm.round.is_not_paused": "Раунд не остановлен",
+  "tdm.round.is_stopped": "Раунд уже остановлен",
+
+  "tdm.team.change": "Команда изменена на :team",
+
+  "cmd.cmdlist": "Usage /cmdlist <page> (optional) <limit> (optional) - to paging through commands",
+  "cmd.kill": "Usage /kill to kill yourself",
+  "cmd.start_arena": "Usage /a, /arena <id> - start arena by id or code",
+  "cmd.stop_arena": "Usage /s, /stop - stop arena",
+  "cmd.add_player": "Usage /add <player> - add player to round",
+  "cmd.remove_player": "Usage /remove <player> - remove player from round",
+  "cmd.pause": "Usage /pause - pause round",
+  "cmd.unpause": "Usage /unpause - unpause round",
+  "cmd.vote": "Usage /vote <id|code> vote for arena",
+  "cmd.spectate": "Usage /spec, /spectate <id|name> to spectate for a player",
+  "cmd.weapon": "Usage /w, /weapon <id|list>",
+  "cmd.change_team": "Usage /t, /team, /changeteam <id|string> (optional) to change team. Example: /t att, /t, /t def",
+  "cmd.change_name": "Usage /name <new_name> to change nick name",
+
+  "cmdlist.page": "Viewing :offset, page: :page, next: :next, last: :last",
+  "cmdlist.not_found": "Page doesnt exist",
+
+  "controls.t": " - открыть чат",
+  "controls.b": " - выбор оружия",
+  "controls.tab": " - статистика",
+  "controls.f4": " - смена команды"
+}

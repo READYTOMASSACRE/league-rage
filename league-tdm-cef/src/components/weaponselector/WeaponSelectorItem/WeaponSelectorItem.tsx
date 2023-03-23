@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC } from 'react'
 import { cef } from '../../../../../league-core/src/types';
 import RageAPI from '../../../helpers/RageAPI';
-import weaponNameForUI from '../../../weaponNameForUI';
+import { weaponNames } from '../../../weaponNameForUI';
 import * as s from './WeaponSelectorItem.module.sass'
 
 interface Props {
@@ -22,7 +22,7 @@ const WeaponSelectorItem: FC<Props> = ({ weapon, position, setCategory, setCurre
 
   const name = () => {
     if (category) return category[0].toUpperCase() + category.slice(1).replace('_', ' ')
-    if (weapon) return weapon.name ? weaponNameForUI[weapon.name] : 'none'
+    if (weapon) return weapon.name ? weaponNames[weapon.name] : 'none'
     if (!weapon && !category) return text
   }
 
