@@ -42,18 +42,23 @@ export default class Scoreboard {
   }
 
   private get playersData(): scoreboard.Player[] {
-    return mp.players.toArray().map(player => ({
-      id: player.remoteId,
-      name: player.name,
-      current: player.id === mp.players.local.id,
-      kills: 0,
-      death: 0,
-      assists: 0,
-      ping: player.ping, // todo fetch from server
-      role: this.playerService.getVariable(player, 'team'),
-      team: this.playerService.getVariable(player, 'team'),
-      lvl: 0
-    }))
+    return mp.players.toArray().map(player => {
+      const team = this.playerService.getVariable(player, 'team')
+      const statistic = this.playerService.getStatistic(player)
+
+      return {
+        id: player.remoteId,
+        name: player.name,
+        current: player.id === mp.players.local.id,
+        kills: statistic.kill,
+        death: statistic.death,
+        assists: statistic.assists,
+        ping: player.ping, // todo fetch from server
+        role: this.playerService.getVariable(player, 'team'),
+        team: this.playerService.getVariable(player, 'team'),
+        lvl: 0
+      }
+    })
   }
 
   private get teamsData(): scoreboard.Team[] {

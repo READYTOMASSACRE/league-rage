@@ -12,4 +12,8 @@ export default class PlayerService {
   ): PlayerData[K] {
     return player.getVariable(String(key))
   }
+
+  getTeam(player: PlayerMp) {
+    return this.getVariable(player, 'team')
+  }
 }
