@@ -1,4 +1,4 @@
-import { IConfig } from "./types"
+import { DbAdapter, IConfig } from "./types"
 import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
 import { TextStyle } from "./types/ui"
@@ -155,7 +155,10 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
           dimension: 0,
         }
       },
-    }
+    },
+    db: {
+      adapter: DbAdapter.lowdb,
+    },
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

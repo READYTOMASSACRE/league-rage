@@ -14,5 +14,8 @@
     "postbuild:external": "cp -R node_modules ../../packages/league-tdm-statistics",
     "watch:external": "tsc --watch",
     "source:external": "tsc"
+  },
+  "dependencies": {
+    "lowdb": "^5.1.0"
   }
 }

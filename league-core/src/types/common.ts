@@ -43,6 +43,18 @@ export const enum Enviroment {
 export type Point2d = [number,number]
 export type Point3d = [number,number,number]
 
+export enum DbAdapter {
+  lowdb = 'lowdb',
+  mongodb = 'mongodb'
+}
+export interface DbConfig {
+  adapter: DbAdapter
+  host?: string
+  user?: string
+  pwd?: string
+  port?: number
+}
+
 export interface IConfig {
   name: string
   gamemode: string
@@ -55,6 +67,7 @@ export interface IConfig {
   vote: VoteConfig
   hud: HudConfig
   interaction: InteractionConfig
+  db: DbConfig
 }
 
 export const enum Events {
