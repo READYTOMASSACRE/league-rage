@@ -71,7 +71,7 @@ export interface IConfig {
   db: DbConfig
 }
 
-export type rgscId = string
+export type userId = string
 
 export const enum Events {
   /** Fires when tdm gamemode starts */
@@ -175,4 +175,8 @@ export const enum Procs {
   'tdm.spectate.move' = 'tdm.spectate.move',
   /** Returns player position while spectating */
   'tdm.spectate.get' = 'tdm.spectate.get',
+  /** Returns player's profile */
+  'tdm.statistic.profile.get' = 'tdm.statistic.profile.get',
+  /** Returns player round's statistic */
+  'tdm.statistic.round.get' = 'tdm.statistic.round.get',
 }

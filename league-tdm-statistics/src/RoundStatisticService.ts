@@ -1,7 +1,7 @@
 import { eventable, event, commandable, command, log } from '../../league-core'
 import { decorate } from '../../league-core/src/helpers'
 import toPlayerStat from '../../league-core/src/helpers/toPlayerStat'
-import { Events, rgscId } from '../../league-core/src/types'
+import { Events, userId } from '../../league-core/src/types'
 import { PlayerStat, RoundStatData, Team } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
 import RepositoryService from './repository/RepositoryService'
@@ -37,8 +37,8 @@ export default class RoundStatisticService {
       ...Object.entries(this.stat.players.defenders),
     ]
 
-    for (const [rgscId, stat] of playerStats) {
-      this.saveProfileByRgscId(rgscId, stat)
+    for (const [userId, stat] of playerStats) {
+      this.saveProfileByUserId(userId, stat)
     }
 
     this.repositoryService.round.save({
@@ -77,16 +77,16 @@ export default class RoundStatisticService {
     const team = this.playerService.getTeam(player)
     const teamStat = this.stat.players[team]
 
-    if (!teamStat[player.rgscId]) teamStat[player.rgscId] = toPlayerStat()
-    teamStat[player.rgscId][key] = modifier(teamStat[player.rgscId][key])
+    if (!teamStat[player.userId]) teamStat[player.userId] = toPlayerStat()
+    teamStat[player.userId][key] = modifier(teamStat[player.userId][key])
   }
 
-  private async saveProfileByRgscId(rgscId: rgscId, stat: PlayerStat) {
-    const player = this.playerService.atRgscId(rgscId)
-    const profile = await this.repositoryService.profile.getById(rgscId)
+  private async saveProfileByUserId(userId: userId, stat: PlayerStat) {
+    const player = this.playerService.atUserId(userId)
+    const profile = await this.repositoryService.profile.getById(userId)
 
     return this.repositoryService.profile.save({
-      id: rgscId,
+      id: userId,
       ...profile,
       ...this.mergePlayerStat(profile, stat),
       ...(player ? { name: player.name } : {}),

@@ -1,15 +1,15 @@
 import { JSONFile } from "lowdb/node";
 import { resolve } from "path";
 import { DbAdapter, DbConfig } from "../../../league-core/src/types";
-import { IRepository, LowdbCollection, Profile, Round } from "../@types";
+import { IProfileRepoSitory, IRoundRepository, LowdbCollection, Profile, Round } from "../@types";
 import LowdbProfileRepository from "./lowdb/ProfileRepository";
 import LowdbRoundRepository from "./lowdb/RoundRepository";
 import MongodbProfileRepository from "./mongodb/ProfileRepository";
 import MongodbRoundRepository from "./mongodb/RoundRepository";
 
 export default class RepositoryService {
-  readonly profile: IRepository<Profile>
-  readonly round: IRepository<Round>
+  readonly profile: IProfileRepoSitory
+  readonly round: IRoundRepository
 
   constructor(readonly config: DbConfig) {
     if (config.adapter === DbAdapter.lowdb) {

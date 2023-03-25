@@ -1,4 +1,4 @@
-import { rgscId } from "../../../league-core/src/types"
+import { userId } from "../../../league-core/src/types"
 import { PlayerStat, Team } from "../../../league-core/src/types/tdm"
 
 export type TEntity = {
@@ -13,6 +13,9 @@ export interface IRepository<T extends TEntity> {
   getById(id: number | string): Promise<T | undefined>
 }
 
+export interface IProfileRepoSitory extends IRepository<Profile> {}
+export interface IRoundRepository extends IRepository<Round> {}
+
 export interface LowdbCollection<T extends TEntity> {
   [key: string]: Record<number | string, T>
 }
@@ -26,7 +29,6 @@ export type LowdbFilter = {
 
 export type Profile = {
   id: number
-  rgscId: rgscId
   lvl: number
   exp: number
   kill: number
@@ -42,6 +44,6 @@ export type Round = {
   id: number
   arenaId: number
   result: Team | "draw"
-  [Team.attackers]: Record<rgscId, PlayerStat>
-  [Team.defenders]: Record<rgscId, PlayerStat>
+  [Team.attackers]: Record<userId, PlayerStat>
+  [Team.defenders]: Record<userId, PlayerStat>
 }

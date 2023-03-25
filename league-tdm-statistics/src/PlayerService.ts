@@ -1,7 +1,19 @@
-import { rgscId } from "../../league-core/src/types"
+import { event, eventable, log } from "../../league-core"
 import { PlayerData } from "../../league-core/src/types/tdm"
 
+@eventable
 export default class PlayerService {
+  @log
+  @event("playerJoin")
+  overrideUserId(player: PlayerMp) {
+    Object.defineProperty(player, 'userId', {
+      get: () => this.getVariable(player, 'userId'),
+      set: (value: string) => this.setVariable(player, 'userId', value)
+    })
+
+    player.userId = `rg_${player.rgscId}`
+  }
+
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(
     player: PlayerMp, key: K, value: V
   ) {
@@ -18,8 +30,8 @@ export default class PlayerService {
     return this.getVariable(player, 'team')
   }
 
-  atRgscId(rgscId: rgscId): PlayerMp | undefined {
-    const player = mp.players.toArrayFast().find(player => player.rgscId === rgscId)
+  atUserId(id: string): PlayerMp | undefined {
+    const player = mp.players.toArrayFast().find(player => player.userId === id)
     return mp.players.exists(player) ? player : undefined
   }
 }
