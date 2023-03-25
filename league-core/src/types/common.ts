@@ -50,10 +50,12 @@ export enum DbAdapter {
 export interface DbConfig {
   adapter: DbAdapter
   lowdb: string
-  host?: string
-  user?: string
-  pwd?: string
-  port?: number
+  mongodb?: {
+    host: string
+    user: string
+    pwd: string
+    port: number
+  }
 }
 
 export interface IConfig {
