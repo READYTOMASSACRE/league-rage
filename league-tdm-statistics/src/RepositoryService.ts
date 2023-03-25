@@ -1,11 +1,11 @@
 import { JSONFile } from "lowdb/node";
 import { resolve } from "path";
-import { DbAdapter, DbConfig } from "../../../league-core/src/types";
-import { IProfileRepoSitory, IRoundRepository, LowdbCollection, Profile, Round } from "../@types";
-import LowdbProfileRepository from "./lowdb/ProfileRepository";
-import LowdbRoundRepository from "./lowdb/RoundRepository";
-import MongodbProfileRepository from "./mongodb/ProfileRepository";
-import MongodbRoundRepository from "./mongodb/RoundRepository";
+import { DbAdapter, DbConfig } from "../../league-core/src/types";
+import { IProfileRepoSitory, IRoundRepository, LowdbCollection } from "./@types";
+import LowdbProfileRepository from "./repository/lowdb/ProfileRepository";
+import LowdbRoundRepository from "./repository/lowdb/RoundRepository";
+import MongodbProfileRepository from "./repository/mongodb/ProfileRepository";
+import MongodbRoundRepository from "./repository/mongodb/RoundRepository";
 
 export default class RepositoryService {
   readonly profile: IProfileRepoSitory

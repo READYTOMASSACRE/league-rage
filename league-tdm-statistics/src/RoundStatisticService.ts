@@ -4,7 +4,7 @@ import toPlayerStat from '../../league-core/src/helpers/toPlayerStat'
 import { Events, userId } from '../../league-core/src/types'
 import { PlayerStat, RoundStatData, Team } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
-import RepositoryService from './repository/RepositoryService'
+import RepositoryService from './RepositoryService'
 
 @commandable
 @eventable

@@ -1,7 +1,7 @@
 import { config } from "../league-core"
 import PlayerService from "./src/PlayerService"
 import PlayerStatisticService from "./src/PlayerStatisticService"
-import RepositoryService from "./src/repository/RepositoryService"
+import RepositoryService from "./src/RepositoryService"
 import RoundStatisticService from "./src/RoundStatisticService"
 
 const main = async () => {

@@ -1,6 +1,6 @@
 import { proc, proceable } from "../../league-core";
 import { Procs, userId } from "../../league-core/src/types";
-import RepositoryService from "./repository/RepositoryService";
+import RepositoryService from "./RepositoryService";
 
 @proceable
 export default class PlayerProfileService {
