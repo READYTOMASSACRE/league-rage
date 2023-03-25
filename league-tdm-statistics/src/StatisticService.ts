@@ -1,17 +1,20 @@
+import { addDays, differenceInCalendarDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { proc, proceable } from "../../league-core";
-import { Procs, userId } from "../../league-core/src/types";
+import { Procs } from "../../league-core/src/types";
 import RepositoryService from "./RepositoryService";
+
+const MAX_DIFF_INTERVAL = 2
 
 @proceable
 export default class PlayerProfileService {
   constructor(readonly repositoryService: RepositoryService) {}
 
   @proc(Procs["tdm.statistic.profile.get"])
-  async getProfile(player: PlayerMp, id?: number, userId?: string) {
-    userId = this.getUserId(player, id, userId)
-    if (!userId) return
+  async getProfile(player: PlayerMp, idOrUserId?: string | number) {
+    const userId = this.getUserId(player, idOrUserId)
+    const profile = await this.repositoryService.profile.getById(userId)
 
-    const profile = await this.repositoryService.profile.getById(id)
+    if (!profile) return
 
     return {
       lvl: profile.lvl,
@@ -27,23 +30,35 @@ export default class PlayerProfileService {
   }
 
   @proc(Procs["tdm.statistic.round.get"])
-  async getRound(player: PlayerMp, id?: number, userId?: userId) {
-    userId = this.getUserId(player, id, userId)
-    if (!userId) return []
+  async getRound(player: PlayerMp, idOrUserId?: string | number, dateFrom?: number, dateTo?: number) {
+    const userId = this.getUserId(player, idOrUserId)
+    const now = Date.now()
+    const yesterday = +startOfDay(subDays(now, 1))
+    const tomorrow = +endOfDay(addDays(now, 1))
 
-    return this.repositoryService.round.get({userId})
-  }
+    dateFrom = Number(dateFrom) || yesterday
+    dateTo = Number(dateTo) || tomorrow
 
-  private getUserId(player: PlayerMp, id?: number, userId?: userId) {
-    userId = userId || player.userId
-
-    if (typeof id !== 'undefined') {
-      const targetPlayer = mp.players.at(id)
-      if (!mp.players.exists(targetPlayer)) return
-
-      userId = targetPlayer.userId
+    if (differenceInCalendarDays(dateFrom, dateTo) > MAX_DIFF_INTERVAL) {
+      dateFrom = yesterday
+      dateTo = tomorrow
     }
 
-    return userId
+    return this.repositoryService.round.get({ userId, dateFrom, dateTo })
+  }
+
+  private getUserId(player: PlayerMp, idOrUserId?: number | string) {
+    if (typeof idOrUserId !== 'undefined') {
+      const targetId = Number(idOrUserId) || -1
+      const targetPlayer = mp.players.at(targetId)
+  
+      if (mp.players.exists(targetPlayer)) {
+        idOrUserId = targetPlayer.userId
+      }
+
+      return String(idOrUserId)
+    }
+
+    return player.userId
   }
 }

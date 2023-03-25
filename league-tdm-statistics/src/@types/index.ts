@@ -20,12 +20,17 @@ export interface LowdbCollection<T extends TEntity> {
   [key: string]: Record<number | string, T>
 }
 
-export type LowdbFilter = {
+export type Filter = {
   id?: number
   ids?: number[]
   limit?: number
   offset?: number
 }
+
+export type RoundFilter = {
+  dateFrom?: number
+  dateTo?: number
+} & Filter
 
 export type Profile = {
   id: number

@@ -1,7 +1,7 @@
 import BaseRepository from "../BaseRepository";
 import { Low } from 'lowdb'
 import { JSONFile } from "lowdb/node"
-import { LowdbCollection, LowdbFilter, TEntity } from "../../@types";
+import { Filter, LowdbCollection, TEntity } from "../../@types";
 
 export default abstract class LowdbRepository<T extends TEntity> extends BaseRepository<
   T, JSONFile<LowdbCollection<T>>
@@ -28,7 +28,7 @@ export default abstract class LowdbRepository<T extends TEntity> extends BaseRep
     this.db.write()
   }
 
-  async get({ id, ids, limit = 10, offset = 0 }: LowdbFilter = {}) {
+  async get({ id, ids, limit = 10, offset = 0 }: Filter = {}) {
     let result: T[] = [this.collection[id]]
     limit = limit > 50 ? 50 : limit
 
@@ -53,7 +53,7 @@ export default abstract class LowdbRepository<T extends TEntity> extends BaseRep
     return Promise.resolve(result)
   }
 
-  async getOne({ id }: LowdbFilter = {}) {
+  async getOne({ id }: Filter = {}) {
     return Promise.resolve(this.collection[id])
   }
 

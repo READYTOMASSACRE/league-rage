@@ -5,6 +5,7 @@ import { Events, userId } from '../../league-core/src/types'
 import { PlayerStat, RoundStatData, Team } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
 import RepositoryService from './RepositoryService'
+import deepmerge from 'deepmerge'
 
 @commandable
 @eventable
@@ -26,20 +27,24 @@ export default class RoundStatisticService {
   }
 
   @event(Events['tdm.round.prepare'])
-  roundPrepare() {
-    this.stat = this.getDefault()
+  roundPrepare(_: number, players: number[]) {
+    this.stat = this.getDefault({ players: this.getDefaultPlayerStat(players) })
   }
 
   @event(Events['tdm.round.end'])
-  roundEnd(arenaId: number, result: Team | 'draw') {
+  async roundEnd(arenaId: number, result: Team | 'draw') {
     const playerStats = [
       ...Object.entries(this.stat.players.attackers),
       ...Object.entries(this.stat.players.defenders),
     ]
 
+    const promises = []
+
     for (const [userId, stat] of playerStats) {
-      this.saveProfileByUserId(userId, stat)
+      promises.push(this.saveProfileByUserId(userId, stat))
     }
+
+    await Promise.all(promises)
 
     this.repositoryService.round.save({
       id: Date.now(),
@@ -48,6 +53,7 @@ export default class RoundStatisticService {
       attackers: this.stat.players.attackers,
       defenders: this.stat.players.defenders,
     }, { write: true })
+
     this.stat = this.getDefault()
   }
 
@@ -107,13 +113,32 @@ export default class RoundStatisticService {
     }
   }
 
-  private getDefault(): RoundStatData {
-    return {
+  private getDefault(data?: Partial<RoundStatData>): RoundStatData {
+    return deepmerge({
       result: 'draw',
       players: {
         [Team.attackers]: {},
         [Team.defenders]: {},
-      }
+      },
+    }, data)
+  }
+
+  private getDefaultPlayerStat(players: number[]) {
+    const stats = {
+      [Team.attackers]: <Record<userId, PlayerStat>>{},
+      [Team.defenders]: <Record<userId, PlayerStat>>{},
     }
+
+    for (const id of players) {
+      const player = mp.players.at(id)
+      if (!mp.players.exists(player)) continue
+
+      const team = this.playerService.getTeam(player)
+      if (team !== Team.attackers && team !== Team.defenders) continue
+
+      stats[team][player.userId] = toPlayerStat()
+    }
+
+    return stats
   }
 }
