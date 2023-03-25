@@ -1,3 +1,4 @@
+import { rgscId } from "../../league-core/src/types"
 import { PlayerData } from "../../league-core/src/types/tdm"
 
 export default class PlayerService {
@@ -15,5 +16,10 @@ export default class PlayerService {
 
   getTeam(player: PlayerMp) {
     return this.getVariable(player, 'team')
+  }
+
+  atRgscId(rgscId: rgscId): PlayerMp | undefined {
+    const player = mp.players.toArrayFast().find(player => player.rgscId === rgscId)
+    return mp.players.exists(player) ? player : undefined
   }
 }

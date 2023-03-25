@@ -1,21 +1,33 @@
+import { JSONFile } from "lowdb/node";
+import { resolve } from "path";
 import { DbAdapter, DbConfig } from "../../../league-core/src/types";
-import { IRepository, Profile, Round } from "../@types";
+import { IRepository, LowdbCollection, Profile, Round } from "../@types";
 import LowdbProfileRepository from "./lowdb/ProfileRepository";
 import LowdbRoundRepository from "./lowdb/RoundRepository";
 import MongodbProfileRepository from "./mongodb/ProfileRepository";
 import MongodbRoundRepository from "./mongodb/RoundRepository";
 
 export default class RepositoryService {
-  readonly profileRepository: IRepository<Profile>
-  readonly roundRepository: IRepository<Round>
+  readonly profile: IRepository<Profile>
+  readonly round: IRepository<Round>
 
   constructor(readonly config: DbConfig) {
     if (config.adapter === DbAdapter.lowdb) {
-      this.profileRepository = new LowdbProfileRepository({})
-      this.roundRepository = new LowdbRoundRepository({})
+      const dbPath = resolve(__dirname, config.lowdb || "db.json")
+      const adapter = new JSONFile<LowdbCollection<any>>(dbPath)
+
+      this.profile = new LowdbProfileRepository(adapter)
+      this.round = new LowdbRoundRepository(adapter)
     } else {
-      this.profileRepository = new MongodbProfileRepository({})
-      this.roundRepository = new MongodbRoundRepository({})
+      this.profile = new MongodbProfileRepository({})
+      this.round = new MongodbRoundRepository({})
     }
+  }
+
+  async load() {
+    await Promise.all([
+      this.profile.load(),
+      this.round.load(),
+    ])
   }
 }

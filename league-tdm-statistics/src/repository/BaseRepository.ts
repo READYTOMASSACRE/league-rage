@@ -1,10 +1,11 @@
-import { IRepository } from "../@types";
+import { IRepository, TEntity } from "../@types";
 
-export default abstract class BaseRepository<T> implements IRepository<T> {
-  constructor(readonly adapter: any) {}
+export default abstract class BaseRepository<T extends TEntity, A extends any> implements IRepository<T> {
+  constructor(private readonly adapter: A) {}
 
-  abstract save(t: T): Promise<T>
+  abstract load(): Promise<void>
+  abstract save(t: T): Promise<void>
   abstract get(...args: any[]): Promise<T[]>
-  abstract getOne(...args: any[]): Promise<T>
-  abstract getById<V extends number | string>(id: V): Promise<T>
+  abstract getOne(...args: any[]): Promise<T | undefined>
+  abstract getById<V extends number | string>(id: V): Promise<T | undefined>
 }

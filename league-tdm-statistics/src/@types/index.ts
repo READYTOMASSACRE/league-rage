@@ -1,15 +1,28 @@
+import { rgscId } from "../../../league-core/src/types"
 import { PlayerStat, Team } from "../../../league-core/src/types/tdm"
 
-export type TEntity = {}
-
-export interface IRepository<T = TEntity> {
-  save(t: T): Promise<T>
-  get(...args: any[]): Promise<T[]>
-  getOne(...args: any[]): Promise<T>
-  getById(id: number | string): Promise<T>
+export type TEntity = {
+  id: number
 }
 
-export type rgscId = number
+export interface IRepository<T extends TEntity> {
+  load(): Promise<void>
+  save(t: T, opts?: any): Promise<void>
+  get(...args: any[]): Promise<T[]>
+  getOne(...args: any[]): Promise<T | undefined>
+  getById(id: number | string): Promise<T | undefined>
+}
+
+export interface LowdbCollection<T extends TEntity> {
+  [key: string]: Record<number | string, T>
+}
+
+export type LowdbFilter = {
+  id?: number
+  ids?: number[]
+  limit?: number
+  offset?: number
+}
 
 export type Profile = {
   id: number
@@ -22,12 +35,13 @@ export type Profile = {
   damageDone: number
   damageRecieved: number
   hit: number
-  name: number
+  name: string
 }
 
 export type Round = {
   id: number
-  date: number
+  arenaId: number
+  result: Team | "draw"
   [Team.attackers]: Record<rgscId, PlayerStat>
   [Team.defenders]: Record<rgscId, PlayerStat>
 }

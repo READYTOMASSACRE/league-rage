@@ -1,4 +1,4 @@
-import { Point2d, Point3d } from "./common"
+import { Point2d, Point3d, rgscId } from "./common"
 
 export enum Team {
   attackers = 'attackers',
@@ -82,8 +82,8 @@ export type PlayerStat = {
 export type RoundStatData = {
   result: Team | 'draw'
   players: {
-    [Team.attackers]: Record<number, PlayerStat>
-    [Team.defenders]: Record<number, PlayerStat>
+    [Team.attackers]: Record<rgscId, PlayerStat>
+    [Team.defenders]: Record<rgscId, PlayerStat>
   }
 }
 

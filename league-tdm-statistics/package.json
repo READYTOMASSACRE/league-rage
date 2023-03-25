@@ -16,6 +16,7 @@
     "source:external": "tsc"
   },
   "dependencies": {
+    "@types/node": "^18.15.9",
     "lowdb": "^5.1.0"
   }
 }

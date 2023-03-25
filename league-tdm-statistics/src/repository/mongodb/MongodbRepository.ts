@@ -1,8 +1,13 @@
+import { TEntity } from "../../@types";
 import BaseRepository from "../BaseRepository";
 
-export default class MongodbRepository<T> extends BaseRepository<T> {
+export default abstract class MongodbRepository<T extends TEntity> extends BaseRepository<T, any> {
+  async load() {
+    return Promise.resolve()
+  }
+
   async save(t: T) {
-    return t
+    return Promise.resolve()
   }
 
   async get(...args: any[]) {

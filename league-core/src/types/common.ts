@@ -53,6 +53,7 @@ export interface DbConfig {
   user?: string
   pwd?: string
   port?: number
+  lowdb?: string
 }
 
 export interface IConfig {
@@ -69,6 +70,8 @@ export interface IConfig {
   interaction: InteractionConfig
   db: DbConfig
 }
+
+export type rgscId = string
 
 export const enum Events {
   /** Fires when tdm gamemode starts */

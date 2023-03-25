@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@ragempcommunity/types-server/-/types-server-2.1.1.tgz#9f5b667d9394f78a43ae5e7d304dd3ec5d49a028"
   integrity sha512-prX4R7jECp9D52sIqmezx9Nig3p5QY8NMeJOjEDUUUN4bhEaelb6ARNUL7TGgKN/+qs4TGKG8fBPdk0iY1fhhQ==
 
+"@types/node@^18.15.9":
+  version "18.15.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.15.9.tgz#a9b529d2a16ae73122b3875969e7db18c9f3e790"
+  integrity sha512-dUxhiNzBLr6IqlZXz6e/rN2YQXlFgOei/Dxy+e3cyXTJ4txSUbGT2/fmnD6zd/75jDMeW5bDee+YXxlFKHoV0A==
+
 lowdb@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/lowdb/-/lowdb-5.1.0.tgz#3d9f13522ea92e445348a7d455a69ce570c2f51d"
