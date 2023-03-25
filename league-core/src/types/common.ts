@@ -49,11 +49,11 @@ export enum DbAdapter {
 }
 export interface DbConfig {
   adapter: DbAdapter
+  lowdb: string
   host?: string
   user?: string
   pwd?: string
   port?: number
-  lowdb?: string
 }
 
 export interface IConfig {

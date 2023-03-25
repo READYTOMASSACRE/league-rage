@@ -13,7 +13,7 @@ export default class RepositoryService {
 
   constructor(readonly config: DbConfig) {
     if (config.adapter === DbAdapter.lowdb) {
-      const dbPath = resolve(__dirname, config.lowdb || "db.json")
+      const dbPath = resolve(__dirname, config.lowdb)
       const adapter = new JSONFile<LowdbCollection<any>>(dbPath)
 
       this.profile = new LowdbProfileRepository(adapter)

@@ -158,6 +158,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     db: {
       adapter: DbAdapter.lowdb,
+      lowdb: "db.json",
     },
   }
 
