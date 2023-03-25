@@ -2,7 +2,7 @@ import { Round, RoundFilter } from "../../@types";
 import { day } from "../../helpers";
 import LowdbRepository from "./LowdbRepository";
 
-export default class RoundRepository extends LowdbRepository<Round> {
+export default class RoundRepository extends LowdbRepository<Round, 'round'> {
   name = 'round'
 
   async get({

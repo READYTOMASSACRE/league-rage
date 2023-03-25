@@ -1,19 +1,11 @@
 import BaseRepository from "../BaseRepository";
 import { Low } from 'lowdb'
-import { JSONFile } from "lowdb/node"
 import { Filter, LowdbCollection, TEntity } from "../../@types";
 
-export default abstract class LowdbRepository<T extends TEntity> extends BaseRepository<
-  T, JSONFile<LowdbCollection<T>>
-> {
+export default abstract class LowdbRepository<T extends TEntity, K extends keyof LowdbCollection>
+  extends BaseRepository<T, Low<LowdbCollection>> {
 
-  private readonly db: Low<LowdbCollection<T>>
   abstract readonly name: string
-
-  constructor(adapter: JSONFile<LowdbCollection<T>>) {
-    super(adapter)
-    this.db = new Low<LowdbCollection<T>>(adapter)
-  }
 
   async load() {
     return this.db.read()
@@ -61,7 +53,7 @@ export default abstract class LowdbRepository<T extends TEntity> extends BaseRep
     return Promise.resolve(this.collection[id])
   }
 
-  get collection() {
+  get collection(): LowdbCollection[K] {
     return this.db.data[this.name]
   }
 }

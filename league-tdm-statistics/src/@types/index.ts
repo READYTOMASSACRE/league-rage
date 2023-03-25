@@ -6,7 +6,6 @@ export type TEntity = {
 }
 
 export interface IRepository<T extends TEntity> {
-  load(): Promise<void>
   save(t: T, opts?: any): Promise<void>
   get(...args: any[]): Promise<T[]>
   getOne(...args: any[]): Promise<T | undefined>
@@ -16,8 +15,9 @@ export interface IRepository<T extends TEntity> {
 export interface IProfileRepoSitory extends IRepository<Profile> {}
 export interface IRoundRepository extends IRepository<Round> {}
 
-export interface LowdbCollection<T extends TEntity> {
-  [key: string]: Record<number | string, T>
+export interface LowdbCollection {
+  round: Record<number, Round>
+  profile: Record<string, Profile>
 }
 
 export type Filter = {

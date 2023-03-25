@@ -1,3 +1,4 @@
+import { Low } from "lowdb/lib";
 import { JSONFile } from "lowdb/node";
 import { resolve } from "path";
 import { DbAdapter, DbConfig } from "../../league-core/src/types";
@@ -11,14 +12,16 @@ import MongodbRoundRepository from "./repository/mongodb/RoundRepository";
 export default class RepositoryService {
   readonly profile: IProfileRepoSitory
   readonly round: IRoundRepository
+  private lowdb?: Low<LowdbCollection>
 
   constructor(readonly config: DbConfig) {
     if (config.adapter === DbAdapter.lowdb) {
       const dbPath = resolve(packagesPath, config.lowdb)
-      const adapter = new JSONFile<LowdbCollection<any>>(dbPath)
+      const adapter = new JSONFile<LowdbCollection>(dbPath)
 
-      this.profile = new LowdbProfileRepository(adapter)
-      this.round = new LowdbRoundRepository(adapter)
+      this.lowdb = new Low(adapter)
+      this.profile = new LowdbProfileRepository(this.lowdb)
+      this.round = new LowdbRoundRepository(this.lowdb)
     } else {
       this.profile = new MongodbProfileRepository({})
       this.round = new MongodbRoundRepository({})
@@ -26,9 +29,6 @@ export default class RepositoryService {
   }
 
   async load() {
-    await Promise.all([
-      this.profile.load(),
-      this.round.load(),
-    ])
+    if (this.lowdb) await this.lowdb.read()
   }
 }
