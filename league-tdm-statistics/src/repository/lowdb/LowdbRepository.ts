@@ -1,6 +1,7 @@
 import BaseRepository from "../BaseRepository";
 import { Low } from 'lowdb'
 import { Filter, LowdbCollection, TEntity } from "../../@types";
+import { maxLimit } from "../../helpers";
 
 export default abstract class LowdbRepository<T extends TEntity, K extends keyof LowdbCollection>
   extends BaseRepository<T, Low<LowdbCollection>> {
@@ -20,9 +21,14 @@ export default abstract class LowdbRepository<T extends TEntity, K extends keyof
     this.db.write()
   }
 
-  async get({ id, ids, limit = 10, offset = 0 }: Filter = {}) {
+  async get({
+    id,
+    ids,
+    limit = maxLimit,
+    offset = 0
+  }: Filter = {}) {
     let result: T[] = [this.collection[id]]
-    limit = limit > 50 ? 50 : limit
+    limit = limit > maxLimit ? maxLimit : limit
 
     if (ids) {
       ids.map(id => result.push(this.collection[id]))
@@ -32,17 +38,11 @@ export default abstract class LowdbRepository<T extends TEntity, K extends keyof
       result = Object.values(this.collection)
     }
 
-    result = result.filter(Boolean)
-
-    if (offset) {
-      result = result.slice(offset)
-    }
-
-    if (limit && result.length > limit) {
-      result = result.slice(offset, limit)
-    }
-
-    return Promise.resolve(result)
+    return Promise.resolve(
+      result
+        .filter(Boolean)
+        .slice(offset, limit)
+    )
   }
 
   async getOne({ id }: Filter = {}) {
