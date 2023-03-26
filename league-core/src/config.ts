@@ -32,7 +32,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
   const defaultConfig: IConfig = {
     name: '',
     gamemode: '',
-    welcomeText: `Hello :player, welcome to the server!`,
+    welcomeText: `Hello :player, welcome to the ${mp.config.name}!`,
     motd: `<h1 style="border-bottom: 1px solid; min-width: 50%; display: block; margin-bottom: 10px;">${mp.config.name}</h1> Welcome to our server, please enjoy the game!`,
     lang: 'ru',
     lobby: [-1026.7474365234375, -364.5588073730469, 36.930908203125],
@@ -167,6 +167,18 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         autosaveInterval: 4000,
       },
     },
+    statistic: {
+      exp: {
+        kill: 50,
+        death: 10,
+        assist: 30,
+        win: 100,
+        hit: 5,
+        damageRecieved: 0,
+        damageDone: 5,
+        expToLvl: 1000,
+      },
+    }
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

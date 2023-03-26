@@ -1,7 +1,7 @@
 import { Events, Procs } from "../../league-core/src/types";
-import { PlayerData, PlayerStat, State, Team, WeaponState } from "../../league-core/src/types/tdm";
+import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
-import toPlayerStat from '../../league-core/src/helpers/toPlayerStat';
+import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
 
 export default class PlayerService {
   private interval: number = 0
@@ -93,6 +93,21 @@ export default class PlayerService {
     }
 
     return toPlayerStat(statistic)
+  }
+
+  getProfile(player?: PlayerMp) {
+    player = player || this.local
+    let profile = this.getVariable(player, 'profile')
+
+    if (typeof profile === 'string') {
+      try {
+        profile = JSON.parse(profile)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    return toProfile(profile)
   }
 
   setVariable<K extends keyof PlayerData, V extends PlayerData[K]>(

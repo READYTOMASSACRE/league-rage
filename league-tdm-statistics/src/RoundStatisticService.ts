@@ -1,22 +1,24 @@
 import { eventable, event, commandable, command, log } from '../../league-core'
 import { decorate } from '../../league-core/src/helpers'
-import toPlayerStat from '../../league-core/src/helpers/toPlayerStat'
 import { Events, userId } from '../../league-core/src/types'
-import { PlayerStat, RoundStatData, Team } from '../../league-core/src/types/tdm'
+import { Team, TeamConfig } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
 import RepositoryService from './RepositoryService'
-import deepmerge from 'deepmerge'
+import { PlayerStat, Round, StatisticConfig } from '../../league-core/src/types/statistic'
+import { toPlayerStat, toProfile, toRound } from '../../league-core/src/helpers/toStatistic'
 
 @commandable
 @eventable
 export default class RoundStatisticService {
-  private stat: RoundStatData
+  private stat: Round
 
   constructor(
+    readonly teamConfig: TeamConfig,
+    readonly statisticConfig: StatisticConfig,
     readonly playerService: PlayerService,
     readonly repositoryService: RepositoryService
   ) {
-    this.stat = this.getDefault()
+    this.stat = this.toDefault()
   }
 
   @command('roundstat')
@@ -26,20 +28,42 @@ export default class RoundStatisticService {
     return this.stat
   }
 
-  @log
   @event(Events['tdm.round.prepare'])
-  roundPrepare(_: number, players: number[]) {
-    this.stat = this.getDefault({ players: this.getDefaultPlayerStat(players) })
-
-    return this.stat
+  roundPrepare() {
+    this.stat = this.toDefault()
   }
 
-  @log
+  @event(Events['tdm.round.add'])
+  roundAdd(id: number, manual?: boolean) {
+    const player = mp.players.at(id)
+    if (!mp.players.exists(player)) return
+
+    const team = this.playerService.getTeam(player)
+    const teamStat = this.getPlayersStatByTeam(team)
+
+    teamStat[player.userId] = toPlayerStat({
+      ...teamStat[player.userId],
+      name: player.name,
+    })
+  }
+
   @event(Events['tdm.round.end'])
   async roundEnd(arenaId: number, result: Team | 'draw') {
+    if (result !== 'draw') {
+      const winners = this.getPlayersStatByTeam(result)
+  
+      for (const userId of Object.keys(winners)) {
+        this.addStat(
+          this.playerService.atUserId(userId),
+          'exp',
+          prev => prev + this.exp.win
+        )
+      }
+    }
+
     const playerStats = [
-      ...Object.entries(this.stat.players.attackers),
-      ...Object.entries(this.stat.players.defenders),
+      ...Object.entries(this.getPlayersStatByTeam(Team.attackers)),
+      ...Object.entries(this.getPlayersStatByTeam(Team.defenders)),
     ]
 
     const promises = []
@@ -54,38 +78,51 @@ export default class RoundStatisticService {
       id: Date.now(),
       arenaId: arenaId,
       result,
-      attackers: this.stat.players.attackers,
-      defenders: this.stat.players.defenders,
+      teamName: this.teamConfig[result]?.name || 'none',
+      [Team.attackers]: this.stat[Team.attackers],
+      [Team.defenders]: this.stat[Team.defenders],
     }, { write: true })
 
-    this.stat = this.getDefault()
+    this.stat = this.toDefault()
   }
 
   @event(Events['tdm.player.kill'])
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
-    this.addStat(killerId, 'kill')
-    this.addStat(victimId, 'death')
-    if (typeof assistId !== 'undefined') this.addStat(assistId, 'assists')
+    this.addStat(killerId, 'kill', prev => prev + 1)
+    this.addStat(killerId, 'exp', prev => prev + this.exp.kill)
+
+    this.addStat(victimId, 'death', prev => prev + 1)
+    this.addStat(victimId, 'exp', prev => prev + this.exp.death)
+
+    if (typeof assistId !== 'undefined') {
+      this.addStat(assistId, 'assists', prev => prev + 1)
+      this.addStat(assistId, 'exp', prev => prev + this.exp.assist)
+    }
   }
 
   @event(Events['tdm.player.damage'])
   playerDamage(victimId: number, killerId: number, weapon: string, damage: number) {
     this.addStat(victimId, 'damageRecieved', prev => prev + damage)
+    this.addStat(victimId, 'exp', prev => prev + this.exp.damageRecieved)
+
     this.addStat(killerId, 'damageDone', prev => prev + damage)
-    this.addStat(killerId, 'hit')
+    this.addStat(killerId, 'exp', prev => prev + this.exp.damageDone)
+
+    this.addStat(killerId, 'hit', prev => prev + 1)
+    this.addStat(killerId, 'exp', prev => prev + this.exp.hit)
   }
 
   @log
   addStat<_, K extends keyof PlayerStat>(
     player: PlayerMp | number,
     key: K,
-    modifier: (prev: PlayerStat[K]) => PlayerStat[K] = (prev) => prev + 1,
+    modifier: (prev: PlayerStat[K]) => PlayerStat[K],
   ) {
     if (typeof player === 'number') player = mp.players.at(player)
     if (!mp.players.exists(player)) return
 
     const team = this.playerService.getTeam(player)
-    const teamStat = this.stat.players[team]
+    const teamStat = this.getPlayersStatByTeam(team)
 
     if (!teamStat[player.userId]) teamStat[player.userId] = toPlayerStat()
     teamStat[player.userId][key] = modifier(teamStat[player.userId][key])
@@ -93,13 +130,15 @@ export default class RoundStatisticService {
 
   private async saveProfileByUserId(userId: userId, stat: PlayerStat) {
     const player = this.playerService.atUserId(userId)
-    const profile = await this.repositoryService.profile.getById(userId)
+    const userProfile = await this.repositoryService.profile.getById(userId)
+    const profile = toProfile(userProfile)
 
     return this.repositoryService.profile.save({
-      id: userId,
       ...profile,
-      ...this.mergePlayerStat(profile, stat),
       ...(player ? { name: player.name } : {}),
+      ...this.mergePlayerStat(profile, stat),
+      ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
+      id: userId,
     })
   }
 
@@ -117,36 +156,40 @@ export default class RoundStatisticService {
     }
   }
 
-  @log
-  private getDefault(data?: Partial<RoundStatData>): RoundStatData {
-    const defautData: RoundStatData = {
-      result: 'draw',
-      players: {
-        [Team.attackers]: {},
-        [Team.defenders]: {},
+  private toDefault() {
+    return toRound({
+      [Team.attackers]: {
+        name: this.teamConfig[Team.attackers].name,
+        players: {},
       },
-    }
-
-    return data ? deepmerge(defautData, data) : defautData
+      [Team.defenders]: {
+        name: this.teamConfig[Team.defenders].name,
+        players: {},
+      }
+    })
   }
 
-  @log
-  private getDefaultPlayerStat(players: number[]) {
-    const stats = {
-      [Team.attackers]: <Record<userId, PlayerStat>>{},
-      [Team.defenders]: <Record<userId, PlayerStat>>{},
+  private getPlayersStatByTeam(team: Team): Record<userId, PlayerStat> {
+    return this.stat[team]?.players || {}
+  }
+
+  private calculateLvl(lvl: number, exp: number) {
+    return {
+      lvl: lvl + Math.floor(exp / this.exp.expToLvl),
+      exp: Math.floor(exp % this.exp.expToLvl),
     }
+  }
 
-    for (const id of players) {
-      const player = mp.players.at(id)
-      if (!mp.players.exists(player)) continue
-
-      const team = this.playerService.getTeam(player)
-      if (team !== Team.attackers && team !== Team.defenders) continue
-
-      stats[team][player.userId] = toPlayerStat()
+  get exp() {
+    return {
+      kill: this.statisticConfig.exp.kill ?? 0,
+      death: this.statisticConfig.exp.death ?? 0,
+      assist: this.statisticConfig.exp.assist ?? 0,
+      win: this.statisticConfig.exp.win ?? 0,
+      hit: this.statisticConfig.exp.hit ?? 0,
+      damageRecieved: this.statisticConfig.exp.damageRecieved ?? 0,
+      damageDone: this.statisticConfig.exp.damageDone ?? 0,
+      expToLvl: this.statisticConfig.exp.expToLvl ?? 1000,
     }
-
-    return stats
   }
 }

@@ -21,6 +21,7 @@ export default class ConfigService {
             vote: this.config.vote,
             hud: this.config.hud,
             interaction: this.config.interaction,
+            statistic: this.config.statistic,
         }
     }
 }

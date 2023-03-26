@@ -1,4 +1,5 @@
-import { Point2d, Point3d, userId } from "./common"
+import { Point2d, Point3d } from "./common"
+import { PlayerStat, Profile } from "./statistic"
 
 export enum Team {
   attackers = 'attackers',
@@ -57,7 +58,6 @@ export type VoteConfig = {
 
 export const enum Entity {
   ROUND,
-  ROUND_STAT,
   TEAM,
 }
 
@@ -70,27 +70,9 @@ export type RoundData = {
 
 export type TeamData = Record<Team, { score: number }>
 
-export type PlayerStat = {
-  kill: number
-  death: number
-  assists: number
-  damageDone: number
-  damageRecieved: number
-  hit: number
-}
-
-export type RoundStatData = {
-  result: Team | 'draw'
-  players: {
-    [Team.attackers]: Record<userId, PlayerStat>
-    [Team.defenders]: Record<userId, PlayerStat>
-  }
-}
-
 export type Dummy = {
   [Entity.ROUND]: RoundData
   [Entity.TEAM]: TeamData
-  [Entity.ROUND_STAT]: RoundStatData
 }
 
 export type PlayerData = {
@@ -101,8 +83,9 @@ export type PlayerData = {
   health: number
   alive: boolean
   spectate?: number
-  statistic: PlayerStat
   userId: string
+  profile: Profile
+  statistic: PlayerStat
 }
 
 export enum Vote {

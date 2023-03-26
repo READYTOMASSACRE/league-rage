@@ -3,6 +3,7 @@ import PlayerService from "./src/PlayerService"
 import PlayerStatisticService from "./src/PlayerStatisticService"
 import RepositoryService from "./src/RepositoryService"
 import RoundStatisticService from "./src/RoundStatisticService"
+import StatisticService from "./src/StatisticService"
 
 const main = async () => {
   const repositoryService = new RepositoryService(config.db)
@@ -10,7 +11,8 @@ const main = async () => {
 
   const playerService = new PlayerService()
   new PlayerStatisticService(playerService)
-  new RoundStatisticService(playerService, repositoryService)
+  new RoundStatisticService(config.team, config.statistic, playerService, repositoryService)
+  new StatisticService(repositoryService, playerService)
 }
 
 main()

@@ -1,4 +1,5 @@
-import { Round, RoundLokiFilter } from "../../@types";
+import { Round } from "../../../../league-core/src/types/statistic";
+import { RoundLokiFilter } from "../../@types";
 import { day } from "../../helpers";
 import LokijsRepository from "./LokijsRepository";
 

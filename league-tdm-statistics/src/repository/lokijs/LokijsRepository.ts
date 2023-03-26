@@ -1,14 +1,20 @@
 import BaseRepository from "../BaseRepository";
 import { LokiFilter, TEntity } from "../../@types";
 import { maxLimit } from "../../helpers";
+import { log } from "../../../../league-core";
 
 export default abstract class LokijsRepository<T extends TEntity> extends BaseRepository<T, Loki> {
   abstract readonly name: string
 
+  @log
   async save(t: T, opts?: {write?: boolean}) {
-    await this.getById(t.id) ?
-      this.collection.update(t) :
+    const doc = await this.getById(t.id)
+
+    if (doc) {
+      this.collection.update({...doc, ...t})
+    } else {
       this.collection.insert(t)
+    }
 
     if (opts?.write) await this.saveDatabase()
   }

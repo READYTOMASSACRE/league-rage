@@ -30,8 +30,8 @@ export default class Round {
     this.state = RoundState.prepare
 
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
-    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.players)
-    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.players])
+    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.config.players)
+    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.config.players])
   }
 
   prepare() {
@@ -83,7 +83,7 @@ export default class Round {
     this.players.push(id)
 
     this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
-    mp.events.call(Events["tdm.round.add"], id, manual)
+    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id)
   }
 
   removePlayer(id: number, manual?: boolean) {

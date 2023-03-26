@@ -1,13 +1,37 @@
 import { addDays, differenceInCalendarDays, endOfDay, startOfDay, subDays } from "date-fns";
-import { proc, proceable } from "../../league-core";
+import { event, eventable, proc, proceable } from "../../league-core";
+import { toProfile } from "../../league-core/src/helpers/toStatistic";
 import { Procs } from "../../league-core/src/types";
+import PlayerService from "./PlayerService";
 import RepositoryService from "./RepositoryService";
 
 const MAX_DIFF_INTERVAL = 2
 
+@eventable
 @proceable
-export default class PlayerProfileService {
-  constructor(readonly repositoryService: RepositoryService) {}
+export default class StatisticService {
+  constructor(
+    readonly repositoryService: RepositoryService,
+    readonly playerService: PlayerService,
+  ) {}
+
+  @event("playerJoin")
+  async overrideUserId(player: PlayerMp) {
+    Object.defineProperty(player, 'userId', {
+      get: () => this.playerService.getVariable(player, 'userId'),
+      set: (value: string) => this.playerService.setVariable(player, 'userId', value)
+    })
+
+    player.userId = `rg_${player.rgscId}`
+
+    const userProfile = await this.repositoryService.profile.getById(player.userId)
+    const profile = toProfile({ name: player.name, id: player.userId, ...userProfile })
+
+    this.playerService.setVariable(player, 'profile', profile)
+    player.name = profile.name
+    
+    if (!userProfile) this.repositoryService.profile.save(profile)
+  }
 
   @proc(Procs["tdm.statistic.profile.get"])
   async getProfile(player: PlayerMp, idOrUserId?: string | number) {
@@ -16,17 +40,7 @@ export default class PlayerProfileService {
 
     if (!profile) return
 
-    return {
-      lvl: profile.lvl,
-      exp: profile.exp,
-      kill: profile.kill,
-      death: profile.death,
-      assists: profile.assists,
-      damageDone: profile.damageDone,
-      damageRecieved: profile.damageRecieved,
-      hit: profile.hit,
-      name: profile.name,
-    }
+    return toProfile(profile)
   }
 
   @proc(Procs["tdm.statistic.round.get"])

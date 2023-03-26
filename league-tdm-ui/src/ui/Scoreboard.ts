@@ -43,8 +43,8 @@ export default class Scoreboard {
 
   private get playersData(): scoreboard.Player[] {
     return mp.players.toArray().map(player => {
-      const team = this.playerService.getVariable(player, 'team')
       const statistic = this.playerService.getStatistic(player)
+      const profile = this.playerService.getProfile(player)
 
       return {
         id: player.remoteId,
@@ -56,7 +56,7 @@ export default class Scoreboard {
         ping: player.ping, // todo fetch from server
         role: this.playerService.getVariable(player, 'team'),
         team: this.playerService.getVariable(player, 'team'),
-        lvl: 0
+        lvl: profile.lvl,
       }
     })
   }

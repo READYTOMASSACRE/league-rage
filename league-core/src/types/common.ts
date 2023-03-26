@@ -1,6 +1,7 @@
 import { Config as WeaponConfig } from './weapon'
 import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
 import { HudConfig, InteractionConfig } from './ui';
+import { StatisticConfig } from './statistic';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
 export type callable = (...args: any[]) => any
@@ -78,6 +79,7 @@ export interface IConfig {
   hud: HudConfig
   interaction: InteractionConfig
   db: DbConfig
+  statistic: StatisticConfig
 }
 
 export interface ClientConfig extends Omit<IConfig, 'db'> {}
