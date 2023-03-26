@@ -6,3 +6,4 @@ dist
 bundle.js
 .parcel-cache
 yarn-error.log
+league.db
