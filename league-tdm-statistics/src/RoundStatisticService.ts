@@ -74,14 +74,13 @@ export default class RoundStatisticService {
 
     await Promise.all(promises)
 
-    this.repositoryService.round.save({
+    this.repositoryService.round.save(toRound({
       id: Date.now(),
       arenaId: arenaId,
       result,
-      teamName: this.teamConfig[result]?.name || 'none',
       [Team.attackers]: this.stat[Team.attackers],
       [Team.defenders]: this.stat[Team.defenders],
-    }, { write: true })
+    }), { write: true })
 
     this.stat = this.toDefault()
   }

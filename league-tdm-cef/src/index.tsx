@@ -17,6 +17,7 @@ import Debug from './components/debug'
 import DeathLog from './components/deathlog/DeathLog'
 import WeaponHud from './components/weaponhud/WeaponHud'
 import Motd from './components/motd/motd'
+import Panel from './components/panel/panel'
 
 const App = () => {
 
@@ -34,6 +35,7 @@ const App = () => {
       <DeathLog />
       <WeaponHud />
       <Motd />
+      <Panel />
       {RageAPI.sendReady()}
     </>
   )

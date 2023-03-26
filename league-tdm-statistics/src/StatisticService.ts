@@ -1,6 +1,6 @@
 import { addDays, differenceInCalendarDays, endOfDay, startOfDay, subDays } from "date-fns";
-import { event, eventable, proc, proceable } from "../../league-core";
-import { toProfile } from "../../league-core/src/helpers/toStatistic";
+import { event, eventable, log, proc, proceable } from "../../league-core";
+import { toClientProfile, toProfile, toRound } from "../../league-core/src/helpers/toStatistic";
 import { Procs } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 import RepositoryService from "./RepositoryService";
@@ -27,12 +27,13 @@ export default class StatisticService {
     const userProfile = await this.repositoryService.profile.getById(player.userId)
     const profile = toProfile({ name: player.name, id: player.userId, ...userProfile })
 
-    this.playerService.setVariable(player, 'profile', profile)
+    this.playerService.setVariable(player, 'profile', toClientProfile(profile))
     player.name = profile.name
     
     if (!userProfile) this.repositoryService.profile.save(profile)
   }
 
+  @log
   @proc(Procs["tdm.statistic.profile.get"])
   async getProfile(player: PlayerMp, idOrUserId?: string | number) {
     const userId = this.getUserId(player, idOrUserId)
@@ -40,7 +41,7 @@ export default class StatisticService {
 
     if (!profile) return
 
-    return toProfile(profile)
+    return JSON.stringify(toClientProfile(profile))
   }
 
   @proc(Procs["tdm.statistic.round.get"])
@@ -58,16 +59,19 @@ export default class StatisticService {
       dateTo = tomorrow
     }
 
-    return this.repositoryService.round.get({ userId, dateFrom, dateTo })
+    const rounds = await this.repositoryService.round.get({ userId, dateFrom, dateTo })
+    return JSON.stringify(rounds.map(toRound))
   }
 
   private getUserId(player: PlayerMp, idOrUserId?: number | string) {
-    if (typeof idOrUserId !== 'undefined') {
-      const targetId = Number(idOrUserId) || -1
-      const targetPlayer = mp.players.at(targetId)
+    idOrUserId = idOrUserId ?? -1
+
+    if (idOrUserId >= 0) {
+      let targetPlayer = this.playerService.atUserId(String(idOrUserId))
+      targetPlayer = targetPlayer ?? mp.players.at(Number(idOrUserId))
   
-      if (mp.players.exists(targetPlayer)) {
-        idOrUserId = targetPlayer.userId
+      if (!mp.players.exists(targetPlayer)) {
+        return undefined
       }
 
       return String(idOrUserId)

@@ -1,3 +1,5 @@
+import console from "./helpers/console"
+
 export default class KeybindService {
   public typing: boolean = false
   private bindings: Map<string, Function> = new Map()
@@ -48,6 +50,8 @@ export default class KeybindService {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
 
+    // todo null pointer
+    // when unbind by component unbinad all keyCodes and rebind again
     for (const code of keyCode) {
       for (const upOrDown of keyHold) {
         component = this.getKey(component, upOrDown)
@@ -85,5 +89,7 @@ export const key: Record<string, number> = {
   w: 0x57,
   tab: 0x09,
   return: 0x0D,
+  enter: 0x0D,
+  vk_f2: 0x71,
   vk_f9: 0x78,
 }

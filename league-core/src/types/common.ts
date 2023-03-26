@@ -157,6 +157,8 @@ export const enum Events {
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when cef should add debug message */
   'tdm.cef.debug' = 'tdm.cef.debug',
+  /** Fires when cef recieves panel data */
+  'tdm.cef.panel' = 'tdm.cef.panel',
   /** Fires when cef should show debug window */
   'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
   /** Fires when cef motd recieved data */

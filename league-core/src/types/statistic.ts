@@ -27,6 +27,8 @@ export type Profile = {
   name: string
 }
 
+export type ClientProfile = Omit<Profile, 'password'>
+
 export type PlayerStat = {
   kill: number
   death: number
@@ -42,7 +44,6 @@ export type Round = {
   id: number
   arenaId: number
   result: Team | "draw"
-  teamName: string
   [Team.attackers]: {
     name: string
     players: Record<userId, PlayerStat>
@@ -51,4 +52,10 @@ export type Round = {
     name: string
     players: Record<userId, PlayerStat>
   }
+}
+
+export type PanelData = {
+  profile: ClientProfile
+  rounds: Round[]
+  visible: boolean
 }

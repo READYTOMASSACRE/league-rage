@@ -1,4 +1,5 @@
 import { Round } from "../../../../league-core/src/types/statistic";
+import { Team } from "../../../../league-core/src/types/tdm";
 import { RoundLokiFilter } from "../../@types";
 import { day } from "../../helpers";
 import LokijsRepository from "./LokijsRepository";
@@ -17,8 +18,8 @@ export default class RoundRepository extends LokijsRepository<Round> {
       id: { $gt: dateFrom, $lt: dateTo },
       ...(userId ? {
         $or: [
-          {[`attackers.${userId}`]: { $exists: true }},
-          {[`defenders.${userId}`]: { $exists: true }},
+          {[`${Team.attackers}.players.${userId}`]: { $exists: true }},
+          {[`${Team.defenders}.players.${userId}`]: { $exists: true }},
         ],
       } : {}),
     })

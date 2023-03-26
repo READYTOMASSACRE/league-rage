@@ -1,4 +1,4 @@
-import { PlayerStat, Profile, Round } from "../types/statistic";
+import { ClientProfile, PlayerStat, Profile, Round } from "../types/statistic";
 import { Team } from "../types/tdm";
 
 export const toPlayerStat = (o?: any): PlayerStat => ({
@@ -20,11 +20,18 @@ export const toProfile = (o?: any): Profile => ({
   exp: o?.exp ?? 0,
 })
 
+export const toClientProfile = (o?: any): ClientProfile => ({
+  ...toPlayerStat(o),
+  id: o?.id ?? '-1',
+  name: o?.name ?? '',
+  lvl: o?.lvl ?? 0,
+  exp: o?.exp ?? 0,
+})
+
 export const toRound = (o?: Partial<Round>): Round => ({
   id: o?.id ?? Date.now(),
   arenaId: o?.arenaId ?? 0,
   result: o?.result ?? "draw",
-  teamName: o?.teamName ?? 'none',
   [Team.attackers]: o?.[Team.attackers] ?? { name: '', players: {} },
   [Team.defenders]: o?.[Team.defenders] ?? { name: '', players: {} },
 })
