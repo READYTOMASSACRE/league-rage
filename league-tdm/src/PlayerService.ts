@@ -1,4 +1,4 @@
-import { event, eventable, log, ensurePlayer, command, commandable } from "../../league-core";
+import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
 import { PlayerData } from "../../league-core/src/types/tdm";
 
@@ -6,7 +6,6 @@ import { PlayerData } from "../../league-core/src/types/tdm";
 export default class PlayerService {
   constructor(readonly config: IConfig) {}
 
-  @log
   @event(Events["tdm.player.sync_health"])
   syncHealth(player: PlayerMp) {
     this.setHealth(player, player.health)
@@ -14,7 +13,6 @@ export default class PlayerService {
     return [player.health, this.getVariable(player, 'health')]
   }
 
-  @log
   @event("playerReady")
   playerReady(player: PlayerMp) {
     this.setState(player, tdm.State.idle)
@@ -23,13 +21,11 @@ export default class PlayerService {
     this.setWeaponSlot(player)
   }
 
-  @log
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
     this.spawnLobby(player)
   }
 
-  @log
   @ensurePlayer
   setHealth(p: number | PlayerMp, health: number) {
     const player = <PlayerMp>p
@@ -51,7 +47,6 @@ export default class PlayerService {
     return this.getVariable(<PlayerMp>p, 'alive')
   }
 
-  @log
   @ensurePlayer
   setDimension(p: number | PlayerMp, dimension: number) {
     (p as PlayerMp).dimension = dimension
@@ -62,7 +57,6 @@ export default class PlayerService {
     return this.getVariable(<PlayerMp>p, 'team')
   }
 
-  @log
   @ensurePlayer
   setTeam(p: number | PlayerMp, id: tdm.Team) {
     const player = <PlayerMp>p
@@ -71,13 +65,11 @@ export default class PlayerService {
     mp.players.call(Events["tdm.player.team"], [player.id, id])
   }
 
-  @log
   @ensurePlayer
   spawn(p: number | PlayerMp, vector: IVector3) {
     (p as PlayerMp).spawn(new mp.Vector3(vector))
   }
 
-  @log
   @ensurePlayer
   getState(p: number | PlayerMp) {
     return this.getVariable(<PlayerMp>p, 'state')
@@ -95,7 +87,6 @@ export default class PlayerService {
     return players
   }
 
-  @log
   @ensurePlayer
   setState(p: number | PlayerMp, state: tdm.State) {
     const player = <PlayerMp>p
@@ -104,7 +95,6 @@ export default class PlayerService {
     mp.players.call(Events["tdm.player.state"], [player.id, state])
   }
 
-  @log
   @ensurePlayer
   hasState(p: number | PlayerMp, state: tdm.State | tdm.State[]) {
     return Array.isArray(state) ?
@@ -112,14 +102,12 @@ export default class PlayerService {
       this.getState(p) === state
   }
 
-  @log
   @ensurePlayer
   @event(Events["tdm.player.spawn_lobby"])
   spawnLobby(p: number | PlayerMp) {
     (p as PlayerMp).spawn(new mp.Vector3(this.config.lobby))
   }
 
-  @log
   @ensurePlayer
   setWeaponState(p: number | PlayerMp, state: tdm.WeaponState) {
     const player = <PlayerMp>p
@@ -128,7 +116,6 @@ export default class PlayerService {
     mp.players.call(Events["tdm.player.weapon_state"], [player.id, state])
   }
 
-  @log
   @ensurePlayer
   setWeaponSlot(p: number | PlayerMp, slot?: string, weapon?: string, ammo?: number) {
     const player = <PlayerMp>p
@@ -151,7 +138,6 @@ export default class PlayerService {
     }
   }
 
-  @log
   @ensurePlayer
   getWeaponSlot(p: number | PlayerMp, slot?: string) {
     return slot ?
@@ -159,19 +145,16 @@ export default class PlayerService {
       this.getVariable(<PlayerMp>p, 'weaponSlot')
   }
 
-  @log
   @ensurePlayer
   getWeaponState(p: number | PlayerMp): tdm.WeaponState {
     return this.getVariable(<PlayerMp>p, 'weaponState')
   }
 
-  @log
   @ensurePlayer
   hasWeaponState(p: number | PlayerMp, state: tdm.WeaponState) {
     return this.getWeaponState(p) === state
   }
 
-  @log
   getByIdOrName(id: string | number): PlayerMp | PlayerMp[] | undefined {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))
@@ -186,14 +169,12 @@ export default class PlayerService {
     return p
   }
 
-  @log
   getById(id: number): PlayerMp | undefined {
     if (mp.players.exists(Number(id))) {
       return mp.players.at(Number(id))
     }
   }
 
-  @log
   @ensurePlayer
   setModel(p: number | PlayerMp, model: number) {
     const player = <PlayerMp>p

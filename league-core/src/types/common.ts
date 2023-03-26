@@ -1,6 +1,7 @@
 import { Config as WeaponConfig } from './weapon'
 import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
 import { HudConfig, InteractionConfig } from './ui';
+import { StatisticConfig } from './statistic';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
 export type callable = (...args: any[]) => any
@@ -43,9 +44,31 @@ export const enum Enviroment {
 export type Point2d = [number,number]
 export type Point3d = [number,number,number]
 
+export enum DbAdapter {
+  lokijs = 'lokijs',
+  mongodb = 'mongodb'
+}
+export interface DbConfig {
+  adapter: DbAdapter
+  lokijs?: {
+    database: string
+    autoload?: boolean
+    autosave?: boolean
+    autosaveInterval?: number
+  }
+  mongodb?: {
+    host: string
+    user: string
+    pwd: string
+    port: number
+  }
+}
+
 export interface IConfig {
   name: string
   gamemode: string
+  welcomeText: string
+  motd: string
   lang: string
   lobby: [number, number, number]
   cef: string
@@ -55,7 +78,13 @@ export interface IConfig {
   vote: VoteConfig
   hud: HudConfig
   interaction: InteractionConfig
+  db: DbConfig
+  statistic: StatisticConfig
 }
+
+export interface ClientConfig extends Omit<IConfig, 'db'> {}
+
+export type userId = string
 
 export const enum Events {
   /** Fires when tdm gamemode starts */
@@ -128,8 +157,12 @@ export const enum Events {
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when cef should add debug message */
   'tdm.cef.debug' = 'tdm.cef.debug',
+  /** Fires when cef recieves panel data */
+  'tdm.cef.panel' = 'tdm.cef.panel',
   /** Fires when cef should show debug window */
   'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
+  /** Fires when cef motd recieved data */
+  'tdm.cef.motd' = 'tdm.cef.motd',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
@@ -159,4 +192,8 @@ export const enum Procs {
   'tdm.spectate.move' = 'tdm.spectate.move',
   /** Returns player position while spectating */
   'tdm.spectate.get' = 'tdm.spectate.get',
+  /** Returns player's profile */
+  'tdm.statistic.profile.get' = 'tdm.statistic.profile.get',
+  /** Returns player round's statistic */
+  'tdm.statistic.round.get' = 'tdm.statistic.round.get',
 }

@@ -1,4 +1,4 @@
-import { IConfig } from "./types"
+import { DbAdapter, IConfig } from "./types"
 import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
 import { TextStyle } from "./types/ui"
@@ -32,6 +32,8 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
   const defaultConfig: IConfig = {
     name: '',
     gamemode: '',
+    welcomeText: `Hello :player, welcome to the ${mp.config.name}!`,
+    motd: `<h1 style="border-bottom: 1px solid; min-width: 50%; display: block; margin-bottom: 10px;">${mp.config.name}</h1> Welcome to our server, please enjoy the game!`,
     lang: 'ru',
     lobby: [-1026.7474365234375, -364.5588073730469, 36.930908203125],
     cef: "package://league-tdm-cef/index.html",
@@ -154,6 +156,27 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
           dance: "",
           dimension: 0,
         }
+      },
+    },
+    db: {
+      adapter: DbAdapter.lokijs,
+      lokijs: {
+        database: 'league.db',
+        autoload: true,
+        autosave: true,
+        autosaveInterval: 4000,
+      },
+    },
+    statistic: {
+      exp: {
+        kill: 50,
+        death: 10,
+        assist: 30,
+        win: 100,
+        hit: 5,
+        damageRecieved: 0,
+        damageDone: 5,
+        expToLvl: 1000,
       },
     }
   }

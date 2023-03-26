@@ -11,7 +11,6 @@ export interface IDummyService {
 export default new class DummyService implements IDummyService {
   readonly dummies: {
     [Entity.ROUND]: DummyMp
-    [Entity.ROUND_STAT]: DummyMp
     [Entity.TEAM]: DummyMp
   }
 
@@ -22,13 +21,6 @@ export default new class DummyService implements IDummyService {
         state: RoundState.stopped,
         time: 0,
         players: '[]',
-      }),
-      [Entity.ROUND_STAT]: this.setDefault(Entity.ROUND_STAT, {
-        result: 'draw',
-        players: {
-          attackers: {},
-          defenders: {},
-        },
       }),
       [Entity.TEAM]: this.setDefault(Entity.TEAM, {
         [Team.attackers]: { score: 0 },

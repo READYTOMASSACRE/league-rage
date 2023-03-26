@@ -120,6 +120,7 @@ export default class DebugService {
       team: this.playerService.getVariable(player, 'team'),
       weaponSlot: this.playerService.getVariable(player, 'weaponSlot'),
       weaponState: this.playerService.getVariable(player, 'weaponState'),
+      statistic: this.playerService.getVariable(player, 'statistic'),
       position: player.position,
     }
   }

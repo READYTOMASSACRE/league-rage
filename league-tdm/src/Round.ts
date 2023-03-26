@@ -1,4 +1,4 @@
-import { log, helpers } from "../../league-core"
+import { helpers } from "../../league-core"
 import { IDummyService } from "../../league-core/src/server/DummyService"
 import { Events } from "../../league-core/src/types"
 import { Entity, RoundState, State, Team, WeaponState } from "../../league-core/src/types/tdm"
@@ -30,11 +30,10 @@ export default class Round {
     this.state = RoundState.prepare
 
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
-    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.players)
-    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.players])
+    mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.config.players)
+    mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.config.players])
   }
 
-  @log
   prepare() {
     if (this.running) {
       return
@@ -54,7 +53,6 @@ export default class Round {
     }
   }
 
-  @log
   end() {
     if (!this.prepared && !this.running && !this.paused) {
       return
@@ -75,7 +73,6 @@ export default class Round {
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
-  @log
   addPlayer(id: number, manual?: boolean) {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
@@ -86,10 +83,9 @@ export default class Round {
     this.players.push(id)
 
     this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
-    mp.events.call(Events["tdm.round.add"], id, manual)
+    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id)
   }
 
-  @log
   removePlayer(id: number, manual?: boolean) {
     if (!this.players.includes(id)) {
       return
@@ -102,12 +98,10 @@ export default class Round {
     mp.events.call(Events["tdm.round.remove"], id, manual)
   }
 
-  @log
   playerQuit(id: number) {
     this.players = this.players.filter(playerId => playerId !== id)
   }
 
-  @log
   pause() {
     clearTimeout(this.roundTimer)
     this.time = this.timeleft
@@ -117,7 +111,6 @@ export default class Round {
     mp.events.call(Events["tdm.round.pause"], true)
   }
 
-  @log
   unpause() {
     if (!this.timeleft) {
       return this.end()
@@ -132,7 +125,6 @@ export default class Round {
 
   }
 
-  @log
   private getResult(): Team | "draw" {
     const result = this.info
 
@@ -151,7 +143,6 @@ export default class Round {
       : Team.defenders
   }
 
-  @log
   private async watch() { // todo rewise this lifecycle
     while (this.running) {
       if (!this.shouldRunning) {

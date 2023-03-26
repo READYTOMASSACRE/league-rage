@@ -1,4 +1,4 @@
-import { event, eventable, log } from "../../league-core"
+import { event, eventable } from "../../league-core"
 import { RoundConfig, State, Team } from "../../league-core/src/types/tdm"
 import { IDummyService } from '../../league-core/src/server/DummyService'
 import { ILanguage, Lang } from "../../league-lang/language"
@@ -44,7 +44,6 @@ export default class RoundService {
     }
   }
 
-  @log
   start(id: string, player?: PlayerMp) {
     if (this.running) {
       if (player) {
@@ -75,7 +74,6 @@ export default class RoundService {
     }, this.playerService, this.dummyService)
   }
 
-  @log
   stop(player?: PlayerMp) {
     if (!this.running || !this.round) {
       if (player) {
@@ -88,7 +86,6 @@ export default class RoundService {
     this.end()
   }
 
-  @log
   add(player: PlayerMp) {
     if (!this.running || !this.round) {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
@@ -108,7 +105,6 @@ export default class RoundService {
     return this.round.addPlayer(player.id, true)
   }
 
-  @log
   remove(player: PlayerMp) {
     if (!this.running || !this.round) {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
@@ -121,7 +117,6 @@ export default class RoundService {
     return this.round.removePlayer(player.id, true)
   }
 
-  @log
   pause(player: PlayerMp) {
     if (!this.running || !this.round) {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
@@ -133,7 +128,6 @@ export default class RoundService {
     return this.round.pause()
   }
 
-  @log
   unpause(player: PlayerMp) {
     if (!this.running || !this.round) {
       return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
@@ -145,7 +139,6 @@ export default class RoundService {
     return this.round.unpause()
   }
 
-  @log
   private end() {
     if (!this.round) return
     

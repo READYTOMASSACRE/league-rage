@@ -1,10 +1,11 @@
 import { event, eventable } from "../../league-core/client";
-import { Events, IConfig } from "../../league-core/src/types";
+import { ClientConfig, Events } from "../../league-core/src/types";
 import DummyService from "./DummyService";
 import Spectate from "./interactions/Spectate";
 import TeamSelector from "./interactions/TeamSelector";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
+import UIService from "./UIService";
 
 @eventable
 export default class InteractionService {
@@ -12,15 +13,15 @@ export default class InteractionService {
   private spectate: Spectate
 
   constructor(
-    readonly config: IConfig,
+    readonly config: ClientConfig,
     readonly playerService: PlayerService,
     readonly dummyService: DummyService,
     readonly keybindService: KeybindService,
+    readonly uiService: UIService,
   ) {
     this.teamSelector = new TeamSelector(
-      this.config.interaction.selector,
-      this.config.team,
-      this.playerService,
+      config.interaction.selector, config.team,
+      playerService, uiService,
     )
 
     this.spectate = new Spectate(dummyService, keybindService, playerService)

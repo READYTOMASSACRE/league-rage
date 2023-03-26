@@ -1,5 +1,7 @@
 import { Events, Procs } from "../../league-core/src/types";
 import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
+import console from "./helpers/console";
+import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
 
 export default class PlayerService {
   private interval: number = 0
@@ -76,6 +78,36 @@ export default class PlayerService {
 
   spawnLobby() {
     mp.events.callRemote(Events["tdm.player.spawn_lobby"])
+  }
+
+  getStatistic(player?: PlayerMp) {
+    player = player || this.local
+    let statistic = this.getVariable(player, 'statistic')
+
+    if (typeof statistic === 'string') {
+      try {
+        statistic = JSON.parse(statistic)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    return toPlayerStat(statistic)
+  }
+
+  getProfile(player?: PlayerMp) {
+    player = player || this.local
+    let profile = this.getVariable(player, 'profile')
+
+    if (typeof profile === 'string') {
+      try {
+        profile = JSON.parse(profile)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    return toProfile(profile)
   }
 
   setVariable<K extends keyof PlayerData, V extends PlayerData[K]>(

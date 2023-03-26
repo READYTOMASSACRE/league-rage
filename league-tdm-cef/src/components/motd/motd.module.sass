@@ -1,0 +1,57 @@
+@use '../../variables' as *
+
+.root
+  position: absolute
+  display: flex
+  height: 100vh
+  width: 100%
+  overflow: hidden
+  flex-direction: column
+  align-items: center
+  justify-content: center
+
+.gamemode
+  background-color: $transparentBlack
+  max-height: 10vh
+  width: 80vw
+  color: $yellow
+  padding: 5px
+  font-size: 0.7em
+  letter-spacing: 1px
+  text-align: center
+  border-bottom: 1px solid $yellow
+  z-index: 1
+
+.motd
+  background-color: $black
+  min-height: 20vh
+  max-height: 90vh
+  width: 80vw
+  max-width: 80vw
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  color: white
+  font-weight: 600
+  text-align: center
+  padding: 5px
+  & h1
+    font-weight: 800
+    font-size: 2em
+
+.button
+  width: 80vw
+  max-width: 80vw
+  padding: 5px
+  outline: none
+  border: none
+  font-weight: 600
+  color: white
+  background-color: $transparentBlack
+  border-top: 1px solid $yellow
+  &:active, &:focus
+    outline: none
+  &:active, &:hover
+    color: $yellow
+    

@@ -12,4 +12,13 @@ export default class PlayerService {
   ): PlayerData[K] {
     return player.getVariable(String(key))
   }
+
+  getTeam(player: PlayerMp) {
+    return this.getVariable(player, 'team')
+  }
+
+  atUserId(id: string): PlayerMp | undefined {
+    const player = mp.players.toArray().find(player => player.userId === id)
+    return mp.players.exists(player) ? player : undefined
+  }
 }

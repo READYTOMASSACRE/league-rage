@@ -4,6 +4,7 @@ import { Events, tdm } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
 import PlayerService from "../PlayerService";
+import UIService from "../UIService";
 
 interface TeamSelector extends TeamSelectorConfig {}
 
@@ -15,6 +16,7 @@ class TeamSelector implements TeamSelectorConfig {
   private camera: CameraMp
   private playerService: PlayerService
   private teamConfig: TeamConfig
+  private uiService: UIService
 
   private current = {
     team: 0,
@@ -24,10 +26,12 @@ class TeamSelector implements TeamSelectorConfig {
   constructor(
     config: TeamSelectorConfig,
     teamConfig: TeamConfig,
-    playerService: PlayerService
+    playerService: PlayerService,
+    uiService: UIService
   ) {
     Object.assign(this, deepclone(config))
     this.playerService = playerService
+    this.uiService = uiService
     this.teamConfig = teamConfig
 
     this.camera = mp.cameras.new(
@@ -144,7 +148,7 @@ class TeamSelector implements TeamSelectorConfig {
 
   private turn(s: "left" | "right" | "up" | "down") {
     try {
-      if (!this.running) {
+      if (!this.isRunning) {
         return
       }
   
@@ -179,7 +183,7 @@ class TeamSelector implements TeamSelectorConfig {
 
   private submit() {
     try {
-      if (!this.running) {
+      if (!this.isRunning) {
         return
       }
 
@@ -207,6 +211,12 @@ class TeamSelector implements TeamSelectorConfig {
     const { name: team, color } = this.teamConfig[this.currentTeam]
 
     return { team, color }
+  }
+
+  private get isRunning() {
+    return this.running &&
+      !this.uiService.motd.visible &&
+      !this.uiService.chat.visible
   }
 }
 

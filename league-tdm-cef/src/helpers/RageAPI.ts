@@ -1,4 +1,4 @@
-import { Enviroment, Events } from "../../../league-core/src/types"
+import { Enviroment, Events, userId } from "../../../league-core/src/types"
 
 export default new class RageAPI {
   private ready: boolean = false
@@ -30,12 +30,24 @@ export default new class RageAPI {
     mp.trigger(Events['tdm.chat.toggle'], toggle, forceClose)
   }
 
+  motdClose() {
+    mp.trigger(Events["tdm.cef.motd"], false)
+  }
+
   weaponSubmit(weapon?: string) {
     mp.trigger(Events['tdm.weapon.submit'], weapon)
   }
 
   weaponToggle() {
     mp.trigger(Events['tdm.weapon.toggle'])
+  }
+
+  panelClose() {
+    mp.trigger(Events["tdm.cef.panel"], false)
+  }
+
+  panelRequest(...args: any[]) {
+    mp.trigger(Events["tdm.cef.panel"], true, ...args)
   }
 
   sendReady() {

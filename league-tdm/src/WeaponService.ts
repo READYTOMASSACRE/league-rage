@@ -1,4 +1,4 @@
-import { command, commandable, event, eventable, log } from "../../league-core";
+import { command, commandable, event, eventable } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
 import { State, WeaponState } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
@@ -20,7 +20,6 @@ export default class WeaponService {
     readonly lang: ILanguage,
   ) {}
 
-  @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(_: number, players: number[]) {
     this.clearDelayedTasks()
@@ -40,8 +39,7 @@ export default class WeaponService {
       this.playerService.setWeaponState(p, tdm.WeaponState.idle)
     })
   }
-  
-  @log
+
   @event(Events["tdm.round.end"])
   tdmRoundEnd() {
     this.clearDelayedTasks()
@@ -52,7 +50,6 @@ export default class WeaponService {
     })
   }
 
-  @log
   @event(Events["tdm.round.add"])
   tdmRoundAdd(id: number, manual?: boolean) {
     if (manual) {
@@ -69,14 +66,12 @@ export default class WeaponService {
     }
   }
 
-  @log
   @event(Events["tdm.round.remove"])
   tdmRoundRemove(id: number, manual?: boolean) {
     this.playerService.setWeaponSlot(id)
     this.playerService.setWeaponState(id, tdm.WeaponState.idle)
   }
 
-  @log
   @event(Events["tdm.weapon.submit"])
   weaponRequest(player: PlayerMp, weapon?: string) {
     if (!weapon) {
@@ -88,7 +83,6 @@ export default class WeaponService {
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
   }
 
-  @log
   @command(['w', 'weapon'], { desc: Lang["cmd.weapon"] })
   weaponRequestCmd(player: PlayerMp, fullText: string, description: string, weapon?: string) {
     if (!weapon) {
@@ -100,7 +94,6 @@ export default class WeaponService {
     this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
   }
 
-  @log
   @event(Events["tdm.player.incoming_damage"])
   weaponDamage(player: PlayerMp, sourcePlayer?: number, weapon?: string, hit?: number, damage?: number) {
     const source = mp.players.at(sourcePlayer)
@@ -146,7 +139,6 @@ export default class WeaponService {
     }
   }
 
-  @log
   private validateRequest(player: PlayerMp, weapon: string) {
     if (!mp.players.exists(player)) {
       throw new Error(this.lang.get(Lang["error.player.not_found"], { player: player?.id }))

@@ -1,5 +1,5 @@
-import { event, eventable, logClient } from "../../league-core/client";
-import { Events, IConfig } from "../../league-core/src/types";
+import { event, eventable } from "../../league-core/client";
+import { ClientConfig, Events } from "../../league-core/src/types";
 import console from "./helpers/console";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
@@ -16,7 +16,7 @@ export default class HudService {
     private nametag?: Nametag
 
     constructor(
-        readonly config: IConfig,
+        readonly config: ClientConfig,
         readonly roundService: RoundService,
         readonly playerService: PlayerService,
     ) {}

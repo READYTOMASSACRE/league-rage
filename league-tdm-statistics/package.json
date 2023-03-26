@@ -4,7 +4,8 @@
   "version": "0.1.1",
   "license": "ISC",
   "devDependencies": {
-    "@ragempcommunity/types-server": "^2.1.1"
+    "@ragempcommunity/types-server": "^2.1.1",
+    "@types/lokijs": "^1.5.7"
   },
   "scripts": {
     "build": "tsc -p tsconfig.local.json",
@@ -14,5 +15,11 @@
     "postbuild:external": "cp -R node_modules ../../packages/league-tdm-statistics",
     "watch:external": "tsc --watch",
     "source:external": "tsc"
+  },
+  "dependencies": {
+    "@types/node": "^18.15.9",
+    "date-fns": "^2.29.3",
+    "deepmerge": "^4.3.1",
+    "lokijs": "^1.5.12"
   }
 }

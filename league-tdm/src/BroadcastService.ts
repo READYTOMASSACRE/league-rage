@@ -1,4 +1,4 @@
-import { event, eventable, log } from "../../league-core";
+import { event, eventable } from "../../league-core";
 import { Enviroment, Events, IConfig, tdm } from "../../league-core/src/types";
 import { ChatItem } from "../../league-core/src/types/cef";
 import { Vote } from "../../league-core/src/types/tdm";
@@ -19,19 +19,16 @@ export default class BroadcastService {
     readonly lang: ILanguage,
   ) {}
 
-  @log
   @event(Events["tdm.round.prepare"])
   tdmRoundPrepare(id: number) {
     this.broadcast(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: id }))
   }
 
-  @log
   @event(Events["tdm.round.start"])
   tdmRoundStart(id: number, players: number[]) {
     this.broadcast(this.lang.get(Lang["tdm.round.arena_start"], { arena: id }))
   }
 
-  @log
   @event(Events["tdm.round.end"])
   tdmRoundEnd(id: number, team: tdm.Team | "draw") {
     const result = this.teamService.getName(team)
@@ -39,7 +36,6 @@ export default class BroadcastService {
     this.broadcast(this.lang.get(Lang["tdm.round.end"], { arena: id, result }))
   }
 
-  @log
   @event(Events["tdm.round.add"])
   tdmRoundAdd(id: number, manual?: boolean) {
     if (manual) {
@@ -47,7 +43,6 @@ export default class BroadcastService {
     }
   }
 
-  @log
   @event(Events["tdm.round.remove"])
   tdmRoundRemove(id: number, manual?: boolean) {
     if (manual) {
@@ -55,7 +50,6 @@ export default class BroadcastService {
     }
   }
 
-  @log
   @event(Events["tdm.round.pause"])
   tdmRoundPause(toggle: boolean) {
     this.broadcast(toggle ?
@@ -64,7 +58,6 @@ export default class BroadcastService {
     )
   }
 
-  @log
   @event(Events["tdm.vote"])
   tdmVote(vote: Vote, id: number, key: string) {
     const player = this.playerService.getById(id)
@@ -87,7 +80,6 @@ export default class BroadcastService {
     }
   }
 
-  @log
   @event(Events["tdm.vote.start"])
   tdmVoteStart(vote: Vote, id: number, key: string) {
     const player = this.playerService.getById(id)
@@ -112,7 +104,6 @@ export default class BroadcastService {
     }
   }
 
-  @log
   @event(Events["tdm.vote.end"])
   tdmVoteEnd(vote: Vote, result: string) {
     this.arenas = []
@@ -120,7 +111,6 @@ export default class BroadcastService {
     this.notifyStop(vote)
   }
 
-  @log
   @event(Events["tdm.chat.push"])
   tdmChatPush(player: PlayerMp, message?: string) {
     if (message?.[0] === '/') {
@@ -141,32 +131,42 @@ export default class BroadcastService {
     })
   }
 
-  @log
-  broadcast(message: string | ChatItem) {
-    mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+  broadcast(message: string | ChatItem, players?: number[]) {
+    if (Array.isArray(players)) {
+      this.playerService.call(players, Events["tdm.chat.push"], message, Enviroment.server)
+    } else {
+      mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+    }
 
     return message
   }
 
-  @log
+  broadcastByServer(input: string, players?: number[]) {
+    return this.broadcast({
+      message: [
+        [`[${mp.config.name}]:`, '#ffd400'],
+        [input, '#fff'],
+      ]
+    }, players)
+  }
+
   notify(text: string, alive: number, component: string, template: string = 'default', keepAlive?: boolean) {
     mp.players.call(Events["tdm.notify.text"], [text, alive, component, template, keepAlive])
   }
 
-  @log
   notifyStop(component: string) {
     mp.players.call(Events["tdm.notify.stop"], [component])
   }
 
-  @log
   @event("playerReady")
   overrideOutputChatBox(player: PlayerMp) {
-    player.outputChatBox = function (message: string) {
+    player.outputChatBox = function (message: string | ChatItem) {
       player.call(Events["tdm.chat.push"], [message, Enviroment.server])
     }
+
+    this.broadcastByServer(this.config.welcomeText, [player.id])
   }
 
-  @log
   @event("playerJoin")
   playerJoin(player: PlayerMp) {
     mp.players.forEachFast(p => p.outputChatBox(this.lang.get(Lang["tdm.player.join"], {
@@ -174,7 +174,6 @@ export default class BroadcastService {
     })))
   }
 
-  @log
   @event("playerQuit")
   playerQuit(player: PlayerMp, exitType: string, reason?: string) {
     mp.players.forEachFast(p => p.outputChatBox(this.lang.get(Lang["tdm.player.quit"], {
@@ -183,7 +182,6 @@ export default class BroadcastService {
     })))
   }
 
-  @log
   @event(Events["tdm.player.change_name"])
   onChangeName(id: number, old: string, newName: string) {
     this.broadcast(this.lang.get(Lang["tdm.player.change_name"], { player: old, new: newName }))
