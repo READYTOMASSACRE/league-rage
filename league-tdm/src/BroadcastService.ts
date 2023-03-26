@@ -142,10 +142,23 @@ export default class BroadcastService {
   }
 
   @log
-  broadcast(message: string | ChatItem) {
-    mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+  broadcast(message: string | ChatItem, players?: number[]) {
+    if (Array.isArray(players)) {
+      this.playerService.call(players, Events["tdm.chat.push"], message, Enviroment.server)
+    } else {
+      mp.players.call(Events["tdm.chat.push"], [message, Enviroment.server])
+    }
 
     return message
+  }
+
+  broadcastByServer(input: string, players?: number[]) {
+    return this.broadcast({
+      message: [
+        [`[${mp.config.name}]:`, '#ffd400'],
+        [input, '#fff'],
+      ]
+    }, players)
   }
 
   @log
@@ -161,9 +174,11 @@ export default class BroadcastService {
   @log
   @event("playerReady")
   overrideOutputChatBox(player: PlayerMp) {
-    player.outputChatBox = function (message: string) {
+    player.outputChatBox = function (message: string | ChatItem) {
       player.call(Events["tdm.chat.push"], [message, Enviroment.server])
     }
+
+    this.broadcastByServer(this.config.welcomeText, [player.id])
   }
 
   @log

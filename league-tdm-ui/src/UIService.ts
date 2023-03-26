@@ -10,6 +10,7 @@ import Controls from "./ui/Controls";
 import Deathlog from "./ui/Deathlog";
 import Debug from "./ui/Debug";
 import Infopanel from "./ui/Infopanel";
+import Motd from "./ui/Motd";
 import NotifyText from "./ui/Notifytext";
 import Scoreboard from "./ui/Scoreboard";
 import TeamSelector from "./ui/TeamSelector";
@@ -28,6 +29,7 @@ export default class UIService {
   public controls: Controls
   public notifyText: NotifyText
   public deathlog: Deathlog
+  public motd: Motd
 
   constructor(
     readonly url: string,
@@ -53,6 +55,7 @@ export default class UIService {
     this.controls = new Controls(this, lang)
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
     this.deathlog = new Deathlog(config.team, this, playerService)
+    this.motd = new Motd(config.motd, this)
 
     this.disableControlActions()
   }

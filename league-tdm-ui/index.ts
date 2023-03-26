@@ -23,8 +23,7 @@ const main = async () => {
     const zoneService = new ZoneService(playerService, dummyService)
     const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
     const keybindService = new KeybindService()
-
-    new UIService(
+    const uiService = new UIService(
       "package://league-tdm-cef/index.html",
       config,
       keybindService,
@@ -36,7 +35,7 @@ const main = async () => {
 
     new WeaponService(playerService)
     new HudService(config, roundService, playerService)
-    new InteractionService(config, playerService, dummyService, keybindService)
+    new InteractionService(config, playerService, dummyService, keybindService, uiService)
     new DebugService(playerService)
 
     mp.console.log('league-tdm-ui package initialized')

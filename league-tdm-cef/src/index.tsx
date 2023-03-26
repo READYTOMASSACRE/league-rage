@@ -16,6 +16,7 @@ import Notifytext from './components/notifytext'
 import Debug from './components/debug'
 import DeathLog from './components/deathlog/DeathLog'
 import WeaponHud from './components/weaponhud/WeaponHud'
+import Motd from './components/motd/motd'
 
 const App = () => {
 
@@ -32,6 +33,7 @@ const App = () => {
       <Debug />
       <DeathLog />
       <WeaponHud />
+      <Motd />
       {RageAPI.sendReady()}
     </>
   )

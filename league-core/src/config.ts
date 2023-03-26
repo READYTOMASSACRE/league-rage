@@ -32,6 +32,8 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
   const defaultConfig: IConfig = {
     name: '',
     gamemode: '',
+    welcomeText: `Welcome to the ${mp.config.name} server!`,
+    motd: `<h1 style="border-bottom: 1px solid; min-width: 50%; display: block; margin-bottom: 10px;">${mp.config.name}</h1> Welcome to our server, please enjoy the game!`,
     lang: 'ru',
     lobby: [-1026.7474365234375, -364.5588073730469, 36.930908203125],
     cef: "package://league-tdm-cef/index.html",
@@ -157,8 +159,13 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       },
     },
     db: {
-      adapter: DbAdapter.lowdb,
-      lowdb: "db.json",
+      adapter: DbAdapter.lokijs,
+      lokijs: {
+        database: 'league.db',
+        autoload: true,
+        autosave: true,
+        autosaveInterval: 4000,
+      },
     },
   }
 

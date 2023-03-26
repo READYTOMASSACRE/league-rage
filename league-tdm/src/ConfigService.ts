@@ -10,6 +10,8 @@ export default class ConfigService {
         return {
             name: this.config.name,
             gamemode: this.config.gamemode,
+            welcomeText: this.config.welcomeText,
+            motd: this.config.motd,
             lang: this.config.lang,
             lobby: this.config.lobby,
             cef: this.config.cef,

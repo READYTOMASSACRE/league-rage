@@ -30,6 +30,10 @@ export default new class RageAPI {
     mp.trigger(Events['tdm.chat.toggle'], toggle, forceClose)
   }
 
+  motdClose() {
+    mp.trigger(Events["tdm.cef.motd"], false)
+  }
+
   weaponSubmit(weapon?: string) {
     mp.trigger(Events['tdm.weapon.submit'], weapon)
   }

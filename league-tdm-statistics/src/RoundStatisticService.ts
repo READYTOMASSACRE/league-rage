@@ -114,13 +114,15 @@ export default class RoundStatisticService {
   }
 
   private getDefault(data?: Partial<RoundStatData>): RoundStatData {
-    return deepmerge({
+    const defautData: RoundStatData = {
       result: 'draw',
       players: {
         [Team.attackers]: {},
         [Team.defenders]: {},
       },
-    }, data)
+    }
+
+    return data ? deepmerge(defautData, data) : defautData
   }
 
   private getDefaultPlayerStat(players: number[]) {

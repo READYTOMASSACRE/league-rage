@@ -1,27 +1,43 @@
-import { Low } from "lowdb/lib";
-import { JSONFile } from "lowdb/node";
 import { resolve } from "path";
 import { DbAdapter, DbConfig } from "../../league-core/src/types";
-import { IProfileRepoSitory, IRoundRepository, LowdbCollection } from "./@types";
+import { IProfileRepoSitory, IRoundRepository } from "./@types";
 import { packagesPath } from "./helpers";
-import LowdbProfileRepository from "./repository/lowdb/ProfileRepository";
-import LowdbRoundRepository from "./repository/lowdb/RoundRepository";
+import LokijsProfileRepository from "./repository/lokijs/ProfileRepository";
+import LokijsRoundRepository from "./repository/lokijs/RoundRepository";
 import MongodbProfileRepository from "./repository/mongodb/ProfileRepository";
 import MongodbRoundRepository from "./repository/mongodb/RoundRepository";
+import Loki from 'lokijs'
+
+const collections = ['profile', 'round']
 
 export default class RepositoryService {
   readonly profile: IProfileRepoSitory
   readonly round: IRoundRepository
-  private lowdb?: Low<LowdbCollection>
+  private lokijs?: Loki
+  private lokiPromise: Promise<void>
 
   constructor(readonly config: DbConfig) {
-    if (config.adapter === DbAdapter.lowdb) {
-      const dbPath = resolve(packagesPath, config.lowdb)
-      const adapter = new JSONFile<LowdbCollection>(dbPath)
+    if (config.adapter === DbAdapter.lokijs) {
+      if (!config.lokijs) {
+        throw new Error('Lokijs is not configured')
+      }
 
-      this.lowdb = new Low(adapter)
-      this.profile = new LowdbProfileRepository(this.lowdb)
-      this.round = new LowdbRoundRepository(this.lowdb)
+      const dbPath = resolve(packagesPath, config.lokijs.database)
+
+      let _resolve: () => void
+      let _reject: () => void
+
+      this.lokiPromise = new Promise((resolve, reject) => {
+        _resolve = resolve
+        _reject = reject
+      })
+
+      this.lokijs = new Loki(dbPath, {
+        ...config.lokijs,
+        autoloadCallback: () => this.lokiLoad(_resolve, _reject),
+      })
+      this.profile = new LokijsProfileRepository(this.lokijs)
+      this.round = new LokijsRoundRepository(this.lokijs)
     } else {
       this.profile = new MongodbProfileRepository({})
       this.round = new MongodbRoundRepository({})
@@ -29,6 +45,22 @@ export default class RepositoryService {
   }
 
   async load() {
-    if (this.lowdb) await this.lowdb.read()
+    if (this.lokijs) {
+      return this.lokiPromise
+    }
+  }
+
+  private lokiLoad(resolve: () => void, reject: () => void) {
+    if (!this.lokijs) reject()
+
+    for (const collection of collections) {
+      if (!this.lokijs.getCollection(collection)) {
+        this.lokijs.addCollection(collection, {
+          unique: ['id'],
+        })
+      }
+    }
+
+    resolve()
   }
 }

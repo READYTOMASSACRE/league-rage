@@ -44,12 +44,17 @@ export type Point2d = [number,number]
 export type Point3d = [number,number,number]
 
 export enum DbAdapter {
-  lowdb = 'lowdb',
+  lokijs = 'lokijs',
   mongodb = 'mongodb'
 }
 export interface DbConfig {
   adapter: DbAdapter
-  lowdb: string
+  lokijs?: {
+    database: string
+    autoload?: boolean
+    autosave?: boolean
+    autosaveInterval?: number
+  }
   mongodb?: {
     host: string
     user: string
@@ -61,6 +66,8 @@ export interface DbConfig {
 export interface IConfig {
   name: string
   gamemode: string
+  welcomeText: string
+  motd: string
   lang: string
   lobby: [number, number, number]
   cef: string
@@ -148,6 +155,8 @@ export const enum Events {
   'tdm.cef.debug' = 'tdm.cef.debug',
   /** Fires when cef should show debug window */
   'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
+  /** Fires when cef motd recieved data */
+  'tdm.cef.motd' = 'tdm.cef.motd',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */

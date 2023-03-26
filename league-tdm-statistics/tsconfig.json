@@ -10,7 +10,7 @@
       "composite": true,
       "skipLibCheck": true,
       "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"],
-      "esModuleInterop": true
+      "esModuleInterop": true,
   },
   "references": [
     {"path": "../league-core", "declarationMap": true},
