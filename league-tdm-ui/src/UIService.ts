@@ -1,5 +1,5 @@
 import { event, eventable, logClient } from "../../league-core/client";
-import { Events, IConfig } from "../../league-core/src/types";
+import { ClientConfig, Events } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
@@ -33,7 +33,7 @@ export default class UIService {
 
   constructor(
     readonly url: string,
-    readonly config: IConfig,
+    readonly config: ClientConfig,
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService,
     readonly dummyService: DummyService,
@@ -55,7 +55,7 @@ export default class UIService {
     this.controls = new Controls(this, lang)
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
     this.deathlog = new Deathlog(config.team, this, playerService)
-    this.motd = new Motd(config.motd, this)
+    this.motd = new Motd(config, this)
 
     this.disableControlActions()
   }

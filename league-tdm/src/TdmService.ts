@@ -21,7 +21,6 @@ export default class TdmService {
     readonly lang: ILanguage,
   ) {}
 
-  @log
   @command(['start', 'arena', 'a'], {desc: Lang["cmd.start_arena"]})
   start(player: PlayerMp, fullText: string, description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.start')
@@ -33,7 +32,6 @@ export default class TdmService {
     return this.roundService.start(id, player)
   }
 
-  @log
   @command(['stop', 's'], {desc: Lang["cmd.stop_arena"]})
   stop(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.stop')
@@ -41,7 +39,6 @@ export default class TdmService {
     return this.roundService.stop(player)
   }
 
-  @log
   @command('add', {desc: Lang["cmd.add_player"]})
   add(player: PlayerMp, fullText: string,description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.add')
@@ -64,7 +61,6 @@ export default class TdmService {
     return this.roundService.add(addPlayer)
   }
 
-  @log
   @command('remove', {desc: Lang["cmd.remove_player"]})
   remove(player: PlayerMp, fullText: string,description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.remove')
@@ -87,7 +83,6 @@ export default class TdmService {
     return this.roundService.remove(removePlayer)
   }
 
-  @log
   @command('pause', {desc: Lang["cmd.pause"]})
   pause(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.pause')
@@ -95,7 +90,6 @@ export default class TdmService {
     return this.roundService.pause(player)
   }
 
-  @log
   @command('unpause', {desc: Lang["cmd.unpause"]})
   unpause(player: PlayerMp, fullText: string, description: string) {
     this.permissionService.hasRight(player, 'tdm.pause')
@@ -103,7 +97,6 @@ export default class TdmService {
     return this.roundService.unpause(player)
   }
 
-  @log
   @command('vote', {desc: Lang["cmd.vote"]})
   vote(player: PlayerMp, fullText: string, description: string, id?: string) {
     this.permissionService.hasRight(player, 'tdm.vote')
@@ -119,7 +112,6 @@ export default class TdmService {
     })
   }
 
-  @log
   @proc(Procs["tdm.arena.get"])
   getArenas(player: PlayerMp, id?: number) {
     if (typeof id !== 'undefined') {
@@ -146,7 +138,6 @@ export default class TdmService {
     mp.events.call(Events["tdm.player.change_name"], player.id, old, player.name)
   }
 
-  @log
   @command('cmdlist')
   cmdlistCmd(player: PlayerMp, fullText: string, description: string, p: string = "0", l: string | number = 7) {
     l = Number(l) || 7
@@ -174,7 +165,6 @@ export default class TdmService {
     }
   }
 
-  @log
   @command('kill')
   kill(player: PlayerMp) {
     this.playerService.setHealth(player, 0)

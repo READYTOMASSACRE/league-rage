@@ -1,12 +1,12 @@
 import { proc, proceable } from "../../league-core";
-import { DbConfig, IConfig, Procs } from "../../league-core/src/types";
+import { ClientConfig, IConfig, Procs } from "../../league-core/src/types";
 
 @proceable
 export default class ConfigService {
     constructor(readonly config: IConfig) {}
 
     @proc(Procs["tdm.config.get"])
-    get(): Omit<IConfig, 'db'> {
+    get(): ClientConfig {
         return {
             name: this.config.name,
             gamemode: this.config.gamemode,

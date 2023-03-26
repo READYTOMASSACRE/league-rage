@@ -26,11 +26,15 @@ export default class RoundStatisticService {
     return this.stat
   }
 
+  @log
   @event(Events['tdm.round.prepare'])
   roundPrepare(_: number, players: number[]) {
     this.stat = this.getDefault({ players: this.getDefaultPlayerStat(players) })
+
+    return this.stat
   }
 
+  @log
   @event(Events['tdm.round.end'])
   async roundEnd(arenaId: number, result: Team | 'draw') {
     const playerStats = [
@@ -113,6 +117,7 @@ export default class RoundStatisticService {
     }
   }
 
+  @log
   private getDefault(data?: Partial<RoundStatData>): RoundStatData {
     const defautData: RoundStatData = {
       result: 'draw',
@@ -125,6 +130,7 @@ export default class RoundStatisticService {
     return data ? deepmerge(defautData, data) : defautData
   }
 
+  @log
   private getDefaultPlayerStat(players: number[]) {
     const stats = {
       [Team.attackers]: <Record<userId, PlayerStat>>{},

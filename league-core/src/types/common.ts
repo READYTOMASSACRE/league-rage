@@ -80,6 +80,8 @@ export interface IConfig {
   db: DbConfig
 }
 
+export interface ClientConfig extends Omit<IConfig, 'db'> {}
+
 export type userId = string
 
 export const enum Events {

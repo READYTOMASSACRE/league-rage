@@ -23,7 +23,7 @@ export default class Chat {
   push(msg: string | ChatItem, from?: Enviroment) {
     if (from === Enviroment.cef) {
       mp.events.callRemote(Events["tdm.chat.push"], msg)
-    } else if (from === Enviroment.server) {
+    } else if ([Enviroment.server, Enviroment.client].includes(from)) {
       if (typeof msg === 'string') {
         msg = { message: [[msg, '#fff']]}
       }

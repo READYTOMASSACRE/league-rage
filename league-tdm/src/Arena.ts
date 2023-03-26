@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { log, helpers, types, command, commandable } from '../../league-core'
+import { helpers, types, command, commandable } from '../../league-core'
 import { ILanguage, Lang } from "../../league-lang/language"
 
 @commandable
@@ -25,7 +25,6 @@ export default class Arena {
     this.lang = lang
   }
 
-  @log
   getRandVector(team: types.tdm.Team): Vector3 {
     const randIndex = helpers.rand(this.arena[team].length)
     const vector = this.arena[team][randIndex]

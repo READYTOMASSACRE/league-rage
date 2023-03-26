@@ -1,4 +1,4 @@
-import { Events, IConfig, Procs } from "../league-core/src/types"
+import { ClientConfig, Events, IConfig, Procs } from "../league-core/src/types"
 import './src/helpers/console'
 import { Language } from '../league-lang/language'
 import DebugService from "./src/DebugService"
@@ -14,7 +14,7 @@ import ZoneService from "./src/ZoneService"
 
 const main = async () => {
   try {
-    const config: IConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
+    const config: ClientConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
     const lang = await mp.events.callRemoteProc(Procs["tdm.language.get"], config.lang)
     const language = new Language(lang)
   

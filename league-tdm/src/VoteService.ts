@@ -1,4 +1,4 @@
-import { log, eventable, event, helpers } from "../../league-core";
+import { eventable, event, helpers } from "../../league-core";
 import { Events } from "../../league-core/src/types";
 import { VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
@@ -19,7 +19,6 @@ export default class VoteService {
     readonly lang: ILanguage,
   ) {}
 
-  @log
   @event("playerQuit")
   playerQuit(player: PlayerMp) {
     for (const[, info] of Object.entries(this.info)) {
@@ -29,7 +28,6 @@ export default class VoteService {
     }
   }
 
-  @log
   voteArena(player: PlayerMp, key: string | number, callback: (result: string) => void) {
     if (typeof this.config["arena"] === 'undefined') {
       throw new BroadCastError(this.lang.get(Lang["error.vote.not_found_config"], { vote: 'arena' }), player)
@@ -42,12 +40,10 @@ export default class VoteService {
     }
   }
 
-  @log
   isRunning(vote: string) {
     return Boolean(this.info[vote] && this.info[vote].timer)
   }
 
-  @log
   getResult(vote: string): string {
     const {key} = Object.entries(this.info[vote].result).reduce((acc, [key, vote]) => {
       if (acc.vote < vote) {
@@ -61,7 +57,6 @@ export default class VoteService {
     return key
   }
 
-  @log
   private add(vote: string, key: string | number, player: PlayerMp) {
     const info = this.info[vote]
 
@@ -74,7 +69,6 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote"], vote, player.id, key)
   }
 
-  @log
   private start(vote: string, key: string | number, player: PlayerMp, callback: (result: string) => void) {
     this.info[vote] = {
       result: {[key]: 1},
@@ -93,7 +87,6 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote.start"], vote, player.id, key)
   }
 
-  @log
   private stop(vote: string, result?: string) {
     clearTimeout(this.info[vote]?.timer)
     delete this.info[vote]
@@ -101,7 +94,6 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote.end"], vote, result)
   }
 
-  @log
   private getTimeleft(vote: string) {
     return helpers.toMs(this.config[vote])
   }

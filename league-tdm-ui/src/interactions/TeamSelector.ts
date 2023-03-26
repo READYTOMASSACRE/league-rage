@@ -148,7 +148,7 @@ class TeamSelector implements TeamSelectorConfig {
 
   private turn(s: "left" | "right" | "up" | "down") {
     try {
-      if (!this.running || this.uiService.motd.visible) {
+      if (!this.isRunning) {
         return
       }
   
@@ -183,7 +183,7 @@ class TeamSelector implements TeamSelectorConfig {
 
   private submit() {
     try {
-      if (!this.running || this.uiService.motd.visible) {
+      if (!this.isRunning) {
         return
       }
 
@@ -211,6 +211,12 @@ class TeamSelector implements TeamSelectorConfig {
     const { name: team, color } = this.teamConfig[this.currentTeam]
 
     return { team, color }
+  }
+
+  private get isRunning() {
+    return this.running &&
+      !this.uiService.motd.visible &&
+      !this.uiService.chat.visible
   }
 }
 

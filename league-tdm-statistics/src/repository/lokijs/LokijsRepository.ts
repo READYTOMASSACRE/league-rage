@@ -6,7 +6,10 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
   abstract readonly name: string
 
   async save(t: T, opts?: {write?: boolean}) {
-    this.collection.update(t)
+    await this.getById(t.id) ?
+      this.collection.update(t) :
+      this.collection.insert(t)
+
     if (opts?.write) await this.saveDatabase()
   }
 
@@ -28,8 +31,8 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
     )
   }
 
-  async getOne(query: LokiQuery<T & LokiObj> = {}) {
-    return this.collection.findOne(query)
+  async getOne(query: LokiQuery<T & LokiObj> = {}): Promise<T & LokiObj | undefined> {
+    return Promise.resolve(this.collection.findOne(query))
   }
 
   async getById(id: number | string) {

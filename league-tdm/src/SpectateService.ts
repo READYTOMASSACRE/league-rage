@@ -1,4 +1,4 @@
-import { command, commandable, event, eventable, log, proc, proceable } from "../../league-core";
+import { command, commandable, event, eventable, proc, proceable } from "../../league-core";
 import { Events, Procs } from "../../league-core/src/types";
 import { State, Team } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
@@ -16,7 +16,6 @@ export default class SpectateService {
     readonly lang: ILanguage,
   ) {}
 
-  @log
   @event(['playerDeath', 'playerQuit'])
   onPLayerDeathOrQuit(player: PlayerMp) {
     if (!this.roundService.running) {
@@ -32,7 +31,6 @@ export default class SpectateService {
     }
   }
 
-  @log
   @event([Events["tdm.round.end"], Events["tdm.round.start"]])
   onRoundStartOrEnd() {
     const players = this.playerService.getWithState(State.spectate)
@@ -42,7 +40,6 @@ export default class SpectateService {
     }
   }
 
-  @log
   @event(Events["tdm.round.remove"])
   onPlayerRemove(id: number) {
     const player = mp.players.at(id)
@@ -60,13 +57,11 @@ export default class SpectateService {
     }
   }
 
-  @log
   @event(Events["tdm.round.add"])
   onPlayerAdd(id: number) {
     this.stopSpectate(id)
   }
 
-  @log
   @command(['spec', 'spectate'], { desc: Lang["cmd.spectate"] })
   spectate(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!this.roundService.running) {
@@ -119,7 +114,6 @@ export default class SpectateService {
     this.playerService.call([player.id], Events["tdm.spectate.start"], spectatePlayer.id)
   }
 
-  @log
   @proc(Procs["tdm.spectate.move"])
   moveSpectate(player: PlayerMp, x: number, y: number, z: number, dimension: number) {
     try {
@@ -137,7 +131,6 @@ export default class SpectateService {
     }
   }
 
-  @log
   @proc(Procs["tdm.spectate.get"])
   getSpectateData(player: PlayerMp, id?: number) {
     if (!this.playerService.hasState(player, State.spectate)) {

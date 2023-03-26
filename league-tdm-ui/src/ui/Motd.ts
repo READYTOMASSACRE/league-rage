@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client";
-import { Events, IConfig } from "../../../league-core/src/types";
+import { ClientConfig, Enviroment, Events } from "../../../league-core/src/types";
 import UIService from "../UIService";
 
 @eventable
@@ -7,13 +7,19 @@ export default class Motd {
   public visible: boolean = false
 
   constructor(
-    readonly motd: string,
+    readonly config: ClientConfig,
     readonly uiService: UIService
   ) {}
 
   @event(Events["tdm.ui.ready"])
   ready() {
     this.toggle(true)
+    mp.events.call(Events["tdm.chat.push"], {
+      message: [
+        [`[${this.config.name}]:`, '#ffd400'],
+        [this.config.welcomeText.replace(':player', mp.players.local.name), '#fff'],
+      ]
+    }, Enviroment.client)
   }
 
   @event(Events["tdm.cef.motd"])
@@ -24,6 +30,6 @@ export default class Motd {
   }
 
   get data() {
-    return [this.motd, 'League 0.6.a', this.visible]
+    return [this.config.motd, 'League 0.6.a', this.visible]
   }
 }
