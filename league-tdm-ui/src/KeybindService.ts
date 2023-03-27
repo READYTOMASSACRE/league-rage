@@ -1,4 +1,3 @@
-import { logClient } from "../../league-core/client"
 import console from "./helpers/console"
 
 type Binding = {
@@ -76,17 +75,15 @@ export default class KeybindService {
     return `${component}_${keyHold ? 'down' : 'up'}`
   }
 
-  @logClient
   private handle(keyCode: number, keyHold: boolean) {
     const key = this.getHandleKey(keyCode, keyHold)
     const bindings = this.bindings.get(key) || []
 
     let iterate = 0
 
-    for (const {handler, stopPropagation, component} of bindings) {
+    for (const {handler, stopPropagation} of bindings) {
       try {
         const response = handler()
-        console.log(`CALL ${component} with ${stopPropagation ? 'stopPropagation' : 'default'}`)
 
         if (response instanceof Promise) {
           response.catch(err => {
