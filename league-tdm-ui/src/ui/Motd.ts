@@ -16,12 +16,7 @@ export default class Motd {
     readonly config: ClientConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
-  ) {
-    this.keybindService.bind(key.enter, true, Motd.key, () => this.toggle(false), {
-      stopPropagation: true,
-      priority: keyPriority.highest,
-    })
-  }
+  ) {}
 
   @event(Events["tdm.ui.ready"])
   ready() {
@@ -40,15 +35,21 @@ export default class Motd {
     this.visible = t
     this.uiService.cef.call(Events["tdm.cef.motd"], ...this.data)
     this.uiService.setCursor(this.visible, Motd.key)
-
-    if (!this.visible) {
-      this.keybindService.unbind(key.enter, true, Motd.key)
-    }
+    this.bindKeys(this.visible)
   }
 
   @command('motd')
   motdCmd() {
     this.toggle(true)
+  }
+
+  bindKeys(t: boolean = true) {
+    return t ?
+      this.keybindService.bind(key.enter, true, Motd.key, () => this.toggle(false), {
+        stopPropagation: true,
+        priority: keyPriority.highest,
+      }) :
+      this.keybindService.unbind(key.enter, true, Motd.key)
   }
 
   get data() {

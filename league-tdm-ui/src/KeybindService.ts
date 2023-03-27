@@ -82,7 +82,7 @@ export default class KeybindService {
 
     let iterate = 0
 
-    for (const {handler, stopPropagation} of bindings) {
+    for (const {handler, stopPropagation, component} of bindings) {
       try {
         const response = handler()
 
@@ -93,6 +93,7 @@ export default class KeybindService {
           })
         }
 
+        console.log(`keybindService::${component}::${inverseKey[keyCode]}`)
         if (stopPropagation || response?.__stopPropagation) break
       } catch (err) {
         console.error(err)
@@ -153,3 +154,9 @@ export const key: Record<string, number> = {
   vk_f2: 0x71,
   vk_f9: 0x78,
 }
+
+export const inverseKey: Record<number, string> = Object.fromEntries(
+  Object
+  .entries(key)
+  .map(([key, value]) => [value, key])
+)

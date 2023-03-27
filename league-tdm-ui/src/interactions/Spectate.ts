@@ -25,10 +25,6 @@ export default class Spectate {
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService
   ) {
-    this.keybindService.unbind(key.a, true, Spectate.key)
-    this.keybindService.unbind(key.d, true, Spectate.key)
-    this.keybindService.bind(key.a, true, Spectate.key, this.turn('left'))
-    this.keybindService.bind(key.d, true, Spectate.key, this.turn('right'))
     this.gameplayCamera = mp.cameras.new('gameplay')
   }
 
@@ -65,6 +61,7 @@ export default class Spectate {
   }
 
   private toggle(t: boolean) {
+    this.bindKeys(t)
     this.playerService.setInvicible(t)
     this.playerService.setAlpha(t ? 0 : 255)
     mp.game.ui.displayRadar(!t)
@@ -78,6 +75,16 @@ export default class Spectate {
       })
     } else {
       this.prepare()
+    }
+  }
+
+  private bindKeys(t: boolean) {
+    if (t) {
+      this.keybindService.bind(key.a, true, Spectate.key, this.turn('left'))
+      this.keybindService.bind(key.d, true, Spectate.key, this.turn('right'))
+    } else {
+      this.keybindService.unbind(key.a, true, Spectate.key)
+      this.keybindService.unbind(key.d, true, Spectate.key)
     }
   }
 
