@@ -1,5 +1,6 @@
 import { command, commandable, event, eventable, logClient } from "../../../league-core/client";
 import { ClientConfig, Enviroment, Events } from "../../../league-core/src/types";
+import { keyPriority } from "../@types/common";
 import console from "../helpers/console";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
@@ -15,7 +16,12 @@ export default class Motd {
     readonly config: ClientConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
-  ) {}
+  ) {
+    this.keybindService.bind(key.enter, false, Motd.key, () => this.toggle(false), {
+      stopPropagation: true,
+      priority: keyPriority.highest,
+    })
+  }
 
   @event(Events["tdm.ui.ready"])
   ready() {
@@ -34,6 +40,10 @@ export default class Motd {
     this.visible = t
     this.uiService.cef.call(Events["tdm.cef.motd"], ...this.data)
     this.uiService.setCursor(this.visible, Motd.key)
+
+    if (!this.visible) {
+      this.keybindService.unbind(key.enter, false, Motd.key)
+    }
   }
 
   @command('motd')

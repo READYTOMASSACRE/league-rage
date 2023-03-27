@@ -16,7 +16,7 @@ export default class Chat {
     this.toggle = this.toggle.bind(this)
 
     this.keybindService.unbind(key.t, true, Chat.key)
-    this.keybindService.bind(key.t, true, this.toggle, Chat.key)
+    this.keybindService.bind(key.t, true, Chat.key, this.toggle)
   }
 
   @event(Events["tdm.chat.push"])

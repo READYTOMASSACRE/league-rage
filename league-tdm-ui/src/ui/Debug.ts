@@ -13,8 +13,9 @@ export default class Debug {
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
   ) {
+    this.toggle = this.toggle.bind(this)
     this.keybindService.unbind(key.vk_f9, true, Debug.key)
-    this.keybindService.bind(key.vk_f9, true, () => this.toggle(), Debug.key)
+    this.keybindService.bind(key.vk_f9, true, Debug.key, this.toggle)
 
     mp.events.add(Events["tdm.cef.debug"], (args: string[], type?: string) => this.debug(args, type))
   }

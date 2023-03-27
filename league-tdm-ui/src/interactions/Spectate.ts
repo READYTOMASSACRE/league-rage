@@ -27,8 +27,8 @@ export default class Spectate {
   ) {
     this.keybindService.unbind(key.a, true, Spectate.key)
     this.keybindService.unbind(key.d, true, Spectate.key)
-    this.keybindService.bind(key.a, true, this.turn('left'), Spectate.key)
-    this.keybindService.bind(key.d, true, this.turn('right'), Spectate.key)
+    this.keybindService.bind(key.a, true, Spectate.key, this.turn('left'))
+    this.keybindService.bind(key.d, true, Spectate.key, this.turn('right'))
     this.gameplayCamera = mp.cameras.new('gameplay')
   }
 

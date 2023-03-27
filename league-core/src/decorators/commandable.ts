@@ -1,4 +1,4 @@
-import { env } from "../helpers"
+import { decorate, env } from "../helpers"
 import { Command, ctor, Decorator, Enviroment, Events } from "../types"
 
 const server = <T extends ctor>(target: T): T => {
@@ -115,6 +115,10 @@ const client = <T extends ctor>(target: T): T => {
 
         mp.events.add(Events["tdm.chat.push"], (fullText: string) => {
           try {
+            if (typeof fullText !== 'string') {
+              return
+            }
+
             const slash = fullText.slice(0, 1)
             const input = fullText.slice(1)
   
@@ -150,7 +154,7 @@ const client = <T extends ctor>(target: T): T => {
               return callback.apply(this, [description, ...commandArgs])
             }
           } catch (err) {
-            (mp as any).console.logError('Invalid register command: ' + err.stack)
+            (mp as any).console.logError('Invalid register command: ' + err.stack + decorate(fullText))
           }
         })
 

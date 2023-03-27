@@ -3,6 +3,7 @@ import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
 import { TeamConfig } from "../../../league-core/src/types/tdm";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
+import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
 import UIService from "../UIService";
 
@@ -10,13 +11,17 @@ interface TeamSelector extends TeamSelectorConfig {}
 
 @eventable
 class TeamSelector implements TeamSelectorConfig {
+  static key = 'teamselector'
+
   private running: boolean = false
   private ids: number[] = []
   private teamPed: Record<string, { skin: string, ped: PedMp }[]> = {}
   private camera: CameraMp
   private playerService: PlayerService
   private teamConfig: TeamConfig
+
   private uiService: UIService
+  private keybindService: KeybindService
 
   private current = {
     team: 0,
@@ -27,12 +32,14 @@ class TeamSelector implements TeamSelectorConfig {
     config: TeamSelectorConfig,
     teamConfig: TeamConfig,
     playerService: PlayerService,
-    uiService: UIService
+    uiService: UIService,
+    keybindService: KeybindService,
   ) {
     Object.assign(this, deepclone(config))
     this.playerService = playerService
     this.uiService = uiService
     this.teamConfig = teamConfig
+    this.keybindService = keybindService
 
     this.camera = mp.cameras.new(
       "TeamSelector",
@@ -57,17 +64,11 @@ class TeamSelector implements TeamSelectorConfig {
       this.teamPed[team] = peds
     }
 
-    const rightButtons = [0x27, 0x44] // VK_RIGHT, D
-    const leftButtons = [0x25, 0x41] // VK_LEFT, A
-    const upButtons = [0x26, 0x57] // VK_UP, W
-    const downButtons = [0x28, 0x53] // VK_DOWN, S
-    const submitButton = 0x0D // VK_RETURN
-
-    rightButtons.map(key => mp.keys.bind(key, false, () => this.turn('right')))
-    leftButtons.map(key => mp.keys.bind(key, false, () => this.turn('left')))
-    upButtons.map(key => mp.keys.bind(key, false, () => this.turn('up')))
-    downButtons.map(key => mp.keys.bind(key, false, () => this.turn('down')))
-    mp.keys.bind(submitButton, true, () => this.submit())
+    this.keybindService.bind([key.right, key.d], false, TeamSelector.key, () => this.turn('right'))
+    this.keybindService.bind([key.left, key.a], false, TeamSelector.key, () => this.turn('left'))
+    this.keybindService.bind([key.up, key.w], false, TeamSelector.key, () => this.turn('up'))
+    this.keybindService.bind([key.down, key.s], false, TeamSelector.key, () => this.turn('down'))
+    this.keybindService.bind(key.enter, false, TeamSelector.key, () => this.submit())
   }
 
   @event('entityStreamIn')
