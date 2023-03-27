@@ -17,13 +17,13 @@ export default class KeybindService {
   public typing: boolean = false
   private bindings: Map<string, Binding[]> = new Map()
 
-	/**
-	 * Binds the key
-	 *
-	 * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
-	 * @param keyHold True triggers on keydown, false triggers on keyup (bool)
-	 * @param handler Function Handler
-	 */
+  /**
+   * Binds the key
+   *
+   * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+   * @param keyHold True triggers on keydown, false triggers on keyup (bool)
+   * @param handler Function Handler
+   */
   bind(
     keyCode: number | number[],
     keyHold: boolean | boolean[],
@@ -54,13 +54,13 @@ export default class KeybindService {
     }
   }
 
-	/**
-	 * Unbinds the key
-	 *
-	 * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
-	 * @param keyHold True triggers on keydown, false triggers on keyup (bool)
-	 * @param handler Only unbind this function handler
-	 */
+  /**
+   * Unbinds the key
+   *
+   * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+   * @param keyHold True triggers on keydown, false triggers on keyup (bool)
+   * @param handler Only unbind this function handler
+   */
   unbind(keyCode: number | number[], keyHold: boolean | boolean[], component: string) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
