@@ -1,3 +1,4 @@
+import { keyPriority } from "./@types/common"
 import console from "./helpers/console"
 
 type Binding = {
@@ -28,7 +29,7 @@ export default class KeybindService {
     keyHold: boolean | boolean[],
     component: string,
     handler: Function,
-    { stopPropagation = false, priority = 0 }: BindOpts = {},
+    { stopPropagation = false, priority = keyPriority.default }: BindOpts = {},
   ) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
@@ -92,7 +93,7 @@ export default class KeybindService {
           })
         }
 
-        if (stopPropagation) break
+        if (stopPropagation || response?.__stopPropagation) break
       } catch (err) {
         console.error(err)
         this.bindings.set(key, bindings.filter((_,index) => index !== iterate))

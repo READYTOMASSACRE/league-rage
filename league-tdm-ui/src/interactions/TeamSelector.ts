@@ -63,12 +63,6 @@ class TeamSelector implements TeamSelectorConfig {
       this.ids.push(...peds.map(({ ped }) => toId(ped)))
       this.teamPed[team] = peds
     }
-
-    this.keybindService.bind([key.right, key.d], false, TeamSelector.key, () => this.turn('right'))
-    this.keybindService.bind([key.left, key.a], false, TeamSelector.key, () => this.turn('left'))
-    this.keybindService.bind([key.up, key.w], false, TeamSelector.key, () => this.turn('up'))
-    this.keybindService.bind([key.down, key.s], false, TeamSelector.key, () => this.turn('down'))
-    this.keybindService.bind(key.enter, false, TeamSelector.key, () => this.submit())
   }
 
   @event('entityStreamIn')
@@ -121,6 +115,9 @@ class TeamSelector implements TeamSelectorConfig {
       if (toggle) {
         const {x, y, z} = this.camera.getCoord()
         this.playerService.local.setCoordsNoOffset(x, y, z, false, false, false)
+        this.bindKeys()
+      } else {
+        this.unbindKeys()
       }
   
       this.camera.setActive(toggle)
@@ -130,6 +127,22 @@ class TeamSelector implements TeamSelectorConfig {
     } catch (err) {
       mp.console.logError(err.stack)
     }
+  }
+
+  private unbindKeys() {
+    this.keybindService.unbind([key.right, key.d], false, TeamSelector.key)
+    this.keybindService.unbind([key.left, key.a], false, TeamSelector.key)
+    this.keybindService.unbind([key.up, key.w], false, TeamSelector.key)
+    this.keybindService.unbind([key.down, key.s], false, TeamSelector.key)
+    this.keybindService.unbind(key.enter, true, TeamSelector.key)
+  }
+
+  private bindKeys() {
+    this.keybindService.bind([key.right, key.d], false, TeamSelector.key, () => this.turn('right'))
+    this.keybindService.bind([key.left, key.a], false, TeamSelector.key, () => this.turn('left'))
+    this.keybindService.bind([key.up, key.w], false, TeamSelector.key, () => this.turn('up'))
+    this.keybindService.bind([key.down, key.s], false, TeamSelector.key, () => this.turn('down'))
+    this.keybindService.bind(key.enter, true, TeamSelector.key, () => this.submit())
   }
 
   private refreshPeds(toggle: boolean) {

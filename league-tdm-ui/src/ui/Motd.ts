@@ -17,7 +17,7 @@ export default class Motd {
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
   ) {
-    this.keybindService.bind(key.enter, false, Motd.key, () => this.toggle(false), {
+    this.keybindService.bind(key.enter, true, Motd.key, () => this.toggle(false), {
       stopPropagation: true,
       priority: keyPriority.highest,
     })
@@ -42,7 +42,7 @@ export default class Motd {
     this.uiService.setCursor(this.visible, Motd.key)
 
     if (!this.visible) {
-      this.keybindService.unbind(key.enter, false, Motd.key)
+      this.keybindService.unbind(key.enter, true, Motd.key)
     }
   }
 
