@@ -22,6 +22,7 @@ export default class KeybindService {
    *
    * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
    * @param keyHold True triggers on keydown, false triggers on keyup (bool)
+   * @param component Binding function name
    * @param handler Function Handler
    */
   bind(
@@ -59,7 +60,7 @@ export default class KeybindService {
    *
    * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
    * @param keyHold True triggers on keydown, false triggers on keyup (bool)
-   * @param handler Only unbind this function handler
+   * @param component Binding function name
    */
   unbind(keyCode: number | number[], keyHold: boolean | boolean[], component: string) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
