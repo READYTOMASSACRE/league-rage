@@ -9,7 +9,7 @@ import UIService from "../UIService";
 @eventable
 export default class Scoreboard {
   static key = 'scoreboard'
-  private visible: boolean = false
+  public visible: boolean = false
 
   constructor(
     readonly config: TeamConfig,

@@ -34,6 +34,10 @@ export default class Chat {
 
   @event(Events["tdm.chat.toggle"])
   toggle(visible: boolean, force?: boolean) {
+    if (this.uiService.scoreboard.visible && !force) {
+      return
+    }
+
     const old = this.visible
 
     visible = typeof visible !== 'undefined' ?

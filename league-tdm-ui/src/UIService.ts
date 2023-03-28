@@ -68,7 +68,7 @@ export default class UIService {
       this.visible = {}
     }
 
-    this.visible = {[component]: visible}
+    this.visible = {...this.visible, [component]: visible}
 
     if (!visible && Object.values(this.visible).find(Boolean)) {
       return
