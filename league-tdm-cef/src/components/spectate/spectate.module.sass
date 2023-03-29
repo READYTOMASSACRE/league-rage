@@ -1,0 +1,40 @@
+@use '../../variables' as *
+
+.root
+  position: absolute
+  justify-self: center
+  display: flex
+  flex-direction: column
+  align-items: center
+  color: white
+
+  & > span, & .kda
+    text-shadow: 0 0 3px white
+  & span, div
+    font-size: .9em
+  & > .nickname
+    font-size: 1.2em
+
+.kda
+  border-top: 1px dotted $transparentWhite2
+  & > span
+    &:not(:last-child):after
+      content: '•'
+      color: $transparentWhite2
+      text-shadow: none
+      margin: 2px
+
+.controls
+  margin-top: 4px
+  display: flex
+  & div
+    margin: 2px
+    background: $black
+    color: $yellow
+    padding: 5px
+    border-radius: 2px
+    & span
+      border-radius: 2px
+      margin-right: 5px
+      border: 1px solid $yellow
+      padding: 2px

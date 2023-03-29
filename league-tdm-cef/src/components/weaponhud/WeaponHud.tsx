@@ -14,7 +14,7 @@ const WeaponHud: FC = ({ }) => {
   const [curretnWeapon, setCurrentWeapon] = useState<string>('')
 
   useEffect(() => {
-    setPlayerWeapons(data)
+    // setPlayerWeapons(data)
     setCurrentWeapon('assaultrifle-mk2')
   }, [])
 

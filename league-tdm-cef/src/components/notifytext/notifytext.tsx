@@ -22,7 +22,7 @@ export default () => {
   }, [])
 
   return (
-    <div className={styles.root}>
+    <>
       {Array.isArray(items) && items.map(([text, template]) => {
         return (
           <span key={nanoid(10)} className={cls(styles.item, styles[template] || styles.default)}>
@@ -30,6 +30,6 @@ export default () => {
           </span>
         )
       })}
-    </div>
+    </>
   )
 }

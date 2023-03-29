@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
-import { IMessage } from '../../../types'
-import * as s from './PopupItem.module.sass'
+import { IMessage } from '../../types'
+import * as s from './popupItem.module.sass'
 
 interface Props {
   message: IMessage
@@ -28,9 +28,9 @@ const PopupItem: FC<Props> = ({ message }) => {
   }
 
   return (
-    <div style={style} className={s.popupitem}>
+    <span style={style} className={s.popupitem}>
       {message.text}
-    </div>
+    </span>
   )
 }
 

@@ -163,6 +163,8 @@ export const enum Events {
   'tdm.cef.debug_toggle' = 'tdm.cef.debug_toggle',
   /** Fires when cef motd recieved data */
   'tdm.cef.motd' = 'tdm.cef.motd',
+  /** Fires when cef spectate recieved data */
+  'tdm.cef.spectate' = 'tdm.cef.spectate',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
