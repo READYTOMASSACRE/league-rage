@@ -14,7 +14,7 @@ import Navbar from './Navbar'
 
 export default () => {
 
-  const [active, setActive] = useState<boolean>(true)
+  const [active, setActive] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<string>('Profile')
   const [shrink, setShrink] = useState<boolean>(false)
 
