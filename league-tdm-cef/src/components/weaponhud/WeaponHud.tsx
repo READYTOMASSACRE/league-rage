@@ -4,8 +4,8 @@ import WeaponHudItem from './WeaponHudItem'
 import { weaponSlot } from '../../weaponNameForUI'
 
 const data = [
-  { name: 'assaultrifle-mk2', slot: 'primary' },
-  { name: 'bat', slot: 'melee' },
+  // { name: 'assaultrifle-mk2', slot: 'primary' },
+  // { name: 'bat', slot: 'melee' },
 ]
 
 const WeaponHud: FC = ({ }) => {
