@@ -16,7 +16,7 @@ const Chat = () => {
     const [input, setInput] = useState('')
     const [history, setHistory] = useState<ChatMessage[]>([])
     const [toggle, setToggle] = useState(false)
-    const [active, setActive] = useState<number>()
+    const [active, setActive] = useState<number | undefined>()
 
     const ref = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -85,7 +85,7 @@ const Chat = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.history}>
+            <div className={cls(styles.history, toggle && styles.historyActive)}>
                 {historyElements}
                 <div ref={ref} />
             </div>

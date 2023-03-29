@@ -1,33 +1,37 @@
-$transparentBlack: rgba(0, 0, 0, .8)
+@use '../../variables' as *
 
 .container
   max-height: 40vh
   max-width: 50vw
-  overflow: hidden
   font-size: 1em
   color: white
   padding: 5px
-  z-index: -1
+  position: relative
 
 .history
   padding: 2px
   height: 30vh
   overflow-y: auto
   overflow-wrap: break-word
-  display: flex
   flex-direction: column
   justify-content: end
   word-break: break-word
-  z-index: 11
+  display: flex
+  transition: .1s ease-out all
   & span
     display: flex
-    &:hover
-      background: $transparentBlack
   & .item
     color: white
     text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
     margin-right: 3px
 
+.historyActive
+  justify-content: flex-end
+  background: $black2
+  & span
+    &:hover
+      background: $black3
+  
 .input
   opacity: 0
   font-size: 0.85em

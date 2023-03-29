@@ -20,7 +20,7 @@ export default () => {
     })
   }, [])
 
-  if (!current) return <></>
+  if (!current?.visible) return <></>
 
   return (
     <div className={styles.root}>

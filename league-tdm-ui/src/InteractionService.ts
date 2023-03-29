@@ -24,7 +24,10 @@ export default class InteractionService {
       playerService, uiService, keybindService,
     )
 
-    this.spectate = new Spectate(dummyService, keybindService, playerService)
+    this.spectate = new Spectate(
+      dummyService, keybindService,
+      playerService, uiService
+    )
   }
 
   @event(Events["tdm.team.select"])
