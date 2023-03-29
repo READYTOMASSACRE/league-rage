@@ -9,7 +9,7 @@ import UIService from "../UIService";
 @eventable
 export default class Scoreboard {
   static key = 'scoreboard'
-  private visible: boolean = false
+  public visible: boolean = false
 
   constructor(
     readonly config: TeamConfig,
@@ -19,7 +19,7 @@ export default class Scoreboard {
     readonly dummyService: DummyService,
   ) {
     this.keybindService.unbind(key.tab, [true, false], Scoreboard.key)
-    this.keybindService.bind(key.tab, [true, false], () => this.toggle(mp.keys.isDown(key.tab)), Scoreboard.key)
+    this.keybindService.bind(key.tab, [true, false], Scoreboard.key, () => this.toggle(mp.keys.isDown(key.tab)))
   }
 
   @event(Events["tdm.scoreboard.toggle"])

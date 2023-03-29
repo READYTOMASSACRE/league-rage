@@ -16,7 +16,7 @@ export default class Chat {
     this.toggle = this.toggle.bind(this)
 
     this.keybindService.unbind(key.t, true, Chat.key)
-    this.keybindService.bind(key.t, true, this.toggle, Chat.key)
+    this.keybindService.bind(key.t, true, Chat.key, this.toggle)
   }
 
   @event(Events["tdm.chat.push"])
@@ -34,6 +34,10 @@ export default class Chat {
 
   @event(Events["tdm.chat.toggle"])
   toggle(visible: boolean, force?: boolean) {
+    if (this.uiService.scoreboard.visible && !force) {
+      return
+    }
+
     const old = this.visible
 
     visible = typeof visible !== 'undefined' ?

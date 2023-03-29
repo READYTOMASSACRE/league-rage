@@ -5,12 +5,12 @@ import cls from 'classnames'
 import RageAPI from '../../helpers/RageAPI'
 
 const TeamSelector: FC = () => {
-  const [classname, setClassname] = useState(styles.item)
+  const [active, setActive] = useState(false)
   const [{team, color}, setData] = useState({team: '', color: ''})
 
   useEffect(() => {
     RageAPI.subscribe(Events['tdm.team.select_toggle'], 'teamselector', (team = '', color = '', toggle = false) => {
-      setClassname(toggle ? cls(styles.item, styles.active): styles.item)
+      setActive(toggle)
       setData({team, color})
     })
 
@@ -19,8 +19,10 @@ const TeamSelector: FC = () => {
     }
   }, [])
 
+  if (!active) return <></>
+
   return (
-    <div className={classname} style={color?.length ? { color } : {}}>{team}</div>
+    <div className={cls(styles.item, styles.active)} style={color?.length ? { color } : {}}>{team}</div>
   )
 }
 

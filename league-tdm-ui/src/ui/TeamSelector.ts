@@ -4,8 +4,11 @@ import KeybindService from "../KeybindService";
 import UIService from "../UIService";
 
 @eventable
-export default class TeamSelect {
-  constructor(readonly uiService: UIService, readonly keybindService: KeybindService) {}
+export default class TeamSelector {
+  constructor(
+    readonly uiService: UIService,
+    readonly keybindService: KeybindService
+  ) {}
 
   @event(Events["tdm.team.select_toggle"])
   teamSelectToggle({ team, toggle, color }: any = {}) {

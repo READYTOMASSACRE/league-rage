@@ -169,13 +169,13 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     statistic: {
       exp: {
-        kill: 50,
-        death: 10,
-        assist: 30,
-        win: 100,
-        hit: 5,
+        kill: 30,
+        death: 5,
+        assist: 20,
+        win: 70,
+        hit: 1,
         damageRecieved: 0,
-        damageDone: 5,
+        damageDone: 1,
         expToLvl: 1000,
       },
     }

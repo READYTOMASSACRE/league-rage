@@ -25,7 +25,7 @@ export default class WeaponRequest {
     this.request = this.request.bind(this)
 
     this.keybindService.unbind(key.b, true, WeaponRequest.key)
-    this.keybindService.bind(key.b, true, this.request, WeaponRequest.key)
+    this.keybindService.bind(key.b, true, WeaponRequest.key, this.request)
     this.data = this.getData()
   }
   

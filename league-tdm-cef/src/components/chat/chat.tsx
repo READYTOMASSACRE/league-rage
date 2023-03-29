@@ -91,6 +91,7 @@ const Chat = () => {
             </div>
             <input
                 name="input"
+                autoFocus={true}
                 type="text"
                 value={input}
                 placeholder="Type to chat"
@@ -99,6 +100,7 @@ const Chat = () => {
                 disabled={!toggle}
                 className={toggle ? cls(styles.input, styles.active) : styles.input}
                 ref={inputRef}
+                onBlur={() => inputRef.current && inputRef.current.focus()}
                 onKeyDown={e => {
                     if (e.key === 'Enter') {
                         const message = input.trim().slice(0, MAX_CHAR_SIZE)

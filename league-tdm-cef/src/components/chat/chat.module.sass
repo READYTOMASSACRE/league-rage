@@ -1,38 +1,41 @@
 $transparentBlack: rgba(0, 0, 0, .8)
 
 .container
-    position: absolute
-    max-height: 40vh
-    max-width: 50vw
-    overflow: hidden
-    font-size: 1em
-    color: white
-    padding: 5px
-    z-index: -1
+  max-height: 40vh
+  max-width: 50vw
+  overflow: hidden
+  font-size: 1em
+  color: white
+  padding: 5px
+  z-index: -1
 
 .history
-    padding: 2px
-    height: 30vh
-    overflow-y: auto
-    overflow-wrap: break-word
+  padding: 2px
+  height: 30vh
+  overflow-y: auto
+  overflow-wrap: break-word
+  display: flex
+  flex-direction: column
+  justify-content: end
+  word-break: break-word
+  z-index: 11
+  & span
     display: flex
-    flex-direction: column
-    justify-content: end
-    & span
-        display: flex
-    & .item
-        color: white
-        text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
-        margin-right: 3px
+    &:hover
+      background: $transparentBlack
+  & .item
+    color: white
+    text-shadow: -1px 0px $transparentBlack, 0 -1px $transparentBlack, 1px 0 $transparentBlack, 0 1px black, 1px 1px black, 1px 2px black, 2px 2px rgba(0, 0, 0, .5)
+    margin-right: 3px
 
 .input
-    opacity: 0
-    font-size: 0.85em
-    border: 2px solid rgba(0, 0, 0, .3)
-    background: rgba(0, 0, 0, .6)
-    color: white
-    &:focus
-        outline: none
+  opacity: 0
+  font-size: 0.85em
+  border: 2px solid rgba(0, 0, 0, .3)
+  background: rgba(0, 0, 0, .6)
+  color: white
+  &:focus
+      outline: none
 
 .active
-    opacity: 1
+  opacity: 1

@@ -1,16 +1,37 @@
+import { keyPriority } from "./@types/common"
 import console from "./helpers/console"
+
+type Binding = {
+  handler: Function
+  stopPropagation: boolean
+  priority: number
+  component: string
+}
+
+type BindOpts = {
+  stopPropagation?: boolean
+  priority?: number
+}
 
 export default class KeybindService {
   public typing: boolean = false
-  private bindings: Map<string, Function> = new Map()
-	/**
-	 * Binds the key
-	 *
-	 * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
-	 * @param keyHold True triggers on keydown, false triggers on keyup (bool)
-	 * @param handler Function Handler
-	 */
-  bind(keyCode: number | number[], keyHold: boolean | boolean[], handler: Function, component?: string) {
+  private bindings: Map<string, Binding[]> = new Map()
+
+  /**
+   * Binds the key
+   *
+   * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+   * @param keyHold True triggers on keydown, false triggers on keyup (bool)
+   * @param component Binding function name
+   * @param handler Function Handler
+   */
+  bind(
+    keyCode: number | number[],
+    keyHold: boolean | boolean[],
+    component: string,
+    handler: Function,
+    { stopPropagation = false, priority = keyPriority.default }: BindOpts = {},
+  ) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
 
@@ -24,55 +45,96 @@ export default class KeybindService {
 
     for (const code of keyCode) {
       for (const upOrDown of keyHold) {
-        component = this.getKey(component, upOrDown)
-
-        if (component) {
-          if (this.bindings.has(component)) {
-            continue
-          }
-
-          this.bindings.set(component, handler)
-        }
-
-        mp.keys.bind(code, upOrDown, handler)
+        this.addBinding(code, upOrDown, {
+          component: this.getComponentKey(component, upOrDown),
+          handler,
+          stopPropagation,
+          priority,
+        })
       }
     }
   }
 
-	/**
-	 * Unbinds the key
-	 *
-	 * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
-	 * @param keyHold True triggers on keydown, false triggers on keyup (bool)
-	 * @param handler Only unbind this function handler
-	 */
-  unbind(keyCode: number | number[], keyHold: boolean | boolean[], component?: string) {
+  /**
+   * Unbinds the key
+   *
+   * @param keyCode Hexadecimal code of [key](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+   * @param keyHold True triggers on keydown, false triggers on keyup (bool)
+   * @param component Binding function name
+   */
+  unbind(keyCode: number | number[], keyHold: boolean | boolean[], component: string) {
     keyCode = Array.isArray(keyCode) ? keyCode : [keyCode]
     keyHold = Array.isArray(keyHold) ? keyHold : [keyHold]
 
-    // todo null pointer
-    // when unbind by component unbinad all keyCodes and rebind again
     for (const code of keyCode) {
       for (const upOrDown of keyHold) {
-        component = this.getKey(component, upOrDown)
-        const componentFn = this.bindings.get(component)
-        if (component && typeof componentFn === 'function') {
-          mp.keys.unbind(code, upOrDown, componentFn)
-        } else {
-          mp.keys.unbind(code, upOrDown)
-        }
-
-        this.bindings.delete(component)
+        this.removeBinding(code, upOrDown, this.getComponentKey(component, upOrDown))
       }
     }
   }
 
-  private getKey(component?: string, keyHold?: boolean): string | undefined {
-    if (!component) {
+  private getComponentKey(component: string, keyHold?: boolean) {
+    return `${component}_${keyHold ? 'down' : 'up'}`
+  }
+
+  private handle(keyCode: number, keyHold: boolean) {
+    const key = this.getHandleKey(keyCode, keyHold)
+    const bindings = this.bindings.get(key) || []
+
+    let iterate = 0
+
+    for (const {handler, stopPropagation, component} of bindings) {
+      try {
+        const response = handler()
+
+        if (response instanceof Promise) {
+          response.catch(err => {
+            console.error(err)
+            this.bindings.set(key, bindings.filter((_,index) => index !== iterate))
+          })
+        }
+
+        console.log(`keybindService::${component}::${inverseKey[keyCode]}`)
+        if (stopPropagation || response?.__stopPropagation) break
+      } catch (err) {
+        console.error(err)
+        this.bindings.set(key, bindings.filter((_,index) => index !== iterate))
+      }
+      ++iterate
+    }
+  }
+
+  private addBinding(keyCode: number, keyHold: boolean, binding: Binding) {
+    const key = this.getHandleKey(keyCode, keyHold)
+    const has = this.bindings.has(key)
+    const bindings = this.bindings.get(key) || []
+
+    if (bindings.find(item => item.component === binding.component)) {
       return
     }
 
-    return `${component}_${keyHold ? 'true' : 'false'}`
+    this.bindings.set(key, [...bindings, binding].sort((a, b) => b.priority - a.priority))
+
+    if (!has) {
+      mp.keys.unbind(keyCode, keyHold)
+      mp.keys.bind(keyCode, keyHold, () => this.handle(keyCode, keyHold))
+    }
+  }
+
+  private removeBinding(keyCode: number, keyHold: boolean, component: string) {
+    const key = this.getHandleKey(keyCode, keyHold)
+    const bindings = (this.bindings.get(key) || []).filter(item => item.component !== component)
+
+    if (bindings.length) {
+      this.bindings.set(key, bindings)
+    } else {
+      this.bindings.delete(key)
+      mp.keys.unbind(keyCode, keyHold)
+    }
+  }
+
+  private getHandleKey(keyCode: number, keyHold: boolean) {
+    return `${keyCode}_${keyHold ? 'down' : 'up'}`
   }
 }
 
@@ -93,3 +155,9 @@ export const key: Record<string, number> = {
   vk_f2: 0x71,
   vk_f9: 0x78,
 }
+
+export const inverseKey: Record<number, string> = Object.fromEntries(
+  Object
+  .entries(key)
+  .map(([key, value]) => [value, key])
+)

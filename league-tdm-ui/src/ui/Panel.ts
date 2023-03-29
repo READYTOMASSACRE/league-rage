@@ -17,7 +17,7 @@ export default class Panel {
   ) {
     this.request = this.request.bind(this)
     this.keybindService.unbind(key.vk_f2, true, Panel.key)
-    this.keybindService.bind(key.vk_f2, true, this.request, Panel.key)
+    this.keybindService.bind(key.vk_f2, true, Panel.key, this.request)
   }
 
   @logClient

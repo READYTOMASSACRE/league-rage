@@ -21,7 +21,7 @@ export default class InteractionService {
   ) {
     this.teamSelector = new TeamSelector(
       config.interaction.selector, config.team,
-      playerService, uiService,
+      playerService, uiService, keybindService,
     )
 
     this.spectate = new Spectate(dummyService, keybindService, playerService)
