@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Events } from '../../../../league-core/src/types'
-import { CurrentPlayer, SpectateData } from '../../../../league-core/src/types/spectate'
+import { CurrentPlayer } from '../../../../league-core/src/types/spectate'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './spectate.module.sass'
