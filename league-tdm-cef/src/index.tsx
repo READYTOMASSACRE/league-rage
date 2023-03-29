@@ -7,7 +7,7 @@ import RageAPI from './helpers/RageAPI'
 
 import Chat from './components/chat/chat'
 import TeamSelector from './components/teamselector'
-import Popup from './components/popup'
+import Popup from './components/popup/popup'
 import Scoreboard from './components/scoreboard/Scoreboard'
 import WeaponSelector from './components/weaponselector/WeaponSelector'
 import Infopanel from './components/infopanel/infopanel'
