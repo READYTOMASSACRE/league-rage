@@ -1,11 +1,12 @@
 import { event, eventable } from "../../../league-core/client"
-import { Procs } from "../../../league-core/src/types"
+import { Enviroment, Events, Procs } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
 import { isPlayer } from "../helpers/guards"
 import KeybindService, { key } from "../KeybindService"
 import PlayerService from "../PlayerService"
+import UIService from "../UIService"
 
 @eventable
 export default class Spectate {
@@ -23,7 +24,8 @@ export default class Spectate {
   constructor(
     readonly dummyService: DummyService,
     readonly keybindService: KeybindService,
-    readonly playerService: PlayerService
+    readonly playerService: PlayerService,
+    readonly uiService: UIService,
   ) {
     this.gameplayCamera = mp.cameras.new('gameplay')
   }
@@ -43,6 +45,7 @@ export default class Spectate {
       this.streamingPlayer = player
       this.toggle(true)
       this.running = true
+      mp.events.call(Events["tdm.spectate.client_toggle"], true)
     } catch (err) {
       this.stop(err)
     }
@@ -57,6 +60,7 @@ export default class Spectate {
     } finally {
       this.running = false
       this.prepared = false
+      mp.events.call(Events["tdm.spectate.client_toggle"], false)
     }
   }
 
@@ -76,6 +80,9 @@ export default class Spectate {
     } else {
       this.prepare()
     }
+
+    this.uiService.spectate.toggle(t, this.streamingPlayer.remoteId)
+    this.uiService.controls.toggle(!t)
   }
 
   private bindKeys(t: boolean) {
@@ -179,6 +186,7 @@ export default class Spectate {
 
     this.gameplayCamera.setActive(true)
     this.prepared = true
+    mp.events.call(Events["tdm.spectate.prepare"], this.streamingPlayer.remoteId)
   }
 
   private turn(direction: 'right' | 'left') {
@@ -206,6 +214,7 @@ export default class Spectate {
         this.streamingPlayer = players[this.current]
         this.prepared = false
         this.prepare()
+        this.uiService.spectate.toggle(true, this.streamingPlayer.remoteId)
       } catch (err) {
         this.stop(err)
       }

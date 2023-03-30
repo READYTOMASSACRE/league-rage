@@ -177,6 +177,10 @@ export const enum Events {
   'tdm.spectate.start' = 'tdm.spectate.start',
   /** Fires when player stop spectating */
   'tdm.spectate.stop' = 'tdm.spectate.stop',
+  /** Fires on clientside when spectate is preparing by streamingPlayer */
+  'tdm.spectate.prepare' = 'tdm.spectate.prepare',
+  /** Fires on clientside when player start/stop spectating */
+  'tdm.spectate.client_toggle' = 'tdm.spectate.client_toggle',
   /** Fires when cef/client recieves text */
   'tdm.notify.text' = 'tdm.notify.text',
   /** Fires when client stops notify text */

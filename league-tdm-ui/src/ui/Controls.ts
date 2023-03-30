@@ -5,6 +5,8 @@ import UIService from "../UIService";
 
 @eventable
 export default class Controls {
+  public visible: boolean = false
+
   constructor(
     readonly uiService: UIService,
     readonly lang: ILanguage
@@ -13,8 +15,13 @@ export default class Controls {
   @event(Events["tdm.ui.ready"])
   ready() {
     if (this.uiService.cef) {
-      this.uiService.cef.call(Events["tdm.controls.data"], this.data)
+      this.toggle(true)
     }
+  }
+  
+  toggle(t: boolean) {
+    this.visible = t
+    this.uiService.cef.call(Events["tdm.controls.data"], this.data, this.visible)
   }
 
   get data(): cef.Control[] {

@@ -6,12 +6,14 @@ import * as styles from './controls.module.sass'
 import cls from 'classnames'
 
 export default () => {
+  const [active, setActive] = useState(false)
   const [controls, setControls] = useState<cef.Control[]>([])
 
   useEffect(() => {
-    RageAPI.subscribe(Events['tdm.controls.data'], 'controls', (data: string) => {
+    RageAPI.subscribe(Events['tdm.controls.data'], 'controls', (data: string, toggle: boolean) => {
       try {
         setControls(JSON.parse(data))
+        setActive(toggle)
       } catch (err) {
         cefLog(err)
       }
@@ -25,6 +27,8 @@ export default () => {
     2: cls(styles.key, styles.medium),
     default: cls(styles.key, styles.large),
   }
+
+  if (!active) return <></>
 
   return (
     <div className={styles.root}>

@@ -1,4 +1,5 @@
 export type CurrentPlayer = {
+  visible: boolean
   name: string
   kill: number
   death: number
