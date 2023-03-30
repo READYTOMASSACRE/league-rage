@@ -22,9 +22,7 @@ const Navbar = () => {
       {data.map((el) =>
         <div key={el.title} className={cl(styles.navbarItem, currentPage === el.title && styles.current)} onClick={() => setCurrentPage && setCurrentPage(el.title)}>
           <img src={`/assets/svg/${el.svg}.svg`} className={styles.icon} alt="" />
-          {
-            !shrink && <div className={styles.title}>{el.title}</div>
-          }
+          {!shrink && <div className={styles.title}>{el.title}</div>}
         </div>
       )}
     </div>

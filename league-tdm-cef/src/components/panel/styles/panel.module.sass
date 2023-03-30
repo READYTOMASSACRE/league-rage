@@ -79,22 +79,19 @@
   display: grid
   grid-template-rows: max-content 1fr
 
+.profileItem
+  display: flex
+  flex-direction: column
+  :nth-child(2)
+    font-size: 1.5rem
+    font-weight: 600
+
 .profileTop
   grid-row: 1 / 2
   display: flex
   align-items: center
   padding: 15px 45px
   gap: 10px
-  span
-    font-weight: 600
-  div
-    display: flex
-    flex-direction: column
-    font-weight: 600
-    :nth-child(1)
-      font-size: 1rem
-    :nth-child(2)
-      font-size: 1.5rem
   :nth-child(1)
     flex-grow: 1
   :nth-child(2)
@@ -108,13 +105,7 @@
   flex-wrap: wrap
   div
     width: 25%
-    display: flex
-    flex-direction: column
-    height: max-content
     align-items: center
-    :nth-child(2)
-      font-size: 1.5rem
-      font-weight: 600
 
 // Main --> Games
 

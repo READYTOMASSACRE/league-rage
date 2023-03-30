@@ -5,7 +5,7 @@ import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import { Active, CurrentPage } from './context'
 import Games from './Pages/Games'
-import Profile from './Pages/Profile'
+import Profile from './Pages/Profile/Profile'
 
 import * as styles from './styles/panel.module.sass'
 
@@ -68,7 +68,7 @@ const Main = () => {
   const dateTo = undefined
 
   const content = useMemo(() => {
-    if (currentPage === 'Profile' && profile) return (<Profile profile={data} matches={rounds.length} />)
+    if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
     if (currentPage === 'Games') return (<Games matches={rounds} name={'ZXCAndruha1488'}/>)
     if (currentPage === 'Vote') return (<div>Voting</div>)
     if (currentPage === 'About') return (<div>About</div>)
