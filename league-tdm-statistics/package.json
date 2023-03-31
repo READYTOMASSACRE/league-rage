@@ -20,6 +20,7 @@
     "@types/node": "^18.15.9",
     "date-fns": "^2.29.3",
     "deepmerge": "^4.3.1",
-    "lokijs": "^1.5.12"
+    "lokijs": "^1.5.12",
+    "mongodb": "^5.1.0"
   }
 }

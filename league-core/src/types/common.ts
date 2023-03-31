@@ -57,10 +57,20 @@ export interface DbConfig {
     autosaveInterval?: number
   }
   mongodb?: {
+    uri?: string
     host: string
-    user: string
-    pwd: string
     port: number
+    username: string
+    password: string
+    database: string
+    opts?: {
+      tls?: boolean
+      ssl?: boolean
+      connectTimeoutMS?: number
+      socketTimeoutMS?: number
+      maxPoolSize?: number
+      maxConnecting?: number
+    }
   }
 }
 
