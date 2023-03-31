@@ -4,6 +4,8 @@ import { ClientProfile, Round } from '../../../../league-core/src/types/statisti
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import { Active, CurrentPage } from './context'
+import Games from './Pages/Games'
+import Profile from './Pages/Profile/Profile'
 
 import * as styles from './styles/panel.module.sass'
 
@@ -13,12 +15,17 @@ const data = {
   exp: 285000,
   kill: 891,
   death: 322,
-  assists: 500,
-  damageDone: 70000,
-  damageRecieved: 30000,
-  hit: 100000,
-  name: 'sanya',
+  assists: 412,
+  damageDone: 65489,
+  damageRecieved: 22487,
+  hit: 2341,
+  name: 'ZXCAndruha1488',
 }
+
+const dataM = [
+  {arenaId: 'arena 11', kda: 32, id: 1233233333},
+  {arenaId: 'arena 23', kda: 4, id: 1233214444},
+]
 
 const Main = () => {
 
@@ -61,17 +68,8 @@ const Main = () => {
   const dateTo = undefined
 
   const content = useMemo(() => {
-    if (currentPage === 'Profile') return (
-      <div className={styles.profile}>
-        <div className={styles.profileTop}>
-
-        </div>
-        <div className={styles.profileCenter}>
-            
-        </div>
-      </div>
-    )
-    if (currentPage === 'Games') return (<div>Games</div>)
+    if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
+    if (currentPage === 'Games') return (<Games matches={rounds} name={'ZXCAndruha1488'}/>)
     if (currentPage === 'Vote') return (<div>Voting</div>)
     if (currentPage === 'About') return (<div>About</div>)
   }, [currentPage, profile, rounds])
@@ -84,3 +82,7 @@ const Main = () => {
 }
 
 export default Main
+
+// {Object.entries(profile || {}).map(([key, value]: [string, any], index) => (
+//     span key = { index } > { key }: { value }</span >
+//   ))}
