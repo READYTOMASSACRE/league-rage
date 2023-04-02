@@ -3,23 +3,18 @@ import * as s from './styles/WeaponHudItem.module.sass'
 import cl from 'classnames'
 import { weaponSlot } from '../../weaponNameForUI'
 
-interface Weapon {
-  name: string
-  slot: string
-}
-
 interface Props {
-  weapon: Weapon
+  weapon: string
+  slot: string
   current?: boolean
 }
 
-const WeaponHudItem: FC<Props> = ({ weapon, current }) => {
-
+const WeaponHudItem: FC<Props> = ({ weapon, slot, current }) => {
   return (
     <div className={cl(s.item, current && s.current)}>
-      <img className={s.image} src={`/assets/weapons/${weapon.name}.webp/`} alt='' />
-      <div className={s.slot}>{weaponSlot[weapon.slot]}</div>
-      <div className={s.name}>{weapon.name}</div>
+      <img className={s.image} src={`/assets/weapons/${weapon}.webp/`} alt='' />
+      <div className={s.slot}>{weaponSlot[slot]}</div>
+      <div className={s.name}>{weapon}</div>
     </div>
   )
 }

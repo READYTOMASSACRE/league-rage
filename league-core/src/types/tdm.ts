@@ -75,11 +75,17 @@ export type Dummy = {
   [Entity.TEAM]: TeamData
 }
 
+export const enum WeaponSlot {
+  primary = 'primary',
+  secondary = 'secondary',
+  melee = 'melee',
+}
+
 export type PlayerData = {
   state: State
   team: Team
   weaponState: WeaponState
-  weaponSlot: Record<string, string>
+  weaponSlot: Record<string, string> // todo add enum WeaponSlot
   health: number
   alive: boolean
   spectate?: number

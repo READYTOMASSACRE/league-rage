@@ -33,7 +33,7 @@ const main = async () => {
       language
     )
 
-    new WeaponService(playerService)
+    new WeaponService(playerService, keybindService)
     new HudService(config, roundService, playerService)
     new InteractionService(config, playerService, dummyService, keybindService, uiService)
     new DebugService(playerService)
@@ -48,3 +48,8 @@ const main = async () => {
 }
 
 main()
+
+// about Right shift >> with mp.game.invoke
+// when you use mp.game.invoke js might eat your huge ingeters by making it float
+// try like (weaponHash >> 0) to make it "strict" integer
+// However there is player.weapon = weaponHash as well

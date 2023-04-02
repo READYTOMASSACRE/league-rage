@@ -159,6 +159,8 @@ export const enum Events {
   'tdm.player.change_name' = 'tdm.player.change_name',
   /** Fires when player have to spawn in lobby */
   'tdm.player.spawn_lobby' = 'tdm.player.spawn_lobby',
+  /** Fires when player switch weapon on clientside */
+  'tdm.player.switch_weapon' = 'tdm.player.switch_weapon',
   /** Fires when clientside should team select */
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */
@@ -175,6 +177,8 @@ export const enum Events {
   'tdm.cef.motd' = 'tdm.cef.motd',
   /** Fires when cef spectate recieved data */
   'tdm.cef.spectate' = 'tdm.cef.spectate',
+  /** Fires when player recieved new weapon data */
+  'tdm.cef.weapon_hud' = 'tdm.cef.weapon_hud',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */

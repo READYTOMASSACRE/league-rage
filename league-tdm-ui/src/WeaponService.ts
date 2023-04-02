@@ -1,12 +1,17 @@
-import { event, eventable, helpers, logClient } from "../../league-core/client";
+import { command, commandable, event, eventable, helpers, logClient } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
+import { WeaponSlot } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
+import KeybindService, { key } from "./KeybindService";
 import PlayerService from "./PlayerService";
 import weapons from "./weapons";
 
 @eventable
+@commandable
 export default class WeaponService {
+  static key = 'weapon_service'
   static isPedArmed = '0x475768A975D5AD17'
+  static setCurrentPedWeapon = '0xADF692B254977C0C'
   static exceptFists = 7
 
   private throttledIncomingUpdate: Function
@@ -16,8 +21,32 @@ export default class WeaponService {
   private weapon?: string
   private rendering: boolean = true
 
-  constructor(readonly playerService: PlayerService) {
+  constructor(
+    readonly playerService: PlayerService,
+    readonly keybindService: KeybindService,
+  ) {
     this.throttledIncomingUpdate = helpers.throttle(() => this.incomingUpdate(), 100)
+    mp.game.weapon.unequipEmptyWeapons = false
+
+    this.keybindService.unbind([key["1"], key["2"], key["3"]], true, WeaponService.key)
+    this.keybindService.bind(key["1"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.primary))
+    this.keybindService.bind(key["2"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.secondary))
+    this.keybindService.bind(key["3"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.melee))
+  }
+
+  @command('cwep')
+  changeWeapon(description: string, id?: string) {
+    if (!id) return
+
+    const hashWeaponSlot = {
+      1: WeaponSlot.primary,
+      2: WeaponSlot.secondary,
+      3: WeaponSlot.melee,
+    }
+
+    const slot = hashWeaponSlot[id] || WeaponSlot.primary
+
+    this.switchPlayerWeapon(slot)
   }
 
   @event('render')
@@ -77,5 +106,16 @@ export default class WeaponService {
     this.damage = 0
     this.source = undefined
     this.weapon = undefined
+  }
+
+  @logClient
+  private switchPlayerWeapon(slot: WeaponSlot) {
+    const weaponSlot = this.playerService.getVariable(this.playerService.local, 'weaponSlot')
+    const weapon = weaponSlot[slot]
+
+    if (!weapon) return
+
+    mp.game.invoke(WeaponService.setCurrentPedWeapon, this.playerService.local.handle, mp.game.joaat('weapon_' + weapon) >> 0, true)
+    mp.events.call(Events["tdm.player.switch_weapon"], weapon)
   }
 }
