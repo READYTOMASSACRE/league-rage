@@ -21,6 +21,11 @@ export default class WeaponHud {
   switchWeapon(weapon: string) {
     this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data, weapon)
   }
+  
+  @event([Events["tdm.round.end"], Events["tdm.round.prepare"]])
+  update() {
+    this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data)
+  }
 
   get data() {
     const {

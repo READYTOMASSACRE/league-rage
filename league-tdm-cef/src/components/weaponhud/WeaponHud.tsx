@@ -28,9 +28,6 @@ const WeaponHud: FC = ({ }) => {
       }
     })
 
-    // setPlayerWeapons(data)
-    // setCurrentWeapon('assaultrifle-mk2')
-
     return () => {
       RageAPI.unsubscribe(Events['tdm.cef.weapon_hud'], 'weapon_hud')
     }

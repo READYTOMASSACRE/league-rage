@@ -100,7 +100,7 @@ export default class WeaponService {
 
     if (!weapon) return
 
-    mp.game.invoke(WeaponService.setCurrentPedWeapon, this.playerService.local.handle, mp.game.joaat('weapon_' + weapon) >> 0, true)
+    mp.game.invoke(WeaponService.setCurrentPedWeapon, this.playerService.local.handle, mp.game.joaat('weapon_' + weapon) >> 0, false)
     mp.events.call(Events["tdm.player.switch_weapon"], weapon)
   }
 }
