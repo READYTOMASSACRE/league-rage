@@ -19,6 +19,7 @@ export default class TeamService {
       return player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
     }
 
+    // return this.change(player, tdm.Team.attackers, 'u_m_m_jesus_01')
     return this.teamSelectRequest(player)
   }
 

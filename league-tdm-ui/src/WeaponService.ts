@@ -34,21 +34,6 @@ export default class WeaponService {
     this.keybindService.bind(key["3"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.melee))
   }
 
-  @command('cwep')
-  changeWeapon(description: string, id?: string) {
-    if (!id) return
-
-    const hashWeaponSlot = {
-      1: WeaponSlot.primary,
-      2: WeaponSlot.secondary,
-      3: WeaponSlot.melee,
-    }
-
-    const slot = hashWeaponSlot[id] || WeaponSlot.primary
-
-    this.switchPlayerWeapon(slot)
-  }
-
   @event('render')
   render() {
     if (!this.rendering) return

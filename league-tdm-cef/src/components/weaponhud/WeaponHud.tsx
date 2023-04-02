@@ -6,10 +6,6 @@ import RageAPI from '../../helpers/RageAPI'
 import { Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 
-// const data = [
-//   { name: 'assaultrifle-mk2', slot: 'primary' },
-//   { name: 'bat', slot: 'melee' },
-// ]
 
 interface WeaponData {
   primary?: string
