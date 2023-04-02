@@ -1,8 +1,13 @@
+import { InferIdType, Filter as MongoFilter } from 'mongodb'
 import { userId } from "../../../league-core/src/types"
 import { Profile, Round } from "../../../league-core/src/types/statistic"
 
 export type TEntity = {
   id: number | string
+}
+
+export type MongoEntity = TEntity & {
+  _id: InferIdType<any>
 }
 
 export interface IRepository<T extends TEntity> {
@@ -17,16 +22,18 @@ export interface IRepository<T extends TEntity> {
 export interface IProfileRepoSitory extends IRepository<Profile> {}
 export interface IRoundRepository extends IRepository<Round> {}
 
-export type Filter = {
+export type AbstractFilter = {
   ids?: string[]
   limit?: number
   offset?: number
 }
 
-export type LokiFilter<E> = Filter & LokiQuery<E & LokiObj>
-
-export type RoundLokiFilter = LokiFilter<Round> & {
+export type RoundFilter = {
   dateFrom: number
   dateTo: number
   userId: userId
 }
+
+export type LokiFilter<E> = AbstractFilter & LokiQuery<E & LokiObj>
+export type RoundLokiFilter = LokiFilter<Round> & RoundFilter
+export type RoundMongoFilter = MongoFilter<Round> & RoundFilter

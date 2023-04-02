@@ -16,6 +16,7 @@ import Panel from "./ui/Panel";
 import Scoreboard from "./ui/Scoreboard";
 import Spectate from "./ui/Spectate";
 import TeamSelector from "./ui/TeamSelector";
+import WeaponHud from "./ui/WeaponHud";
 import WeaponSelector from "./ui/WeaponSelector";
 
 @eventable
@@ -34,6 +35,7 @@ export default class UIService {
   public motd: Motd
   public panel: Panel
   public spectate: Spectate
+  public weaponHud: WeaponHud
 
   constructor(
     readonly url: string,
@@ -62,7 +64,7 @@ export default class UIService {
     this.motd = new Motd(config, this, keybindService)
     this.panel = new Panel(this, keybindService)
     this.spectate = new Spectate(this, playerService)
-    this.disableControlActions()
+    this.weaponHud = new WeaponHud(this, playerService)
   }
 
   setCursor(visible: boolean, component: string, forceClose?: boolean) {
@@ -90,6 +92,7 @@ export default class UIService {
     return this.url
   }
 
+  @event('render')
   disableControlActions() {
     mp.game.controls.disableControlAction(24, 37, true)
     mp.game.controls.disableControlAction(24, 157, true)

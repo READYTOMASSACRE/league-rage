@@ -6,13 +6,17 @@ import RoundStatisticService from "./src/RoundStatisticService"
 import StatisticService from "./src/StatisticService"
 
 const main = async () => {
-  const repositoryService = new RepositoryService(config.db)
-  await repositoryService.load()
+  try {
+    const repositoryService = new RepositoryService(config.db)
+    await repositoryService.load()
 
-  const playerService = new PlayerService()
-  new PlayerStatisticService(playerService)
-  new RoundStatisticService(config.team, config.statistic, playerService, repositoryService)
-  new StatisticService(repositoryService, playerService)
+    const playerService = new PlayerService()
+    new PlayerStatisticService(playerService)
+    new RoundStatisticService(config.team, config.statistic, playerService, repositoryService)
+    new StatisticService(repositoryService, playerService)
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 main()

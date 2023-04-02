@@ -15,6 +15,7 @@ export type StatisticConfig = {
 }
 
 export type Profile = {
+  _id: any
   id: string
   lvl: number
   exp: number
@@ -40,18 +41,18 @@ export type PlayerStat = {
   name: string
 }
 
+export type TeamStat = {
+  name: string
+  players: Record<userId, PlayerStat>
+}
+
 export type Round = {
+  _id: any
   id: number
   arenaId: number
   result: Team | "draw"
-  [Team.attackers]: {
-    name: string
-    players: Record<userId, PlayerStat>
-  }
-  [Team.defenders]: {
-    name: string
-    players: Record<userId, PlayerStat>
-  }
+  [Team.attackers]: TeamStat
+  [Team.defenders]: TeamStat
 }
 
 export type PanelData = {
