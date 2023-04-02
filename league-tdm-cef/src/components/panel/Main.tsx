@@ -18,7 +18,7 @@ const Main: FC<Props> = ({rounds, profile }) => {
 
   const { currentPage } = useContext(CurrentPage)
 
-  const content = useMemo(() => {
+  const page = useMemo(() => {
     if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
     if (currentPage === 'Games') return (<Games matches={rounds} name={profile?.name}/>)
     if (currentPage === 'Vote') return (<Voting />)
@@ -27,7 +27,7 @@ const Main: FC<Props> = ({rounds, profile }) => {
 
   return (
     <div className={styles.main}>
-      {content}
+      {page}
     </div>
   )
 }

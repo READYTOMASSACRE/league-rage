@@ -14,7 +14,7 @@ import cefLog from '../../helpers/cefLog'
 
 export default () => {
 
-  const [currentPage, setCurrentPage] = useState<string>('Profile')
+  const [currentPage, setCurrentPage] = useState<string>('Vote')
   const [shrink, setShrink] = useState<boolean>(false)
 
   const [active, setActive] = useState<boolean>(false)
@@ -48,10 +48,6 @@ export default () => {
       }
     })
   }, [])
-
-  const userId = undefined
-  const dateFrom = undefined
-  const dateTo = undefined
 
   if (!active) return <></>
 

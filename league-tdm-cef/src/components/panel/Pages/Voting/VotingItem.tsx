@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import * as styles from '../../styles/panel.module.sass'
 
@@ -8,8 +8,11 @@ interface Props {
 }
 
 const VotingItem: FC<Props> = ({ title, id }) => {
+
+  const [hover, set] = useState<boolean>(false)
+
   return (
-    <span className={styles.votingItem}>{title}</span>
+    <div className={styles.votingItem} onMouseEnter={() => set(true)} onMouseLeave={() => set(false)}>{hover ? 'Voting' : title}</div>
   )
 }
 
