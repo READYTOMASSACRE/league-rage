@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Active, CurrentPage, ShrinkNavbar } from './context'
+import { CurrentPage, ShrinkNavbar } from './context'
 
 import * as styles from './styles/panel.module.sass'
 
@@ -7,11 +7,51 @@ import Header from './Header'
 import Main from './Main'
 import Navbar from './Navbar'
 
+import { ClientProfile, Round } from '../../../../league-core/src/types/statistic'
+import RageAPI from '../../helpers/RageAPI'
+import { Events } from '../../../../league-core/src/types'
+import cefLog from '../../helpers/cefLog'
+
 export default () => {
 
-  const [active, setActive] = useState<boolean>(false)
-  const [currentPage, setCurrentPage] = useState<string>('Games')
+  const [currentPage, setCurrentPage] = useState<string>('Profile')
   const [shrink, setShrink] = useState<boolean>(false)
+
+  const [active, setActive] = useState<boolean>(false)
+  const [profile, setProfile] = useState<ClientProfile>()
+  const [rounds, setRounds] = useState<Round[]>([])
+
+  useEffect(() => {
+    RageAPI.subscribe(Events['tdm.cef.panel'], 'panel', (data: string | boolean) => {
+      try {
+        if (typeof data === 'boolean') {
+          setActive(data)
+          return
+        }
+
+        const {
+          profile,
+          rounds = [],
+          visible,
+        } = JSON.parse(data)
+
+        cefLog(data)
+        setProfile(profile)
+        setRounds(rounds)
+        setActive(visible)
+      } catch (err) {
+        cefLog(err)
+      }
+
+      return () => {
+        RageAPI.unsubscribe(Events['tdm.cef.panel'], 'panel')
+      }
+    })
+  }, [])
+
+  const userId = undefined
+  const dateFrom = undefined
+  const dateTo = undefined
 
   if (!active) return <></>
 
@@ -19,11 +59,9 @@ export default () => {
     <div className={styles.root}>
       <CurrentPage.Provider value={{ currentPage, setCurrentPage }}>
       <ShrinkNavbar.Provider value={{ shrink, setShrink }}>
-      <Active.Provider value={{active, setActive}}>
         <Header />
         <Navbar />
-        <Main />
-      </Active.Provider>
+        <Main rounds={rounds} profile={profile}/>
       </ShrinkNavbar.Provider>
       </CurrentPage.Provider>
     </div>
