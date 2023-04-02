@@ -10,7 +10,7 @@ import Navbar from './Navbar'
 export default () => {
 
   const [active, setActive] = useState<boolean>(true)
-  const [currentPage, setCurrentPage] = useState<string>('Games')
+  const [currentPage, setCurrentPage] = useState<string>('Vote')
   const [shrink, setShrink] = useState<boolean>(false)
 
   if (!active) return <></>

@@ -109,13 +109,14 @@
 
 // Main --> Games
 
-.games
+.matches
   display: flex
   flex-direction: column
   row-gap: 10px
   padding-top: 15px
+  overflow: auto
 
-.gamesItem
+.matchItem
   padding: 0px 15px
   width: 100%
   display: flex
@@ -126,10 +127,22 @@
     white-space: nowrap
     overflow: hidden
   :nth-child(1)
-    width: calc( (100% - 190px) / 2 )
+    width: calc( (100% - 230px) / 2 )
   :nth-child(2)
-    width: calc( (100% - 190px) / 2 )
+    width: calc( (100% - 230px) / 2 )
   :nth-child(3)
-    width: 60px
+    width: 100px
   :nth-child(4)
     width: 130px
+
+// Main --> Voting
+
+.voting
+
+.votingTop
+
+.votingCenter
+  
+.votingForItem
+
+.votingItem

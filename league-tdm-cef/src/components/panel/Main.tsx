@@ -1,31 +1,16 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+
 import { Events } from '../../../../league-core/src/types'
 import { ClientProfile, Round } from '../../../../league-core/src/types/statistic'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import { Active, CurrentPage } from './context'
-import Games from './Pages/Games'
+
+import Games from './Pages/Matches/Matches'
 import Profile from './Pages/Profile/Profile'
+import Voting from './Pages/Voting/Voting'
 
 import * as styles from './styles/panel.module.sass'
-
-const data = {
-  id: '2222',
-  lvl: 285,
-  exp: 285000,
-  kill: 891,
-  death: 322,
-  assists: 412,
-  damageDone: 65489,
-  damageRecieved: 22487,
-  hit: 2341,
-  name: 'ZXCAndruha1488',
-}
-
-const dataM = [
-  {arenaId: 'arena 11', kda: 32, id: 1233233333},
-  {arenaId: 'arena 23', kda: 4, id: 1233214444},
-]
 
 const Main = () => {
 
@@ -69,8 +54,8 @@ const Main = () => {
 
   const content = useMemo(() => {
     if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
-    if (currentPage === 'Games') return (<Games matches={rounds} name={'ZXCAndruha1488'}/>)
-    if (currentPage === 'Vote') return (<div>Voting</div>)
+    if (currentPage === 'Games') return (<Games matches={rounds} name={profile?.name}/>)
+    if (currentPage === 'Vote') return (<Voting />)
     if (currentPage === 'About') return (<div>About</div>)
   }, [currentPage, profile, rounds])
 
