@@ -21,8 +21,7 @@ import Motd from './components/motd/motd'
 import Panel from './components/panel/panel'
 import Spectate from './components/spectate/spectate'
 import {Hud, Top, Center, Bottom, Absolute} from './components/hud/hud'
-=======
->>>>>>> Stashed changes
+import Winner from './components/winner/winner'
 
 const App = () => {
   return (
@@ -40,6 +39,7 @@ const App = () => {
           <WeaponSelector />
           <Panel />
           <Motd />
+          <Winner />
         </Center>
         <Bottom>
           <Popup />

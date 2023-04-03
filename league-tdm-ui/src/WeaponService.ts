@@ -1,4 +1,4 @@
-import { command, commandable, event, eventable, helpers, logClient } from "../../league-core/client";
+import { event, eventable, helpers, logClient } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
 import { WeaponSlot } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
@@ -7,7 +7,6 @@ import PlayerService from "./PlayerService";
 import weapons from "./weapons";
 
 @eventable
-@commandable
 export default class WeaponService {
   static key = 'weapon_service'
   static isPedArmed = '0x475768A975D5AD17'
