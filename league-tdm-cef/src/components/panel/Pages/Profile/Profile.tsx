@@ -21,7 +21,7 @@ const Profile: FC<Props> = ({ profile, matches }) => {
         <ProfileItem title={'Victories'} value={'60.78%'} />
         <ProfileItem title={'LVL'} value={profile.lvl} />
         <ProfileItem title={'Avarege XP'} value={matches === 0 ? 0 : (profile.exp / matches).toFixed()} />
-        <ProfileItem title={'K/D/A'} value={((profile.kill + profile.assists) / profile.death).toFixed(1)} />
+        <ProfileItem title={'K/D/A'} value={profile.death === 0 ? (profile.kill + profile.assists).toFixed(1) : ((profile.kill + profile.assists) / profile.death).toFixed(1)} />
         <ProfileItem title={'Kills'} value={profile.kill} />
         <ProfileItem title={'Death'} value={profile.death} />
         <ProfileItem title={'Assists'} value={profile.assists} />
