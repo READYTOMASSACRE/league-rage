@@ -16,14 +16,18 @@ import Notifytext from './components/notifytext/notifytext'
 import Debug from './components/debug'
 import DeathLog from './components/deathlog/DeathLog'
 import WeaponHud from './components/weaponhud/WeaponHud'
+<<<<<<< Updated upstream
 import Motd from './components/motd/motd'
 import Panel from './components/panel/panel'
 import Spectate from './components/spectate/spectate'
 import {Hud, Top, Center, Bottom, Absolute} from './components/hud/hud'
+=======
+>>>>>>> Stashed changes
 
 const App = () => {
   return (
     <>
+<<<<<<< Updated upstream
       <Hud>
         <Top>
           <Infopanel />
@@ -48,6 +52,19 @@ const App = () => {
           <Notifytext />
         </Absolute>
       </Hud>
+=======
+      <Scoreboard />
+      <Chat />
+      <Popup />
+      <TeamSelector />
+      <WeaponSelector />
+      <Infopanel />
+      <Controls />
+      <Notifytext />
+      <Debug />
+      <DeathLog />
+      <WeaponHud />
+>>>>>>> Stashed changes
       {RageAPI.sendReady()}
     </>
   )
