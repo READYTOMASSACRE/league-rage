@@ -10,11 +10,5 @@ type shrinkNavbar = {
   setShrink:(value: boolean) => void
 }
 
-type active = {
-  active: boolean
-  setActive:(value: boolean) => void
-}
-
 export const CurrentPage = createContext<Partial<currentPage>>({})
 export const ShrinkNavbar = createContext<Partial<shrinkNavbar>>({})
-export const Active = createContext<Partial<active>>({})

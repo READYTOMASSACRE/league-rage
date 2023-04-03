@@ -3,10 +3,8 @@
 // Wrapper
 
 .root
-  background: $black
+  background: $transparentBlack
   color: $yellow
-
-  border: 1px solid $yellow
 
   left: 50%
   top: 50%
@@ -17,7 +15,7 @@
   position: absolute
   display: grid
   grid-template-columns: max-content 1fr
-  grid-template-rows: max-content 1fr
+  grid-template-rows: 60px 1fr
 
 // Сommon 
 
@@ -37,12 +35,15 @@
   flex-direction: row
   align-items: center
   justify-content: space-between
-  padding: 10px 10px
+  padding: 0px 0px
   border-bottom: 1px solid $yellow
 
 .btncont
-  max-height: 30px
-  max-width: 30px
+  height: 60px
+  width: 60px
+  display: flex
+  justify-content: center
+  align-items: center
   &:hover
     background: $yellow
 
@@ -61,7 +62,7 @@
   align-items: center
   &:hover
     color: #000000
-    background: $yellow
+    background: transparentize($yellow, 0.5)
   &.current
     color: #000000
     background: $yellow
@@ -109,13 +110,14 @@
 
 // Main --> Games
 
-.games
+.matches
   display: flex
   flex-direction: column
   row-gap: 10px
   padding-top: 15px
+  overflow: auto
 
-.gamesItem
+.matchItem
   padding: 0px 15px
   width: 100%
   display: flex
@@ -126,10 +128,53 @@
     white-space: nowrap
     overflow: hidden
   :nth-child(1)
-    width: calc( (100% - 190px) / 2 )
+    width: calc( (100% - 230px) / 2 )
   :nth-child(2)
-    width: calc( (100% - 190px) / 2 )
+    width: calc( (100% - 230px) / 2 )
   :nth-child(3)
-    width: 60px
+    width: 100px
   :nth-child(4)
     width: 130px
+
+// Main --> Voting
+
+.voting
+  display: grid
+  grid-template-rows: 100px 1fr
+
+.votingTop
+  grid-row: 1 / 2
+  display: flex
+  align-items: center
+  padding: 15px 15px
+  gap: 15px
+  border-bottom: 1px solid $yellow
+
+.votingCenter
+  grid-row: 2 / 3
+  display: flex
+  flex-wrap: wrap
+  padding: 15px 15px
+  gap: 15px
+
+.votingCategoryItem
+  display: flex
+  justify-content: center
+  align-items: center
+  font-size: 1.5rem
+  padding: 10px
+  &:hover
+    color: #000000
+    background: transparentize($yellow, 0.5)
+  &.current
+    background: $yellow
+    color: #000000
+
+.votingItem
+  width: calc( 20% - 15px)
+  display: flex
+  align-items: center
+  justify-content: center
+  &:hover
+    color: #000000
+    background: $yellow

@@ -1,14 +1,18 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+
 import * as s from './Scoreboard.module.sass'
 import cl from 'classnames'
+
 import ListOfPlayers from './ListOfPlayer/ListOfPlayers'
 import PlayerItem from './PlayerItem/PlayerItem'
 import TeamBar from './TeamBar/TeamBar'
 import HeaderScoreboard from './HeaderScoreboard/HeaderScoreboard'
 import TeamItem from './Teamitem/TeamItem'
+import Footer from './Footer/Footer'
+
 import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
 import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
-import Footer from './Footer/Footer'
+
 import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
