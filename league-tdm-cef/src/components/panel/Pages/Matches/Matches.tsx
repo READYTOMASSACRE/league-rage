@@ -9,19 +9,21 @@ interface Props {
   name: string | undefined
 }
 
-const Games: FC<Props> = ({matches, name}) => {
+const Games: FC<Props> = ({ matches, name }) => {
   return (
     <div className={styles.matches}>
-        <div className={styles.matchItem}>
-          <span>Name</span>
-          <span>Arena</span>
-          <span>K/D/A</span>
-          <span>Date</span>
-        </div>
-        {matches.map((match, index) => (
-          <MatchItem name={name} match={match}/>
-        ))}
+      <div className={styles.matchItem}>
+        <span>Name</span>
+        <span>Arena</span>
+        <span>K/D/A</span>
+        <span>Date</span>
       </div>
+      
+        {matches.map((match, index) => (
+          <MatchItem name={name} match={match} />
+        ))}
+      
+    </div>
   )
 }
 

@@ -17,7 +17,7 @@ export default () => {
   const [currentPage, setCurrentPage] = useState<string>('Vote')
   const [shrink, setShrink] = useState<boolean>(false)
 
-  const [active, setActive] = useState<boolean>(false)
+  const [active, setActive] = useState<boolean>(true)
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
 
@@ -50,6 +50,8 @@ export default () => {
   }, [])
 
   if (!active) return <></>
+
+  // todo: 
 
   return (
     <div className={styles.root}>

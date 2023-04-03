@@ -24,6 +24,8 @@ const DeathLog: FC = ({ }) => {
     })
 
     const interval = setInterval(() => {
+      if(!log.length) return
+
       setLog(prev => [...prev.filter(item => Date.now() - item.alive < ALIVE)])
     }, 100)
 

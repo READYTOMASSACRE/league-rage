@@ -3,8 +3,7 @@
 // Wrapper
 
 .root
-  background: $transparentBlack
-  color: $yellow
+  color: white
 
   left: 50%
   top: 50%
@@ -15,13 +14,16 @@
   position: absolute
   display: grid
   grid-template-columns: max-content 1fr
-  grid-template-rows: 60px 1fr
+  grid-template-rows: 45px 1fr
+  row-gap: 10px
+  & > div
+    background: $transparentBlack
 
 // Сommon 
 
 .icon
-  height: 30px
-  width: 30px
+  height: 25px
+  width: 25px
 
 .title
   max-height: 30px
@@ -36,11 +38,10 @@
   align-items: center
   justify-content: space-between
   padding: 0px 0px
-  border-bottom: 1px solid $yellow
 
 .btncont
-  height: 60px
-  width: 60px
+  height: 45px
+  width: 45px
   display: flex
   justify-content: center
   align-items: center
@@ -58,11 +59,11 @@
   display: flex
   flex-direction: row
   padding: 15px 15px
-  gap: 10px
+  gap: 15px
   align-items: center
   &:hover
     color: #000000
-    background: transparentize($yellow, 0.5)
+    background: $yellow
   &.current
     color: #000000
     background: $yellow
@@ -71,6 +72,7 @@
 
 .main
   grid-area: 2 / 2 / 3 / 3
+  border-left: 1px solid $yellow
 
 // Main --> Profile
 
@@ -91,8 +93,8 @@
   grid-row: 1 / 2
   display: flex
   align-items: center
-  padding: 15px 45px
-  gap: 10px
+  padding: 15px 15px
+  gap: 15px
   :nth-child(1)
     flex-grow: 1
   :nth-child(2)
@@ -100,8 +102,8 @@
 
 .profileCenter
   grid-row: 2 / 3
-  padding: 15px 45px
-  row-gap: 45px
+  padding: 15px 15px
+  row-gap: 15px
   display: flex
   flex-wrap: wrap
   div
@@ -114,11 +116,14 @@
   display: flex
   flex-direction: column
   row-gap: 10px
-  padding-top: 15px
+  padding: 15px 15px
   overflow: auto
-
+  gap: 5px
+  & div:nth-child(2n)
+    span
+      background: #24262D
+      
 .matchItem
-  padding: 0px 15px
   width: 100%
   display: flex
   column-gap: 10px
@@ -127,6 +132,7 @@
     text-overflow: ellipsis
     white-space: nowrap
     overflow: hidden
+    padding: 3px 5px
   :nth-child(1)
     width: calc( (100% - 230px) / 2 )
   :nth-child(2)
@@ -135,6 +141,9 @@
     width: 100px
   :nth-child(4)
     width: 130px
+  &:hover
+    background: $yellow
+    color: #000000
 
 // Main --> Voting
 
@@ -148,7 +157,6 @@
   align-items: center
   padding: 15px 15px
   gap: 15px
-  border-bottom: 1px solid $yellow
 
 .votingCenter
   grid-row: 2 / 3
@@ -162,10 +170,10 @@
   justify-content: center
   align-items: center
   font-size: 1.5rem
-  padding: 10px
+  padding: 15px
   &:hover
     color: #000000
-    background: transparentize($yellow, 0.5)
+    background: $yellow
   &.current
     background: $yellow
     color: #000000

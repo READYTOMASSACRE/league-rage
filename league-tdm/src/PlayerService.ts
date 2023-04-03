@@ -131,9 +131,9 @@ export default class PlayerService {
     }
 
     if (weapon) {
-      weapon = `weapon_${weapon.replace(/^weapon_/, '')}`
+      const weaponHash = `weapon_${weapon.replace(/^weapon_/, '')}`
 
-      player.giveWeapon(mp.joaat(weapon), Number(ammo) || 0)
+      player.giveWeapon(mp.joaat(weaponHash), Number(ammo) || 0)
       mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
     }
   }

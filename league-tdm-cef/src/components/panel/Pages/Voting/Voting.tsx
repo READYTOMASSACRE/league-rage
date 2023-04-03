@@ -27,6 +27,7 @@ const arenasData = [
   {name: 'arena 7'},
   {name: 'arena 8'},
   {name: 'arena 9'},
+  {name: 'arena 10'},
 ]
 
 const Voting: FC<Props> = ({ arenas }) => {
