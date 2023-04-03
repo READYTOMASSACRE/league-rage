@@ -37,7 +37,7 @@ const App = () => {
           <WeaponSelector />
           <Panel />
           <Motd />
-          {/* <Winner /> */}
+          <Winner />
         </Center>
         <Bottom>
           <Popup />
