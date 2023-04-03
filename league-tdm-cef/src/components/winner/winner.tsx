@@ -53,16 +53,16 @@ export default () => {
 
       return (
         <Letter
-        key={index}
-        color={toColor(color)}
-        animation={`letter${index}`}
-        className={styles.letter}
-        offset={offset}
-        offsetTo={'0em'}
-        delay={`${delay}s`}
-        duration={`${duration - (duration * delay)}s`}
-        content={letter+content}
-        char={letter}/>
+          key={index}
+          color={toColor(color)}
+          animation={`letter${index}`}
+          className={styles.letter}
+          offset={offset}
+          offsetTo={'0em'}
+          delay={`${delay}s`}
+          duration={`${duration - (duration * delay)}s`}
+          content={letter+content}
+          char={letter}/>
       )
     })
   }, [text])
