@@ -18,6 +18,7 @@ import Spectate from "./ui/Spectate";
 import TeamSelector from "./ui/TeamSelector";
 import WeaponHud from "./ui/WeaponHud";
 import WeaponSelector from "./ui/WeaponSelector";
+import Winner from "./ui/Winner";
 
 @eventable
 export default class UIService {
@@ -36,6 +37,7 @@ export default class UIService {
   public panel: Panel
   public spectate: Spectate
   public weaponHud: WeaponHud
+  public winner: Winner
 
   constructor(
     readonly url: string,
@@ -65,6 +67,7 @@ export default class UIService {
     this.panel = new Panel(this, keybindService)
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
+    this.winner = new Winner(config.team, this)
   }
 
   setCursor(visible: boolean, component: string, forceClose?: boolean) {

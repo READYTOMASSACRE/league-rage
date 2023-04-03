@@ -11,12 +11,7 @@ export interface AnimatedLetterProps {
   className: string
   char: string
   animation: string
-}
-
-export interface KeyframeProps {
-  animation: string
-  offset: string
-  offsetTo: string
+  color: string
 }
 
 const useStyles = (props: AnimatedLetterProps) => createUseStyles<any, AnimatedLetterProps>({
@@ -30,6 +25,7 @@ const useStyles = (props: AnimatedLetterProps) => createUseStyles<any, AnimatedL
   },
   letter: {
     '&:before': {
+      color: props.color,
       content: `"${props.content}"`,
       marginTop: props.offset,
       animationName: `$${props.animation}`,
