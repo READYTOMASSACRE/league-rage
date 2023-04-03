@@ -66,7 +66,7 @@ export default class StatisticService {
   private getUserId(player: PlayerMp, idOrUserId?: number | string) {
     idOrUserId = idOrUserId ?? -1
 
-    if (idOrUserId >= 0) {
+    if (idOrUserId !== -1) {
       let targetPlayer = this.playerService.atUserId(String(idOrUserId))
       targetPlayer = targetPlayer ?? mp.players.at(Number(idOrUserId))
   
