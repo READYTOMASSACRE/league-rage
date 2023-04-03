@@ -18,8 +18,7 @@ export const toProfile = (o?: any): Profile => ({
   name: o?.name ?? '',
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
-  _id: o?._id ?? 0,
-})
+}) as Profile
 
 export const toClientProfile = (o?: any): ClientProfile => ({
   ...toPlayerStat(o),
@@ -27,14 +26,12 @@ export const toClientProfile = (o?: any): ClientProfile => ({
   name: o?.name ?? '',
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
-  _id: o?._id ?? 0,
-})
+}) as ClientProfile
 
 export const toRound = (o?: Partial<Round>): Round => ({
-  _id: o?._id ?? 0,
   id: o?.id ?? Date.now(),
   arenaId: o?.arenaId ?? 0,
   result: o?.result ?? "draw",
   [Team.attackers]: o?.[Team.attackers] ?? { name: '', players: {} },
   [Team.defenders]: o?.[Team.defenders] ?? { name: '', players: {} },
-})
+}) as Round

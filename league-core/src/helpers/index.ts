@@ -12,6 +12,7 @@ export const toId = (e: any): number => {
 }
 
 export const rand = (max: number): number => Math.floor(Math.random() * Math.floor(max))
+export const randRange = (min: number, max: number): number => Math.floor(Math.random() * (max - min)) + min
 export const decorate = (arg: any): string => {
   try {
     if (typeof arg === 'boolean') return arg ? 'true' : 'false'

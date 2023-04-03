@@ -1,0 +1,7 @@
+@mixin respond-to($breakpoint)
+  @if type-of($breakpoint) == list
+    @media (min-width: nth($breakpoint, 1)) and (max-width: nth($breakpoint, 2))
+      @content
+  @else
+    @media (max-width: $breakpoint)
+      @content

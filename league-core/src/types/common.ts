@@ -179,6 +179,8 @@ export const enum Events {
   'tdm.cef.spectate' = 'tdm.cef.spectate',
   /** Fires when player recieved new weapon data */
   'tdm.cef.weapon_hud' = 'tdm.cef.weapon_hud',
+  /** Fires when cef recieves team winner */
+  'tdm.cef.winner' = 'tdm.cef.winner',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
