@@ -178,6 +178,9 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         damageDone: 1,
         expToLvl: 1000,
       },
+    },
+    effects: {
+      death: 5,
     }
   }
 

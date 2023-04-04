@@ -1,4 +1,4 @@
-import { eventable, event, commandable, command, log } from '../../league-core'
+import { eventable, event, commandable, command } from '../../league-core'
 import { decorate } from '../../league-core/src/helpers'
 import { Events, userId } from '../../league-core/src/types'
 import { Team, TeamConfig } from '../../league-core/src/types/tdm'
@@ -111,7 +111,6 @@ export default class RoundStatisticService {
     this.addStat(killerId, 'exp', prev => prev + this.exp.hit)
   }
 
-  @log
   addStat<_, K extends keyof PlayerStat>(
     player: PlayerMp | number,
     key: K,

@@ -44,3 +44,7 @@ export interface HudConfig {
   roundStart: RoundStartConfig
   damage: DamageConfig
 }
+
+export interface EffectsConfig {
+  death: number
+}

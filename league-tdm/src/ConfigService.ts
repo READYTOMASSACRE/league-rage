@@ -22,6 +22,8 @@ export default class ConfigService {
             hud: this.config.hud,
             interaction: this.config.interaction,
             statistic: this.config.statistic,
+            effects: this.config.effects,
+            version: 'League 0.6a',
         }
     }
 }

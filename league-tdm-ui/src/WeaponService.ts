@@ -25,7 +25,9 @@ export default class WeaponService {
     readonly keybindService: KeybindService,
   ) {
     this.throttledIncomingUpdate = helpers.throttle(() => this.incomingUpdate(), 100)
-    mp.game.weapon.unequipEmptyWeapons = false
+    if (mp.game1) {
+      mp.game1.weapon.unequipEmptyWeapons = false
+    }
 
     this.keybindService.unbind([key["1"], key["2"], key["3"]], true, WeaponService.key)
     this.keybindService.bind(key["1"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.primary))

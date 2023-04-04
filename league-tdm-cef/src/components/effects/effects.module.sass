@@ -1,0 +1,38 @@
+.item-enter
+  opacity: 0
+
+.item-enter-active
+  opacity: 1
+  transition: all 500ms ease-in
+
+.item-exit
+  opacity: 1
+
+.item-exit-active
+  opacity: 0
+  transition: all 500ms ease-in
+
+.kill
+  position: absolute
+  z-index: -1
+  height: 100%
+  width: 100%
+  background: rgb(2,0,36)
+  background: radial-gradient(circle, rgba(2,0,36,0) 80%, rgba(74,255,0,0.5046393557422969) 100%)
+  animation:
+    name: kill
+    timing-function: ease-out
+    direction: normal
+    duration: 3s
+    fill-mode: forwards
+    iteration-count: 1
+
+@keyframes kill
+  0%
+    opacity: 0
+  20%
+    opacity: 1
+  80%
+    opacity: 1
+  100%
+    opacity: 0

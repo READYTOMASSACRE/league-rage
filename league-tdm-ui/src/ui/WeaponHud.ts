@@ -38,7 +38,7 @@ export default class WeaponHud {
     return {
       primary,
       secondary,
-      melee
+      melee,
     }
   }
 }

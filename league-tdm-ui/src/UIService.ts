@@ -9,6 +9,7 @@ import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
 import Deathlog from "./ui/Deathlog";
 import Debug from "./ui/Debug";
+import Effects from "./ui/Effects";
 import Infopanel from "./ui/Infopanel";
 import Motd from "./ui/Motd";
 import NotifyText from "./ui/Notifytext";
@@ -38,6 +39,7 @@ export default class UIService {
   public spectate: Spectate
   public weaponHud: WeaponHud
   public winner: Winner
+  public effects: Effects
 
   constructor(
     readonly url: string,
@@ -68,6 +70,7 @@ export default class UIService {
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
     this.winner = new Winner(config.team, this)
+    this.effects = new Effects(config.effects, this, playerService)
   }
 
   setCursor(visible: boolean, component: string, forceClose?: boolean) {
