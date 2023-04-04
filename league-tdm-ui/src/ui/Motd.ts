@@ -1,7 +1,6 @@
 import { command, commandable, event, eventable, logClient } from "../../../league-core/client";
 import { ClientConfig, Enviroment, Events } from "../../../league-core/src/types";
 import { keyPriority } from "../@types/common";
-import console from "../helpers/console";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
 

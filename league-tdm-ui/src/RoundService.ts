@@ -1,5 +1,6 @@
 import { event, eventable } from "../../league-core/client";
 import { Events, Procs, tdm } from "../../league-core/src/types";
+import { State } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
 import PlayerService from "./PlayerService";
 import ZoneService from "./ZoneService";
@@ -28,6 +29,13 @@ export default class RoundService {
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
 		this.playerService.freezePosition(false)
+
+		const state = this.playerService.getState()
+
+		if (state === State.select) {
+			return
+		}
+
 		this.playerService.spawnLobby()
 	}
 
