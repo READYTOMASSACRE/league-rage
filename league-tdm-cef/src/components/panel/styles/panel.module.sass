@@ -1,5 +1,11 @@
 @use '../../../variables' as *
 
+@keyframes page
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
 // Wrapper
 
 .root
@@ -73,6 +79,8 @@
 .main
   grid-area: 2 / 2 / 3 / 3
   border-left: 1px solid $yellow
+  & > div
+    animation: page 0.5s
 
 // Main --> Profile
 
@@ -119,10 +127,12 @@
   padding: 15px 15px
   overflow: auto
   gap: 5px
-  & div:nth-child(2n)
-    span
-      background: #24262D
-      
+  & div:nth-child(even)
+    background-color: $black
+    &:hover
+      background: white
+      color: #000000
+
 .matchItem
   width: 100%
   display: flex
@@ -142,7 +152,7 @@
   :nth-child(4)
     width: 130px
   &:hover
-    background: $yellow
+    background: white
     color: #000000
 
 // Main --> Voting

@@ -18,9 +18,11 @@ const Main: FC<Props> = ({rounds, profile }) => {
 
   const { currentPage } = useContext(CurrentPage)
 
+  console.log(profile)
+
   const page = useMemo(() => {
     if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
-    if (currentPage === 'Games') return (<Games matches={rounds} name={profile?.name}/>)
+    if (currentPage === 'Games') return (<Games matches={rounds} name={profile?.name} id={profile?.id}/>)
     if (currentPage === 'Vote') return (<Voting />)
     if (currentPage === 'About') return (<div>About</div>)
   }, [currentPage, profile, rounds])

@@ -6,10 +6,11 @@ import MatchItem from './MatchItem'
 
 interface Props {
   matches: Round[]
-  name: string | undefined
+  name?: string
+  id?: string
 }
 
-const Games: FC<Props> = ({ matches, name }) => {
+const Games: FC<Props> = ({ matches, name, id }) => {
   return (
     <div className={styles.matches}>
       <div className={styles.matchItem}>
@@ -18,11 +19,9 @@ const Games: FC<Props> = ({ matches, name }) => {
         <span>K/D/A</span>
         <span>Date</span>
       </div>
-      
-        {matches.map((match, index) => (
-          <MatchItem name={name} match={match} />
-        ))}
-      
+      {matches.map((match) => (
+        <MatchItem key={match.id} name={name} match={match} id={id} />
+      ))}
     </div>
   )
 }

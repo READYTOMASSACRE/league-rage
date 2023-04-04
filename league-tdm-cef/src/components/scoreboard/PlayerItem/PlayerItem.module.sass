@@ -1,3 +1,5 @@
+@use '../../../../src/variables' as *
+
 .playerItem
   display: flex
   flex-direction: row
@@ -6,11 +8,10 @@
   min-height: 30px
 
 .playerItem div
-  background-color: transparentize(#000000, 0.3)
-  border-bottom: 1px solid#d8c451
-
+  background-color: $black
+  border-bottom: 1px solid $yellow
 .currentPlayerItem div
-  background-color: transparentize(#333, 0.3)
+  background-color: transparentize(#3333, 0.3)
 
 .position
   min-width: 24px
@@ -29,7 +30,7 @@
   padding: 0 5px
 
 .name.current
-  color: #d8c451
+  color: $yellow
 
 .statistics
   display: flex
