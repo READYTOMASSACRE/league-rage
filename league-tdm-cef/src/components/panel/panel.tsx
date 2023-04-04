@@ -14,7 +14,7 @@ import cefLog from '../../helpers/cefLog'
 
 export default () => {
 
-  const [currentPage, setCurrentPage] = useState<string>('Games')
+  const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
 
   const [active, setActive] = useState<boolean>(true)

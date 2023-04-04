@@ -71,9 +71,7 @@ export default () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.letters}>
         {items}
-      </div>
     </div>
   )
 }

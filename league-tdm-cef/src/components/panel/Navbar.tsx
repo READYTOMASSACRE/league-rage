@@ -6,7 +6,7 @@ import cl from 'classnames'
 
 const data = [
   { title: 'Profile', svg: 'user-profile' },
-  { title: 'Games', svg: 'game' },
+  { title: 'Matches', svg: 'list' },
   { title: 'Vote', svg: 'vote' },
   { title: 'About', svg: 'about' },
 ]
@@ -17,12 +17,11 @@ const Navbar = () => {
   const { shrink } = useContext(ShrinkNavbar)
 
   return (
-    <div className={styles.navbar}>
-
+    <div className={cl(styles.navbar, !shrink && styles.shrink)}>
       {data.map((el) =>
         <div key={el.title} className={cl(styles.navbarItem, currentPage === el.title && styles.current)} onClick={() => setCurrentPage && setCurrentPage(el.title)}>
           <img src={`/assets/svg/${el.svg}.svg`} className={styles.icon} alt="" />
-          {!shrink && <div className={styles.title}>{el.title}</div>}
+          <div className={styles.title}>{el.title}</div>
         </div>
       )}
     </div>

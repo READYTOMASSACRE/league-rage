@@ -23,7 +23,7 @@
   grid-template-rows: 45px 1fr
   row-gap: 10px
   & > div
-    background: $transparentBlack
+    background: $black
 
 // Сommon 
 
@@ -60,6 +60,11 @@
   grid-area: 2 / 1 / 3 / 2
   display: flex
   flex-direction: column
+  overflow: hidden
+  width: 54px
+  transition: all 0.5s ease-in-out
+  &.shrink
+    width: 150px
 
 .navbarItem
   display: flex
@@ -80,7 +85,7 @@
   grid-area: 2 / 2 / 3 / 3
   border-left: 1px solid $yellow
   & > div
-    animation: page 0.5s
+    animation: page 0.4s
 
 // Main --> Profile
 
@@ -93,6 +98,7 @@
 .profileItem
   display: flex
   flex-direction: column
+  height: max-content
   :nth-child(2)
     font-size: 1.5rem
     font-weight: 600
@@ -109,14 +115,17 @@
     justify-self: flex-end
 
 .profileCenter
+  height: max-content
   grid-row: 2 / 3
   padding: 15px 15px
-  row-gap: 15px
+  gap: 30px 15px
   display: flex
   flex-wrap: wrap
   div
-    width: 25%
+    width: calc( 25% - 15px )
     align-items: center
+    border:
+      bottom: 2px solid $yellow
 
 // Main --> Games
 
@@ -128,7 +137,7 @@
   overflow: auto
   gap: 5px
   & div:nth-child(even)
-    background-color: $black
+    background-color: $black2
     &:hover
       background: white
       color: #000000
