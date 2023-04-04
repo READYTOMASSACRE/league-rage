@@ -70,7 +70,7 @@ export default () => {
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.letters}>
+      <div>
         {items}
       </div>
     </div>
