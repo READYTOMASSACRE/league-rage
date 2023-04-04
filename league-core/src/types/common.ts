@@ -93,7 +93,9 @@ export interface IConfig {
   effects: EffectsConfig
 }
 
-export interface ClientConfig extends Omit<IConfig, 'db'> {}
+export interface ClientConfig extends Omit<IConfig, 'db'> {
+  version: string
+}
 
 export type userId = string
 
@@ -184,6 +186,8 @@ export const enum Events {
   'tdm.cef.winner' = 'tdm.cef.winner',
   /** Fires when cef should show game effect */
   'tdm.cef.effects' = 'tdm.cef.effects',
+  /** Fires when cef should update gamemode text */
+  'tdm.cef.gamemode' = 'tdm.cef.gamemode',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */

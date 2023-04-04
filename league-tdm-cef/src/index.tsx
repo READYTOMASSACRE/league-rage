@@ -22,6 +22,7 @@ import Spectate from './components/spectate/spectate'
 import {Hud, Top, Center, Bottom, Absolute} from './components/hud/hud'
 import Winner from './components/winner/winner'
 import Effects from './components/effects/effects'
+import Gamemode from './components/gamemode/gamemode'
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
           <Spectate />
           <WeaponHud />
           <Controls />
+          <Gamemode />
         </Bottom>
         <Absolute>
           <Notifytext />

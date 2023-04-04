@@ -27,6 +27,7 @@ export default class Motd {
         [this.config.welcomeText.replace(':player', mp.players.local.name), '#fff'],
       ]
     }, Enviroment.client)
+    this.uiService.cef.call(Events["tdm.cef.gamemode"], this.config.name + ' // ' + this.config.version)
   }
 
   @logClient
@@ -53,6 +54,6 @@ export default class Motd {
   }
 
   get data() {
-    return [this.config.motd, 'League 0.6a', this.visible]
+    return [this.config.motd, this.config.version, this.visible]
   }
 }
