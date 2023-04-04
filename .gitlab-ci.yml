@@ -13,7 +13,7 @@ stages:
 deploy_production:
   stage: deploy
   script:
-    - ssh $DEPLOYMENT_USER@$DEPLOYMENT_ADDRESS "cd /opt/srv/league && git fetch && git checkout deploy && git pull origin deploy && yarn && yarn build && systemctl restart ragesrv"
+    - ssh -vv $DEPLOYMENT_USER@$DEPLOYMENT_ADDRESS "cd /opt/srv/league && git fetch && git checkout deploy && git pull origin deploy && yarn && yarn build && systemctl restart ragesrv"
   environment: production
   only:
     - deploy
