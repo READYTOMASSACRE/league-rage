@@ -77,6 +77,7 @@ export interface DbConfig {
 export interface IConfig {
   name: string
   gamemode: string
+  rcon?: string
   welcomeText: string
   motd: string
   lang: string
