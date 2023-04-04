@@ -16,7 +16,6 @@ export default () => {
 
   useEffect(() => {
     RageAPI.subscribe(Events['tdm.cef.winner'], 'winner', (text: string | undefined, color: string = '#d8c451') => {
-      cefLog(text, color, typeof text, typeof color)
       if (typeof text === 'string') {
         set([text, color])
       } else {

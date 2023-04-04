@@ -23,17 +23,20 @@ const DeathLog: FC = ({ }) => {
       }
     })
 
-    const interval = setInterval(() => {
-      if(!log.length) return
-
-      setLog(prev => [...prev.filter(item => Date.now() - item.alive < ALIVE)])
-    }, 100)
-
     return () => {
-      clearInterval(interval)
       RageAPI.unsubscribe(Events['tdm.player.kill'], 'deathlog')
     }
   }, [])
+
+  useEffect(() => {
+    if (!log.length) return
+
+    const timeout = setTimeout(() => {
+      setLog(prev => [...prev.filter(item => Date.now() - item.alive < ALIVE)])
+    }, 1000)
+
+    return () => clearTimeout(timeout)
+  }, [log])
 
   const items = useMemo(() => {
     return log.map((item) => (

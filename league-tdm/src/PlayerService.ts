@@ -1,6 +1,7 @@
 import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
 import { PlayerData } from "../../league-core/src/types/tdm";
+import TaskManager from "./TaskManager";
 
 @eventable
 export default class PlayerService {
@@ -23,7 +24,19 @@ export default class PlayerService {
 
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
-    this.spawnLobby(player)
+    TaskManager.add(() => {
+      if (!mp.players.exists(player)) {
+        return
+      }
+
+      const state = this.getState(player)
+
+      if ([tdm.State.alive, tdm.State.select, tdm.State.spectate].includes(state)) {
+        return
+      }
+
+      this.spawnLobby(player)
+    }, this.config.effects.death)
   }
 
   @ensurePlayer

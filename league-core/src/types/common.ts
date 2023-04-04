@@ -1,6 +1,6 @@
 import { Config as WeaponConfig } from './weapon'
 import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
-import { HudConfig, InteractionConfig } from './ui';
+import { EffectsConfig, HudConfig, InteractionConfig } from './ui';
 import { StatisticConfig } from './statistic';
 
 export type ctor<T = {}> = new (...args: any[]) => T;
@@ -90,6 +90,7 @@ export interface IConfig {
   interaction: InteractionConfig
   db: DbConfig
   statistic: StatisticConfig
+  effects: EffectsConfig
 }
 
 export interface ClientConfig extends Omit<IConfig, 'db'> {}
@@ -181,6 +182,8 @@ export const enum Events {
   'tdm.cef.weapon_hud' = 'tdm.cef.weapon_hud',
   /** Fires when cef recieves team winner */
   'tdm.cef.winner' = 'tdm.cef.winner',
+  /** Fires when cef should show game effect */
+  'tdm.cef.effects' = 'tdm.cef.effects',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
