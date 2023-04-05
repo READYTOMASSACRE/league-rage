@@ -43,6 +43,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@parcel/transformer-svg-react": "^2.8.3",
     "concurrently": "^7.6.0"
   }
 }
