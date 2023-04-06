@@ -1,11 +1,12 @@
 import { eventable, event, commandable, command } from '../../league-core'
 import { decorate } from '../../league-core/src/helpers'
 import { Events, userId } from '../../league-core/src/types'
-import { Team, TeamConfig } from '../../league-core/src/types/tdm'
+import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
 import RepositoryService from './RepositoryService'
 import { PlayerStat, Round, StatisticConfig } from '../../league-core/src/types/statistic'
 import { toPlayerStat, toProfile, toRound } from '../../league-core/src/helpers/toStatistic'
+import DummyService from "../../league-core/src/server/DummyService";
 
 @commandable
 @eventable
@@ -13,7 +14,7 @@ export default class RoundStatisticService {
   private stat: Round
 
   constructor(
-    readonly teamConfig: TeamConfig,
+    readonly config: TeamConfig,
     readonly statisticConfig: StatisticConfig,
     readonly playerService: PlayerService,
     readonly repositoryService: RepositoryService
@@ -155,13 +156,16 @@ export default class RoundStatisticService {
   }
 
   private toDefault() {
+    const attackers = this.getTeam(Team.attackers) ?? this.config.attackers
+    const defenders = this.getTeam(Team.defenders) ?? this.config.defenders
+
     return toRound({
       [Team.attackers]: {
-        name: this.teamConfig[Team.attackers].name,
+        name: attackers.name,
         players: {},
       },
       [Team.defenders]: {
-        name: this.teamConfig[Team.defenders].name,
+        name: defenders.name,
         players: {},
       }
     })
@@ -176,6 +180,10 @@ export default class RoundStatisticService {
       lvl: lvl + Math.floor(exp / this.exp.expToLvl),
       exp: Math.floor(exp % this.exp.expToLvl),
     }
+  }
+
+  private getTeam(team: Team) {
+    return DummyService.get(Entity.TEAM, team)
   }
 
   get exp() {

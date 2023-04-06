@@ -1,17 +1,16 @@
 import { event, eventable } from "../../../league-core/client";
-import { toColor } from "../../../league-core/src/helpers";
 import { Events } from "../../../league-core/src/types";
-import { TeamConfig } from "../../../league-core/src/types/tdm";
 import console from "../helpers/console";
 import PlayerService from "../PlayerService";
+import TeamService from "../TeamService";
 import UIService from "../UIService";
 
 @eventable
 export default class Deathlog {
   constructor(
-    readonly config: TeamConfig,
     readonly uiService: UIService,
     readonly playerService: PlayerService,
+    readonly teamService: TeamService,
   ) {}
 
   @event(Events["tdm.player.kill"])
@@ -25,16 +24,19 @@ export default class Deathlog {
       }
   
       const victimTeam = this.playerService.getTeam(victimPlayer)
-      const killerTeam= this.playerService.getTeam(killerPlayer)
-  
+      const killerTeam = this.playerService.getTeam(killerPlayer)
+      
+      const killerColor = this.teamService.getTeam(killerTeam).color
+      const victimColor = this.teamService.getTeam(victimTeam).color
+
       this.uiService.cef.call(Events["tdm.player.kill"], {
         killer: {
           name: killerPlayer.name,
-          color: toColor(this.config[killerTeam].color),
+          color: killerColor,
         },
         victim: {
           name: victimPlayer.name,
-          color: toColor(this.config[victimTeam].color),
+          color: victimColor,
         },
         weapon
       })

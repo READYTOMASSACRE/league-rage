@@ -1,7 +1,7 @@
 import { colorGradient, deepclone, hex2rgba } from "../../../league-core/src/helpers"
 import { NametagConfig } from "../../../league-core/src/types/hud"
-import { TeamConfig } from "../../../league-core/src/types/tdm"
 import PlayerService from "../PlayerService"
+import TeamService from "../TeamService"
 import Hud from "./Hud"
 
 interface Nametag extends NametagConfig {}
@@ -13,19 +13,19 @@ class Nametag extends Hud implements NametagConfig {
   readonly visibleBitMap = 1 | 16 | 256
   
   private camera: CameraMp
-  private teamConfig: TeamConfig
+  private teamService: TeamService
   private playerService: PlayerService
   private interval: number = 0
 
   constructor(
     config: NametagConfig,
-    teamConfig: TeamConfig,
+    teamService: TeamService,
     playerService: PlayerService,
   ) {
     super(config)
     Object.assign(this, deepclone(config))
 
-    this.teamConfig = teamConfig
+    this.teamService = teamService
     this.playerService = playerService
     this.camera = mp.cameras.new('gameplay')
   }
@@ -66,7 +66,7 @@ class Nametag extends Hud implements NametagConfig {
     let color: Array4d = [255, 255, 255, 255]
 
     try {
-      color = hex2rgba(this.teamConfig[team].color)
+      color = hex2rgba(this.teamService.getTeam(team).color)
     } catch (err) {}
 
     const { scale: [scaleX, scaleY] } = this.textElement.style

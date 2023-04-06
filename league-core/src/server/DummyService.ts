@@ -1,4 +1,5 @@
 import { Dummy, Entity, RoundState, Team } from "../types/tdm"
+import config from "../config"
 
 export interface IDummyService {
   getOne(type: Entity): DummyMp | undefined
@@ -23,10 +24,19 @@ export default new class DummyService implements IDummyService {
         players: '[]',
       }),
       [Entity.TEAM]: this.setDefault(Entity.TEAM, {
-        [Team.attackers]: { score: 0 },
-        [Team.defenders]: { score: 0 },
-        [Team.spectators]: { score: 0 },
-      }),
+        [Team.attackers]: {
+          score: 0,
+          ...config.get(`team.${Team.attackers}`),
+        },
+        [Team.defenders]: {
+          score: 0,
+          ...config.get(`team.${Team.defenders}`),
+        },
+        [Team.spectators]: {
+          score: 0,
+          ...config.get(`team.${Team.spectators}`),
+        },
+      } as any),
     }
   }
 
@@ -51,7 +61,21 @@ export default new class DummyService implements IDummyService {
     (dummy as any).setVariable(String(key), value)
   }
 
+  getData<E extends Entity, K extends keyof Dummy[E]>(type: E, dummy?: DummyMp): Dummy[E][K] | undefined {
+    dummy = dummy ? dummy : this.getOne(type)
+
+    if (!dummy) {
+      return
+    }
+
+    return <Dummy[E][K]>(dummy as any).getVariables()
+  }
+
   setDefault<E extends Entity>(type: E, data: Dummy[E]) {
-    return (mp as any).dummies.new(type, data)
+    const dummy = (mp as any).dummies.new(type)
+
+    dummy.setVariables(data)
+
+    return dummy
   }
 }

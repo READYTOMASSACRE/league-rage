@@ -1,7 +1,8 @@
 import { event, eventable } from "../../../league-core/client";
 import { cef, Events } from "../../../league-core/src/types";
-import { Entity, RoundState, TeamConfig } from "../../../league-core/src/types/tdm";
+import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
 import DummyService from "../DummyService";
+import TeamService from "../TeamService";
 import UIService from "../UIService";
 
 @eventable
@@ -10,9 +11,9 @@ export default class Infopanel {
   private dateStart: number = 0
 
   constructor(
-    readonly config: TeamConfig,
     readonly uiService: UIService,
     readonly dummyService: DummyService,
+    readonly teamService: TeamService,
   ) {}
 
   @event(Events["tdm.ui.ready"])
@@ -35,6 +36,11 @@ export default class Infopanel {
     this.sendRoundData()
   }
 
+  @event(Events["tdm.team.swap"])
+  teamSwap() {
+    this.sendRoundData()
+  }
+
   @event(Events["tdm.round.pause"])
   roundPause(toggle: boolean) {
     clearInterval(this.interval)
@@ -45,16 +51,19 @@ export default class Infopanel {
   }
 
   get data(): cef.InfoPanel {
+    const attackers = this.teamService.getTeam(Team.attackers)
+    const defenders = this.teamService.getTeam(Team.defenders)
+
     return {
       attackers: {
-        name: this.config.attackers.name,
-        color: this.config.attackers.color,
-        score: 0,
+        name: attackers.name,
+        color: attackers.color,
+        score: attackers.score,
       },
       defenders: {
-        name: this.config.defenders.name,
-        color: this.config.defenders.color,
-        score: 0,
+        name: defenders.name,
+        color: defenders.color,
+        score: defenders.score,
       },
       arena: this.dummyService.get(Entity.ROUND, 'arena'),
       timeleft: Math.floor(this.timeleft / 1000),

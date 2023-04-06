@@ -71,7 +71,7 @@ export default class RoundService {
       prepareSeconds: this.config.prepare,
       roundSeconds: this.config.timeleft,
       aliveWatcher: this.config.watcher.alive,
-    }, this.playerService, this.dummyService)
+    }, this.playerService, this.teamService, this.dummyService)
   }
 
   stop(player?: PlayerMp) {

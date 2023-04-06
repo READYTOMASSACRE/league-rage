@@ -1,9 +1,10 @@
 import { event, eventable } from "../../../league-core/client";
 import { Events, scoreboard } from "../../../league-core/src/types";
-import { Entity, TeamConfig } from "../../../league-core/src/types/tdm";
+import { Entity } from "../../../league-core/src/types/tdm";
 import DummyService from "../DummyService";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
+import TeamService from "../TeamService";
 import UIService from "../UIService";
 
 @eventable
@@ -12,10 +13,10 @@ export default class Scoreboard {
   public visible: boolean = false
 
   constructor(
-    readonly config: TeamConfig,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService,
+    readonly teamService: TeamService,
     readonly dummyService: DummyService,
   ) {
     this.keybindService.unbind(key.tab, [true, false], Scoreboard.key)
@@ -62,7 +63,7 @@ export default class Scoreboard {
   }
 
   private get teamsData(): scoreboard.Team[] {
-    return Object.entries(this.config).map(([team, config], index) => ({
+    return Object.entries(this.teamService.teams).map(([team, config], index) => ({
       id: index,
       name: config.name,
       role: team,

@@ -1,10 +1,10 @@
 import { event, eventable } from "../../../league-core/client";
 import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
-import { TeamConfig } from "../../../league-core/src/types/tdm";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
+import TeamService from "../TeamService";
 import UIService from "../UIService";
 
 interface TeamSelector extends TeamSelectorConfig {}
@@ -18,7 +18,7 @@ class TeamSelector implements TeamSelectorConfig {
   private teamPed: Record<string, { skin: string, ped: PedMp }[]> = {}
   private camera: CameraMp
   private playerService: PlayerService
-  private teamConfig: TeamConfig
+  private teamService: TeamService
 
   private uiService: UIService
   private keybindService: KeybindService
@@ -30,15 +30,15 @@ class TeamSelector implements TeamSelectorConfig {
 
   constructor(
     config: TeamSelectorConfig,
-    teamConfig: TeamConfig,
     playerService: PlayerService,
+    teamService: TeamService,
     uiService: UIService,
     keybindService: KeybindService,
   ) {
     Object.assign(this, deepclone(config))
     this.playerService = playerService
     this.uiService = uiService
-    this.teamConfig = teamConfig
+    this.teamService = teamService
     this.keybindService = keybindService
 
     this.camera = mp.cameras.new(
@@ -48,8 +48,20 @@ class TeamSelector implements TeamSelectorConfig {
       this.cam.fov
     )
     this.camera.pointAtCoord(...config.cam.pointAt)
+    this.setupPeds()
+  }
 
-    for (const [team, data] of Object.entries(teamConfig)) {
+  @event(Events["tdm.team.swap"])
+  private setupPeds() {
+    this.ids = []
+
+    for (const [, peds] of Object.entries(this.teamPed)) {
+      for (const { ped } of peds) {
+        ped.destroy()
+      }
+    }
+
+    for (const [team, data] of Object.entries(this.teamService.teams)) {
       const peds = data.skins.map(skin => ({
         skin,
         ped: mp.peds.new(
@@ -222,7 +234,7 @@ class TeamSelector implements TeamSelectorConfig {
   }
 
   private get currentTeamInfo(): { team: string, color: string } {
-    const { name: team, color } = this.teamConfig[this.currentTeam]
+    const { name: team, color } = this.teamService.getTeam(this.currentTeam)
 
     return { team, color }
   }

@@ -169,6 +169,8 @@ export const enum Events {
   'tdm.team.select' = 'tdm.team.select',
   /** Fires when clientside should team select */
   'tdm.team.select_toggle' = 'tdm.team.select_toggle',
+  /** Fires from server when teams swapped */
+  'tdm.team.swap' = 'tdm.team.swap',
   /** Fires when cef is console.log */
   'tdm.cef.log' = 'tdm.cef.log',
   /** Fires when cef should add debug message */

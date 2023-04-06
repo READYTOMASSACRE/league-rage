@@ -4,6 +4,7 @@ import { Events } from "../../league-core/src/types"
 import { Entity, RoundState, State, Team, WeaponState } from "../../league-core/src/types/tdm"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
+import TeamService from "./TeamService"
 
 interface RoundConfig {
   arena: Arena
@@ -23,6 +24,7 @@ export default class Round {
   constructor(
     readonly config: RoundConfig,
     readonly playerService: PlayerService,
+    readonly teamService: TeamService,
     readonly dummyService: IDummyService,
   ) {
     this.time = helpers.toMs(this.config.roundSeconds)
@@ -68,6 +70,8 @@ export default class Round {
     clearTimeout(this.prepareTimer)
     clearTimeout(this.roundTimer)
     clearTimeout(this.weaponTimer)
+
+    this.teamService.addScore(result)
 
     mp.players.call(Events["tdm.round.end"], [this.arena.id, result])
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)

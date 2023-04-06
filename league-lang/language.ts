@@ -74,6 +74,7 @@ export const enum Lang {
   "cmd.weapon" = "cmd.weapon",
   "cmd.change_team" = "cmd.change_team",
   "cmd.change_name" = "cmd.change_name",
+  "cmd.swap_team" = "cmd.swap_team",
 
   "cmdlist.page" = "cmdlist.page",
   "cmdlist.not_found" = "cmdlist.not_found",

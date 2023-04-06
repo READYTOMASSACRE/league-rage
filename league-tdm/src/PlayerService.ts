@@ -71,11 +71,14 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  setTeam(p: number | PlayerMp, id: tdm.Team) {
+  setTeam(p: number | PlayerMp, id: tdm.Team, callEvent: boolean = true) {
     const player = <PlayerMp>p
 
     this.setVariable(player, 'team', id)
-    mp.players.call(Events["tdm.player.team"], [player.id, id])
+
+    if (callEvent) {
+      mp.players.call(Events["tdm.player.team"], [player.id, id])
+    }
   }
 
   @ensurePlayer
@@ -118,7 +121,8 @@ export default class PlayerService {
   @ensurePlayer
   @event(Events["tdm.player.spawn_lobby"])
   spawnLobby(p: number | PlayerMp) {
-    (p as PlayerMp).spawn(new mp.Vector3(this.config.lobby))
+    const player = <PlayerMp>p
+    player.spawn(new mp.Vector3(this.config.lobby))
   }
 
   @ensurePlayer
@@ -214,10 +218,19 @@ export default class PlayerService {
     return player.getVariable(String(key))
   }
 
-  call(players: number[], eventName: string, ...args: any[]) {
-    players
-      .map(player => mp.players.at(player))
-      .filter(player => mp.players.exists(player))
-      .forEach(player => player.call(eventName, [...args]))
+  getByTeam(team: tdm.Team): PlayerMp[] {
+    return mp.players.toArray().filter(player => this.getTeam(player) === team)
+  }
+
+  call(playersOrEventName: number[] | string, ...args: any[]) {
+    if (Array.isArray(playersOrEventName)) {
+      const [eventName, ...eventArgs] = args
+      playersOrEventName
+        .map(player => mp.players.at(player))
+        .filter(player => mp.players.exists(player))
+        .forEach(player => player.call(eventName, [...eventArgs]))
+    } else {
+      mp.players.call(playersOrEventName, [...args])
+    }
   }
 }

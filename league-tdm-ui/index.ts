@@ -11,6 +11,7 @@ import RoundService from "./src/RoundService"
 import UIService from "./src/UIService"
 import WeaponService from "./src/WeaponService"
 import ZoneService from "./src/ZoneService"
+import TeamService from "./src/TeamService"
 
 const main = async () => {
   try {
@@ -20,6 +21,7 @@ const main = async () => {
   
     const dummyService = new DummyService()
     const playerService = new PlayerService()
+    const teamService = new TeamService(config.team, dummyService)
     const zoneService = new ZoneService(playerService, dummyService)
     const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
     const keybindService = new KeybindService()
@@ -28,14 +30,15 @@ const main = async () => {
       config,
       keybindService,
       playerService,
+      teamService,
       dummyService,
       roundService,
       language
     )
 
     new WeaponService(playerService, keybindService)
-    new HudService(config, roundService, playerService)
-    new InteractionService(config, playerService, dummyService, keybindService, uiService)
+    new HudService(config, roundService, playerService, teamService)
+    new InteractionService(config, playerService, teamService, dummyService, keybindService, uiService)
     new DebugService(playerService)
 
     mp.console.log('league-tdm-ui package initialized')

@@ -1,13 +1,14 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { Events } from "../../../league-core/src/types";
-import { Team, TeamConfig } from "../../../league-core/src/types/tdm";
+import { Team } from "../../../league-core/src/types/tdm";
+import TeamService from "../TeamService";
 import UIService from "../UIService";
 
 @eventable
 export default class Winner {
   constructor(
-    readonly config: TeamConfig,
-    readonly uiService: UIService
+    readonly uiService: UIService,
+    readonly teamService: TeamService,
   ) {}
 
   @logClient
@@ -16,7 +17,7 @@ export default class Winner {
     const {
       name = result,
       color = '#fff',
-    } = this.config[result] || {}
+    } = this.teamService.teams[result] || {}
 
     this.uiService.cef.call(Events["tdm.cef.winner"], name, color)
 
