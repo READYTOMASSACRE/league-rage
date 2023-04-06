@@ -9,7 +9,7 @@ import { Events, Procs } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import DummyService from "../../league-core/src/server/DummyService";
-import { Entity, RoundState, Team } from "../../league-core/src/types/tdm";
+import { Entity, RoundState, State, Team } from "../../league-core/src/types/tdm";
 import { deepclone } from "../../league-core/src/helpers";
 import TeamService from "./TeamService";
 
@@ -188,8 +188,12 @@ export default class TdmService {
     const attackers = deepclone(DummyService.get(Entity.TEAM, Team.attackers))
     const defenders = deepclone(DummyService.get(Entity.TEAM, Team.defenders))
 
-    const attackerPlayers = this.playerService.getByTeam(Team.attackers)
-    const defenderPlayers = this.playerService.getByTeam(Team.defenders)
+    const attackerPlayers = this.playerService
+      .getByTeam(Team.attackers)
+      .filter(player => !this.playerService.hasState(player, State.select))
+    const defenderPlayers = this.playerService
+      .getByTeam(Team.defenders)
+      .filter(player => !this.playerService.hasState(player, State.select))
 
     DummyService.set(Entity.TEAM, Team.defenders, attackers)
     DummyService.set(Entity.TEAM, Team.attackers, defenders)

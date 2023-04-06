@@ -48,6 +48,18 @@ class TeamSelector implements TeamSelectorConfig {
       this.cam.fov
     )
     this.camera.pointAtCoord(...config.cam.pointAt)
+    this.setupPeds()
+  }
+
+  @event(Events["tdm.team.swap"])
+  private setupPeds() {
+    this.ids = []
+
+    for (const [, peds] of Object.entries(this.teamPed)) {
+      for (const { ped } of peds) {
+        ped.destroy()
+      }
+    }
 
     for (const [team, data] of Object.entries(this.teamService.teams)) {
       const peds = data.skins.map(skin => ({
