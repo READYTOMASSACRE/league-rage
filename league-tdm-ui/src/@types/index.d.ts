@@ -13,6 +13,13 @@ declare global {
       }
     }
   }
+
+  interface PlayerMp {
+    blip: BlipMp
+    createBlip(p0: number): void
+    setBlipColor(p0: number): void
+    destroyBlip(): void
+  }
 }
 
 export {}

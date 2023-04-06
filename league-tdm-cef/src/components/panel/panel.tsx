@@ -17,7 +17,7 @@ export default () => {
   const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
 
-  const [active, setActive] = useState<boolean>(true)
+  const [active, setActive] = useState<boolean>(false)
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
 

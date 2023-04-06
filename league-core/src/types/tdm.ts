@@ -41,6 +41,7 @@ export type TeamConfig = {
     name: string
     color: string
     skins: string[]
+    blipColor?: number
   }
 }
 

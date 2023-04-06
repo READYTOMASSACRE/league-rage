@@ -1,6 +1,7 @@
 import { event, eventable } from "../../league-core/client";
 import { ClientConfig, Events } from "../../league-core/src/types";
 import DummyService from "./DummyService";
+import PlayerBlip from "./interactions/PlayerBlip";
 import Spectate from "./interactions/Spectate";
 import TeamSelector from "./interactions/TeamSelector";
 import KeybindService from "./KeybindService";
@@ -11,6 +12,7 @@ import UIService from "./UIService";
 export default class InteractionService {
   private teamSelector: TeamSelector
   private spectate: Spectate
+  private playerBlip: PlayerBlip
 
   constructor(
     readonly config: ClientConfig,
@@ -28,6 +30,8 @@ export default class InteractionService {
       dummyService, keybindService,
       playerService, uiService
     )
+
+    this.playerBlip = new PlayerBlip(config.team, playerService)
   }
 
   @event(Events["tdm.team.select"])
