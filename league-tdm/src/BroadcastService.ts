@@ -122,10 +122,11 @@ export default class BroadcastService {
     }
 
     const team = this.playerService.getTeam(player)
+    const color = this.teamService.getTeam(team).color
 
     return this.broadcast({
       message: [
-        [`${player.name} [${player.id}]:`, this.config.team[team].color],
+        [`${player.name} [${player.id}]:`, color],
         [message, '#fff'],
       ]
     })

@@ -8,6 +8,10 @@ import WeaponService from "./WeaponService";
 import { Events, Procs } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
+import DummyService from "../../league-core/src/server/DummyService";
+import { Entity, RoundState, Team } from "../../league-core/src/types/tdm";
+import { deepclone } from "../../league-core/src/helpers";
+import TeamService from "./TeamService";
 
 @commandable
 @proceable
@@ -18,6 +22,7 @@ export default class TdmService {
     readonly playerService: PlayerService,
     readonly voteService: VoteService,
     readonly weaponService: WeaponService,
+    readonly teamService: TeamService,
     readonly lang: ILanguage,
   ) {}
 
@@ -168,6 +173,32 @@ export default class TdmService {
   @command('kill')
   kill(player: PlayerMp) {
     this.playerService.setHealth(player, 0)
+  }
+
+  @command('swap')
+  swap(player: PlayerMp, fullText: string, description: string) {
+    this.permissionService.hasRight(player, 'tdm.swap')
+
+    const roundState = DummyService.get(Entity.ROUND, 'state')
+
+    if (RoundState.stopped !== roundState) {
+      return player.outputChatBox(description)
+    }
+
+    const attackers = deepclone(DummyService.get(Entity.TEAM, Team.attackers))
+    const defenders = deepclone(DummyService.get(Entity.TEAM, Team.defenders))
+
+    const attackerPlayers = this.playerService.getByTeam(Team.attackers)
+    const defenderPlayers = this.playerService.getByTeam(Team.defenders)
+
+    DummyService.set(Entity.TEAM, Team.defenders, attackers)
+    DummyService.set(Entity.TEAM, Team.attackers, defenders)
+
+    attackerPlayers.forEach(player => this.teamService.change(player, Team.defenders))
+    defenderPlayers.forEach(player => this.teamService.change(player, Team.attackers))
+
+    this.playerService.call(Events["tdm.team.swap"])
+    mp.events.call(Events["tdm.team.swap"])
   }
 
   private getCmdlistOffset(page: number, total: number, limit: number) {

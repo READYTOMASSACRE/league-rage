@@ -73,6 +73,7 @@
   "cmd.weapon": "Usage /w, /weapon <id|list>",
   "cmd.change_team": "Usage /t, /team, /changeteam <id|string> (optional) to change team. Example: /t att, /t, /t def",
   "cmd.change_name": "Usage /name <new_name> to change nick name",
+  "cmd.swap_team": "Usage /swap to change teams",
 
   "cmdlist.page": "Viewing :offset, page: :page, next: :next, last: :last",
   "cmdlist.not_found": "Page doesnt exist",

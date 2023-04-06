@@ -1,6 +1,7 @@
 import { eventable, event, ensurePlayer, commandable, command, helpers } from "../../league-core";
+import DummyService from "../../league-core/src/server/DummyService";
 import { Events, tdm } from "../../league-core/src/types";
-import { TeamConfig } from "../../league-core/src/types/tdm";
+import { Entity } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
 
@@ -8,7 +9,6 @@ import PlayerService from "./PlayerService";
 @commandable
 export default class TeamService {
   constructor(
-    readonly config: TeamConfig,
     readonly playerService: PlayerService,
     readonly lang: ILanguage,
   ) {}
@@ -29,7 +29,9 @@ export default class TeamService {
       return this.teamSelectRequest(player)
     }
 
-    if (!this.config[team]) {
+    const teamOptions = this.getTeam(team)
+
+    if (!teamOptions) {
       return player.outputChatBox(this.lang.get(Lang["error.team.not_found"], { team }))
     }
 
@@ -46,16 +48,18 @@ export default class TeamService {
       return this.teamSelect(player)
     }
 
-    const team = this.hash[id]
+    const teamName = this.hash[id]
+    const team = this.getTeam(teamName)
 
-    if (!team) {
+    console.log('team', team, teamName)
+    if (!teamName || !team) {
       player.outputChatBox(description)
       return
     }
 
-    const [model] = this.config[team].skins
+    const [model] = team.skins
 
-    return this.change(player, team, model)
+    return this.change(player, teamName, model)
   }
 
   private teamSelectRequest(player: PlayerMp) {
@@ -80,7 +84,7 @@ export default class TeamService {
   }
 
   @ensurePlayer
-  change(p: number | PlayerMp, team: tdm.Team, model: string) {
+  change(p: number | PlayerMp, team: tdm.Team, model?: string) {
     const state = this.playerService.getState(p)
     const player = <PlayerMp>p
 
@@ -91,7 +95,10 @@ export default class TeamService {
     this.playerService.setTeam(p, team)
     this.playerService.setState(p, tdm.State.idle)
     this.playerService.spawnLobby(p)
-    this.playerService.setModel(p, mp.joaat(model))
+
+    if (model) {
+      this.playerService.setModel(p, mp.joaat(model))
+    }
 
     player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
   }
@@ -101,7 +108,24 @@ export default class TeamService {
       return team
     }
 
-    return this.config[team]?.name || team
+    return this.getTeam(team)?.name || team
+  }
+
+  getTeam(team: tdm.Team) {
+    return DummyService.get(Entity.TEAM, team)
+  }
+
+  addScore(result: tdm.Team | 'draw') {
+    const team = this.getTeam(<tdm.Team>result)
+
+    if (!team) {
+      return
+    }
+
+    DummyService.set(Entity.TEAM, <tdm.Team>result, {
+      ...team,
+      score: team.score + 1,
+    })
   }
 
   get hash(): Record<string | number, tdm.Team> {

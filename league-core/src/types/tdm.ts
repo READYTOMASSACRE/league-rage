@@ -36,13 +36,14 @@ export type Arena = {
   [Team.spectators]: Point3d[]
 }
 
+export type TeamOptions = {
+  name: string
+  color: string
+  skins: string[]
+  blipColor?: number
+}
 export type TeamConfig = {
-  [key in Team]: {
-    name: string
-    color: string
-    skins: string[]
-    blipColor?: number
-  }
+  [key in Team]: TeamOptions
 }
 
 export type RoundConfig = {
@@ -69,7 +70,7 @@ export type RoundData = {
   players: string
 }
 
-export type TeamData = Record<Team, { score: number }>
+export type TeamData = Record<Team, { score: number } & TeamOptions>
 
 export type Dummy = {
   [Entity.ROUND]: RoundData

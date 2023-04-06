@@ -6,6 +6,7 @@ import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";
 import PlayerService from "./PlayerService";
 import RoundService from './RoundService'
+import TeamService from "./TeamService";
 import Zone from "./Zone";
 
 @eventable
@@ -19,6 +20,7 @@ export default class HudService {
         readonly config: ClientConfig,
         readonly roundService: RoundService,
         readonly playerService: PlayerService,
+        readonly teamService: TeamService,
     ) {}
 
     @event(Events["tdm.round.prepare"])
@@ -116,7 +118,7 @@ export default class HudService {
         }
 
         mp.nametags.enabled = false
-        this.nametag = new Nametag(this.config.hud.nametag, this.config.team, this.playerService)
+        this.nametag = new Nametag(this.config.hud.nametag, this.teamService, this.playerService)
         this.nametag.draw()
     }
 }

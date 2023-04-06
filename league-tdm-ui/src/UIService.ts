@@ -5,6 +5,7 @@ import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
+import TeamService from "./TeamService";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
 import Deathlog from "./ui/Deathlog";
@@ -46,6 +47,7 @@ export default class UIService {
     readonly config: ClientConfig,
     readonly keybindService: KeybindService,
     readonly playerService: PlayerService,
+    readonly teamService: TeamService,
     readonly dummyService: DummyService,
     readonly roundService: RoundService,
     readonly lang: ILanguage
@@ -53,23 +55,23 @@ export default class UIService {
     this.debug = new Debug(this, keybindService)
     this.chat = new Chat(this, keybindService)
     this.scoreboard = new Scoreboard(
-      config.team, this, keybindService,
-      playerService, dummyService
+      this, keybindService,
+      playerService, teamService, dummyService
     )
     this.weaponSelector = new WeaponSelector(
       config.weapon, this, keybindService,
       playerService, dummyService
     )
     this.teamSelect = new TeamSelector(this, keybindService)
-    this.infoPanel = new Infopanel(config.team, this, this.dummyService)
+    this.infoPanel = new Infopanel(this, this.dummyService, teamService)
     this.controls = new Controls(this, lang)
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
-    this.deathlog = new Deathlog(config.team, this, playerService)
+    this.deathlog = new Deathlog(this, playerService, teamService)
     this.motd = new Motd(config, this, keybindService)
     this.panel = new Panel(this, keybindService)
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
-    this.winner = new Winner(config.team, this)
+    this.winner = new Winner(this, teamService)
     this.effects = new Effects(config.effects, this, playerService)
   }
 

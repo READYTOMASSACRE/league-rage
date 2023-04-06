@@ -6,6 +6,7 @@ import Spectate from "./interactions/Spectate";
 import TeamSelector from "./interactions/TeamSelector";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
+import TeamService from "./TeamService";
 import UIService from "./UIService";
 
 @eventable
@@ -17,13 +18,14 @@ export default class InteractionService {
   constructor(
     readonly config: ClientConfig,
     readonly playerService: PlayerService,
+    readonly teamService: TeamService,
     readonly dummyService: DummyService,
     readonly keybindService: KeybindService,
     readonly uiService: UIService,
   ) {
     this.teamSelector = new TeamSelector(
-      config.interaction.selector, config.team,
-      playerService, uiService, keybindService,
+      config.interaction.selector, playerService,
+      teamService, uiService, keybindService,
     )
 
     this.spectate = new Spectate(
@@ -31,7 +33,7 @@ export default class InteractionService {
       playerService, uiService
     )
 
-    this.playerBlip = new PlayerBlip(config.team, playerService)
+    this.playerBlip = new PlayerBlip(playerService, teamService)
   }
 
   @event(Events["tdm.team.select"])

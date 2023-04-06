@@ -1,6 +1,7 @@
 import { event, eventable, logClient } from "../../../league-core/client";
-import { TeamConfig } from "../../../league-core/src/types/tdm";
 import PlayerService from "../PlayerService";
+import TeamService from "../TeamService";
+import console from "../helpers/console";
 import { isPlayer } from "../helpers/guards";
 
 @eventable
@@ -10,31 +11,36 @@ export default class PlayerBlip {
   static setBlipAsFriendly = '0x6F6F290102C02AB4'
 
   constructor(
-    readonly config: TeamConfig,
-    readonly playerService: PlayerService
+    readonly playerService: PlayerService,
+    readonly teamService: TeamService,
   ) {}
 
   @logClient
   @event('entityStreamIn')
   streamIn(entity: EntityMp) {
-    if (isPlayer(entity)) {
-      entity.destroyBlip()
+    try {
+      if (isPlayer(entity)) {
+        entity.destroyBlip()
+  
+        const local = this.playerService.getTeam()
+        const enemy = this.playerService.getTeam(entity)
+        const team = this.teamService.getTeam(local)
 
-      const local = this.playerService.getTeam()
-      const enemy = this.playerService.getTeam(entity)
-
-      if (local !== enemy) return
-      
-      entity.createBlip(1)
-
-      if (typeof this.config[local].blipColor !== 'undefined') {
-        entity.setBlipColor(this.config[local].blipColor)
-      } else {
-        mp.game.invoke(PlayerBlip.setBlipAsFriendly, entity.blip, true)  
+        if (local !== enemy || !team) return
+        
+        entity.createBlip(1)
+  
+        if (typeof team.blipColor !== 'undefined') {
+          entity.setBlipColor(team.blipColor)
+        } else {
+          mp.game.invoke(PlayerBlip.setBlipAsFriendly, entity.blip, true)  
+        }
+  
+        mp.game.invoke(PlayerBlip.setBlipCategory, entity.blip, 7)
+        mp.game.invoke(PlayerBlip.showHeadingIndicatorOnBlip, entity.blip, true)
       }
-
-      mp.game.invoke(PlayerBlip.setBlipCategory, entity.blip, 7)
-      mp.game.invoke(PlayerBlip.showHeadingIndicatorOnBlip, entity.blip, true)
+    } catch (err) {
+      console.error(err)
     }
   }
 }
