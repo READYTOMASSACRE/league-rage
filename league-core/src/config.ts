@@ -184,7 +184,8 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     effects: {
       death: 5,
-    }
+    },
+    prefix: 'Server',
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

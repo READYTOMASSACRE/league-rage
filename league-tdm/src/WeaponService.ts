@@ -1,9 +1,10 @@
-import { command, commandable, event, eventable } from "../../league-core";
+import { catchError, command, commandable, event, eventable } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
 import { State, WeaponState } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import TaskManager, { Task } from "./TaskManager";
@@ -72,10 +73,11 @@ export default class WeaponService {
     this.playerService.setWeaponState(id, tdm.WeaponState.idle)
   }
 
+  @catchError(ErrorNotifyHandler)
   @event(Events["tdm.weapon.submit"])
   weaponRequest(player: PlayerMp, weapon?: string) {
     if (!weapon) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
+      throw new BroadCastError(Lang["error.weapon.weapon_not_found"], player)
     }
 
     const slot = this.validateRequest(player, weapon)
@@ -145,35 +147,35 @@ export default class WeaponService {
     }
 
     if (!weapon) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.weapon_not_found"]), player)
+      throw new BroadCastError(Lang["error.weapon.weapon_not_found"], player)
     }
 
     if (!this.roundService.running) {
-      throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
     if (!this.playerService.hasWeaponState(player, tdm.WeaponState.idle)) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.is_busy"]), player)
+      throw new BroadCastError(Lang["error.weapon.is_busy"], player)
     }
 
     const category = this.getCategory(weapon)
 
     if (!category) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.category_not_found"], { name: weapon }), player)
+      throw new BroadCastError(Lang["error.weapon.category_not_found"], player, { name: weapon })
     }
 
     const slot = this.getSlotByCategory(category)
 
     if (!slot) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_not_found"], { category }), player)
+      throw new BroadCastError(Lang["error.weapon.slot_not_found"], player, { category })
     }
 
     const oldWeapon = this.playerService.getWeaponSlot(player, slot)
 
     if (oldWeapon) {
-      throw new BroadCastError(this.lang.get(Lang["error.weapon.slot_is_busy"], {
+      throw new BroadCastError(Lang["error.weapon.slot_is_busy"], player, {
         slot, weapon: typeof oldWeapon === 'string' ? oldWeapon : ''
-      }), player)
+      })
     }
 
     return slot

@@ -22,7 +22,7 @@ export default class Motd {
     this.toggle(true)
     mp.events.call(Events["tdm.chat.push"], {
       message: [
-        ['[Server]:', '#ffd400'],
+        [`[${this.config.prefix}]:`, '#ffd400'],
         [this.config.welcomeText.replace(':player', mp.players.local.name), '#fff'],
       ]
     }, Enviroment.client)

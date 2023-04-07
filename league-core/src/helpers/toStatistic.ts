@@ -1,3 +1,4 @@
+import { Role } from "../types/permission";
 import { ClientProfile, PlayerStat, Profile, Round } from "../types/statistic";
 import { Team } from "../types/tdm";
 
@@ -18,6 +19,7 @@ export const toProfile = (o?: any): Profile => ({
   name: o?.name ?? '',
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
+  role: o?.role ?? Role.socialUser,
 }) as Profile
 
 export const toClientProfile = (o?: any): ClientProfile => ({
@@ -26,6 +28,7 @@ export const toClientProfile = (o?: any): ClientProfile => ({
   name: o?.name ?? '',
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
+  role: o?.role ?? Role.socialUser,
 }) as ClientProfile
 
 export const toRound = (o?: Partial<Round>): Round => ({

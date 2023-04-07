@@ -1,9 +1,10 @@
 import { addDays, differenceInCalendarDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { event, eventable, log, proc, proceable } from "../../league-core";
 import { toClientProfile, toProfile, toRound } from "../../league-core/src/helpers/toStatistic";
-import { Procs } from "../../league-core/src/types";
+import { Events, Procs } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
-import RepositoryService from "./RepositoryService";
+import ProfileService from "./ProfileService";
+import RoundService from "./RoundService";
 
 const MAX_DIFF_INTERVAL = 2
 
@@ -11,8 +12,9 @@ const MAX_DIFF_INTERVAL = 2
 @proceable
 export default class StatisticService {
   constructor(
-    readonly repositoryService: RepositoryService,
     readonly playerService: PlayerService,
+    readonly profileService: ProfileService,
+    readonly roundService: RoundService,
   ) {}
 
   @event("playerJoin")
@@ -21,27 +23,26 @@ export default class StatisticService {
       get: () => this.playerService.getVariable(player, 'userId'),
       set: (value: string) => this.playerService.setVariable(player, 'userId', value)
     })
+  }
 
-    player.userId = `rg_${player.rgscId}`
-
-    const userProfile = await this.repositoryService.profile.getById(player.userId)
-    const profile = toProfile({ name: player.name, id: player.userId, ...userProfile })
-
-    this.playerService.setVariable(player, 'profile', toClientProfile(profile))
-    player.name = profile.name
-    
-    if (!userProfile) this.repositoryService.profile.save(profile)
+  @event(Events["tdm.client.ready"])
+  async playerReady(player: PlayerMp) {
+    await this.profileService.logSocial(player)
   }
 
   @log
   @proc(Procs["tdm.statistic.profile.get"])
   async getProfile(player: PlayerMp, idOrUserId?: string | number) {
-    const userId = this.getUserId(player, idOrUserId)
-    const profile = await this.repositoryService.profile.getById(userId)
-
-    if (!profile) return
-
-    return JSON.stringify(toClientProfile(profile))
+    try {
+      const userId = this.getUserId(player, idOrUserId)
+      const profile = await this.profileService.getById(userId)
+  
+      if (!profile) return
+  
+      return JSON.stringify(toClientProfile(profile))
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   @proc(Procs["tdm.statistic.round.get"])
@@ -59,8 +60,7 @@ export default class StatisticService {
       dateTo = tomorrow
     }
 
-    const rounds = await this.repositoryService.round.get({ userId, dateFrom, dateTo })
-    return JSON.stringify(rounds.map(toRound))
+    return JSON.stringify(await this.roundService.get({ userId, dateFrom, dateTo }))
   }
 
   private getUserId(player: PlayerMp, idOrUserId?: number | string) {

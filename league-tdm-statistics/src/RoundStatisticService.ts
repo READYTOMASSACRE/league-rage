@@ -3,10 +3,11 @@ import { decorate } from '../../league-core/src/helpers'
 import { Events, userId } from '../../league-core/src/types'
 import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
-import RepositoryService from './RepositoryService'
 import { PlayerStat, Round, StatisticConfig } from '../../league-core/src/types/statistic'
-import { toPlayerStat, toProfile, toRound } from '../../league-core/src/helpers/toStatistic'
+import { toPlayerStat, toRound } from '../../league-core/src/helpers/toStatistic'
 import DummyService from "../../league-core/src/server/DummyService";
+import ProfileService from './ProfileService'
+import RoundService from './RoundService'
 
 @commandable
 @eventable
@@ -17,7 +18,8 @@ export default class RoundStatisticService {
     readonly config: TeamConfig,
     readonly statisticConfig: StatisticConfig,
     readonly playerService: PlayerService,
-    readonly repositoryService: RepositoryService
+    readonly profileService: ProfileService,
+    readonly roundService: RoundService,
   ) {
     this.stat = this.toDefault()
   }
@@ -70,18 +72,18 @@ export default class RoundStatisticService {
     const promises = []
 
     for (const [userId, stat] of playerStats) {
-      promises.push(this.saveProfileByUserId(userId, stat))
+      promises.push(this.saveProfile(userId, stat))
     }
 
     await Promise.all(promises)
 
-    this.repositoryService.round.save(toRound({
+    this.roundService.save({
       id: Date.now(),
       arenaId: arenaId,
       result,
       [Team.attackers]: this.stat[Team.attackers],
       [Team.defenders]: this.stat[Team.defenders],
-    }), { write: true })
+    })
 
     this.stat = this.toDefault()
   }
@@ -127,18 +129,19 @@ export default class RoundStatisticService {
     teamStat[player.userId][key] = modifier(teamStat[player.userId][key])
   }
 
-  private async saveProfileByUserId(userId: userId, stat: PlayerStat) {
-    const player = this.playerService.atUserId(userId)
-    const userProfile = await this.repositoryService.profile.getById(userId)
-    const profile = toProfile(userProfile)
-
-    return this.repositoryService.profile.save({
-      ...profile,
-      ...(player ? { name: player.name } : {}),
-      ...this.mergePlayerStat(profile, stat),
-      ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
-      id: userId,
-    })
+  private async saveProfile(userId: userId, stat: PlayerStat) {
+    try {
+      const player = this.profileService.atUserId(userId)
+      const profile = await this.profileService.getById(userId)
+  
+      await this.profileService.saveById(userId, {
+        ...(player ? { name: player.name } : {}),
+        ...this.mergePlayerStat(profile, stat),
+        ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   private mergePlayerStat(old: PlayerStat, stat: PlayerStat) {

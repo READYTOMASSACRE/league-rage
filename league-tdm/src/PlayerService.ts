@@ -1,5 +1,6 @@
 import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
+import { Role } from "../../league-core/src/types/permission";
 import { PlayerData } from "../../league-core/src/types/tdm";
 import TaskManager from "./TaskManager";
 
@@ -206,6 +207,19 @@ export default class PlayerService {
     return this.getVariable(<PlayerMp>p, 'spectate')
   }
 
+  @ensurePlayer
+  getRole(p: number | PlayerMp) {
+    return this.getVariable(<PlayerMp>p, 'role')
+  }
+
+  @ensurePlayer
+  setRole(p: number | PlayerMp, role: Role) {
+    const player = <PlayerMp>p
+
+    this.setVariable(player, 'role', role)
+    mp.events.call(Events["tdm.permission.role"], p, role)
+  }
+
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(
     player: PlayerMp, key: K, value: V
   ) {
@@ -232,5 +246,10 @@ export default class PlayerService {
     } else {
       mp.players.call(playersOrEventName, [...args])
     }
+  }
+
+  @ensurePlayer
+  popup(p: number | PlayerMp, message: string, type: string = 'info') {
+    (<PlayerMp>p).outputPopup(message, type)
   }
 }

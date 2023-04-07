@@ -1,4 +1,5 @@
 import { Point2d, Point3d } from "./common"
+import { Role } from "./permission"
 import { PlayerStat, Profile } from "./statistic"
 
 export enum Team {
@@ -94,6 +95,7 @@ export type PlayerData = {
   userId: string
   profile: Profile
   statistic: PlayerStat
+  role: Role,
 }
 
 export enum Vote {

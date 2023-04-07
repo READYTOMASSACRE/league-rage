@@ -1,4 +1,4 @@
-import { commandable, command, log, proceable, proc } from "../../league-core";
+import { commandable, command, log, proceable, proc, catchError } from "../../league-core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
@@ -10,8 +10,9 @@ import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import DummyService from "../../league-core/src/server/DummyService";
 import { Entity, RoundState, State, Team } from "../../league-core/src/types/tdm";
-import { deepclone } from "../../league-core/src/helpers";
 import TeamService from "./TeamService";
+import { Rule } from "../../league-core/src/types/permission";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @commandable
 @proceable
@@ -26,9 +27,10 @@ export default class TdmService {
     readonly lang: ILanguage,
   ) {}
 
+  @catchError(ErrorNotifyHandler)
   @command(['start', 'arena', 'a'], {desc: Lang["cmd.start_arena"]})
   start(player: PlayerMp, fullText: string, description: string, id?: string) {
-    this.permissionService.hasRight(player, 'tdm.start')
+    this.permissionService.hasRight(player, Rule.tdmStart)
 
     if (!id) {
       return player.outputChatBox(description)
@@ -37,16 +39,18 @@ export default class TdmService {
     return this.roundService.start(id, player)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command(['stop', 's'], {desc: Lang["cmd.stop_arena"]})
   stop(player: PlayerMp, fullText: string, description: string) {
-    this.permissionService.hasRight(player, 'tdm.stop')
+    this.permissionService.hasRight(player, Rule.tdmStop)
 
     return this.roundService.stop(player)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('add', {desc: Lang["cmd.add_player"]})
   add(player: PlayerMp, fullText: string,description: string, id?: string) {
-    this.permissionService.hasRight(player, 'tdm.add')
+    this.permissionService.hasRight(player, Rule.tdmAdd)
 
     if (typeof id === 'undefined') {
       return player.outputChatBox(description)
@@ -55,7 +59,7 @@ export default class TdmService {
     const addPlayer = this.playerService.getByIdOrName(id)
 
     if (!addPlayer) {
-      return player.outputChatBox(this.lang.get(Lang["error.player.not_found"], { player: id }))
+      throw new BroadCastError(Lang["error.player.not_found"], player, { player: id })
     }
 
     if (Array.isArray(addPlayer)) {
@@ -66,9 +70,10 @@ export default class TdmService {
     return this.roundService.add(addPlayer)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('remove', {desc: Lang["cmd.remove_player"]})
   remove(player: PlayerMp, fullText: string,description: string, id?: string) {
-    this.permissionService.hasRight(player, 'tdm.remove')
+    this.permissionService.hasRight(player, Rule.tdmRemove)
 
     if (typeof id === 'undefined') {
       return player.outputChatBox(description)
@@ -77,7 +82,7 @@ export default class TdmService {
     const removePlayer = this.playerService.getByIdOrName(id)
 
     if (!removePlayer) {
-      return player.outputChatBox(this.lang.get(Lang["error.player.not_found"], { player: id }))
+      throw new BroadCastError(Lang["error.player.not_found"], player, { player: id })
     }
 
     if (Array.isArray(removePlayer)) {
@@ -88,23 +93,26 @@ export default class TdmService {
     return this.roundService.remove(removePlayer)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('pause', {desc: Lang["cmd.pause"]})
   pause(player: PlayerMp, fullText: string, description: string) {
-    this.permissionService.hasRight(player, 'tdm.pause')
+    this.permissionService.hasRight(player, Rule.tdmPause)
 
     return this.roundService.pause(player)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('unpause', {desc: Lang["cmd.unpause"]})
   unpause(player: PlayerMp, fullText: string, description: string) {
-    this.permissionService.hasRight(player, 'tdm.pause')
+    this.permissionService.hasRight(player, Rule.tdmPause)
 
     return this.roundService.unpause(player)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('vote', {desc: Lang["cmd.vote"]})
   vote(player: PlayerMp, fullText: string, description: string, id?: string) {
-    this.permissionService.hasRight(player, 'tdm.vote')
+    this.permissionService.hasRight(player, Rule.tdmVote)
 
     if (!id) {
       return player.outputChatBox(description)
@@ -126,6 +134,7 @@ export default class TdmService {
     return JSON.stringify(Arena.arenas)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('name', { desc: Lang["cmd.change_name"]})
   changeName(player: PlayerMp, fullText: string, description: string, name?: string) {
     if (!name) {
@@ -134,7 +143,7 @@ export default class TdmService {
 
     const max = 16
     if (name.length > max) {
-      throw new BroadCastError(this.lang.get(Lang["error.player.name_too_long"], { max }))
+      throw new BroadCastError(Lang["error.player.name_too_long"], player, { max })
     }
 
     const old = player.name
@@ -177,7 +186,7 @@ export default class TdmService {
 
   @command('swap')
   swap(player: PlayerMp, fullText: string, description: string) {
-    this.permissionService.hasRight(player, 'tdm.swap')
+    this.permissionService.hasRight(player, Rule.tdmSwap)
 
     const roundState = DummyService.get(Entity.ROUND, 'state')
 
@@ -185,24 +194,7 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    const attackers = deepclone(DummyService.get(Entity.TEAM, Team.attackers))
-    const defenders = deepclone(DummyService.get(Entity.TEAM, Team.defenders))
-
-    const attackerPlayers = this.playerService
-      .getByTeam(Team.attackers)
-      .filter(player => !this.playerService.hasState(player, State.select))
-    const defenderPlayers = this.playerService
-      .getByTeam(Team.defenders)
-      .filter(player => !this.playerService.hasState(player, State.select))
-
-    DummyService.set(Entity.TEAM, Team.defenders, attackers)
-    DummyService.set(Entity.TEAM, Team.attackers, defenders)
-
-    attackerPlayers.forEach(player => this.teamService.change(player, Team.defenders))
-    defenderPlayers.forEach(player => this.teamService.change(player, Team.attackers))
-
-    this.playerService.call(Events["tdm.team.swap"])
-    mp.events.call(Events["tdm.team.swap"])
+    this.teamService.swap()
   }
 
   private getCmdlistOffset(page: number, total: number, limit: number) {
@@ -243,6 +235,9 @@ export default class TdmService {
       Lang["cmd.weapon"],
       Lang["cmd.change_team"],
       Lang["cmd.change_name"],
+      Lang["cmd.swap_team"],
+      Lang["cmd.rcon"],
+      Lang["cmd.set_role"],
     ]
   }
 }

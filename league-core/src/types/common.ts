@@ -3,7 +3,7 @@ import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
 import { EffectsConfig, HudConfig, InteractionConfig } from './ui';
 import { StatisticConfig } from './statistic';
 
-export type ctor<T = {}> = new (...args: any[]) => T;
+export type ctor<T = {}> = new (...args: any[]) => T
 export type callable = (...args: any[]) => any
 
 export interface Event {
@@ -77,7 +77,6 @@ export interface DbConfig {
 export interface IConfig {
   name: string
   gamemode: string
-  rcon?: string
   welcomeText: string
   motd: string
   lang: string
@@ -92,13 +91,17 @@ export interface IConfig {
   db: DbConfig
   statistic: StatisticConfig
   effects: EffectsConfig
+  prefix: string
+  rcon?: string
 }
 
-export interface ClientConfig extends Omit<IConfig, 'db'> {
+export interface ClientConfig extends Omit<IConfig, 'db' | 'rcon'> {
   version: string
 }
 
 export type userId = string
+
+export type Catcher = { catch(err: Error): void }
 
 export const enum Events {
   /** Fires when tdm gamemode starts */
@@ -197,6 +200,8 @@ export const enum Events {
   'tdm.infopanel.data' = 'tdm.infopanel.data',
   /** Fires when ui is ready */
   'tdm.ui.ready' = 'tdm.ui.ready',
+  /** Fires when client is ready */
+  'tdm.client.ready' = 'tdm.client.ready',
   /** Fires when cef recieves controls data */
   'tdm.controls.data' = 'tdm.controls.data',
   /** Fires when player start spectating */
@@ -211,6 +216,10 @@ export const enum Events {
   'tdm.notify.text' = 'tdm.notify.text',
   /** Fires when client stops notify text */
   'tdm.notify.stop' = 'tdm.notify.stop',
+  /** Fires when player change role */
+  'tdm.permission.role' = 'tdm.permission.role',
+  /** Fires when player has logged */
+  'tdm.profile.login' = 'tdm.profile.login',
 }
 
 export const enum Procs {

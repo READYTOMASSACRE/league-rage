@@ -24,6 +24,7 @@ export default class ConfigService {
             statistic: this.config.statistic,
             effects: this.config.effects,
             version: 'League 0.6a',
+            prefix: this.config.prefix,
         }
     }
 }

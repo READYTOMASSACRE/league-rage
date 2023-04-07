@@ -1,5 +1,6 @@
 {
   "error.permission.invalid": "Invalid permission :permission",
+  "error.permission.invalid_role": "Invalid role :role to change for player :player",
 
   "error.arena.invalid_format": "Invalid arenas format",
   "error.arena.not_found": "Arena :arena not found",
@@ -18,6 +19,7 @@
   "error.weapon.slot_not_found": "Слот для :category не найден",
   "error.weapon.slot_is_busy": "Слот :slot занят оружием :weapon",
 
+  "error.not_found": "Not found",
   "error.player.not_found": "Player is not exists: :player",
   "error.player.not_in_round": "Not in round",
   "error.player.in_round": "Игрок :player уже в раунде",
@@ -35,6 +37,7 @@
   "tdm.player.join": "Игрок :player присоединился к серверу",
   "tdm.player.quit": "Игрок :player отключился от сервера (:reason)",
   "tdm.player.change_name": "Игрока :player сменил имя на :new",
+  "tdm.player.login": "Успешно авторизован как :player, роль :role",
 
   "tdm.round.arena_prepare": "Подготовка арены :arena",
   "tdm.round.arena_prepare_timer": "Арена :arena запускается %ss",
@@ -58,7 +61,9 @@
   "tdm.round.is_not_paused": "Раунд не остановлен",
   "tdm.round.is_stopped": "Раунд уже остановлен",
 
-  "tdm.team.change": "Команда изменена на :team",
+  "tdm.team.change": "Команда изменена на",
+
+  "tdm.permission.role": "Успешно изменена роль на :role",
 
   "cmd.cmdlist": "Usage /cmdlist <page> (optional) <limit> (optional) - to paging through commands",
   "cmd.kill": "Usage /kill to kill yourself",
@@ -74,6 +79,8 @@
   "cmd.change_team": "Usage /t, /team, /changeteam <id|string> (optional) to change team. Example: /t att, /t, /t def",
   "cmd.change_name": "Usage /name <new_name> to change nick name",
   "cmd.swap_team": "Usage /swap to change teams",
+  "cmd.rcon": "Usage /rcon <password> to log as root",
+  "cmd.set_role": "Usage /setrole <id|nick> <role> to change player's role, available: [user, moderator, admin]",
 
   "cmdlist.page": "Viewing :offset, page: :page, next: :next, last: :last",
   "cmdlist.not_found": "Page doesnt exist",

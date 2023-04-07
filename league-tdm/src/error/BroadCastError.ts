@@ -1,10 +1,10 @@
 export default class BroadCastError extends Error {
-  constructor(message: string, player?: PlayerMp | number) {
-    super(message)
+  public player?: PlayerMp | number
+  public bindings: Record<string, any>
 
-    if (player && mp.players.exists(player)) {
-      const p = typeof player === 'number' ? mp.players.at(player) : player
-      p.outputChatBox(message)
-    }
+  constructor(message: string, player: PlayerMp | number, bindings: Record<string, any> = {}) {
+    super(message)
+    this.player = player
+    this.bindings = bindings
   }
 }

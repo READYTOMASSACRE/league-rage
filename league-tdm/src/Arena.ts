@@ -1,8 +1,9 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { helpers, types, command, commandable } from '../../league-core'
+import { helpers, types, command, commandable, catchError } from '../../league-core'
 import { ILanguage, Lang } from "../../league-lang/language"
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler"
 
 @commandable
 export default class Arena {
@@ -30,7 +31,7 @@ export default class Arena {
     const vector = this.arena[team][randIndex]
 
     if (!vector) {
-      throw new NotFoundError(this.lang.get(Lang["error.arena.not_found_spawn"], { arena: this.arena.id }))
+      throw new Error(this.lang.get(Lang["error.arena.not_found_spawn"], { arena: this.arena.id }))
     }
 
     return new mp.Vector3(...vector)
@@ -40,6 +41,7 @@ export default class Arena {
     return this._arenas
   }
 
+  @catchError(ErrorNotifyHandler)
   static get(id: number | string, player?: PlayerMp, lang?: ILanguage): types.tdm.Arena {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]

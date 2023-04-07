@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client"
-import { Enviroment, Events, Procs } from "../../../league-core/src/types"
+import { Events, Procs } from "../../../league-core/src/types"
 import { Entity, State } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"

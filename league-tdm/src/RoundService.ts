@@ -6,6 +6,7 @@ import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
+import BroadCastError from "./error/BroadCastError"
 
 @eventable
 export default class RoundService {
@@ -47,7 +48,7 @@ export default class RoundService {
   start(id: string, player?: PlayerMp) {
     if (this.running) {
       if (player) {
-        player.outputChatBox(this.lang.get(Lang["tdm.round.is_running"]))
+        throw new BroadCastError(Lang["tdm.round.is_running"], player)
       }
       return
     }
@@ -59,7 +60,7 @@ export default class RoundService {
 
     if (!players.length) {
       if (player) {
-        player.outputChatBox(this.lang.get(Lang["tdm.round.start_empty"]))
+        throw new BroadCastError(Lang["tdm.round.start_empty"], player)
       }
 
       return
@@ -77,7 +78,7 @@ export default class RoundService {
   stop(player?: PlayerMp) {
     if (!this.running || !this.round) {
       if (player) {
-        player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+        throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
       }
 
       return
@@ -88,18 +89,18 @@ export default class RoundService {
 
   add(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
     if (this.playerService.hasState(player, State.alive)) {
-      return player.outputChatBox(this.lang.get(Lang["error.player.in_round"], { player: player.name }))
+      throw new BroadCastError(Lang["error.player.in_round"], player, { player: player.name })
     }
 
     if (
       !this.playerService.hasState(player, [State.dead, State.idle]) ||
       this.playerService.getTeam(player) === Team.spectators
     ) {
-      return player.outputChatBox(this.lang.get(Lang["error.round.add.player_is_busy"]))
+      throw new BroadCastError(Lang["error.round.add.player_is_busy"], player)
     }
 
     return this.round.addPlayer(player.id, true)
@@ -107,11 +108,11 @@ export default class RoundService {
 
   remove(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
     if (!this.playerService.hasState(player, State.alive)) {
-      return player.outputChatBox(this.lang.get(Lang["error.player.not_in_round"], { player: player.name }))
+      throw new BroadCastError(Lang["error.player.not_in_round"], player, { player: player.name })
     }
 
     return this.round.removePlayer(player.id, true)
@@ -119,10 +120,10 @@ export default class RoundService {
 
   pause(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
     if (this.paused) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_stopped"]))
+      throw new BroadCastError(Lang["tdm.round.is_stopped"], player)
     }
 
     return this.round.pause()
@@ -130,10 +131,10 @@ export default class RoundService {
 
   unpause(player: PlayerMp) {
     if (!this.running || !this.round) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_not_running"]))
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
     if (!this.paused) {
-      return player.outputChatBox(this.lang.get(Lang["tdm.round.is_already_paused"]))
+      throw new BroadCastError(Lang["tdm.round.is_already_paused"], player)
     }
 
     return this.round.unpause()

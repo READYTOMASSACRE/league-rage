@@ -1,4 +1,5 @@
 import { userId } from "./common"
+import { Role } from "./permission"
 import { Team } from "./tdm"
 
 export type StatisticConfig = {
@@ -26,6 +27,7 @@ export type Profile = {
   damageRecieved: number
   hit: number
   name: string
+  role: Role
 }
 
 export type ClientProfile = Omit<Profile, 'password'>
@@ -60,3 +62,5 @@ export type PanelData = {
   rounds: Round[]
   visible: boolean
 }
+
+export type AuthType = 'pending' | 'social' | 'auth' | 'error'
