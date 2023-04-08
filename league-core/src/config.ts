@@ -84,7 +84,8 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       damage: {
         weapon: {
           revolver_mk2: 46,
-          musket: 37,
+          musket: 61,
+          gusenberg: 8,
         },
         category: {
           pistols: 23,
