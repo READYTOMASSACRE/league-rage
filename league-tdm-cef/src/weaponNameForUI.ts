@@ -105,7 +105,7 @@ const typeCategory = {
   pistols: 'Buy Pistol (Secondary Weapon)',
   submachine_guns: 'Buy SMG (Primary Weapon)',
   shotguns: 'Buy Shotgun (Primary Weapon)',
-  assaul_trifles: 'Buy Assault Rifle (Primary Weapon)',
+  assault_rifles: 'Buy Assault Rifle (Primary Weapon)',
   light_rifles: 'Buy Light Rifle (Primary Weapon)',
   sniper_rifles: 'Buy Sniper Rifle (Primary Weapon)',
 }

@@ -67,7 +67,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         primary: [
           WeaponCategory.submachine_guns,
           WeaponCategory.shotguns,
-          WeaponCategory.assaul_trifles,
+          WeaponCategory.assault_rifles,
           WeaponCategory.light_rifles,
           WeaponCategory.sniper_rifles
         ],
@@ -77,7 +77,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         [WeaponCategory.pistols]: ["pistol", "combatpistol", "pistol50", "heavypistol", "revolver_mk2"],
         [WeaponCategory.submachine_guns]: ["smg"],
         [WeaponCategory.shotguns]: ["pumpshotgun"],
-        [WeaponCategory.assaul_trifles]: ["assaul_trifles", "carbinerifle", "bullpuprifle", "compactrifle", "gusenberg"],
+        [WeaponCategory.assault_rifles]: ["assaultrifle", "carbinerifle", "bullpuprifle", "compactrifle", "gusenberg"],
         [WeaponCategory.light_rifles]: ["musket"],
         [WeaponCategory.sniper_rifles]: ["sniperrifle"],
       },
@@ -90,7 +90,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
           pistols: 23,
           submachine_guns: 9,
           shotguns: 5,
-          assaul_trifles: 10,
+          assault_rifles: 10,
           light_rifles: 37,
           sniper_rifles: 41,
         },

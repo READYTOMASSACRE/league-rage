@@ -44,7 +44,7 @@ var c = {
       "primary": [
         "submachine_guns",
         "shotguns",
-        "assaul_trifles",
+        "assault_rifles",
         "light_rifles",
         "sniper_rifles"
       ],
@@ -54,7 +54,7 @@ var c = {
       "handguns": ["pistol", "combatpistol", "pistol50", "heavypistol", "revolver_mk2"],
       "submachine_guns": ["smg"],
       "shotguns": ["pumpshotgun"],
-      "assaul_trifles": ["assaul_trifles", "carbinerifle", "bullpuprifle", "compactrifle", "gusenberg"],
+      "assault_rifles": ["assaultrifle", "carbinerifle", "bullpuprifle", "compactrifle", "gusenberg"],
       "light_rifles": ["musket"],
       "sniper_rifles": ["sniperrifle"],
     },
