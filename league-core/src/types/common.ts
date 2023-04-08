@@ -237,4 +237,6 @@ export const enum Procs {
   'tdm.statistic.profile.get' = 'tdm.statistic.profile.get',
   /** Returns player round's statistic */
   'tdm.statistic.round.get' = 'tdm.statistic.round.get',
+  /** Returns round's timeleft */
+  'tdm.round.timeleft' = 'tdm.round.timeleft',
 }

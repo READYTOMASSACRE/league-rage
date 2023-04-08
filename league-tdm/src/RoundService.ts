@@ -1,4 +1,4 @@
-import { event, eventable } from "../../league-core"
+import { event, eventable, proc, proceable } from "../../league-core"
 import { RoundConfig, State, Team } from "../../league-core/src/types/tdm"
 import { IDummyService } from '../../league-core/src/server/DummyService'
 import { ILanguage, Lang } from "../../league-lang/language"
@@ -7,7 +7,9 @@ import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
 import BroadCastError from "./error/BroadCastError"
+import { Procs } from "../../league-core/src/types"
 
+@proceable
 @eventable
 export default class RoundService {
   private round?: Round
@@ -43,6 +45,11 @@ export default class RoundService {
     if (this.round) {
       this.round.playerQuit(player.id)
     }
+  }
+
+  @proc(Procs["tdm.round.timeleft"])
+  getTimeleft() {
+    return this.timeleft
   }
 
   start(id: string, player?: PlayerMp) {
@@ -159,5 +166,9 @@ export default class RoundService {
 
   get paused() {
     return Boolean(this.round?.paused)
+  }
+
+  get timeleft() {
+    return this.round?.timeleft ?? 0
   }
 }
