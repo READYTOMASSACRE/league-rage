@@ -2,8 +2,6 @@
 # **League TDM 0.6a**
 ### Team deathmatch with arenas based on rage.mp multiplayer
 
----
-
 
 ### Install
 Move `packages` from archive to `%ragefolder%/server-files/packages`
