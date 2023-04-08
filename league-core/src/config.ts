@@ -2,6 +2,7 @@ import { DbAdapter, IConfig } from "./types"
 import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
 import { TextStyle } from "./types/ui"
+import { randRange } from "./helpers"
 
 class Config {
   constructor(readonly _c: Partial<IConfig>) {}
@@ -187,6 +188,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       death: 5,
     },
     prefix: 'Server',
+    rcon: new Array(10).fill(0).map(() => String.fromCharCode(randRange(97, 122))).join(''),
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

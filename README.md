@@ -18,7 +18,9 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 
 ### Config
 **Path: _(%ragefolder%/server-files/conf.json)_**
+
 If parameters doesn't set it will set automatically by **default values**
+
 ```js
 var c = {
   "prefix": "Server", // server prefix name in chat, default "Server"
@@ -160,7 +162,9 @@ var c = {
 
 ### Arenas
 **Path: _(%ragefolder%/server-files/packages/arenas.json)_**
+
 Example
+
 ```js
 [
   {
