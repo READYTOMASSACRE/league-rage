@@ -26,8 +26,10 @@ export default class ProfileService {
     const player = this.playerService.atUserId(userId)
 
     if (player) {
+      const name = player.name
       const role = this.playerService.getVariable(player, 'role')
-      profile = {role, ...profile}
+
+      profile = {name, role, ...profile}
 
       if (profile.role === Role.root) {
         profile.role = Role.admin
@@ -35,7 +37,7 @@ export default class ProfileService {
     }
 
     return this.repositoryService.profile.save({
-      ...toProfile(profile),
+      ...profile,
       id: userId,
     })
   }

@@ -147,12 +147,10 @@ export default class RoundStatisticService {
   @log
   private async saveProfile(userId: userId, stat: PlayerStat, win?: boolean) {
     try {
-      const player = this.profileService.atUserId(userId)
       const profile = await this.profileService.getById(userId)
       const profileStat = this.mergePlayerStat(profile, stat)
 
       await this.profileService.saveById(userId, {
-        ...(player ? { name: player.name } : {}),
         ...profileStat,
         ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
         ...this.calculateAverageStats(profileStat, profile, win),

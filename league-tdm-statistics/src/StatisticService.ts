@@ -1,6 +1,5 @@
-import { addDays, differenceInCalendarDays, endOfDay, startOfDay, subDays } from "date-fns";
 import { event, eventable, log, proc, proceable } from "../../league-core";
-import { toClientProfile, toProfile, toRound } from "../../league-core/src/helpers/toStatistic";
+import { toClientProfile } from "../../league-core/src/helpers/toStatistic";
 import { Events, Procs } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 import ProfileService from "./ProfileService";

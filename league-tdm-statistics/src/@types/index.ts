@@ -13,7 +13,7 @@ export type MongoEntity = TEntity & {
 export interface IRepository<T extends TEntity> {
   name: string
 
-  save(t: T, opts?: any): Promise<void>
+  save(t: Partial<T>, opts?: any): Promise<void>
   get(...args: any[]): Promise<T[]>
   getOne(...args: any[]): Promise<T | undefined>
   getById(id: number | string): Promise<T | undefined>
