@@ -13,12 +13,15 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 ✨ You're awesome ✨, server install is done, now you can start it or modify conf.json, below config description
 
 **Info:** All options are `partial`, you dont need to describe it all
+**Dont forget:** Edit rcon to edit `rcon` value in conf.json otherwise it will be set with random string value
 
 ### Config
 **Path: _(%ragefolder%/server-files/conf.json)_**
 If parameters doesn't set it will set automatically by **default values**
 ```js
 var c = {
+  "prefix": "Server", // server prefix name in chat, default "Server"
+  "rcon": "", // server rcon password to logging as root, default random string
   "welcomeText": "string", // Welcome text is showing when player enter to server
   "motd": "string", // Motd window is showing when player enter to server, available html 
   "lang": "string", // Default language, available: [ru, en, ua], to add new: add new <lang>json file to ./server-files/packages/league-lang/lang folder
@@ -149,8 +152,6 @@ var c = {
   "effects": {
     "death": 5, // death timer in seconds
   },
-  "prefix": "Server", // server prefix name in chat, default "Server"
-  "rcon": "", // server rcon password to logging as root, default empty
 }
 ```
 
