@@ -49,6 +49,12 @@ export default class TeamService {
   @catchError(ErrorNotifyHandler)
   @command(['team', 'changeteam', 't'], {desc: Lang["cmd.change_team"]})
   changeTeam(player: PlayerMp, fullText: string, description: string, id: string) {
+    const state = DummyService.get(Entity.ROUND, 'state')
+
+    if (state === tdm.RoundState.prepare) {
+      throw new BroadCastError(Lang["error.is_busy"], player)
+    }
+
     if (!id) {
       return this.teamSelect(player)
     }
