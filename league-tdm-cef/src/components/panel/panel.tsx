@@ -11,6 +11,7 @@ import { ClientProfile, Round } from '../../../../league-core/src/types/statisti
 import RageAPI from '../../helpers/RageAPI'
 import { Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
+import { Arena } from '../../../../league-core/src/types/tdm'
 
 export default () => {
 
@@ -20,6 +21,7 @@ export default () => {
   const [active, setActive] = useState<boolean>(false)
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
+  const [arenas, setArenas] = useState<Record<number, Arena>>()
 
   useEffect(() => {
     RageAPI.subscribe(Events['tdm.cef.panel'], 'panel', (data: string | boolean) => {
@@ -33,12 +35,14 @@ export default () => {
           profile,
           rounds = [],
           visible,
+          arenas,
         } = JSON.parse(data)
 
         cefLog(data)
         setProfile(profile)
         setRounds(rounds)
         setActive(visible)
+        setArenas(arenas)
       } catch (err) {
         cefLog(err)
       }
@@ -59,7 +63,7 @@ export default () => {
       <ShrinkNavbar.Provider value={{ shrink, setShrink }}>
         <Header />
         <Navbar />
-        <Main rounds={rounds} profile={profile}/>
+        <Main rounds={rounds} profile={profile} arenas={arenas}/>
       </ShrinkNavbar.Provider>
       </CurrentPage.Provider>
     </div>

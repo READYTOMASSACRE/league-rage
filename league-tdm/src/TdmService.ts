@@ -1,4 +1,4 @@
-import { commandable, command, log, proceable, proc, catchError } from "../../league-core";
+import { commandable, command, proceable, proc, catchError, event, eventable } from "../../league-core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
@@ -16,6 +16,7 @@ import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @commandable
 @proceable
+@eventable
 export default class TdmService {
   constructor(
     readonly roundService: RoundService,
@@ -116,6 +117,22 @@ export default class TdmService {
 
     if (!id) {
       return player.outputChatBox(description)
+    }
+
+    const arena = Arena.get(id, player)
+
+    return this.voteService.voteArena(player, arena.id, (result) => {
+      return this.roundService.start(result)
+    })
+  }
+
+  @catchError(ErrorNotifyHandler)
+  @event(Events["tdm.cef.vote.arena_request"])
+  onVoteRequest(player: PlayerMp, id?: string) {
+    this.permissionService.hasRight(player, Rule.tdmVote)
+
+    if (!id) {
+      throw new BroadCastError(Lang["error.not_found"], player)
     }
 
     const arena = Arena.get(id, player)

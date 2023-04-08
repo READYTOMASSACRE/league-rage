@@ -1,6 +1,7 @@
 import { event, eventable, logClient } from "../../league-core/client";
 import { ClientConfig, Events } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
+import ArenaService from "./ArenaService";
 import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
@@ -50,6 +51,7 @@ export default class UIService {
     readonly teamService: TeamService,
     readonly dummyService: DummyService,
     readonly roundService: RoundService,
+    readonly arenaService: ArenaService,
     readonly lang: ILanguage
   ) {
     this.debug = new Debug(this, keybindService)
@@ -68,7 +70,7 @@ export default class UIService {
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
     this.deathlog = new Deathlog(this, playerService, teamService)
     this.motd = new Motd(config, this, keybindService)
-    this.panel = new Panel(this, keybindService)
+    this.panel = new Panel(this, keybindService, arenaService)
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
     this.winner = new Winner(this, teamService)

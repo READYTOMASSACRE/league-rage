@@ -8,20 +8,22 @@ import Voting from './Pages/Voting/Voting'
 
 import * as styles from './styles/panel.module.sass'
 import { ClientProfile, Round } from '../../../../league-core/src/types/statistic'
+import { Arena } from '../../../../league-core/src/types/tdm'
 
 interface Props {
   rounds: Round[]
   profile: ClientProfile | undefined
+  arenas?: Record<number, Arena>
 }
 
-const Main: FC<Props> = ({ rounds, profile }) => {
+const Main: FC<Props> = ({ rounds, profile, arenas }) => {
 
   const { currentPage } = useContext(CurrentPage)
 
   const page = useMemo(() => {
     if (currentPage === 'Profile' && profile) return (<Profile profile={profile} />)
     if (currentPage === 'Matches') return (<Matches matches={rounds} name={profile?.name} id={profile?.id}/>)
-    if (currentPage === 'Vote') return (<Voting />)
+    if (currentPage === 'Vote') return (<Voting arenas={arenas} />)
     if (currentPage === 'About') return (<div>About</div>)
   }, [currentPage, profile, rounds])
 

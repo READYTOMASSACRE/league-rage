@@ -1,4 +1,4 @@
-import { Enviroment, Events, userId } from "../../../league-core/src/types"
+import { Enviroment, Events } from "../../../league-core/src/types"
 
 export default new class RageAPI {
   private ready: boolean = false
@@ -48,6 +48,10 @@ export default new class RageAPI {
 
   panelRequest(...args: any[]) {
     mp.trigger(Events["tdm.cef.panel"], true, ...args)
+  }
+
+  voteArenaRequest(id: string | number) {
+    mp.trigger(Events["tdm.cef.vote.arena_request"], id)
   }
 
   sendReady() {

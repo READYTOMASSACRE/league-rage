@@ -1,6 +1,6 @@
 import { userId } from "./common"
 import { Role } from "./permission"
-import { Team } from "./tdm"
+import { Arena, Team } from "./tdm"
 
 export type StatisticConfig = {
   exp: {
@@ -71,6 +71,7 @@ export type PanelData = {
   profile: ClientProfile
   rounds: Round[]
   visible: boolean
+  arenas: Record<number, Arena>
 }
 
 export type AuthType = 'pending' | 'social' | 'auth' | 'error'

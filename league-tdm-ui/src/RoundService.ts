@@ -1,6 +1,6 @@
 import { event, eventable } from "../../league-core/client";
 import { Events, Procs, tdm } from "../../league-core/src/types";
-import { State } from "../../league-core/src/types/tdm";
+import ArenaService from "./ArenaService";
 import console from "./helpers/console";
 import PlayerService from "./PlayerService";
 import ZoneService from "./ZoneService";
@@ -10,7 +10,7 @@ export default class RoundService {
 	constructor(
 		readonly zoneService: ZoneService,
 		readonly playerService: PlayerService,
-		readonly arenas: Record<number, tdm.Arena>,
+		readonly arenaService: ArenaService,
 	) {}
 
 	@event(Events["tdm.round.start"])
@@ -38,7 +38,7 @@ export default class RoundService {
 	}
 
 	getArenaById(id: number): tdm.Arena | undefined {
-		return this.arenas[id]
+		return this.arenaService.arenas[id]
 	}
 
 	@event(Events["tdm.round.pause"])

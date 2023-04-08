@@ -7,7 +7,7 @@ import VotingCategoryItem from './VotingCategoryItem'
 import VotingItem from './VotingItem'
 
 interface Props {
-  arenas?: Arena[]
+  arenas?: Record<number, Arena>
 }
 
 const voteCategory = [
@@ -34,13 +34,21 @@ const Voting: FC<Props> = ({ arenas }) => {
 
   const [currentCategory, setCurrentCategory] = useState('')
 
+  const items = useMemo(() => {
+    if (!arenas) return []
+
+    return Object.entries(arenas).map(([id, arena]) => {
+      return <VotingItem key={id} id={id} title={arena.code}/>
+    })
+  }, [arenas])
+
   return (
     <div className={styles.voting}>
       <div className={styles.votingTop}>
         {voteCategory.map((category) => <VotingCategoryItem key={category.title} setCategory={setCurrentCategory} current={currentCategory} title={category.title}/>)}
       </div>
       <div className={styles.votingCenter}>
-        {arenasData.map((arena) => <VotingItem key={arena.name} title={arena.name}/>)}
+        {items}
       </div>
     </div>
   )

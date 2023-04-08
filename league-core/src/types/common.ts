@@ -194,6 +194,8 @@ export const enum Events {
   'tdm.cef.effects' = 'tdm.cef.effects',
   /** Fires when cef should update gamemode text */
   'tdm.cef.gamemode' = 'tdm.cef.gamemode',
+  /** Fires when vote_arena requested from client/cef */
+  'tdm.cef.vote.arena_request' = 'tdm.cef.vote.arena_request',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
@@ -220,6 +222,8 @@ export const enum Events {
   'tdm.permission.role' = 'tdm.permission.role',
   /** Fires when player has logged */
   'tdm.profile.login' = 'tdm.profile.login',
+  /** Fires when clientsilde should update arenas */
+  'tdm.arena.refresh' = 'tdm.arena.refresh',
 }
 
 export const enum Procs {
