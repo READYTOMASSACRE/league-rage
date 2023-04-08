@@ -1,6 +1,6 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { cef, Events } from "../../../league-core/src/types";
-import { Entity, RoundState } from "../../../league-core/src/types/tdm";
+import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
 import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
 import { Lang } from "../../../league-lang/language";
 import DummyService from "../DummyService";
@@ -42,6 +42,10 @@ export default class WeaponRequest {
       }
 
       if (!this.playerService.canSelectWeapon) {
+        throw new PopupError(Lang["error.weapon.is_busy"])
+      }
+
+      if (this.playerService.getTeam() === Team.spectators) {
         throw new PopupError(Lang["error.weapon.is_busy"])
       }
 

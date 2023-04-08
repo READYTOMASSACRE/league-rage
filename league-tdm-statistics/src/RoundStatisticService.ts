@@ -1,4 +1,4 @@
-import { eventable, event, commandable, command, log } from '../../league-core'
+import { eventable, event, commandable, command } from '../../league-core'
 import { decorate } from '../../league-core/src/helpers'
 import { Events, userId } from '../../league-core/src/types'
 import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
@@ -144,7 +144,6 @@ export default class RoundStatisticService {
     teamStat[player.userId][key] = modifier(teamStat[player.userId][key], teamStat[player.userId])
   }
 
-  @log
   private async saveProfile(userId: userId, stat: PlayerStat, win?: boolean) {
     try {
       const profile = await this.profileService.getById(userId)

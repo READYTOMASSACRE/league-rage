@@ -179,8 +179,14 @@ export default class TdmService {
     }
   }
 
+  @catchError(ErrorNotifyHandler)
   @command('kill')
   kill(player: PlayerMp) {
+    const roundState = DummyService.get(Entity.ROUND, 'state')
+    if (roundState === RoundState.prepare) {
+      throw new BroadCastError(Lang["error.is_busy"], player)
+    }
+
     this.playerService.setHealth(player, 0)
   }
 

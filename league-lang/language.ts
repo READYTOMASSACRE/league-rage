@@ -1,4 +1,5 @@
 export const enum Lang {
+  "error.is_busy" = "error.is_busy",
   "error.permission.invalid" = "error.permission.invalid",
   "error.permission.invalid_role" = "error.permission.invalid_role",
 

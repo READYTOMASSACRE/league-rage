@@ -1,4 +1,5 @@
 {
+  "error.is_busy": "Нельзя в данный момент",
   "error.permission.invalid": "Invalid permission :permission",
   "error.permission.invalid_role": "Invalid role :role to change for player :player",
 

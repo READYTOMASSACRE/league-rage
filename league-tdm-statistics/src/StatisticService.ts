@@ -1,4 +1,4 @@
-import { event, eventable, log, proc, proceable } from "../../league-core";
+import { event, eventable, proc, proceable } from "../../league-core";
 import { toClientProfile } from "../../league-core/src/helpers/toStatistic";
 import { Events, Procs } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
@@ -28,7 +28,6 @@ export default class StatisticService {
     await this.profileService.logSocial(player)
   }
 
-  @log
   @proc(Procs["tdm.statistic.profile.get"])
   async getProfile(player: PlayerMp, idOrUserId?: string | number) {
     try {

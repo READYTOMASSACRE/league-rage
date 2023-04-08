@@ -110,7 +110,6 @@ export default class UIService {
   @event(Events["tdm.cef.log"])
   log(...args: any[]) {}
 
-  @logClient
   @event(Events["tdm.popup.push"])
   popup(message: Lang | string, type: string = 'info') {
     this.cef.call(Events["tdm.popup.push"], this.lang.get(<Lang>message), type)

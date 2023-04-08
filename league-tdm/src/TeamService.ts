@@ -97,8 +97,7 @@ export default class TeamService {
     }
 
     this.playerService.setTeam(p, team)
-    this.playerService.setState(p, tdm.State.idle)
-    this.playerService.spawnLobby(p)
+    this.playerService.spawnLobby(p, true)
 
     if (model) {
       this.playerService.setModel(p, mp.joaat(model))

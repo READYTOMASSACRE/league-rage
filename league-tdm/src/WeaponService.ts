@@ -68,7 +68,7 @@ export default class WeaponService {
   }
 
   @event(Events["tdm.round.remove"])
-  tdmRoundRemove(id: number, manual?: boolean) {
+  tdmRoundRemove(id: number, reason?: 'manual' | 'death') {
     this.playerService.setWeaponSlot(id)
     this.playerService.setWeaponState(id, tdm.WeaponState.idle)
   }
@@ -152,6 +152,10 @@ export default class WeaponService {
 
     if (!this.roundService.running) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
+    }
+
+    if (this.playerService.getTeam(player) === tdm.Team.spectators) {
+      throw new BroadCastError(Lang["error.weapon.is_busy"], player)
     }
 
     if (!this.playerService.hasWeaponState(player, tdm.WeaponState.idle)) {

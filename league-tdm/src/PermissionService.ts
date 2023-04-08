@@ -62,13 +62,6 @@ export default class PermissionService {
     return true
   }
 
-  @event('playerReady')
-  playerReady(player: PlayerMp) {
-    if (!this.config.rcon) {
-      this.setRole(player, Role.root)
-    }
-  }
-
   @command('rcon')
   rconCmd(player: PlayerMp, fullText: string, description: string, rcon: string) {
     player.rconAttempts = player.rconAttempts ?? 0

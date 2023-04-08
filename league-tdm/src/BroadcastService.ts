@@ -52,8 +52,8 @@ export default class BroadcastService {
   }
 
   @event(Events["tdm.round.remove"])
-  tdmRoundRemove(id: number, manual?: boolean) {
-    if (manual) {
+  tdmRoundRemove(id: number, reason?: 'manual' | 'death') {
+    if (reason === 'manual') {
       const message = this.lang.get(Lang["tdm.round.remove"], { player: id })
       this.broadcastByServer(message)
       this.playerService.popup(id, message, 'success')

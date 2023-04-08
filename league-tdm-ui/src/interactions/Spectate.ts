@@ -61,6 +61,7 @@ export default class Spectate {
       this.running = false
       this.prepared = false
       mp.events.call(Events["tdm.spectate.client_toggle"], false)
+      mp.events.callRemote(Events["tdm.spectate.client_toggle"], false)
     }
   }
 
@@ -231,7 +232,7 @@ export default class Spectate {
 
   private get players() {
     try {
-      const players = <number[]>JSON.parse(this.dummyService.get(Entity.ROUND, 'players'))
+      const players = this.dummyService.get(Entity.ROUND, 'players')
 
       return players
         .map((id) => mp.players.atRemoteId(id))

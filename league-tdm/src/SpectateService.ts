@@ -148,6 +148,16 @@ export default class SpectateService {
     return [...targetPlayer.position.toArray(), targetPlayer.dimension]
   }
 
+  @event(Events["tdm.spectate.client_toggle"])
+  clientToggle(player: PlayerMp, toggle: boolean) {
+    if (toggle) {
+      return
+    }
+
+    this.playerService.setVariable(player, 'spectate', undefined)
+    this.playerService.spawnLobby(player)
+  }
+
   private stopSpectate(player: PlayerMp | number) {
     player = typeof player === 'number' ? mp.players.at(player) : player
 
@@ -156,16 +166,5 @@ export default class SpectateService {
     }
 
     this.playerService.call([player.id], Events["tdm.spectate.stop"])
-    this.playerService.setVariable(player, 'spectate', undefined)
-
-    const state = this.playerService.getState(player)
-
-    if (state === State.spectate) {
-      this.playerService.setState(player, State.idle)
-    }
-
-    if (state !== State.alive) {
-      this.playerService.spawnLobby(player)
-    }
   }
 }

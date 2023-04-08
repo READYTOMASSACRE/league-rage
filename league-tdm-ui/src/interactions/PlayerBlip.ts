@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";
 import console from "../helpers/console";
@@ -15,7 +15,6 @@ export default class PlayerBlip {
     readonly teamService: TeamService,
   ) {}
 
-  @logClient
   @event('entityStreamIn')
   streamIn(entity: EntityMp) {
     try {

@@ -2,6 +2,7 @@ import { Events, Procs } from "../../league-core/src/types";
 import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
 import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
+import { event } from "../../league-core/client";
 
 export default class PlayerService {
   private interval: number = 0
@@ -76,8 +77,9 @@ export default class PlayerService {
     (player || this.local).setAlpha(alphaLevel)
   }
 
-  spawnLobby() {
-    mp.events.callRemote(Events["tdm.player.spawn_lobby"])
+  @event(Events["tdm.player.spawn_lobby"])
+  onSpawnLobby() {
+    this.freezePosition(false)
   }
 
   getStatistic(player?: PlayerMp) {

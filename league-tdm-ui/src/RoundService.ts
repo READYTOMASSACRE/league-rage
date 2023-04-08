@@ -29,24 +29,12 @@ export default class RoundService {
 	roundEnd(id: number, result: tdm.Team | "draw") {
 		this.zoneService.disable()
 		this.playerService.freezePosition(false)
-
-		const state = this.playerService.getState()
-
-		if (state === State.select) {
-			return
-		}
-
-		this.playerService.spawnLobby()
 	}
 
 	@event(Events["tdm.round.remove"])
-	roundRemove(id: number, manual?: boolean) {
+	roundRemove(id: number, reason?: 'manual' | 'death') {
 		this.zoneService.disable()
 		this.playerService.freezePosition(false)
-
-		if (manual) {
-			this.playerService.spawnLobby()
-		}
 	}
 
 	getArenaById(id: number): tdm.Arena | undefined {
@@ -59,10 +47,10 @@ export default class RoundService {
 	}
 
 	private enable(id: number) {
+		this.zoneService.disable()
+
 		const arena = this.getArenaById(id)
-		
 		if (arena && this.playerService.alive) {
-			this.zoneService.disable()
 			this.zoneService.enable(arena)
 		}
 	}

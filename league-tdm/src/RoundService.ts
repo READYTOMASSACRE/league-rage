@@ -30,7 +30,7 @@ export default class RoundService {
     }
 
     if (this.round) {
-      this.round.removePlayer(player.id)
+      this.round.removePlayer(player.id, 'death')
     }
   }
 
@@ -115,7 +115,7 @@ export default class RoundService {
       throw new BroadCastError(Lang["error.player.not_in_round"], player, { player: player.name })
     }
 
-    return this.round.removePlayer(player.id, true)
+    return this.round.removePlayer(player.id, 'manual')
   }
 
   pause(player: PlayerMp) {

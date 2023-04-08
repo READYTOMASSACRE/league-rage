@@ -1,4 +1,4 @@
-import { event, eventable } from "../../../league-core/client";
+import { event, eventable, logClient } from "../../../league-core/client";
 import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
@@ -118,6 +118,7 @@ class TeamSelector implements TeamSelectorConfig {
     mp.events.call(Events["tdm.team.select_toggle"], { ...this.currentTeamInfo, toggle: false })
   }
 
+  @logClient
   private toggle(toggle: boolean) {
     try {
       this.playerService.setInvicible(toggle)

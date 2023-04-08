@@ -21,22 +21,19 @@ export default class PlayerService {
     this.setTeam(player, tdm.Team.spectators)
     this.setWeaponState(player, tdm.WeaponState.idle)
     this.setWeaponSlot(player)
+    this.setRole(player, Role.socialUser)
   }
 
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
+    this.setState(player, tdm.State.dead)
+
     TaskManager.add(() => {
       if (!mp.players.exists(player)) {
         return
       }
 
-      const state = this.getState(player)
-
-      if ([tdm.State.alive, tdm.State.select, tdm.State.spectate].includes(state)) {
-        return
-      }
-
-      this.spawnLobby(player)
+      this.spawnLobby(player, true)
     }, this.config.effects.death)
   }
 
@@ -120,10 +117,23 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  @event(Events["tdm.player.spawn_lobby"])
-  spawnLobby(p: number | PlayerMp) {
+  spawnLobby(p: number | PlayerMp, force?: boolean) {
     const player = <PlayerMp>p
+    const state = this.getState(player)
+
+    if (!force && [
+      tdm.State.alive,
+      tdm.State.select,
+      tdm.State.spectate,
+      tdm.State.idle,
+    ].includes(state)) {
+      return
+    }
+
+    this.setState(player, tdm.State.idle)
     player.spawn(new mp.Vector3(this.config.lobby))
+    player.call(Events["tdm.player.spawn_lobby"])
+    mp.events.call(Events["tdm.player.spawn_lobby"], player.id)
   }
 
   @ensurePlayer

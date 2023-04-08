@@ -68,7 +68,7 @@ export type RoundData = {
   arena: string
   state: RoundState
   time: number
-  players: string
+  players: number[]
 }
 
 export type TeamData = Record<Team, { score: number } & TeamOptions>

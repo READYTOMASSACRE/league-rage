@@ -62,7 +62,7 @@ export default class ProfileService {
       this.playerService.setVariable(player, 'profile', toClientProfile(profile))
       this.playerService.setVariable(player, 'role', profile.role)
 
-      player.name = profile.name
+      player.name = profile.name || player.name
       player.logged = 'social'
 
       if (!userProfile) {
