@@ -7,8 +7,11 @@
 
 ### Install
 Move `packages` from archive to `%ragefolder%/server-files/packages`
+
 Move `client_packages` from archive to `%ragefolder%/server-files/client_packages`
+
 ...
+
 You're awesome! Server install is done, now you can start it or modify conf.json, below config description
 **Info:** All options are **partial**, you dont need to describe it all
 
