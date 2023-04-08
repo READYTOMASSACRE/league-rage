@@ -102,10 +102,10 @@ const weaponSlot = {
 
 const typeCategory = {
   melee: 'Buy Melee (Melee Weapon)',
-  handguns: 'Buy Pistol (Secondary Weapon)',
-  submachine: 'Buy SMG (Primary Weapon)',
+  pistols: 'Buy Pistol (Secondary Weapon)',
+  submachine_guns: 'Buy SMG (Primary Weapon)',
   shotguns: 'Buy Shotgun (Primary Weapon)',
-  rifles: 'Buy Rifle (Primary Weapon)',
+  assaul_trifles: 'Buy Assault Rifle (Primary Weapon)',
   light_rifles: 'Buy Light Rifle (Primary Weapon)',
   sniper_rifles: 'Buy Sniper Rifle (Primary Weapon)',
 }

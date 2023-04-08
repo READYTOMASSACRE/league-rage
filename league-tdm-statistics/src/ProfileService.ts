@@ -15,11 +15,13 @@ export default class ProfileService {
     const player = this.playerService.atUserId(userId)
 
     if (player) {
-      const role = this.playerService.getVariable(player, 'role')
+      let role = this.playerService.getVariable(player, 'role')
 
-      if (role !== Role.root) {
-        profile = {role, ...profile}
+      if (role === Role.root) {
+        role = Role.admin
       }
+
+      profile = {role, ...profile}
     }
 
     return this.repositoryService.profile.save({

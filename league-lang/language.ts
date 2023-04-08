@@ -89,6 +89,7 @@ export const enum Lang {
   "controls.t" = "controls.t",
   "controls.b" = "controls.b",
   "controls.tab" = "controls.tab",
+  "controls.f2" = "controls.f2",
   "controls.f4" = "controls.f4",
 }
 

@@ -1,9 +1,9 @@
 export enum Category {
   melee = 'melee',
-  handguns = 'handguns',
-  submachine = 'submachine',
+  pistols = 'pistols',
+  submachine_guns = 'submachine_guns',
   shotguns = 'shotguns',
-  rifles = 'rifles',
+  assaul_trifles = 'assaul_trifles',
   light_rifles = 'light_rifles',
   sniper_rifles = 'sniper_rifles',
 }
