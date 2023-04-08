@@ -2,6 +2,7 @@ import { toRound } from "../../league-core/src/helpers/toStatistic";
 import { userId } from "../../league-core/src/types";
 import { Round } from "../../league-core/src/types/statistic";
 import RepositoryService from "./RepositoryService";
+import { maxLimit } from "./helpers";
 
 export default class RoundService {
   constructor(readonly repositoryService: RepositoryService) {}
@@ -14,11 +15,34 @@ export default class RoundService {
     }
   }
 
-  async get({ userId, dateFrom, dateTo }: {
-    userId: userId, dateFrom?: number, dateTo?: number
+  async get({
+    userId,
+    limit,
+    offset,
+    dateFrom,
+    dateTo,
+  }: {
+    userId: userId
+    limit?: number
+    offset?: number
+    dateFrom?: number
+    dateTo?: number
   }) {
     try {
-      const rounds = await this.repositoryService.round.get({ userId, dateFrom, dateTo })
+      limit = Number(limit ?? maxLimit)
+      offset = Number(offset ?? 0)
+      limit = isNaN(limit) ? maxLimit : limit
+      offset = isNaN(offset) ? 0 : offset
+
+      limit = limit > maxLimit ? maxLimit : limit
+
+      const rounds = await this.repositoryService.round.get({
+        userId,
+        limit,
+        offset,
+        dateFrom,
+        dateTo
+      })
 
       return rounds.map(toRound)
     } catch (err) {

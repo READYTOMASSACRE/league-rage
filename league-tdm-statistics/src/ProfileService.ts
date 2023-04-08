@@ -1,3 +1,4 @@
+import { event, eventable } from "../../league-core";
 import { toClientProfile, toProfile } from "../../league-core/src/helpers/toStatistic";
 import { Events, userId } from "../../league-core/src/types";
 import { Role } from "../../league-core/src/types/permission";
@@ -5,23 +6,32 @@ import { Profile } from "../../league-core/src/types/statistic";
 import PlayerService from "./PlayerService";
 import RepositoryService from "./RepositoryService";
 
+@eventable
 export default class ProfileService {
   constructor(
     readonly playerService: PlayerService,
     readonly repositoryService: RepositoryService
   ) {}
 
+  @event(Events["tdm.permission.role"])
+  playerRole(id: number, role: Role) {
+    const player = this.playerService.at(id)
+
+    if (!player) return
+
+    return this.saveById(player.userId, { role })
+  }
+
   async saveById(userId: userId, profile: Partial<Profile> = {}) {
     const player = this.playerService.atUserId(userId)
 
     if (player) {
-      let role = this.playerService.getVariable(player, 'role')
-
-      if (role === Role.root) {
-        role = Role.admin
-      }
-
+      const role = this.playerService.getVariable(player, 'role')
       profile = {role, ...profile}
+
+      if (profile.role === Role.root) {
+        profile.role = Role.admin
+      }
     }
 
     return this.repositoryService.profile.save({

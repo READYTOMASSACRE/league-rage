@@ -11,6 +11,7 @@ export const toPlayerStat = (o?: any): PlayerStat => ({
   hit: o?.hit ?? 0,
   exp: o?.exp ?? 0,
   name: o?.name ?? '',
+  kda: o?.kda ?? 0,
 })
 
 export const toProfile = (o?: any): Profile => ({
@@ -20,7 +21,14 @@ export const toProfile = (o?: any): Profile => ({
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
   role: o?.role ?? Role.socialUser,
-}) as Profile
+  victory: o?.victory ?? 0,
+  rating: o?.rating ?? 0,
+  kda: o?.kda ?? 0,
+  averageDamage: o?.averageDamage ?? 0,
+  wins: o?.wins ?? 0,
+  loses: o?.loses ?? 0,
+  draws: o?.draw ?? 0,
+})
 
 export const toClientProfile = (o?: any): ClientProfile => ({
   ...toPlayerStat(o),
@@ -29,7 +37,14 @@ export const toClientProfile = (o?: any): ClientProfile => ({
   lvl: o?.lvl ?? 0,
   exp: o?.exp ?? 0,
   role: o?.role ?? Role.socialUser,
-}) as ClientProfile
+  victory: o?.victory ?? 0,
+  rating: o?.rating ?? 0,
+  kda: o?.kda ?? 0,
+  averageDamage: o?.averageDamage ?? 0,
+  wins: o?.wins ?? 0,
+  loses: o?.loses ?? 0,
+  draws: o?.draw ?? 0,
+})
 
 export const toRound = (o?: Partial<Round>): Round => ({
   id: o?.id ?? Date.now(),

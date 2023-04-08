@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useMemo, useState } from 'react'
 
 import { CurrentPage } from './context'
 
-import Games from './Pages/Matches/Matches'
+import Matches from './Pages/Matches/Matches'
 import Profile from './Pages/Profile/Profile'
 import Voting from './Pages/Voting/Voting'
 
@@ -14,13 +14,13 @@ interface Props {
   profile: ClientProfile | undefined
 }
 
-const Main: FC<Props> = ({rounds, profile }) => {
+const Main: FC<Props> = ({ rounds, profile }) => {
 
   const { currentPage } = useContext(CurrentPage)
 
   const page = useMemo(() => {
-    if (currentPage === 'Profile' && profile) return (<Profile profile={profile} matches={rounds.length} />)
-    if (currentPage === 'Games') return (<Games matches={rounds} name={profile?.name} id={profile?.id}/>)
+    if (currentPage === 'Profile' && profile) return (<Profile profile={profile} />)
+    if (currentPage === 'Matches') return (<Matches matches={rounds} name={profile?.name} id={profile?.id}/>)
     if (currentPage === 'Vote') return (<Voting />)
     if (currentPage === 'About') return (<div>About</div>)
   }, [currentPage, profile, rounds])

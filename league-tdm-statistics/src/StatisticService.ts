@@ -5,8 +5,7 @@ import { Events, Procs } from "../../league-core/src/types";
 import PlayerService from "./PlayerService";
 import ProfileService from "./ProfileService";
 import RoundService from "./RoundService";
-
-const MAX_DIFF_INTERVAL = 2
+import { maxLimit } from "./helpers";
 
 @eventable
 @proceable
@@ -46,21 +45,32 @@ export default class StatisticService {
   }
 
   @proc(Procs["tdm.statistic.round.get"])
-  async getRound(player: PlayerMp, idOrUserId?: string | number, dateFrom?: number, dateTo?: number) {
+  async getRound(
+      player: PlayerMp,
+      idOrUserId?: string | number,
+      limit: number = maxLimit,
+      offset?: number,
+      dateFrom?: number,
+      dateTo?: number, 
+    ) {
     const userId = this.getUserId(player, idOrUserId)
-    const now = Date.now()
-    const yesterday = +startOfDay(subDays(now, 1))
-    const tomorrow = +endOfDay(addDays(now, 1))
 
-    dateFrom = Number(dateFrom) || yesterday
-    dateTo = Number(dateTo) || tomorrow
-
-    if (differenceInCalendarDays(dateFrom, dateTo) > MAX_DIFF_INTERVAL) {
-      dateFrom = yesterday
-      dateTo = tomorrow
+    if (dateFrom) {
+      dateFrom = Number(dateFrom)
     }
 
-    return JSON.stringify(await this.roundService.get({ userId, dateFrom, dateTo }))
+    if (dateTo) {
+      dateTo = Number(dateTo)
+    }
+
+
+    return JSON.stringify(await this.roundService.get({
+      userId,
+      limit,
+      offset,
+      dateFrom,
+      dateTo,
+    }))
   }
 
   private getUserId(player: PlayerMp, idOrUserId?: number | string) {

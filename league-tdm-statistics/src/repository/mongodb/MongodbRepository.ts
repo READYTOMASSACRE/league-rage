@@ -2,13 +2,13 @@ import { MongoEntity } from "../../@types";
 import BaseRepository from "../BaseRepository";
 import { log } from "../../../../league-core";
 import { Db, Collection, Filter, OptionalUnlessRequiredId } from "mongodb";
+import { maxLimit } from "../../helpers";
 
 export default abstract class MongodbRepository<T extends MongoEntity> extends BaseRepository<T, Db> {
   constructor(db: Db) {
     super(db)
   }
 
-  @log
   async save(t: T) {
     const item = await this.getById(t.id)
     if (item) {
@@ -20,17 +20,16 @@ export default abstract class MongodbRepository<T extends MongoEntity> extends B
     }
   }
 
-  @log
   async get({
     ids,
-    limit,
+    limit = maxLimit,
     offset,
     ...query
   }: Filter<T> = {}) {
     return this.collection.find({
       ...(ids ? { id: { $in: ids } } : false),
       ...query,
-    }).limit(Number(limit) || 10).skip(Number(offset) || 0).toArray() as any as T[]
+    }).limit(Number(limit)).skip(Number(offset) || 0).sort({ _id: -1 }).toArray() as any as T[]
   }
 
   @log

@@ -1,12 +1,10 @@
 import BaseRepository from "../BaseRepository";
 import { LokiFilter, TEntity } from "../../@types";
 import { maxLimit } from "../../helpers";
-import { log } from "../../../../league-core";
 
 export default abstract class LokijsRepository<T extends TEntity> extends BaseRepository<T, Loki> {
   abstract readonly name: string
 
-  @log
   async save(t: T, opts?: {write?: boolean}) {
     const doc = await this.getById(t.id)
 
@@ -28,12 +26,14 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
     return Promise.resolve(
       this.collection
         .chain()
-        .offset(offset)
-        .limit(limit)
         .find({
           ...(ids ? { id: { $in: ids } } : false),
           ...query,
-        }).data()
+        })
+        .sort((a, b) => Number(b.id) - Number(a.id))
+        .offset(Number(offset))
+        .limit(Number(limit))
+        .data()
     )
   }
 

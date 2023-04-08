@@ -1,6 +1,6 @@
 import { InferIdType, Filter as MongoFilter } from 'mongodb'
 import { userId } from "../../../league-core/src/types"
-import { Profile, Round } from "../../../league-core/src/types/statistic"
+import { MongoRound, Profile, Round } from "../../../league-core/src/types/statistic"
 
 export type TEntity = {
   id: number | string
@@ -36,4 +36,4 @@ export type RoundFilter = {
 
 export type LokiFilter<E> = AbstractFilter & LokiQuery<E & LokiObj>
 export type RoundLokiFilter = LokiFilter<Round> & RoundFilter
-export type RoundMongoFilter = MongoFilter<Round> & RoundFilter
+export type RoundMongoFilter = MongoFilter<MongoRound> & RoundFilter

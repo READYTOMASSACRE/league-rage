@@ -21,4 +21,8 @@ export default class PlayerService {
     const player = mp.players.toArray().find(player => player.userId === id)
     return mp.players.exists(player) ? player : undefined
   }
+
+  at(id: number): PlayerMp | undefined {
+    return mp.players.at(id)
+  }
 }
