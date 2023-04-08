@@ -13,6 +13,7 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 ✨ You're awesome ✨, server install is done, now you can start it or modify conf.json, below config description
 
 **Info:** All options are `partial`, you dont need to describe it all
+
 **Dont forget:** Edit rcon to edit `rcon` value in conf.json otherwise it will be set with random string value
 
 ### Config
