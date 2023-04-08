@@ -14,7 +14,7 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 
 **Info:** All options are `partial`, you dont need to describe it all
 
-**Dont forget:** Edit rcon to edit `rcon` value in conf.json otherwise it will be set with random string value
+**Dont forget:** to edit `rcon` value in `conf.json` otherwise it will be set with random string value
 
 ### Config
 **Path: _(%ragefolder%/server-files/conf.json)_**
