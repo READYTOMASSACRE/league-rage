@@ -11,7 +11,6 @@ import TeamService from "./TeamService";
 
 @eventable
 export default class BroadcastService {
-  private arenas: string[] = []
   private defaultNotifyAlive = 5
 
   constructor(
@@ -31,7 +30,6 @@ export default class BroadcastService {
     const message = this.lang.get(Lang["tdm.round.arena_start"], { arena: id })
 
     this.broadcastByServer(message)
-    this.playerService.popup(id, message, 'success')
   }
 
   @event(Events["tdm.round.end"])
@@ -42,21 +40,27 @@ export default class BroadcastService {
   }
 
   @event(Events["tdm.round.add"])
-  tdmRoundAdd(id: number, manual?: boolean) {
+  tdmRoundAdd(id: number, manual?: boolean, arenaId?: number, whoAdded?: number) {
     if (manual) {
       const message = this.lang.get(Lang["tdm.round.add"], { player: id })
 
       this.broadcastByServer(message)
-      this.playerService.popup(id, message, 'success')
+
+      if (typeof whoAdded !== 'undefined') {
+        this.playerService.popup(whoAdded, message, 'success')
+      }
     }
   }
 
   @event(Events["tdm.round.remove"])
-  tdmRoundRemove(id: number, reason?: 'manual' | 'death') {
+  tdmRoundRemove(id: number, reason?: 'manual' | 'death', arenaId?: number, whoRemoved?: number) {
     if (reason === 'manual') {
       const message = this.lang.get(Lang["tdm.round.remove"], { player: id })
       this.broadcastByServer(message)
-      this.playerService.popup(id, message, 'success')
+
+      if (typeof whoRemoved !== 'undefined') {
+        this.playerService.popup(whoRemoved, message, 'success')
+      }
     }
   }
 
@@ -69,56 +73,64 @@ export default class BroadcastService {
   }
 
   @event(Events["tdm.vote"])
-  tdmVote(vote: Vote, id: number, key: string) {
+  tdmVote(vote: Vote, id: number, key: Record<string, number> | string) {
     const player = this.playerService.getById(id)
     const alive = this.config.vote[vote] || this.defaultNotifyAlive
-    const replacements = { vote, player: player?.name, key }
+    const replacements = this.getReplacements(vote, player, key)
     const message = this.getMessage(vote, Lang["tdm.vote.add"], replacements)
 
     this.broadcastByServer(message.replace('%ss', ''))
 
     if (vote == Vote.arena) {
-      const arena = Arena.get(key)
-      if (!this.arenas.includes(arena.code)) {
-        this.arenas.push(arena.code)
-      }
-
-      replacements.key = this.arenas.join(', ')
-      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'top', true)
+      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'default', true)
     } else {
-      this.notify(message, alive, vote, 'top', true)
+      this.notify(message, alive, vote, 'default', true)
     }
   }
 
   @event(Events["tdm.vote.start"])
-  tdmVoteStart(vote: Vote, id: number, key: string) {
+  tdmVoteStart(vote: Vote, id: number, key: Record<string, number> | string) {
     const player = this.playerService.getById(id)
-
-    if (vote == Vote.arena) {
-      this.arenas = [key]
-    }
-
     const alive = this.config.vote[vote] || this.defaultNotifyAlive
-    const replacements = { vote, player: player?.name, key }
+    const replacements = this.getReplacements(vote, player, key)
     const message = this.getMessage(vote, Lang["tdm.vote.text"], replacements)
 
     this.broadcastByServer(message.replace('%ss', ''))
 
     if (vote == Vote.arena) {
-      const arena = Arena.get(key)
-      this.arenas = [arena.code]
-      replacements.key = arena.code
-      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'top')
+      this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'default')
     } else {
-      this.notify(message, alive, vote, 'top')
+      this.notify(message, alive, vote, 'default')
     }
   }
 
   @event(Events["tdm.vote.end"])
   tdmVoteEnd(vote: Vote, result: string) {
-    this.arenas = []
     this.broadcastByServer(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
     this.notifyStop(vote)
+  }
+
+  private getReplacements(vote: Vote, player: PlayerMp, key: Record<string, number> | string) {
+    const replacements = {
+      vote,
+      player: player?.name,
+      key: String(key),
+    }
+    if (typeof key !== 'undefined' && vote === Vote.arena) {
+      const votes = []
+      for (const [arenaId, count] of Object.entries(key)) {
+        try {
+          const arena = Arena.get(arenaId)
+          votes.push(`${arena.code} (${count})`)
+        } catch (err) {
+          console.error(err)
+        }
+      }
+
+      replacements.key = votes.join(', ')
+    }
+
+    return replacements
   }
 
   @event(Events["tdm.chat.push"])

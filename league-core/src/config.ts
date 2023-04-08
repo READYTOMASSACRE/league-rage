@@ -106,7 +106,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       }
     },
     vote: {
-      arena: 30
+      arena: 20
     },
     hud: {
       roundStart: {

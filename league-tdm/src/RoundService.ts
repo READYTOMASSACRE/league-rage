@@ -94,7 +94,7 @@ export default class RoundService {
     this.end()
   }
 
-  add(player: PlayerMp) {
+  add(player: PlayerMp, whoAdded?: PlayerMp) {
     if (!this.running || !this.round) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
@@ -110,10 +110,10 @@ export default class RoundService {
       throw new BroadCastError(Lang["error.round.add.player_is_busy"], player)
     }
 
-    return this.round.addPlayer(player.id, true)
+    return this.round.addPlayer(player.id, true, whoAdded?.id)
   }
 
-  remove(player: PlayerMp) {
+  remove(player: PlayerMp, whoRemoved?: PlayerMp) {
     if (!this.running || !this.round) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
@@ -122,7 +122,7 @@ export default class RoundService {
       throw new BroadCastError(Lang["error.player.not_in_round"], player, { player: player.name })
     }
 
-    return this.round.removePlayer(player.id, 'manual')
+    return this.round.removePlayer(player.id, 'manual', whoRemoved?.id)
   }
 
   pause(player: PlayerMp) {

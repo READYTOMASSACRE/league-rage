@@ -80,7 +80,7 @@ export default class Round {
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
-  addPlayer(id: number, manual?: boolean) {
+  addPlayer(id: number, manual?: boolean, whoAdded?: number) {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
     this.playerService.spawn(id, vector)
@@ -89,11 +89,11 @@ export default class Round {
 
     this.players = [...this.players, id]
 
-    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
-    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id)
+    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id, whoAdded)
+    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id, whoAdded)
   }
 
-  removePlayer(id: number, reason?: 'manual' | 'death') {
+  removePlayer(id: number, reason?: 'manual' | 'death', whoRemoved?: number) {
     if (!this.players.includes(id)) {
       return
     }
@@ -104,8 +104,8 @@ export default class Round {
       this.playerService.spawnLobby(id, true)
     }
 
-    this.playerService.call([id], Events["tdm.round.remove"], id, reason, this.arena.id)
-    mp.events.call(Events["tdm.round.remove"], id, reason, this.arena.id)
+    this.playerService.call([id], Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
+    mp.events.call(Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
   }
 
   playerQuit(id: number) {

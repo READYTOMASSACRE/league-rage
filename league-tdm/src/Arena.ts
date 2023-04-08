@@ -42,19 +42,18 @@ export default class Arena {
   }
 
   @catchError(ErrorNotifyHandler)
-  static get(id: number | string, player?: PlayerMp, lang?: ILanguage): types.tdm.Arena {
+  static get(id: number | string, player?: PlayerMp): types.tdm.Arena {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
       : Arena.indexByCode[id]
 
 
     if (!this.arenas[index]) {
-      throw new NotFoundError(
-        lang ?
-          lang.get(Lang["error.arena.not_found"], { arena: id }) :
-          `Arena ${id} not found`,
-        player
-      )
+      if (player) {
+        throw new NotFoundError(Lang["error.arena.not_found"], player, { arena: id })
+      } else {
+        throw new Error(`Arena ${id} not found`)
+      }
     }
 
     return this.arenas[index]

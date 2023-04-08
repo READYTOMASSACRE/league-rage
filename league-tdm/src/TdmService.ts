@@ -67,7 +67,7 @@ export default class TdmService {
       return player.outputChatBox(message)
     }
 
-    return this.roundService.add(addPlayer)
+    return this.roundService.add(addPlayer, player)
   }
 
   @catchError(ErrorNotifyHandler)
@@ -90,7 +90,7 @@ export default class TdmService {
       return player.outputChatBox(message)
     }
 
-    return this.roundService.remove(removePlayer)
+    return this.roundService.remove(removePlayer, player)
   }
 
   @catchError(ErrorNotifyHandler)
@@ -118,7 +118,7 @@ export default class TdmService {
       return player.outputChatBox(description)
     }
 
-    const arena = Arena.get(id, player, this.lang)
+    const arena = Arena.get(id, player)
 
     return this.voteService.voteArena(player, arena.id, (result) => {
       return this.roundService.start(result)
@@ -128,7 +128,7 @@ export default class TdmService {
   @proc(Procs["tdm.arena.get"])
   getArenas(player: PlayerMp, id?: number) {
     if (typeof id !== 'undefined') {
-      return Arena.get(id, player, this.lang)
+      return Arena.get(id, player)
     }
 
     return JSON.stringify(Arena.arenas)
