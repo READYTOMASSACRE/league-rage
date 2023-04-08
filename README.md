@@ -149,7 +149,7 @@ var c = {
 ### Arenas
 **Path: _(%ragefolder%/server-files/packages/arenas.json)_**
 Example
-```json
+```js
 [
   {
     "id": 0, // arena id by number
