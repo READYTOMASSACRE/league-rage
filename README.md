@@ -102,7 +102,7 @@ var c = {
   "db": {
     "adapter": "lokijs", // db adapter, available: "lokijs", "mongodb"
     "lokijs": {
-      "database": 'league.db',
+      "database": 'league.db', // database name
       "autoload": true,
       "autosave": true,
       "autosaveInterval": 4000,
@@ -112,7 +112,7 @@ var c = {
       "port": "27017",
       "username": "",
       "password": "",
-      "database": "league",
+      "database": "league", // database name
       "logging": true,
       "opts": {
         "tls": boolean,
