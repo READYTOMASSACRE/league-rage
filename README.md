@@ -13,7 +13,8 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 ...
 
 You're awesome! Server install is done, now you can start it or modify conf.json, below config description
-**Info:** All options are **partial**, you dont need to describe it all
+
+**Info:** All options are `partial`, you dont need to describe it all
 
 ### Config
 **Path: _(%ragefolder%/server-files/conf.json)_**
