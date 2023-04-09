@@ -16,6 +16,24 @@ Move `client_packages` from archive to `%ragefolder%/server-files/client_package
 
 **Dont forget:** to edit `rcon` value in `conf.json` otherwise it will be set with random string value
 
+
+## Contribute information
+
+### Install project
+`yarn`
+
+### Watch project (All files will be built at ../../ path, careful)
+
+`yarn watch`
+
+### Watch conrecete module (All files will be built at ../../ path, careful)
+
+`yarn watch:<module>`, example: `yarn watch:cef`, `yarn watch:ui`, etc (More information in package.json)
+
+### Build concrete module (All files will be built at ../../ path, careful)
+
+`yarn build:<module>`, example: `yarn build:cef`, `yarn build:ui`, etc (More information in package.json)
+
 ### Config
 **Path: _(%ragefolder%/server-files/conf.json)_**
 
