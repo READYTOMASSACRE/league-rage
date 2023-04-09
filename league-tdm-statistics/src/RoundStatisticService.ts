@@ -1,5 +1,4 @@
-import { eventable, event, commandable, command } from '../../league-core'
-import { decorate } from '../../league-core/src/helpers'
+import { eventable, event } from '../../league-core'
 import { Events, userId } from '../../league-core/src/types'
 import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
@@ -9,7 +8,6 @@ import DummyService from "../../league-core/src/server/DummyService";
 import ProfileService from './ProfileService'
 import RoundService from './RoundService'
 
-@commandable
 @eventable
 export default class RoundStatisticService {
   private stat: Round
@@ -22,13 +20,6 @@ export default class RoundStatisticService {
     readonly roundService: RoundService,
   ) {
     this.stat = this.toDefault()
-  }
-
-  @command('roundstat')
-  roundStatCmd(player: PlayerMp) {
-    player.outputChatBox(decorate(this.stat))
-
-    return this.stat
   }
 
   @event(Events['tdm.round.prepare'])

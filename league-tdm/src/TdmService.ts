@@ -255,7 +255,6 @@ export default class TdmService {
       Lang["cmd.unpause"],
       Lang["cmd.vote"],
       Lang["cmd.spectate"],
-      Lang["cmd.weapon"],
       Lang["cmd.change_team"],
       Lang["cmd.change_name"],
       Lang["cmd.swap_team"],

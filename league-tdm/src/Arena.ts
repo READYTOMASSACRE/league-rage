@@ -1,11 +1,10 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { helpers, types, command, commandable, catchError } from '../../league-core'
+import { helpers, types, catchError } from '../../league-core'
 import { ILanguage, Lang } from "../../league-lang/language"
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler"
 
-@commandable
 export default class Arena {
   readonly arena: types.tdm.Arena
   readonly id: number
@@ -59,7 +58,6 @@ export default class Arena {
     return this.arenas[index]
   }
 
-  @command('la') // todo delete me or add check admin rights
   static load(lang?: ILanguage) {
     const path = arenaPath
     if (!existsSync(path)) writeFileSync(path, '[]')

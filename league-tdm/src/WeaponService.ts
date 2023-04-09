@@ -1,4 +1,4 @@
-import { catchError, command, commandable, event, eventable } from "../../league-core";
+import { catchError, event, eventable } from "../../league-core";
 import { Events, tdm, weapon } from "../../league-core/src/types";
 import { State, WeaponState } from "../../league-core/src/types/tdm";
 import { Category } from "../../league-core/src/types/weapon";
@@ -10,7 +10,6 @@ import RoundService from "./RoundService";
 import TaskManager, { Task } from "./TaskManager";
 
 @eventable
-@commandable
 export default class WeaponService {
   private delayedTasks: Task[] = []
 
@@ -78,17 +77,6 @@ export default class WeaponService {
   weaponRequest(player: PlayerMp, weapon?: string) {
     if (!weapon) {
       throw new BroadCastError(Lang["error.weapon.weapon_not_found"], player)
-    }
-
-    const slot = this.validateRequest(player, weapon)
-
-    this.playerService.setWeaponSlot(player, slot, weapon, this.config.ammo)
-  }
-
-  @command(['w', 'weapon'], { desc: Lang["cmd.weapon"] })
-  weaponRequestCmd(player: PlayerMp, fullText: string, description: string, weapon?: string) {
-    if (!weapon) {
-      return player.outputChatBox(description)
     }
 
     const slot = this.validateRequest(player, weapon)
