@@ -33,7 +33,7 @@ export default class PlayerService {
         return
       }
 
-      this.spawnLobby(player, true)
+      this.spawnLobby(player)
     }, this.config.effects.death)
   }
 
@@ -124,7 +124,6 @@ export default class PlayerService {
     if (!force && [
       tdm.State.alive,
       tdm.State.select,
-      tdm.State.spectate,
       tdm.State.idle,
     ].includes(state)) {
       return
