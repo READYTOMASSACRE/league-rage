@@ -4,9 +4,9 @@
 
 
 ### Install
-Move `packages` from archive to `%ragefolder%/server-files/packages`
+Move `packages` from archive to `%ragefolder%/server-files/`
 
-Move `client_packages` from archive to `%ragefolder%/server-files/client_packages`
+Move `client_packages` from archive to `%ragefolder%/server-files/`
 
 ...
 

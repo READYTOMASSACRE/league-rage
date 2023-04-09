@@ -14,7 +14,7 @@ const Header = () => {
       <div className={styles.btncont} onClick={() => setShrink && setShrink(!shrink)}>
         <Menu className={styles.icon}/>
       </div>
-      <div className={styles.title}>some informnation</div>
+      <div className={styles.title}>Game panel</div>
       <div className={styles.btncont}>
         <Close className={styles.icon}/>
       </div>

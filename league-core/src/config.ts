@@ -102,7 +102,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       prepare: 5,
       timeleft: 300,
       watcher: {
-        alive: true,
+        alive: false,
       }
     },
     vote: {
