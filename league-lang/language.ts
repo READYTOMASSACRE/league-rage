@@ -94,7 +94,7 @@ export const enum Lang {
   "controls.f4" = "controls.f4",
 
   "cef.chat.input" = "cef.chat.input",
-  "cef.spectate.text" = "cef.chat.text",
+  "cef.spectate.text" = "cef.spectate.text",
   "cef.spectate.btn_right" = "cef.spectate.btn_right",
   "cef.spectate.btn_left" = "cef.spectate.btn_left",
   "cef.panel.profile_title" = "cef.panel.profile_title",

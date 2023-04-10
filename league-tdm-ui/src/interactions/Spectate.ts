@@ -1,6 +1,6 @@
 import { event, eventable } from "../../../league-core/client"
 import { Events, Procs } from "../../../league-core/src/types"
-import { Entity, State } from "../../../league-core/src/types/tdm"
+import { Entity, State, Team } from "../../../league-core/src/types/tdm"
 import DummyService from "../DummyService"
 import console from "../helpers/console"
 import { isPlayer } from "../helpers/guards"
@@ -233,10 +233,17 @@ export default class Spectate {
   private get players() {
     try {
       const players = this.dummyService.get(Entity.ROUND, 'players')
+      const localTeam = this.playerService.getTeam()
 
       return players
         .map((id) => mp.players.atRemoteId(id))
-        .filter((player) => mp.players.exists(player) && this.playerService.getState(player) === State.alive)
+        .filter((player) => (
+          mp.players.exists(player) &&
+          this.playerService.getState(player) === State.alive && (
+            localTeam === Team.spectators ||
+            localTeam === this.playerService.getTeam(player)
+          )
+        ))
     } catch (err) {
       this.stop(err)
 

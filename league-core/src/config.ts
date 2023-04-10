@@ -49,13 +49,13 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         name: "Sentinel",
         skins: ["u_m_y_imporage", "s_m_y_mime"],
         color: "#85abce",
-        blipColor: 2,
+        blipColor: 3,
       },
       spectators: {
         name: "Spectators",
         skins: ["cs_priest", "csb_vagspeak"],
         color: "#ffffff",
-        blipColor: 0,
+        blipColor: 4,
       },
     },
     weapon: {

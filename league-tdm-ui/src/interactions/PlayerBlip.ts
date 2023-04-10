@@ -1,4 +1,5 @@
 import { event, eventable } from "../../../league-core/client";
+import { State } from "../../../league-core/src/types/tdm";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";
 import console from "../helpers/console";
@@ -24,8 +25,15 @@ export default class PlayerBlip {
         const local = this.playerService.getTeam()
         const enemy = this.playerService.getTeam(entity)
         const team = this.teamService.getTeam(local)
+        const enemyState = this.playerService.getState(entity)
 
-        if (local !== enemy || !team) return
+        if (
+          local !== enemy ||
+          enemyState === State.spectate ||
+          !team
+        ) {
+          return
+        }
         
         entity.createBlip(1)
   

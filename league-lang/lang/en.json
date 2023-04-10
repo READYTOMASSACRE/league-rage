@@ -93,6 +93,9 @@
   "controls.f4": " - смена команды",
 
   "cef.chat.input": "Введите текст",
+  "cef.spectate.text": "Сменить игрока",
+  "cef.spectate.btn_right": "Влево",
+  "cef.spectate.btn_left": "Вправо",
   "cef.panel.profile_title": "Профиль игрока",
   "cef.panel.matches_title": "Матчи игрока",
   "cef.panel.vote_title": "Голосование",

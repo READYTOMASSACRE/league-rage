@@ -145,8 +145,9 @@ export default class PlayerService {
     return mp.players.local
   }
 
-  private syncHealth() {
+  private syncHealth(force?: boolean) {
     if (
+      force ||
       typeof this.getVariable(this.local, 'health') !== 'number' ||
       this.getVariable(this.local, 'health') > (this.local.getHealth() + 1)
     ) {

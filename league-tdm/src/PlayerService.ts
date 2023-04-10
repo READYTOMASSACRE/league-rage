@@ -136,6 +136,7 @@ export default class PlayerService {
 
     this.setState(player, tdm.State.idle)
     this.spawn(player, new mp.Vector3(this.config.lobby))
+    this.setHealth(player, 100)
     player.call(Events["tdm.player.spawn_lobby"])
     mp.events.call(Events["tdm.player.spawn_lobby"], player.id)
   }
