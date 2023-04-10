@@ -3,7 +3,7 @@ import * as styles from '../../styles/panel.module.sass'
 
 export default () => {
   return (
-    <div className={styles.about}>
+    <div>
       About
       Testers:
         Young
