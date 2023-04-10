@@ -9,6 +9,8 @@ export default () => {
         Young
         sofly
         Max_Burg
+        Alex_Dev
+        PATRIOT
       Contributors:
         readytomassacre
         sabgrad

@@ -26,9 +26,4 @@ export default class Effects {
   playerDeath() {
     mp.game.graphics.startScreenEffect("DeathFailOut", toMs(this.config.death), false)
   }
-
-  @event(Events["tdm.round.end"])
-  rounEnd() {
-    mp.game.graphics.stopScreenEffect("DeathFailOut")
-  }
 }

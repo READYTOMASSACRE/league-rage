@@ -13,6 +13,12 @@ export default class PlayerService {
     this.interval = setInterval(() => this.syncHealth(), this.syncMs)
   }
 
+  @event("playerReady")
+  playerReady() {
+    mp.game.audio.startAudioScene("CHARACTER_CHANGE_IN_SKY_SCENE")
+    mp.game.audio.setAudioFlag("DisableFlightMusic", true)
+  }
+
   getState(player?: PlayerMp): State | undefined {
     player = player || this.local
 
