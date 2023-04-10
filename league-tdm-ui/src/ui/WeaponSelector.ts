@@ -37,6 +37,13 @@ export default class WeaponRequest {
 
     this.request(true)
   }
+
+  @event([Events["tdm.vote.end"], Events["tdm.round.remove"], "playerDeath"])
+  close() {
+    if (this.visible) {
+      return this.request(false)
+    }
+  }
   
   @event(Events["tdm.weapon.request"])
   request(visible?: boolean) {
