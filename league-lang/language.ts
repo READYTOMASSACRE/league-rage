@@ -92,6 +92,8 @@ export const enum Lang {
   "controls.tab" = "controls.tab",
   "controls.f2" = "controls.f2",
   "controls.f4" = "controls.f4",
+
+  "cef.description.tdm_arena" = "cef.description.tdm_arena",
 }
 
 export interface ILanguage {

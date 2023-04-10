@@ -81,6 +81,7 @@ export default class PlayerService {
   @event(Events["tdm.player.spawn_lobby"])
   onSpawnLobby() {
     this.freezePosition(false)
+    mp.game.graphics.stopScreenEffect("DeathFailOut")
   }
 
   getStatistic(player?: PlayerMp) {
