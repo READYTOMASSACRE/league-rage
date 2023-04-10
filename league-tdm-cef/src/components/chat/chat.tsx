@@ -38,7 +38,6 @@ const Chat = () => {
         
                         return [...prev, chatItem.message]
                     })
-                    setActive(MAX_CHAT_ALIVE)
                 }
             } catch (err) {
                 cefLog(err)
@@ -53,6 +52,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (ref.current) ref.current?.scrollIntoView()
+        setActive(MAX_CHAT_ALIVE)
     }, [history])
 
     useEffect(() => {
