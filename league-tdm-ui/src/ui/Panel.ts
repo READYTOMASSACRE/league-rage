@@ -1,5 +1,5 @@
 import { event, eventable, logClient } from "../../../league-core/client";
-import { Events, Procs, userId } from "../../../league-core/src/types";
+import { Events, IConfig, Procs, userId } from "../../../league-core/src/types";
 import { PanelData } from "../../../league-core/src/types/statistic";
 import ArenaService from "../ArenaService";
 import console from "../helpers/console";
@@ -13,6 +13,7 @@ export default class Panel {
   public visible: boolean = false
 
   constructor(
+    readonly title: string,
     readonly uiService: UIService,
     readonly keybindService: KeybindService,
     readonly arenaService: ArenaService,
@@ -50,6 +51,7 @@ export default class Panel {
         rounds,
         visible: this.visible,
         arenas: this.arenaService.arenas,
+        title: this.title,
       }
   
       this.uiService.cef.call(Events["tdm.cef.panel"], data)

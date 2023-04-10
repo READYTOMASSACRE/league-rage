@@ -4,6 +4,7 @@ import { CurrentPlayer } from '../../../../league-core/src/types/spectate'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './spectate.module.sass'
+import { Lang } from '../../../../league-lang/language'
 
 export default () => {
   const [current, set] = useState<CurrentPlayer>()
@@ -32,9 +33,9 @@ export default () => {
         <span>A {current.assists}</span>
       </div>
       <div className={styles.controls}>
-        <div>Сменить игрока</div>
-        <div><span>A</span>Влево</div>
-        <div><span>D</span>Вправо</div>
+        <div>{RageAPI.lang.get(Lang['cef.spectate.text'])}</div>
+        <div><span>A</span>{RageAPI.lang.get(Lang['cef.spectate.btn_left'])}</div>
+        <div><span>D</span>{RageAPI.lang.get(Lang['cef.spectate.btn_right'])}</div>
       </div>
     </div>
   )

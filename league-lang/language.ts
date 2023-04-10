@@ -93,16 +93,32 @@ export const enum Lang {
   "controls.f2" = "controls.f2",
   "controls.f4" = "controls.f4",
 
-  "cef.description.tdm_arena" = "cef.description.tdm_arena",
+  "cef.chat.input" = "cef.chat.input",
+  "cef.spectate.text" = "cef.chat.text",
+  "cef.spectate.btn_right" = "cef.spectate.btn_right",
+  "cef.spectate.btn_left" = "cef.spectate.btn_left",
+  "cef.panel.profile_title" = "cef.panel.profile_title",
+  "cef.panel.matches_title" = "cef.panel.matches_title",
+  "cef.panel.vote_title" = "cef.panel.vote_title",
+  "cef.panel.about_title" = "cef.panel.about_title",
+  "cef.panel.about_description" = "cef.panel.about_description",
+  "cef.panel.vote_arena" = "cef.panel.vote_arena",
+  "cef.panel.vote_base" = "cef.panel.vote_base",
+  "cef.panel.vote_player" = "cef.panel.vote_player",
+  "cef.panel.navbar_profile" = "cef.panel.navbar_profile",
+  "cef.panel.navbar_matches" = "cef.panel.navbar_matches",
+  "cef.panel.navbar_vote" = "cef.panel.navbar_vote",
+  "cef.panel.navbar_about" = "cef.panel.navbar_about",
 }
 
 export interface ILanguage {
   get(code: Lang, replacements?: Record<string, string | number>): string
   change(lang: Record<Lang, string>): void
+  language: Record<Lang, string>
 }
 
 export class Language implements ILanguage {
-  constructor(private language: Record<Lang, string>) {}
+  constructor(public language: Record<Lang, string>) {}
 
   get(code: Lang, replacements: Record<string, string | number> = {}) {
     const text = this.language[code]

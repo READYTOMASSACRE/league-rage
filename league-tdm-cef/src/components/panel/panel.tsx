@@ -14,11 +14,9 @@ import cefLog from '../../helpers/cefLog'
 import { Arena } from '../../../../league-core/src/types/tdm'
 
 export default () => {
-
+  const [active, setActive] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
-
-  const [active, setActive] = useState<boolean>(false)
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
   const [arenas, setArenas] = useState<Record<number, Arena>>()

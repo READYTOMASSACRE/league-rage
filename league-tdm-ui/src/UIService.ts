@@ -7,6 +7,7 @@ import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import TeamService from "./TeamService";
+import console from "./helpers/console";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
 import Deathlog from "./ui/Deathlog";
@@ -70,7 +71,7 @@ export default class UIService {
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
     this.deathlog = new Deathlog(this, playerService, teamService)
     this.motd = new Motd(config, this, keybindService)
-    this.panel = new Panel(this, keybindService, arenaService)
+    this.panel = new Panel(config.name, this, keybindService, arenaService)
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
     this.winner = new Winner(this, teamService)
@@ -120,5 +121,19 @@ export default class UIService {
   @event(Events["tdm.ui.ready"])
   ready() {
     mp.events.callRemote(Events["tdm.client.ready"])
+    this.refreshCefLanguage()
+  }
+
+  @event(Events["tdm.language"])
+  refreshCefLanguage(lang?: string) {
+    if (typeof lang === 'string') {
+      try {
+        this.lang.change(JSON.parse(lang))
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    this.cef.call(Events["tdm.language"], this.lang.language)
   }
 }

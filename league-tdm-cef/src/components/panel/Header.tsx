@@ -4,6 +4,7 @@ import Menu from 'jsx:../../../public/assets/svg/menu.svg'
 import Close from 'jsx:../../../public/assets/svg/close.svg'
 
 import * as styles from './styles/panel.module.sass'
+import RageAPI from '../../helpers/RageAPI'
 
 const Header = ({ title }: { title: string }) => {
 
@@ -16,7 +17,7 @@ const Header = ({ title }: { title: string }) => {
       </div>
       <div className={styles.title}>{title}</div>
       <div className={styles.btncont}>
-        <Close className={styles.icon}/>
+        <Close className={styles.icon} onClick={() => RageAPI.panelClose()}/>
       </div>
     </div>
   )

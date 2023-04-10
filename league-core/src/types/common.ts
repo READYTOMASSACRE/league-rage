@@ -224,6 +224,8 @@ export const enum Events {
   'tdm.profile.login' = 'tdm.profile.login',
   /** Fires when clientsilde should update arenas */
   'tdm.arena.refresh' = 'tdm.arena.refresh',
+  /** Fires when clientside/cef recieved language */
+  'tdm.language' = 'tdm.language',
 }
 
 export const enum Procs {

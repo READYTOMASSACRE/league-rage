@@ -5,33 +5,14 @@ import * as styles from '../../styles/panel.module.sass'
 
 import VotingCategoryItem from './VotingCategoryItem'
 import VotingItem from './VotingItem'
+import RageAPI from '../../../../helpers/RageAPI'
+import { Lang } from '../../../../../../league-lang/language'
 
 interface Props {
   arenas?: Record<number, Arena>
 }
 
-const voteCategory = [
-  {title: 'Arenas'},
-  {title: 'Bases'},
-  {title: 'Players'},
-]
-
-const arenasData = [
-  {name: 'arena 0'},
-  {name: 'arena 1'},
-  {name: 'arena 2'},
-  {name: 'arena 3'},
-  {name: 'arena 4'},
-  {name: 'arena 5'},
-  {name: 'arena 6'},
-  {name: 'arena 7'},
-  {name: 'arena 8'},
-  {name: 'arena 9'},
-  {name: 'arena 10'},
-]
-
 const Voting: FC<Props> = ({ arenas }) => {
-
   const [currentCategory, setCurrentCategory] = useState('')
 
   const items = useMemo(() => {
@@ -42,13 +23,29 @@ const Voting: FC<Props> = ({ arenas }) => {
     })
   }, [arenas])
 
+  const voteCategory = [
+    RageAPI.lang.get(Lang['cef.panel.vote_arena']),
+    RageAPI.lang.get(Lang['cef.panel.vote_base']),
+    RageAPI.lang.get(Lang['cef.panel.vote_player']),
+  ]
+
   return (
-    <div className={styles.voting}>
-      <div className={styles.votingTop}>
-        {voteCategory.map((category) => <VotingCategoryItem key={category.title} setCategory={setCurrentCategory} current={currentCategory} title={category.title}/>)}
-      </div>
-      <div className={styles.votingCenter}>
-        {items}
+    <div>
+      <h1>{RageAPI.lang.get(Lang['cef.panel.vote_title'])}</h1>
+      <div className={styles.voting}>
+        <div className={styles.votingTop}>
+          {voteCategory.map((category) => (
+            <VotingCategoryItem
+              key={category}
+              setCategory={setCurrentCategory}
+              current={currentCategory}
+              title={category}
+            />
+          ))}
+        </div>
+        <div className={styles.votingCenter}>
+          {items}
+        </div>
       </div>
     </div>
   )

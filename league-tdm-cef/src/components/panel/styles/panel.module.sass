@@ -120,6 +120,7 @@
   justify-content: space-between
 
 .profileCenter
+  margin-top: 5px
   height: max-content
   grid-row: 2 / 3
   gap: 30px 15px
@@ -213,3 +214,30 @@
 
 .page
   padding: 15px
+  & h1
+    border-bottom: 1px solid white
+
+.about
+  display: flex
+  flex-direction: column
+
+.aboutContributors
+  display: flex
+  flex-direction: row
+  margin-top: 5px
+  justify-content: space-evenly
+  & > div
+    padding-right: 15px
+    padding-top: 5px
+  & div.dev
+    color: $yellow
+  & div.qa
+    color: $yellowgreen
+  & ul
+    list-style-type: none
+    columns: 2
+  & li
+    font-size: 0.8em
+
+.aboutDesc
+  margin: 5px 0

@@ -72,6 +72,7 @@ export type PanelData = {
   rounds: Round[]
   visible: boolean
   arenas: Record<number, Arena>
+  title?: string
 }
 
 export type AuthType = 'pending' | 'social' | 'auth' | 'error'

@@ -92,5 +92,17 @@
   "controls.f2": " - игровое меню",
   "controls.f4": " - смена команды",
 
-  "cef.description.tdm_arena": "TDM Arenas - матч между двумя командами, цель: уничтожить команду соперника. Матч завршается когда нет никого в живых, либо по окончанию таймера"
+  "cef.chat.input": "Введите текст",
+  "cef.panel.profile_title": "Профиль игрока",
+  "cef.panel.matches_title": "Матчи игрока",
+  "cef.panel.vote_title": "Голосование",
+  "cef.panel.about_title": "О сервере",
+  "cef.panel.about_description": "TDM - матч между двумя командами, основная цель: уничтожить команду соперника. Матч завершается, когда нет никого в живых, либо по окончанию таймера",
+  "cef.panel.vote_arena": "Арены",
+  "cef.panel.vote_base": "Базы",
+  "cef.panel.vote_player": "Игроки",
+  "cef.panel.navbar_profile": "Профиль",
+  "cef.panel.navbar_matches": "Матчи",
+  "cef.panel.navbar_vote": "Голосование",
+  "cef.panel.navbar_about": "О сервере"
 }

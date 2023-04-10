@@ -1,8 +1,17 @@
 import { Enviroment, Events } from "../../../league-core/src/types"
+import { ILanguage, Lang, Language } from '../../../league-lang/language'
+import cefLog from "./cefLog"
 
 export default new class RageAPI {
   private ready: boolean = false
   private events: Map<string, Function> = new Map()
+  public lang: ILanguage
+
+  constructor() {
+    this.updateLanguage = this.updateLanguage.bind(this)
+    this.subscribe(Events["tdm.language"], 'language', this.updateLanguage)
+    this.lang = new Language(<Record<Lang, string>>{})
+  }
 
   subscribe(event: string, component: string, handler: Function) {
     const key = `${event}.${component}`
@@ -52,6 +61,18 @@ export default new class RageAPI {
 
   voteArenaRequest(id: string | number) {
     mp.trigger(Events["tdm.cef.vote.arena_request"], id)
+  }
+
+  updateLanguage(lang?: string) {
+    try {
+      if (!lang || typeof lang !== 'string') {
+        return
+      }
+
+      this.lang.change(JSON.parse(lang))
+    } catch (err) {
+      cefLog(err)
+    }
   }
 
   sendReady() {
