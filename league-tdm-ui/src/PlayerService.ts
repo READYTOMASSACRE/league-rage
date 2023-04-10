@@ -1,5 +1,5 @@
 import { Events, Procs } from "../../league-core/src/types";
-import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
+import { PlayerData, State, StateDimensions, Team, WeaponState } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
 import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
 import { event, eventable } from "../../league-core/client";
@@ -13,9 +13,9 @@ export default class PlayerService {
     this.interval = setInterval(() => this.syncHealth(), this.syncMs)
   }
 
-  @event("playerReady")
+  @event(Events["tdm.ui.ready"])
   playerReady() {
-    mp.game.audio.startAudioScene("CHARACTER_CHANGE_IN_SKY_SCENE")
+    mp.game.audio.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE")
     mp.game.audio.setAudioFlag("DisableFlightMusic", true)
   }
 
@@ -70,6 +70,15 @@ export default class PlayerService {
 
   getDimension(player?: PlayerMp) {
     return (player || this.local).dimension
+  }
+
+  getDimensionByState(state?: State, player?: PlayerMp) {
+    player = player ?? this.local
+    state = state ?? this.getState(player)
+
+    return state === State.select ?
+      StateDimensions.select + player.remoteId :
+      StateDimensions[state] ?? StateDimensions.idle
   }
 
   setInvicible(toggle: boolean, player?: PlayerMp) {

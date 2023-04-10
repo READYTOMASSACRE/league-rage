@@ -1,7 +1,7 @@
 import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
 import { Role } from "../../league-core/src/types/permission";
-import { PlayerData } from "../../league-core/src/types/tdm";
+import { PlayerData, StateDimensions } from "../../league-core/src/types/tdm";
 import TaskManager from "./TaskManager";
 
 @eventable
@@ -80,10 +80,8 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  spawn(p: number | PlayerMp, vector: IVector3, dimension: number = 0) {
-    const player = <PlayerMp>p
-    player.spawn(new mp.Vector3(vector))
-    player.dimension = dimension
+  spawn(p: number | PlayerMp, vector: IVector3) {
+    (<PlayerMp>p).spawn(new mp.Vector3(vector))
   }
 
   @ensurePlayer
@@ -107,6 +105,11 @@ export default class PlayerService {
   setState(p: number | PlayerMp, state: tdm.State) {
     const player = <PlayerMp>p
 
+    const dimension = state === tdm.State.select ?
+      StateDimensions.select + player.id :
+      StateDimensions[state] ?? StateDimensions.idle
+
+    player.dimension = dimension
     this.setVariable(player, 'state', state)
     mp.players.call(Events["tdm.player.state"], [player.id, state])
   }
@@ -132,7 +135,7 @@ export default class PlayerService {
     }
 
     this.setState(player, tdm.State.idle)
-    this.spawn(player, new mp.Vector3(this.config.lobby), 1)
+    this.spawn(player, new mp.Vector3(this.config.lobby))
     player.call(Events["tdm.player.spawn_lobby"])
     mp.events.call(Events["tdm.player.spawn_lobby"], player.id)
   }

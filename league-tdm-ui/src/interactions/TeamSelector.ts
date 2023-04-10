@@ -1,6 +1,7 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { deepclone, toId } from "../../../league-core/src/helpers";
 import { Events, tdm } from "../../../league-core/src/types";
+import { State } from "../../../league-core/src/types/tdm";
 import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
@@ -61,6 +62,8 @@ class TeamSelector implements TeamSelectorConfig {
       }
     }
 
+    const dimension = this.playerService.getDimensionByState(State.select)
+
     for (const [team, data] of Object.entries(this.teamService.teams)) {
       const peds = data.skins.map(skin => ({
         skin,
@@ -68,7 +71,7 @@ class TeamSelector implements TeamSelectorConfig {
           mp.game.joaat(skin),
           new mp.Vector3(...this.ped.vector),
           this.ped.heading,
-          this.ped.dimension
+          dimension
         )
       }))
 

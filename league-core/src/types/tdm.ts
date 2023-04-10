@@ -16,6 +16,14 @@ export enum State {
   select = 'select',
 }
 
+export const StateDimensions = {
+  [State.alive]: 0,
+  [State.spectate]: 0,
+  [State.idle]: 1,
+  [State.dead]: 1,
+  [State.select]: 10,
+}
+
 export enum RoundState {
   prepare = 'prepare',
   running = 'running',
