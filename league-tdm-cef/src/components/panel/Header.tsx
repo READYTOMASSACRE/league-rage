@@ -5,7 +5,7 @@ import Close from 'jsx:../../../public/assets/svg/close.svg'
 
 import * as styles from './styles/panel.module.sass'
 
-const Header = () => {
+const Header = ({ title }: { title: string }) => {
 
   const { shrink, setShrink } = useContext(ShrinkNavbar)
 
@@ -14,7 +14,7 @@ const Header = () => {
       <div className={styles.btncont} onClick={() => setShrink && setShrink(!shrink)}>
         <Menu className={styles.icon}/>
       </div>
-      <div className={styles.title}>Game panel</div>
+      <div className={styles.title}>{title}</div>
       <div className={styles.btncont}>
         <Close className={styles.icon}/>
       </div>

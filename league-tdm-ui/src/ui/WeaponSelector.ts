@@ -28,6 +28,15 @@ export default class WeaponRequest {
     this.keybindService.bind(key.b, true, WeaponRequest.key, this.request)
     this.data = this.getData()
   }
+
+  @event(Events["tdm.round.prepare"])
+  roundPrepare(arenaId: number, players: number[]) {
+    if (!players.includes(this.playerService.local.remoteId)) {
+      return
+    }
+
+    this.request(true)
+  }
   
   @event(Events["tdm.weapon.request"])
   request(visible?: boolean) {

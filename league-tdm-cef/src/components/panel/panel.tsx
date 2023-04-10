@@ -22,6 +22,7 @@ export default () => {
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
   const [arenas, setArenas] = useState<Record<number, Arena>>()
+  const [title, setTitle] = useState('Game panel')
 
   useEffect(() => {
     RageAPI.subscribe(Events['tdm.cef.panel'], 'panel', (data: string | boolean) => {
@@ -36,6 +37,7 @@ export default () => {
           rounds = [],
           visible,
           arenas,
+          title = 'Game panel',
         } = JSON.parse(data)
 
         cefLog(data)
@@ -43,6 +45,7 @@ export default () => {
         setRounds(rounds)
         setActive(visible)
         setArenas(arenas)
+        setTitle(title)
       } catch (err) {
         cefLog(err)
       }
@@ -61,7 +64,7 @@ export default () => {
     <div className={styles.root}>
       <CurrentPage.Provider value={{ currentPage, setCurrentPage }}>
       <ShrinkNavbar.Provider value={{ shrink, setShrink }}>
-        <Header />
+        <Header title={title} />
         <Navbar />
         <Main rounds={rounds} profile={profile} arenas={arenas}/>
       </ShrinkNavbar.Provider>

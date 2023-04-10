@@ -80,8 +80,10 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  spawn(p: number | PlayerMp, vector: IVector3) {
-    (p as PlayerMp).spawn(new mp.Vector3(vector))
+  spawn(p: number | PlayerMp, vector: IVector3, dimension: number = 0) {
+    const player = <PlayerMp>p
+    player.spawn(new mp.Vector3(vector))
+    player.dimension = dimension
   }
 
   @ensurePlayer
@@ -130,7 +132,7 @@ export default class PlayerService {
     }
 
     this.setState(player, tdm.State.idle)
-    player.spawn(new mp.Vector3(this.config.lobby))
+    this.spawn(player, new mp.Vector3(this.config.lobby), 1)
     player.call(Events["tdm.player.spawn_lobby"])
     mp.events.call(Events["tdm.player.spawn_lobby"], player.id)
   }
