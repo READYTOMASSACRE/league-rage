@@ -5,6 +5,7 @@ export type CurrentPlayer = {
   death: number
   assists: number
   id: number
+  spectate: string[]
 }
 
 export type SpectateData = {

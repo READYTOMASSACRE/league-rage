@@ -107,6 +107,8 @@ export default class UIService {
   disableControlActions() {
     mp.game.controls.disableControlAction(24, 37, true)
     mp.game.controls.disableControlAction(24, 157, true)
+    mp.game.ui.hideHudComponentThisFrame(7)
+    mp.game.ui.hideHudComponentThisFrame(9)
   }
 
   @logClient

@@ -20,12 +20,6 @@ export default class Motd {
   @event(Events["tdm.ui.ready"])
   ready() {
     this.toggle(true)
-    mp.events.call(Events["tdm.chat.push"], {
-      message: [
-        [`[${this.config.prefix}]:`, '#ffd400'],
-        [this.config.welcomeText.replace(':player', mp.players.local.name), '#fff'],
-      ]
-    }, Enviroment.client)
     this.uiService.cef.call(Events["tdm.cef.gamemode"], this.config.name + ' // ' + this.config.version)
   }
 

@@ -19,8 +19,14 @@ const WeaponHud: FC = ({ }) => {
   const [currentWeapon, setCurrentWeapon] = useState<string>('')
 
   useEffect(() => {
-    RageAPI.subscribe(Events['tdm.cef.weapon_hud'], 'weapon_hud', (playerWeapons: string, currentWeapon?: string) => {
+    RageAPI.subscribe(Events['tdm.cef.weapon_hud'], 'weapon_hud', (playerWeapons?: string, currentWeapon?: string) => {
       try {
+        if (!playerWeapons) {
+          setPlayerWeapons(void 0)
+          setCurrentWeapon('')
+          return
+        }
+
         setPlayerWeapons(JSON.parse(playerWeapons))
         if (currentWeapon) setCurrentWeapon(currentWeapon)
       } catch(err) {

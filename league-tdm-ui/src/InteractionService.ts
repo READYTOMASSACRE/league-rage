@@ -1,5 +1,6 @@
-import { event, eventable } from "../../league-core/client";
+import { event, eventable, logClient } from "../../league-core/client";
 import { ClientConfig, Events } from "../../league-core/src/types";
+import { State, Team } from "../../league-core/src/types/tdm";
 import DummyService from "./DummyService";
 import PlayerBlip from "./interactions/PlayerBlip";
 import Spectate from "./interactions/Spectate";
@@ -41,6 +42,7 @@ export default class InteractionService {
     this.teamSelector.run()
   }
 
+  @logClient
   @event(Events["tdm.spectate.start"])
   startSpectate(player: number) {
     this.spectate.run(player)
@@ -49,5 +51,10 @@ export default class InteractionService {
   @event([Events["tdm.spectate.stop"], Events["tdm.round.end"]])
   stopSpectate() {
     this.spectate.stop()
+  }
+
+  @event(Events["tdm.spectate.turn"])
+  turnSpectate(direction: 'right' | 'left' = 'right') {
+    this.spectate.turn(direction)()
   }
 }

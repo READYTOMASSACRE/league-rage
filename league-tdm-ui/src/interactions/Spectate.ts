@@ -190,7 +190,7 @@ export default class Spectate {
     mp.events.call(Events["tdm.spectate.prepare"], this.streamingPlayer.remoteId)
   }
 
-  private turn(direction: 'right' | 'left') {
+  turn(direction: 'right' | 'left') {
     return () => {
       try {
         if (!this.running) {

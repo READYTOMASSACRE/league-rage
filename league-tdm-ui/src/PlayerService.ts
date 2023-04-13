@@ -27,6 +27,13 @@ export default class PlayerService {
     }
   }
 
+  hasState(player?: PlayerMp, state: State | State[] = []) {
+    player = player ?? this.local
+    state = Array.isArray(state) ? state : [state]
+
+    return state.includes(this.getState(player))
+  }
+
   getTeam(player?: PlayerMp): Team | undefined {
     player = player || this.local
     
@@ -39,6 +46,20 @@ export default class PlayerService {
     return this.getTeam() === this.getTeam(player)
   }
 
+  inRound(player?: PlayerMp) {
+    player = player ?? this.local
+
+    return this.hasState(player, [State.alive, State.prepare])
+  }
+
+  getSpectatePlayers(player?: PlayerMp): PlayerMp[] {
+    player = player ?? this.local
+
+    return mp.players.toArray().filter(target => (
+      player.remoteId === this.getVariable(target, 'spectate')
+    ))
+  }
+
   get alive(): boolean {
     return this.getVariable(this.local, 'state') === State.alive
   }
@@ -48,7 +69,7 @@ export default class PlayerService {
   }
 
   get canSelectWeapon(): boolean {
-    return this.getVariable(this.local, 'weaponState') === WeaponState.idle
+    return this.getVariable(this.local, 'weaponState') === WeaponState.idle && this.inRound()
   }
 
   setPosition(vector: Vector3, player?: PlayerMp) {

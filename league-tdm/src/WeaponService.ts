@@ -95,7 +95,7 @@ export default class WeaponService {
     if (
       !this.config.friendlyfire &&
       this.playerService.getTeam(player) === this.playerService.getTeam(source) &&
-      this.playerService.hasState(player, tdm.State.alive)
+      this.playerService.inRound(player)
     ) {
       return
     }
@@ -143,6 +143,10 @@ export default class WeaponService {
     }
 
     if (this.playerService.getTeam(player) === tdm.Team.spectators) {
+      throw new BroadCastError(Lang["error.weapon.is_busy"], player)
+    }
+
+    if (!this.playerService.inRound(player)) {
       throw new BroadCastError(Lang["error.weapon.is_busy"], player)
     }
 

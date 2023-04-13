@@ -99,7 +99,7 @@ export default class RoundService {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
-    if (this.playerService.hasState(player, State.alive)) {
+    if (this.playerService.inRound(player)) {
       throw new BroadCastError(Lang["error.player.in_round"], player, { player: player.name })
     }
 
@@ -118,7 +118,7 @@ export default class RoundService {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
-    if (!this.playerService.hasState(player, State.alive)) {
+    if (!this.playerService.inRound(player)) {
       throw new BroadCastError(Lang["error.player.not_in_round"], player, { player: player.name })
     }
 
