@@ -1,9 +1,12 @@
-import { eventable, event, ensurePlayer, commandable, command, helpers } from "../../league-core";
+import { eventable, event, ensurePlayer, commandable, command, helpers, catchError } from "../../league-core";
+import { deepclone } from "../../league-core/src/helpers";
 import DummyService from "../../league-core/src/server/DummyService";
 import { Events, tdm } from "../../league-core/src/types";
 import { Entity } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import PlayerService from "./PlayerService";
+import BroadCastError from "./error/BroadCastError";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @eventable
 @commandable
@@ -23,6 +26,7 @@ export default class TeamService {
     return this.teamSelectRequest(player)
   }
 
+  @catchError(ErrorNotifyHandler)
   @event(Events["tdm.team.select"])
   teamSelect(player: PlayerMp, team?: tdm.Team, model?: string) {
     if (typeof team === 'undefined') {
@@ -32,18 +36,25 @@ export default class TeamService {
     const teamOptions = this.getTeam(team)
 
     if (!teamOptions) {
-      return player.outputChatBox(this.lang.get(Lang["error.team.not_found"], { team }))
+      throw new BroadCastError(Lang["error.team.not_found"], player, { team })
     }
 
     if (this.playerService.getState(player) !== tdm.State.select) {
-      return player.outputChatBox(this.lang.get(Lang["error.team.player_is_busy"]))
+      throw new BroadCastError(Lang["error.team.player_is_busy"], player)
     }
 
     return this.change(player, team, model)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command(['team', 'changeteam', 't'], {desc: Lang["cmd.change_team"]})
   changeTeam(player: PlayerMp, fullText: string, description: string, id: string) {
+    const state = DummyService.get(Entity.ROUND, 'state')
+
+    if (state === tdm.RoundState.prepare) {
+      throw new BroadCastError(Lang["error.is_busy"], player)
+    }
+
     if (!id) {
       return this.teamSelect(player)
     }
@@ -51,7 +62,6 @@ export default class TeamService {
     const teamName = this.hash[id]
     const team = this.getTeam(teamName)
 
-    console.log('team', team, teamName)
     if (!teamName || !team) {
       player.outputChatBox(description)
       return
@@ -89,18 +99,24 @@ export default class TeamService {
     const player = <PlayerMp>p
 
     if (![tdm.State.idle, tdm.State.select].includes(state)) {
-      player.outputChatBox(this.lang.get(Lang["error.team.player_not_in_lobby"]))
+      throw new BroadCastError(Lang["error.team.player_not_in_lobby"], player)
     }
 
     this.playerService.setTeam(p, team)
-    this.playerService.setState(p, tdm.State.idle)
-    this.playerService.spawnLobby(p)
+    this.playerService.spawnLobby(p, true)
 
     if (model) {
       this.playerService.setModel(p, mp.joaat(model))
     }
 
-    player.outputChatBox(this.lang.get(Lang["tdm.team.change"], { team }))
+    const teamData = this.getTeam(team)
+
+    player.outputChatBox({
+      message: [
+        [this.lang.get(Lang["tdm.team.change"]), '#fff'],
+        [teamData.name, teamData.color]
+      ]
+    })
   }
 
   getName(team: tdm.Team | 'draw') {
@@ -126,6 +142,27 @@ export default class TeamService {
       ...team,
       score: team.score + 1,
     })
+  }
+
+  swap() {
+    const attackers = deepclone(DummyService.get(Entity.TEAM, tdm.Team.attackers))
+    const defenders = deepclone(DummyService.get(Entity.TEAM, tdm.Team.defenders))
+
+    const attackerPlayers = this.playerService
+      .getByTeam(tdm.Team.attackers)
+      .filter(player => !this.playerService.hasState(player, tdm.State.select))
+    const defenderPlayers = this.playerService
+      .getByTeam(tdm.Team.defenders)
+      .filter(player => !this.playerService.hasState(player, tdm.State.select))
+
+    DummyService.set(Entity.TEAM, tdm.Team.defenders, attackers)
+    DummyService.set(Entity.TEAM, tdm.Team.attackers, defenders)
+
+    attackerPlayers.forEach(player => this.change(player, tdm.Team.defenders))
+    defenderPlayers.forEach(player => this.change(player, tdm.Team.attackers))
+
+    this.playerService.call(Events["tdm.team.swap"])
+    mp.events.call(Events["tdm.team.swap"])
   }
 
   get hash(): Record<string | number, tdm.Team> {

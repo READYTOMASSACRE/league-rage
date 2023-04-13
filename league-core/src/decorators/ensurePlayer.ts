@@ -8,7 +8,12 @@ export const ensurePlayer = function (target: Object, key: string, descriptor: T
     }
 
     if (!mp.players.exists(player)) {
-      throw new Error(`Player ${player?.id} not found`)
+      try {
+        throw new Error(`Player ${player?.id} not found`)
+      } catch (err) {
+        console.error(err)
+        return
+      }
     }
 
     return child.apply(this, [player, ...args])

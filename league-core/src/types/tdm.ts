@@ -1,4 +1,5 @@
 import { Point2d, Point3d } from "./common"
+import { Role } from "./permission"
 import { PlayerStat, Profile } from "./statistic"
 
 export enum Team {
@@ -13,6 +14,14 @@ export enum State {
   dead = 'dead',
   spectate = 'spectate',
   select = 'select',
+}
+
+export const StateDimensions = {
+  [State.alive]: 0,
+  [State.spectate]: 0,
+  [State.idle]: 1,
+  [State.dead]: 1,
+  [State.select]: 10,
 }
 
 export enum RoundState {
@@ -67,7 +76,7 @@ export type RoundData = {
   arena: string
   state: RoundState
   time: number
-  players: string
+  players: number[]
 }
 
 export type TeamData = Record<Team, { score: number } & TeamOptions>
@@ -94,6 +103,7 @@ export type PlayerData = {
   userId: string
   profile: Profile
   statistic: PlayerStat
+  role: Role,
 }
 
 export enum Vote {

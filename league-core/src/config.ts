@@ -2,6 +2,7 @@ import { DbAdapter, IConfig } from "./types"
 import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
 import { TextStyle } from "./types/ui"
+import { randRange } from "./helpers"
 
 class Config {
   constructor(readonly _c: Partial<IConfig>) {}
@@ -48,13 +49,13 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         name: "Sentinel",
         skins: ["u_m_y_imporage", "s_m_y_mime"],
         color: "#85abce",
-        blipColor: 2,
+        blipColor: 3,
       },
       spectators: {
         name: "Spectators",
         skins: ["cs_priest", "csb_vagspeak"],
         color: "#ffffff",
-        blipColor: 0,
+        blipColor: 4,
       },
     },
     weapon: {
@@ -63,35 +64,36 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       selectTime: 25,
       slot: {
         melee: [WeaponCategory.melee],
-        secondary: [WeaponCategory.handguns],
+        secondary: [WeaponCategory.pistols],
         primary: [
-          WeaponCategory.submachine,
+          WeaponCategory.submachine_guns,
           WeaponCategory.shotguns,
-          WeaponCategory.rifles,
+          WeaponCategory.assault_rifles,
           WeaponCategory.light_rifles,
           WeaponCategory.sniper_rifles
         ],
       },
       category: {
         [WeaponCategory.melee]: ["dagger", "bat", "bottle", "crowbar", "flashlight", "golfclub", "nightstick", "knuckle"],
-        [WeaponCategory.handguns]: ["pistol", "combatpistol", "pistol50", "heavypistol", "revolver_mk2"],
-        [WeaponCategory.submachine]: ["smg"],
-        [WeaponCategory.shotguns]: ["pumpshotgun", "musket"],
-        [WeaponCategory.rifles]: ["assaultrifle", "carbinerifle", "bullpuprifle", "compactrifle"],
-        [WeaponCategory.light_rifles]: ["gusenberg"],
+        [WeaponCategory.pistols]: ["pistol", "combatpistol", "pistol50", "heavypistol", "revolver_mk2"],
+        [WeaponCategory.submachine_guns]: ["smg"],
+        [WeaponCategory.shotguns]: ["pumpshotgun"],
+        [WeaponCategory.assault_rifles]: ["assaultrifle", "carbinerifle", "bullpuprifle", "compactrifle", "gusenberg"],
+        [WeaponCategory.light_rifles]: ["musket"],
         [WeaponCategory.sniper_rifles]: ["sniperrifle"],
       },
       damage: {
         weapon: {
           revolver_mk2: 46,
-          musket: 37,
+          musket: 61,
+          gusenberg: 8,
         },
         category: {
-          handguns: 13,
-          submachine: 9,
+          pistols: 23,
+          submachine_guns: 9,
           shotguns: 5,
-          rifles: 10,
-          light_rifles: 10,
+          assault_rifles: 10,
+          light_rifles: 37,
           sniper_rifles: 41,
         },
       },
@@ -104,7 +106,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
       }
     },
     vote: {
-      arena: 30
+      arena: 20
     },
     hud: {
       roundStart: {
@@ -184,7 +186,9 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     effects: {
       death: 5,
-    }
+    },
+    prefix: 'Server',
+    rcon: new Array(10).fill(0).map(() => String.fromCharCode(randRange(97, 122))).join(''),
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

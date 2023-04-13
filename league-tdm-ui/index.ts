@@ -12,18 +12,21 @@ import UIService from "./src/UIService"
 import WeaponService from "./src/WeaponService"
 import ZoneService from "./src/ZoneService"
 import TeamService from "./src/TeamService"
+import ArenaService from "./src/ArenaService"
 
 const main = async () => {
   try {
     const config: ClientConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
     const lang = await mp.events.callRemoteProc(Procs["tdm.language.get"], config.lang)
     const language = new Language(lang)
-  
+    const arenaService = new ArenaService()
+    await arenaService.loadArenas()
+
     const dummyService = new DummyService()
     const playerService = new PlayerService()
     const teamService = new TeamService(config.team, dummyService)
     const zoneService = new ZoneService(playerService, dummyService)
-    const roundService = new RoundService(zoneService, playerService, await RoundService.getArenas())
+    const roundService = new RoundService(zoneService, playerService, arenaService)
     const keybindService = new KeybindService()
     const uiService = new UIService(
       "package://league-tdm-cef/index.html",
@@ -33,6 +36,7 @@ const main = async () => {
       teamService,
       dummyService,
       roundService,
+      arenaService,
       language
     )
 

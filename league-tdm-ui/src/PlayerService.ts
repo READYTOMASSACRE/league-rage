@@ -1,14 +1,22 @@
 import { Events, Procs } from "../../league-core/src/types";
-import { PlayerData, State, Team, WeaponState } from "../../league-core/src/types/tdm";
+import { PlayerData, State, StateDimensions, Team, WeaponState } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
 import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
+import { event, eventable } from "../../league-core/client";
 
+@eventable
 export default class PlayerService {
   private interval: number = 0
   private syncMs: number = 500
 
   constructor() {
     this.interval = setInterval(() => this.syncHealth(), this.syncMs)
+  }
+
+  @event(Events["tdm.ui.ready"])
+  playerReady() {
+    mp.game.audio.startAudioScene("FBI_HEIST_H5_MUTE_AMBIENCE_SCENE")
+    mp.game.audio.setAudioFlag("DisableFlightMusic", true)
   }
 
   getState(player?: PlayerMp): State | undefined {
@@ -64,6 +72,15 @@ export default class PlayerService {
     return (player || this.local).dimension
   }
 
+  getDimensionByState(state?: State, player?: PlayerMp) {
+    player = player ?? this.local
+    state = state ?? this.getState(player)
+
+    return state === State.select ?
+      StateDimensions.select + player.remoteId :
+      StateDimensions[state] ?? StateDimensions.idle
+  }
+
   setInvicible(toggle: boolean, player?: PlayerMp) {
     (player || this.local).setInvincible(toggle)
   }
@@ -76,8 +93,10 @@ export default class PlayerService {
     (player || this.local).setAlpha(alphaLevel)
   }
 
-  spawnLobby() {
-    mp.events.callRemote(Events["tdm.player.spawn_lobby"])
+  @event(Events["tdm.player.spawn_lobby"])
+  onSpawnLobby() {
+    this.freezePosition(false)
+    mp.game.graphics.stopScreenEffect("DeathFailOut")
   }
 
   getStatistic(player?: PlayerMp) {
@@ -126,8 +145,9 @@ export default class PlayerService {
     return mp.players.local
   }
 
-  private syncHealth() {
+  private syncHealth(force?: boolean) {
     if (
+      force ||
       typeof this.getVariable(this.local, 'health') !== 'number' ||
       this.getVariable(this.local, 'health') > (this.local.getHealth() + 1)
     ) {

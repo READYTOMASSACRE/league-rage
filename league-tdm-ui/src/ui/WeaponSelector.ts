@@ -1,6 +1,6 @@
 import { event, eventable, logClient } from "../../../league-core/client";
 import { cef, Events } from "../../../league-core/src/types";
-import { Entity, RoundState } from "../../../league-core/src/types/tdm";
+import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
 import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
 import { Lang } from "../../../league-lang/language";
 import DummyService from "../DummyService";
@@ -28,6 +28,22 @@ export default class WeaponRequest {
     this.keybindService.bind(key.b, true, WeaponRequest.key, this.request)
     this.data = this.getData()
   }
+
+  @event(Events["tdm.round.prepare"])
+  roundPrepare(arenaId: number, players: number[]) {
+    if (!players.includes(this.playerService.local.remoteId)) {
+      return
+    }
+
+    this.request(true)
+  }
+
+  @event([Events["tdm.vote.end"], Events["tdm.round.remove"], "playerDeath"])
+  close() {
+    if (this.visible) {
+      return this.request(false)
+    }
+  }
   
   @event(Events["tdm.weapon.request"])
   request(visible?: boolean) {
@@ -42,6 +58,10 @@ export default class WeaponRequest {
       }
 
       if (!this.playerService.canSelectWeapon) {
+        throw new PopupError(Lang["error.weapon.is_busy"])
+      }
+
+      if (this.playerService.getTeam() === Team.spectators) {
         throw new PopupError(Lang["error.weapon.is_busy"])
       }
 

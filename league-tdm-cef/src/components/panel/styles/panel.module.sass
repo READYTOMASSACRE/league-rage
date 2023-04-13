@@ -92,6 +92,7 @@
 .main
   grid-area: 2 / 2 / 3 / 3
   border-left: 1px solid $yellow
+  height: inherit
   & > div
     animation: page 0.4s
 
@@ -115,20 +116,17 @@
   grid-row: 1 / 2
   display: flex
   align-items: center
-  padding: 15px 15px
   gap: 15px
-  :nth-child(1)
-    flex-grow: 1
-  :nth-child(2)
-    justify-self: flex-end
+  justify-content: space-between
 
 .profileCenter
+  margin-top: 5px
   height: max-content
   grid-row: 2 / 3
-  padding: 15px 15px
   gap: 30px 15px
   display: flex
   flex-wrap: wrap
+  justify-content: space-between
   div
     width: calc( 30% - 15px )
     align-items: center
@@ -141,9 +139,9 @@
   display: flex
   flex-direction: column
   row-gap: 10px
-  padding: 15px 15px
   overflow: auto
   gap: 5px
+  height: inherit
   & div:nth-child(even)
     background-color: $black2
     &:hover
@@ -213,3 +211,33 @@
   &:hover
     color: #000000
     background: $yellow
+
+.page
+  padding: 15px
+  & h1
+    border-bottom: 1px solid white
+
+.about
+  display: flex
+  flex-direction: column
+
+.aboutContributors
+  display: flex
+  flex-direction: row
+  margin-top: 5px
+  justify-content: space-evenly
+  & > div
+    padding-right: 15px
+    padding-top: 5px
+  & div.dev
+    color: $yellow
+  & div.qa
+    color: $yellowgreen
+  & ul
+    list-style-type: none
+    columns: 2
+  & li
+    font-size: 0.8em
+
+.aboutDesc
+  margin: 5px 0

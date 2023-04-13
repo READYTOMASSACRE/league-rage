@@ -29,7 +29,8 @@ export default class Controls {
       { key: 'B', description: this.lang.get(Lang["controls.b"]) },
       { key: 'T', description: this.lang.get(Lang["controls.t"]) },
       { key: 'Tab', description: this.lang.get(Lang["controls.tab"]) },
-      { key: 'F4', description: this.lang.get(Lang["controls.f4"]) },
+      { key: 'F2', description: this.lang.get(Lang["controls.f2"]) },
+      // { key: 'F4', description: this.lang.get(Lang["controls.f4"]) }, todo add f4 keybindservice
     ]
   }
 }

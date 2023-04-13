@@ -12,7 +12,11 @@ const serverOnly: string[] = [
   Events["tdm.round.add"],
   Events["tdm.round.remove"],
   Events["tdm.round.pause"],
-]
+  Events["tdm.player.spawn_lobby"],
+  Events["tdm.team.swap"],
+  Events["tdm.player.kill"],
+  Events["tdm.player.damage"],
+] // todo enum for ServerEvents
 
 export const eventable = <T extends ctor>(target: T): T => {
   return class extends target {

@@ -6,6 +6,7 @@ import RageAPI from '../../helpers/RageAPI'
 import { ChatItem, ChatMessage } from '../../../../league-core/src/types/cef'
 import { toColor } from '../../../../league-core/src/helpers'
 import cefLog from '../../helpers/cefLog'
+import { Lang } from '../../../../league-lang/language'
 
 const MAX_CHAT_SIZE = 50
 const MAX_CHAR_SIZE = 128
@@ -37,7 +38,6 @@ const Chat = () => {
         
                         return [...prev, chatItem.message]
                     })
-                    setActive(MAX_CHAT_ALIVE)
                 }
             } catch (err) {
                 cefLog(err)
@@ -52,6 +52,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (ref.current) ref.current?.scrollIntoView()
+        setActive(MAX_CHAT_ALIVE)
     }, [history])
 
     useEffect(() => {
@@ -94,7 +95,7 @@ const Chat = () => {
                 autoFocus={true}
                 type="text"
                 value={input}
-                placeholder="Type to chat"
+                placeholder={RageAPI.lang.get(Lang['cef.chat.input'])}
                 onChange={e => setInput(e.target.value)}
                 maxLength={MAX_CHAR_SIZE}
                 disabled={!toggle}

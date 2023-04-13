@@ -1,6 +1,7 @@
 import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
-import { PlayerData } from "../../league-core/src/types/tdm";
+import { Role } from "../../league-core/src/types/permission";
+import { PlayerData, StateDimensions } from "../../league-core/src/types/tdm";
 import TaskManager from "./TaskManager";
 
 @eventable
@@ -20,18 +21,15 @@ export default class PlayerService {
     this.setTeam(player, tdm.Team.spectators)
     this.setWeaponState(player, tdm.WeaponState.idle)
     this.setWeaponSlot(player)
+    this.setRole(player, Role.socialUser)
   }
 
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
+    this.setState(player, tdm.State.dead)
+
     TaskManager.add(() => {
       if (!mp.players.exists(player)) {
-        return
-      }
-
-      const state = this.getState(player)
-
-      if ([tdm.State.alive, tdm.State.select, tdm.State.spectate].includes(state)) {
         return
       }
 
@@ -83,7 +81,7 @@ export default class PlayerService {
 
   @ensurePlayer
   spawn(p: number | PlayerMp, vector: IVector3) {
-    (p as PlayerMp).spawn(new mp.Vector3(vector))
+    (<PlayerMp>p).spawn(new mp.Vector3(vector))
   }
 
   @ensurePlayer
@@ -107,6 +105,11 @@ export default class PlayerService {
   setState(p: number | PlayerMp, state: tdm.State) {
     const player = <PlayerMp>p
 
+    const dimension = state === tdm.State.select ?
+      StateDimensions.select + player.id :
+      StateDimensions[state] ?? StateDimensions.idle
+
+    player.dimension = dimension
     this.setVariable(player, 'state', state)
     mp.players.call(Events["tdm.player.state"], [player.id, state])
   }
@@ -119,10 +122,23 @@ export default class PlayerService {
   }
 
   @ensurePlayer
-  @event(Events["tdm.player.spawn_lobby"])
-  spawnLobby(p: number | PlayerMp) {
+  spawnLobby(p: number | PlayerMp, force?: boolean) {
     const player = <PlayerMp>p
-    player.spawn(new mp.Vector3(this.config.lobby))
+    const state = this.getState(player)
+
+    if (!force && [
+      tdm.State.alive,
+      tdm.State.select,
+      tdm.State.idle,
+    ].includes(state)) {
+      return
+    }
+
+    this.setState(player, tdm.State.idle)
+    this.spawn(player, new mp.Vector3(this.config.lobby))
+    this.setHealth(player, 100)
+    player.call(Events["tdm.player.spawn_lobby"])
+    mp.events.call(Events["tdm.player.spawn_lobby"], player.id)
   }
 
   @ensurePlayer
@@ -206,6 +222,19 @@ export default class PlayerService {
     return this.getVariable(<PlayerMp>p, 'spectate')
   }
 
+  @ensurePlayer
+  getRole(p: number | PlayerMp) {
+    return this.getVariable(<PlayerMp>p, 'role')
+  }
+
+  @ensurePlayer
+  setRole(p: number | PlayerMp, role: Role) {
+    const player = <PlayerMp>p
+
+    this.setVariable(player, 'role', role)
+    mp.events.call(Events["tdm.permission.role"], p, role)
+  }
+
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(
     player: PlayerMp, key: K, value: V
   ) {
@@ -232,5 +261,10 @@ export default class PlayerService {
     } else {
       mp.players.call(playersOrEventName, [...args])
     }
+  }
+
+  @ensurePlayer
+  popup(p: number | PlayerMp, message: string, type: string = 'info') {
+    (<PlayerMp>p).outputPopup(message, type)
   }
 }

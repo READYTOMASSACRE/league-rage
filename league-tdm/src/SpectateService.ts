@@ -1,8 +1,9 @@
-import { command, commandable, event, eventable, proc, proceable } from "../../league-core";
+import { catchError, command, commandable, event, eventable, proc, proceable } from "../../league-core";
 import { Events, Procs } from "../../league-core/src/types";
 import { State, Team } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 
@@ -62,14 +63,15 @@ export default class SpectateService {
     this.stopSpectate(id)
   }
 
+  @catchError(ErrorNotifyHandler)
   @command(['spec', 'spectate'], { desc: Lang["cmd.spectate"] })
   spectate(player: PlayerMp, fullText: string, description: string, id?: string) {
     if (!this.roundService.running) {
-      throw new BroadCastError(this.lang.get(Lang["tdm.round.is_not_running"]), player)
+      throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
     if (![State.dead, State.idle, State.spectate].includes(this.playerService.getState(player))) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.not_same_team"]), player)
+      throw new BroadCastError(Lang["error.spectate.not_same_team"], player)
     }
 
     if (!id) {
@@ -87,26 +89,26 @@ export default class SpectateService {
     }
 
     if (Array.isArray(spectatePlayer)) {
-      const message = this.lang.get(Lang["tdm.player.find_result"], { players: spectatePlayer.map(p => p.name).join(', ') })
-      throw new BroadCastError(message, player)
+      throw new BroadCastError(Lang["tdm.player.find_result"], player, { players: spectatePlayer.map(p => p.name).join(', ') })
     }
 
     if (
       this.playerService.getTeam(player) !== Team.spectators &&
       this.playerService.getTeam(player) !== this.playerService.getTeam(spectatePlayer)
     ) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.not_same_team"]), player)
+      throw new BroadCastError(Lang["error.spectate.not_same_team"], player)
     }
 
     if (!this.playerService.hasState(spectatePlayer, State.alive)) {
       throw new BroadCastError(
-        this.lang.get(Lang["error.player.not_in_round"], { player: spectatePlayer.name }),
-        player
+        Lang["error.player.not_in_round"],
+        player,
+        { player: spectatePlayer.name }
       )
     }
 
     if (spectatePlayer.id === player.id) {
-      throw new BroadCastError(this.lang.get(Lang["error.spectate.same_player"]), player)
+      throw new BroadCastError(Lang["error.spectate.same_player"], player)
     }
 
     this.playerService.setState(player, State.spectate)
@@ -146,6 +148,16 @@ export default class SpectateService {
     return [...targetPlayer.position.toArray(), targetPlayer.dimension]
   }
 
+  @event(Events["tdm.spectate.client_toggle"])
+  clientToggle(player: PlayerMp, toggle: boolean) {
+    if (toggle) {
+      return
+    }
+
+    this.playerService.setVariable(player, 'spectate', undefined)
+    this.playerService.spawnLobby(player)
+  }
+
   private stopSpectate(player: PlayerMp | number) {
     player = typeof player === 'number' ? mp.players.at(player) : player
 
@@ -154,16 +166,5 @@ export default class SpectateService {
     }
 
     this.playerService.call([player.id], Events["tdm.spectate.stop"])
-    this.playerService.setVariable(player, 'spectate', undefined)
-
-    const state = this.playerService.getState(player)
-
-    if (state === State.spectate) {
-      this.playerService.setState(player, State.idle)
-    }
-
-    if (state !== State.alive) {
-      this.playerService.spawnLobby(player)
-    }
   }
 }

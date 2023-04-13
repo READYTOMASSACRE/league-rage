@@ -1,4 +1,7 @@
 {
+  "name": "league-rage",
+  "description": "League TDM gamemode",
+  "version": "0.6a",
   "license": "ISC",
   "scripts": {
     "install": "yarn install:core && yarn install:tdm && yarn install:cef && yarn install:ui && yarn install:lang && yarn install:statistics",

@@ -14,10 +14,10 @@
   overflow-y: auto
   overflow-wrap: break-word
   flex-direction: column
-  justify-content: end
   word-break: break-word
   display: flex
   transition: .1s ease-out all
+  overflow-y: hidden
   & span
     display: flex
   & .item
@@ -26,8 +26,8 @@
     margin-right: 3px
 
 .historyActive
-  justify-content: flex-end
   background: $black2
+  overflow-y: auto
   & span
     &:hover
       background: $black3

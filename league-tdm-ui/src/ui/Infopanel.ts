@@ -1,5 +1,5 @@
 import { event, eventable } from "../../../league-core/client";
-import { cef, Events } from "../../../league-core/src/types";
+import { cef, Events, Procs } from "../../../league-core/src/types";
 import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
 import DummyService from "../DummyService";
 import TeamService from "../TeamService";
@@ -17,6 +17,20 @@ export default class Infopanel {
   ) {}
 
   @event(Events["tdm.ui.ready"])
+  async onReady() {
+    const state = this.dummyService.get(Entity.ROUND, 'state')
+    const time = this.dummyService.get(Entity.ROUND, 'time')
+
+    if (state === RoundState.running) {
+      const timeleft = await mp.events.callRemoteProc(Procs["tdm.round.timeleft"])
+      this.dateStart = Date.now() - (time - timeleft)
+      clearInterval(this.interval)
+      this.interval = setInterval(() => this.sendRoundData(), 1000)
+    }
+
+    this.sendRoundData()
+  }
+
   sendRoundData() {
     if (this.uiService.cef) {
       this.uiService.cef.call(Events["tdm.infopanel.data"], this.data, true)

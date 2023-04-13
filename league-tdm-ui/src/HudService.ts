@@ -42,7 +42,7 @@ export default class HudService {
         }
     }
 
-    @event([Events["tdm.round.start"], Events["tdm.round.end"]]) // todo add check in decorator to server_only events
+    @event([Events["tdm.round.start"], Events["tdm.round.end"]])
     stopDrawRoundStart() {
         if (this.roundStart) {
             this.roundStart.destroy()

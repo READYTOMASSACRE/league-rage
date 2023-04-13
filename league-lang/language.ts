@@ -1,5 +1,7 @@
 export const enum Lang {
+  "error.is_busy" = "error.is_busy",
   "error.permission.invalid" = "error.permission.invalid",
+  "error.permission.invalid_role" = "error.permission.invalid_role",
 
   "error.arena.invalid_format" = "error.arena.invalid_format",
   "error.arena.not_found" = "error.arena.not_found",
@@ -18,6 +20,7 @@ export const enum Lang {
   "error.weapon.slot_not_found" = "error.weapon.slot_not_found",
   "error.weapon.slot_is_busy" = "error.weapon.slot_is_busy",
 
+  "error.not_found" = "error.not_found",
   "error.player.not_found" = "error.player.not_found",
   "error.player.not_in_round" = "error.player.not_in_round",
   "error.player.in_round" = "error.player.in_round",
@@ -35,6 +38,7 @@ export const enum Lang {
   "tdm.player.join" = "tdm.player.join",
   "tdm.player.quit" = "tdm.player.quit",
   "tdm.player.change_name" = "tdm.player.change_name",
+  "tdm.player.login" = "tdm.player.login",
 
   "tdm.round.arena_prepare" = "tdm.round.arena_prepare",
   "tdm.round.arena_prepare_timer" = "tdm.round.arena_prepare_timer",
@@ -61,6 +65,8 @@ export const enum Lang {
 
   "tdm.team.change" = "tdm.team.change",
 
+  "tdm.permission.role" = "tdm.permission.role",
+
   "cmd.cmdlist" = "cmd.cmdlist",
   "cmd.kill" = "cmd.kill",
   "cmd.start_arena" = "cmd.start_arena",
@@ -75,6 +81,8 @@ export const enum Lang {
   "cmd.change_team" = "cmd.change_team",
   "cmd.change_name" = "cmd.change_name",
   "cmd.swap_team" = "cmd.swap_team",
+  "cmd.rcon" = "cmd.rcon",
+  "cmd.set_role" = "cmd.set_role",
 
   "cmdlist.page" = "cmdlist.page",
   "cmdlist.not_found" = "cmdlist.not_found",
@@ -82,16 +90,35 @@ export const enum Lang {
   "controls.t" = "controls.t",
   "controls.b" = "controls.b",
   "controls.tab" = "controls.tab",
+  "controls.f2" = "controls.f2",
   "controls.f4" = "controls.f4",
+
+  "cef.chat.input" = "cef.chat.input",
+  "cef.spectate.text" = "cef.spectate.text",
+  "cef.spectate.btn_right" = "cef.spectate.btn_right",
+  "cef.spectate.btn_left" = "cef.spectate.btn_left",
+  "cef.panel.profile_title" = "cef.panel.profile_title",
+  "cef.panel.matches_title" = "cef.panel.matches_title",
+  "cef.panel.vote_title" = "cef.panel.vote_title",
+  "cef.panel.about_title" = "cef.panel.about_title",
+  "cef.panel.about_description" = "cef.panel.about_description",
+  "cef.panel.vote_arena" = "cef.panel.vote_arena",
+  "cef.panel.vote_base" = "cef.panel.vote_base",
+  "cef.panel.vote_player" = "cef.panel.vote_player",
+  "cef.panel.navbar_profile" = "cef.panel.navbar_profile",
+  "cef.panel.navbar_matches" = "cef.panel.navbar_matches",
+  "cef.panel.navbar_vote" = "cef.panel.navbar_vote",
+  "cef.panel.navbar_about" = "cef.panel.navbar_about",
 }
 
 export interface ILanguage {
   get(code: Lang, replacements?: Record<string, string | number>): string
   change(lang: Record<Lang, string>): void
+  language: Record<Lang, string>
 }
 
 export class Language implements ILanguage {
-  constructor(private language: Record<Lang, string>) {}
+  constructor(public language: Record<Lang, string>) {}
 
   get(code: Lang, replacements: Record<string, string | number> = {}) {
     const text = this.language[code]

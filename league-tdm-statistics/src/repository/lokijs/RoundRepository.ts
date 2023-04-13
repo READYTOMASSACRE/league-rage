@@ -9,13 +9,18 @@ export default class RoundRepository extends LokijsRepository<Round> {
 
   async get({
     userId,
-    dateFrom = Date.now() - day,
-    dateTo = Date.now() + day,
+    dateFrom = Date.now() - (day * 10),
+    dateTo,
     ...filter
   }: RoundLokiFilter) {
     return super.get({
       ...filter,
-      id: { $gt: dateFrom, $lt: dateTo },
+      ...(dateFrom || dateTo ? {
+        id: {
+          ...(dateFrom ? { $gt: dateFrom }: false),
+          ...(dateTo ? { $lt: dateTo }: false),
+        },
+      } : {}),
       ...(userId ? {
         $or: [
           {[`${Team.attackers}.players.${userId}`]: { $exists: true }},

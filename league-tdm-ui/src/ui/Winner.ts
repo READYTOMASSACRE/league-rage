@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { Events } from "../../../league-core/src/types";
 import { Team } from "../../../league-core/src/types/tdm";
 import TeamService from "../TeamService";
@@ -11,7 +11,6 @@ export default class Winner {
     readonly teamService: TeamService,
   ) {}
 
-  @logClient
   @event(Events["tdm.round.end"])
   roundEnd(arenaId: number, result: Team | "draw") {
     const {

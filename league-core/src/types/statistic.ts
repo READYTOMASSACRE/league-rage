@@ -1,5 +1,6 @@
 import { userId } from "./common"
-import { Team } from "./tdm"
+import { Role } from "./permission"
+import { Arena, Team } from "./tdm"
 
 export type StatisticConfig = {
   exp: {
@@ -15,7 +16,6 @@ export type StatisticConfig = {
 }
 
 export type Profile = {
-  _id: any
   id: string
   lvl: number
   exp: number
@@ -26,9 +26,19 @@ export type Profile = {
   damageRecieved: number
   hit: number
   name: string
+  role: Role
+  rating: number
+  victory: number
+  kda: number
+  averageDamage: number
+  wins: number
+  loses: number
+  draws: number
 }
 
-export type ClientProfile = Omit<Profile, 'password'>
+export type MongoProfile = Profile & { _id: any }
+
+export type ClientProfile = Omit<Profile, 'password' | '_id'>
 
 export type PlayerStat = {
   kill: number
@@ -39,6 +49,7 @@ export type PlayerStat = {
   hit: number
   exp: number
   name: string
+  kda: number
 }
 
 export type TeamStat = {
@@ -47,7 +58,6 @@ export type TeamStat = {
 }
 
 export type Round = {
-  _id: any
   id: number
   arenaId: number
   result: Team | "draw"
@@ -55,8 +65,14 @@ export type Round = {
   [Team.defenders]: TeamStat
 }
 
+export type MongoRound = Round & { _id: any }
+
 export type PanelData = {
   profile: ClientProfile
   rounds: Round[]
   visible: boolean
+  arenas: Record<number, Arena>
+  title?: string
 }
+
+export type AuthType = 'pending' | 'social' | 'auth' | 'error'

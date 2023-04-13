@@ -28,7 +28,7 @@ export default class Round {
     readonly dummyService: IDummyService,
   ) {
     this.time = helpers.toMs(this.config.roundSeconds)
-    this.prepareTimer = setTimeout(() => this.prepare(), helpers.toMs(this.config.prepareSeconds))
+    this.prepareTimer = setTimeout(() => this.start(), helpers.toMs(this.config.prepareSeconds))
     this.state = RoundState.prepare
 
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
@@ -36,12 +36,15 @@ export default class Round {
     mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.config.players])
   }
 
-  prepare() {
+  start() {
     if (this.running) {
       return
     }
 
-    this.config.players.map(id => this.addPlayer(id))
+    this.players = this.config.players.filter(id => (
+      ![State.select, State.spectate].includes(this.playerService.getState(id))
+    ))
+    this.players.forEach(id => this.addPlayer(id))
     this.roundTimer = setTimeout(() => this.end(), this.time)
     this.date = Date.now()
     this.state = RoundState.running
@@ -77,29 +80,32 @@ export default class Round {
     mp.events.call(Events["tdm.round.end"], this.arena.id, result)
   }
 
-  addPlayer(id: number, manual?: boolean) {
+  addPlayer(id: number, manual?: boolean, whoAdded?: number) {
     const vector = this.arena.getRandVector(this.playerService.getTeam(id))
 
     this.playerService.spawn(id, vector)
     this.playerService.setState(id, State.alive)
     this.playerService.setHealth(id, 100)
 
-    this.players.push(id)
+    this.players = [...this.players, id]
 
-    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id)
-    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id)
+    this.playerService.call([id], Events["tdm.round.add"], id, manual, this.arena.id, whoAdded)
+    mp.events.call(Events["tdm.round.add"], id, manual, this.arena.id, whoAdded)
   }
 
-  removePlayer(id: number, manual?: boolean) {
+  removePlayer(id: number, reason?: 'manual' | 'death', whoRemoved?: number) {
     if (!this.players.includes(id)) {
       return
     }
 
     this.players = this.players.filter(playerId => playerId !== id)
-    this.playerService.setState(id, State.idle)
 
-    this.playerService.call([id], Events["tdm.round.remove"], id, manual, this.arena.id)
-    mp.events.call(Events["tdm.round.remove"], id, manual)
+    if (reason !== 'death') {
+      this.playerService.spawnLobby(id, true)
+    }
+
+    this.playerService.call([id], Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
+    mp.events.call(Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
   }
 
   playerQuit(id: number) {
@@ -219,7 +225,7 @@ export default class Round {
   }
 
   private set players(p: number[]) {
-    this.dummyService.set(Entity.ROUND, 'players', JSON.stringify(p))
+    this.dummyService.set(Entity.ROUND, 'players', p)
     this._players = p
   }
 

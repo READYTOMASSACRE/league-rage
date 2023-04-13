@@ -1,14 +1,13 @@
-import { eventable, event, commandable, command } from '../../league-core'
-import { decorate } from '../../league-core/src/helpers'
+import { eventable, event } from '../../league-core'
 import { Events, userId } from '../../league-core/src/types'
 import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
 import PlayerService from './PlayerService'
-import RepositoryService from './RepositoryService'
-import { PlayerStat, Round, StatisticConfig } from '../../league-core/src/types/statistic'
-import { toPlayerStat, toProfile, toRound } from '../../league-core/src/helpers/toStatistic'
+import { PlayerStat, Profile, Round, StatisticConfig } from '../../league-core/src/types/statistic'
+import { toPlayerStat, toRound } from '../../league-core/src/helpers/toStatistic'
 import DummyService from "../../league-core/src/server/DummyService";
+import ProfileService from './ProfileService'
+import RoundService from './RoundService'
 
-@commandable
 @eventable
 export default class RoundStatisticService {
   private stat: Round
@@ -17,16 +16,10 @@ export default class RoundStatisticService {
     readonly config: TeamConfig,
     readonly statisticConfig: StatisticConfig,
     readonly playerService: PlayerService,
-    readonly repositoryService: RepositoryService
+    readonly profileService: ProfileService,
+    readonly roundService: RoundService,
   ) {
     this.stat = this.toDefault()
-  }
-
-  @command('roundstat')
-  roundStatCmd(player: PlayerMp) {
-    player.outputChatBox(decorate(this.stat))
-
-    return this.stat
   }
 
   @event(Events['tdm.round.prepare'])
@@ -62,41 +55,56 @@ export default class RoundStatisticService {
       }
     }
 
-    const playerStats = [
-      ...Object.entries(this.getPlayersStatByTeam(Team.attackers)),
-      ...Object.entries(this.getPlayersStatByTeam(Team.defenders)),
-    ]
+    const attackers = Object.entries(this.getPlayersStatByTeam(Team.attackers))
+    const defenders = Object.entries(this.getPlayersStatByTeam(Team.defenders))
+
+    if (!attackers.length && !defenders.length) {
+      this.stat = this.toDefault()
+      return
+    }
 
     const promises = []
 
-    for (const [userId, stat] of playerStats) {
-      promises.push(this.saveProfileByUserId(userId, stat))
+    for (const [userId, stat] of attackers) {
+      promises.push(this.saveProfile(userId, stat, result === 'draw' ? undefined : result === Team.attackers))
+    }
+
+    for (const [userId, stat] of defenders) {
+      promises.push(this.saveProfile(userId, stat, result === 'draw' ? undefined : result === Team.defenders))
     }
 
     await Promise.all(promises)
 
-    this.repositoryService.round.save(toRound({
+    this.roundService.save({
       id: Date.now(),
       arenaId: arenaId,
       result,
       [Team.attackers]: this.stat[Team.attackers],
       [Team.defenders]: this.stat[Team.defenders],
-    }), { write: true })
+    })
 
     this.stat = this.toDefault()
   }
 
   @event(Events['tdm.player.kill'])
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
+    const addKda = (_: number, full: PlayerStat) => {
+      const kda = (full.kill + full.assists / (full.death || 1)).toFixed(2)
+      return Number(kda)
+    }
+
     this.addStat(killerId, 'kill', prev => prev + 1)
     this.addStat(killerId, 'exp', prev => prev + this.exp.kill)
+    this.addStat(killerId, 'kda', addKda)
 
     this.addStat(victimId, 'death', prev => prev + 1)
     this.addStat(victimId, 'exp', prev => prev + this.exp.death)
+    this.addStat(victimId, 'kda', addKda)
 
     if (typeof assistId !== 'undefined') {
       this.addStat(assistId, 'assists', prev => prev + 1)
       this.addStat(assistId, 'exp', prev => prev + this.exp.assist)
+      this.addStat(assistId, 'kda', addKda)
     }
   }
 
@@ -115,7 +123,7 @@ export default class RoundStatisticService {
   addStat<_, K extends keyof PlayerStat>(
     player: PlayerMp | number,
     key: K,
-    modifier: (prev: PlayerStat[K]) => PlayerStat[K],
+    modifier: (prev: PlayerStat[K], full?: PlayerStat) => PlayerStat[K],
   ) {
     if (typeof player === 'number') player = mp.players.at(player)
     if (!mp.players.exists(player)) return
@@ -124,21 +132,22 @@ export default class RoundStatisticService {
     const teamStat = this.getPlayersStatByTeam(team)
 
     if (!teamStat[player.userId]) teamStat[player.userId] = toPlayerStat()
-    teamStat[player.userId][key] = modifier(teamStat[player.userId][key])
+    teamStat[player.userId][key] = modifier(teamStat[player.userId][key], teamStat[player.userId])
   }
 
-  private async saveProfileByUserId(userId: userId, stat: PlayerStat) {
-    const player = this.playerService.atUserId(userId)
-    const userProfile = await this.repositoryService.profile.getById(userId)
-    const profile = toProfile(userProfile)
+  private async saveProfile(userId: userId, stat: PlayerStat, win?: boolean) {
+    try {
+      const profile = await this.profileService.getById(userId)
+      const profileStat = this.mergePlayerStat(profile, stat)
 
-    return this.repositoryService.profile.save({
-      ...profile,
-      ...(player ? { name: player.name } : {}),
-      ...this.mergePlayerStat(profile, stat),
-      ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
-      id: userId,
-    })
+      await this.profileService.saveById(userId, {
+        ...profileStat,
+        ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
+        ...this.calculateAverageStats(profileStat, profile, win),
+      })
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   private mergePlayerStat(old: PlayerStat, stat: PlayerStat) {
@@ -152,6 +161,7 @@ export default class RoundStatisticService {
       damageDone: old.damageDone + stat.damageDone,
       damageRecieved: old.damageRecieved + stat.damageRecieved,
       hit: old.hit + stat.hit,
+      kda: old.kda + stat.kda,
     }
   }
 
@@ -179,6 +189,27 @@ export default class RoundStatisticService {
     return {
       lvl: lvl + Math.floor(exp / this.exp.expToLvl),
       exp: Math.floor(exp % this.exp.expToLvl),
+    }
+  }
+
+  private calculateAverageStats(stat: Omit<PlayerStat, 'exp' | 'name'>, profile: Profile, win: boolean) {
+    const wins = win === true ? profile.wins + 1 : profile.wins
+    const loses = win === false ? profile.loses + 1 : profile.loses
+    const draws = win === undefined ? profile.draws + 1 : profile.draws
+    const matches = wins + loses + draws
+
+    const victory = (wins / (matches || 1) * 100).toFixed(2)
+    const kda = ((profile.kill + profile.assists) / (profile.death || 1)).toFixed(2)
+    const averageDamage = (profile.damageDone / (matches || 1)).toFixed(2)
+
+    return {
+      victory: Number(victory),
+      rating: profile.rating + (win ? 10 : 0),
+      kda: Number(kda),
+      averageDamage: Number(averageDamage),
+      wins,
+      loses,
+      draws,
     }
   }
 

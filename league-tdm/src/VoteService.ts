@@ -1,12 +1,13 @@
-import { eventable, event, helpers } from "../../league-core";
-import { Events } from "../../league-core/src/types";
+import { eventable, helpers, catchError } from "../../league-core";
+import { Events, userId } from "../../league-core/src/types";
 import { VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 interface InternalVoteConfig {
   timer: NodeJS.Timeout
-  players: number[]
+  players: userId[]
   result: Record<string, number>
 }
 
@@ -19,18 +20,10 @@ export default class VoteService {
     readonly lang: ILanguage,
   ) {}
 
-  @event("playerQuit")
-  playerQuit(player: PlayerMp) {
-    for (const[, info] of Object.entries(this.info)) {
-      if (info.players.includes(player.id)) {
-        info.players = info.players.filter(id => id !== player.id)
-      }
-    }
-  }
-
+  @catchError(ErrorNotifyHandler)
   voteArena(player: PlayerMp, key: string | number, callback: (result: string) => void) {
     if (typeof this.config["arena"] === 'undefined') {
-      throw new BroadCastError(this.lang.get(Lang["error.vote.not_found_config"], { vote: 'arena' }), player)
+      throw new BroadCastError(Lang["error.vote.not_found_config"], player, { vote: 'arena' })
     }
 
     if (this.isRunning('arena')) {
@@ -60,19 +53,20 @@ export default class VoteService {
   private add(vote: string, key: string | number, player: PlayerMp) {
     const info = this.info[vote]
 
-    if (info.players.includes(player.id)) {
-      return player.outputChatBox(this.lang.get(Lang["error.vote.already_voted"]))
+    if (info.players.includes(player.userId)) {
+      throw new BroadCastError(Lang["error.vote.already_voted"], player)
     }
 
-    info.result[key]++
+    info.result[key] = info.result[key] ? info.result[key] + 1 : 1
+    info.players.push(player.userId)
 
-    mp.events.call(Events["tdm.vote"], vote, player.id, key)
+    mp.events.call(Events["tdm.vote"], vote, player.id, this.info[vote].result)
   }
 
   private start(vote: string, key: string | number, player: PlayerMp, callback: (result: string) => void) {
     this.info[vote] = {
-      result: {[key]: 1},
-      players: [player.id],
+      result: { [key]: 1 },
+      players: [player.userId],
       timer: setTimeout(() => {
         try {
           const result = this.getResult(vote)
@@ -84,12 +78,17 @@ export default class VoteService {
       }, this.getTimeleft(vote))
     }
 
-    mp.events.call(Events["tdm.vote.start"], vote, player.id, key)
+    mp.events.call(Events["tdm.vote.start"], vote, player.id, this.info[vote].result)
   }
 
   private stop(vote: string, result?: string) {
     clearTimeout(this.info[vote]?.timer)
-    delete this.info[vote]
+
+    this.info[vote] = {
+      result: {},
+      players: [],
+      timer: undefined,
+    }
 
     mp.events.call(Events["tdm.vote.end"], vote, result)
   }

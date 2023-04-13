@@ -1,4 +1,4 @@
-import { command, commandable, event, eventable, logClient } from "../../../league-core/client";
+import { command, commandable, event, eventable } from "../../../league-core/client";
 import { ClientConfig, Enviroment, Events } from "../../../league-core/src/types";
 import { keyPriority } from "../@types/common";
 import KeybindService, { key } from "../KeybindService";
@@ -22,14 +22,13 @@ export default class Motd {
     this.toggle(true)
     mp.events.call(Events["tdm.chat.push"], {
       message: [
-        ['[Server]:', '#ffd400'],
+        [`[${this.config.prefix}]:`, '#ffd400'],
         [this.config.welcomeText.replace(':player', mp.players.local.name), '#fff'],
       ]
     }, Enviroment.client)
     this.uiService.cef.call(Events["tdm.cef.gamemode"], this.config.name + ' // ' + this.config.version)
   }
 
-  @logClient
   @event(Events["tdm.cef.motd"])
   toggle(t: boolean = false) {
     this.visible = t

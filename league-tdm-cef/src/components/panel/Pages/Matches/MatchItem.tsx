@@ -15,8 +15,9 @@ const MatchItem: FC<Props> = ({ match, name, id }) => {
 
   const stats = match.defenders.players[id] ?? match.attackers.players[id]
 
-  const { kill, death, assists } = stats
-  const kda = Math.floor((kill + assists) / death) || kill + assists
+  if (!stats) return <></>
+
+  const { kda = 0 } = stats
 
   return (
     <div className={styles.matchItem}>

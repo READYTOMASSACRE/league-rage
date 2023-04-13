@@ -21,7 +21,7 @@ export default new class DummyService implements IDummyService {
         arena: '',
         state: RoundState.stopped,
         time: 0,
-        players: '[]',
+        players: [],
       }),
       [Entity.TEAM]: this.setDefault(Entity.TEAM, {
         [Team.attackers]: {

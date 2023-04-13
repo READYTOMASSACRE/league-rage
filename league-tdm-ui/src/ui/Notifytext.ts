@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { toMs } from "../../../league-core/src/helpers";
 import { Events } from "../../../league-core/src/types";
 import { RoundConfig } from "../../../league-core/src/types/tdm";
@@ -19,7 +19,6 @@ export default class NotifyText {
     readonly lang: ILanguage
   ) {}
 
-  @logClient
   @event(Events["tdm.round.prepare"])
   roundPrepare(id: number) {
     const arena = this.roundService.getArenaById(id)
@@ -54,7 +53,6 @@ export default class NotifyText {
     this.hide(component)
   }
 
-  @logClient
   private show(text: string, alive: number, component: string, template: string = 'default', end?: number) {
     this.items[component] = [text, template, typeof end !== 'undefined' ? end : toMs(alive) + Date.now() + this.tickMs]
     this.tick()
