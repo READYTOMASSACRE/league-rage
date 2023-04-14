@@ -65,7 +65,7 @@ const Chat = () => {
         }
 
         return () => clearTimeout(timeout)
-    }, [active, toggle])
+    }, [history, active, toggle])
 
     useEffect(() => {
         if (inputRef.current && toggle) inputRef.current.focus()
@@ -76,7 +76,7 @@ const Chat = () => {
         return history.map((message, index) => (
             <span key={index}>
                 {message.map(([message, color = '#fff'], i) => (
-                    <p key={i} style={{color: toColor(color)}} className={styles.item}>{message}</p>
+                    <p key={i} style={{color: toColor(color)}} className={styles.item}>{message.trim() + ' '}</p>
                 ))}
             </span>
         ))

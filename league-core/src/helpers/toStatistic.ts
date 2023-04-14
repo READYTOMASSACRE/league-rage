@@ -7,7 +7,7 @@ export const toPlayerStat = (o?: any): PlayerStat => ({
   death: o?.death ?? 0,
   assists: o?.assists ?? 0,
   damageDone: o?.damageDone ?? 0,
-  damageRecieved: o?.damagerecieved ?? 0,
+  damageRecieved: o?.damageRecieved ?? 0,
   hit: o?.hit ?? 0,
   exp: o?.exp ?? 0,
   name: o?.name ?? '',

@@ -1,4 +1,4 @@
-import { event, eventable, helpers, logClient } from "../../league-core/client";
+import { event, eventable, helpers } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
 import { WeaponSlot } from "../../league-core/src/types/tdm";
 import console from "./helpers/console";
@@ -19,6 +19,7 @@ export default class WeaponService {
   private source?: number
   private weapon?: string
   private rendering: boolean = true
+  private slot: WeaponSlot = WeaponSlot.unarmed
 
   constructor(
     readonly playerService: PlayerService,
@@ -33,6 +34,7 @@ export default class WeaponService {
     this.keybindService.bind(key["1"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.primary))
     this.keybindService.bind(key["2"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.secondary))
     this.keybindService.bind(key["3"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.melee))
+    this.keybindService.bind(key["4"], true, WeaponService.key, () => this.switchPlayerWeapon(WeaponSlot.unarmed))
   }
 
   @event('render')
@@ -54,7 +56,6 @@ export default class WeaponService {
     }
   }
 
-  @logClient
   @event("incomingDamage")
   incomingDamage(
     sourceEntity: EntityMp,
@@ -94,8 +95,16 @@ export default class WeaponService {
     this.weapon = undefined
   }
 
-  @logClient
+  @event(Events["tdm.player.weapon_slot"])
+  onSetWeaponSlot(slot: WeaponSlot, weapon: string) {
+    this.switchPlayerWeapon(slot)
+  }
+
   private switchPlayerWeapon(slot: WeaponSlot) {
+    if (slot === this.slot) {
+      slot = WeaponSlot.unarmed
+    }
+
     const weaponSlot = this.playerService.getVariable(this.playerService.local, 'weaponSlot')
     const weapon = weaponSlot[slot]
 
@@ -103,5 +112,6 @@ export default class WeaponService {
 
     mp.game.invoke(WeaponService.setCurrentPedWeapon, this.playerService.local.handle, mp.game.joaat('weapon_' + weapon) >> 0, false)
     mp.events.call(Events["tdm.player.switch_weapon"], weapon)
+    this.slot = slot
   }
 }

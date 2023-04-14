@@ -1,6 +1,6 @@
-import { eventable, helpers, catchError } from "../../league-core";
+import { eventable, helpers, catchError, event } from "../../league-core";
 import { Events, userId } from "../../league-core/src/types";
-import { VoteConfig } from "../../league-core/src/types/tdm";
+import { Vote, VoteConfig } from "../../league-core/src/types/tdm";
 import { ILanguage, Lang } from "../../league-lang/language";
 import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
@@ -23,17 +23,22 @@ export default class VoteService {
   @catchError(ErrorNotifyHandler)
   voteArena(player: PlayerMp, key: string | number, callback: (result: string) => void) {
     if (typeof this.config["arena"] === 'undefined') {
-      throw new BroadCastError(Lang["error.vote.not_found_config"], player, { vote: 'arena' })
+      throw new BroadCastError(Lang["error.vote.not_found_config"], player, { vote: Vote.arena })
     }
 
-    if (this.isRunning('arena')) {
-      this.add('arena', key, player)
+    if (this.isRunning(Vote.arena)) {
+      this.add(Vote.arena, key, player)
     } else {
-      this.start('arena', key, player, callback)
+      this.start(Vote.arena, key, player, callback)
     }
   }
 
-  isRunning(vote: string) {
+  @event(Events["tdm.round.prepare"])
+  roundPrepare() {
+    this.stop(Vote.arena)
+  }
+
+  isRunning(vote: Vote) {
     return Boolean(this.info[vote] && this.info[vote].timer)
   }
 
@@ -50,7 +55,7 @@ export default class VoteService {
     return key
   }
 
-  private add(vote: string, key: string | number, player: PlayerMp) {
+  private add(vote: Vote, key: string | number, player: PlayerMp) {
     const info = this.info[vote]
 
     if (info.players.includes(player.userId)) {
@@ -63,7 +68,7 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote"], vote, player.id, this.info[vote].result)
   }
 
-  private start(vote: string, key: string | number, player: PlayerMp, callback: (result: string) => void) {
+  private start(vote: Vote, key: string | number, player: PlayerMp, callback: (result: string) => void) {
     this.info[vote] = {
       result: { [key]: 1 },
       players: [player.userId],

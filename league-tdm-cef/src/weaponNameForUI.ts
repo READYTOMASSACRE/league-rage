@@ -1,3 +1,5 @@
+import { WeaponSlot } from "../../league-core/src/types/tdm"
+
 const weaponNames = {
   "dagger": "Dagger",
   "bat": "Bat",
@@ -95,9 +97,10 @@ const weaponNames = {
 }
 
 const weaponSlot = {
-  primary: 1,
-  secondary: 2,
-  melee: 3,
+  [WeaponSlot.primary]: 1,
+  [WeaponSlot.secondary]: 2,
+  [WeaponSlot.melee]: 3,
+  [WeaponSlot.unarmed]: 4,
 }
 
 const typeCategory = {

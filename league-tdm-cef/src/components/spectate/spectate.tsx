@@ -37,6 +37,7 @@ export default () => {
         <div><span>A</span>{RageAPI.lang.get(Lang['cef.spectate.btn_left'])}</div>
         <div><span>D</span>{RageAPI.lang.get(Lang['cef.spectate.btn_right'])}</div>
       </div>
+      <div className={styles.spectate}>{current.spectate.join(', ')}</div>
     </div>
   )
 }

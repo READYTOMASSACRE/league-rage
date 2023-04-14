@@ -25,11 +25,14 @@ export default class Spectate {
   }
 
   get data(): CurrentPlayer {
+    const specatePlayers = this.playerService.getSpectatePlayers(this.player)
+
     return {
       ...toPlayerStat(this.playerService.getStatistic(this.player)),
       id: this.player.remoteId,
       name: this.player.name,
       visible: this.visible,
+      spectate: specatePlayers.map(player => player.name),
     }
   }
 }

@@ -14,10 +14,12 @@ export enum State {
   dead = 'dead',
   spectate = 'spectate',
   select = 'select',
+  prepare = 'prepare',
 }
 
 export const StateDimensions = {
   [State.alive]: 0,
+  [State.prepare]: 0,
   [State.spectate]: 0,
   [State.idle]: 1,
   [State.dead]: 1,
@@ -90,6 +92,7 @@ export const enum WeaponSlot {
   primary = 'primary',
   secondary = 'secondary',
   melee = 'melee',
+  unarmed = 'unarmed'
 }
 
 export type PlayerData = {

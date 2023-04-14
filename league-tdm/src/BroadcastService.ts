@@ -105,8 +105,11 @@ export default class BroadcastService {
   }
 
   @event(Events["tdm.vote.end"])
-  tdmVoteEnd(vote: Vote, result: string) {
-    this.broadcastByServer(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
+  tdmVoteEnd(vote: Vote, result?: string) {
+    if (result) {
+      this.broadcastByServer(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
+    }
+
     this.notifyStop(vote)
   }
 
@@ -189,19 +192,14 @@ export default class BroadcastService {
     player.outputChatBox = function (input: string | ChatItem, byServer = true) {
       if (byServer) {
         if (typeof input === 'string') {
-          input = {
-            message: [
-              [`[${self.config.prefix}]:`, '#ffd400'],
-              [input, '#fff'],
-            ]
-          }
-        } else {
-          input = {
-            message: [
-              [`[${self.config.prefix}]:`, '#ffd400'],
-              ...input.message,
-            ]
-          }
+          input = { message: [[input, '#fff']] }
+        }
+
+        input = {
+          message: [
+            [`[${self.config.prefix}]:`, '#ffd400'],
+            ...input.message,
+          ]
         }
       }
 
@@ -225,6 +223,11 @@ export default class BroadcastService {
     this.playerService.popup(id, message, 'success')
   }
 
+  @event(Events["tdm.client.ready"])
+  clientReady(player: PlayerMp) {
+    player.outputChatBox(this.config.welcomeText.replace(':player', player.name))
+  }
+
   broadcast(message: string | ChatItem, players?: number[]) {
     if (Array.isArray(players)) {
       this.playerService.call(players, Events["tdm.chat.push"], message, Enviroment.server)
@@ -237,19 +240,14 @@ export default class BroadcastService {
 
   broadcastByServer(input: string | ChatItem, players?: number[]) {
     if (typeof input === 'string') {
-      input = {
-        message: [
-          [`[${this.config.prefix}]:`, '#ffd400'],
-          [input, '#fff'],
-        ]
-      }
-    } else {
-      input = {
-        message: [
-          [`[${this.config.prefix}]:`, '#ffd400'],
-          ...input.message,
-        ]
-      }
+      input = { message: [[input, '#fff']] }
+    }
+
+    input = {
+      message: [
+        [`[${this.config.prefix}]:`, '#ffd400'],
+        ...input.message,
+      ]
     }
 
     return this.broadcast(input, players)
@@ -259,7 +257,7 @@ export default class BroadcastService {
     mp.players.call(Events["tdm.notify.text"], [text, alive, component, template, keepAlive])
   }
 
-  notifyStop(component: string) {
+  notifyStop(component: Vote) {
     mp.players.call(Events["tdm.notify.stop"], [component])
   }
 

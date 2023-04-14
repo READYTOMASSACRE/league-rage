@@ -1,4 +1,3 @@
-import { logClient } from "../../league-core/client";
 import { Entity, Team, TeamConfig } from "../../league-core/src/types/tdm";
 import DummyService from "./DummyService";
 

@@ -10,14 +10,6 @@ export default class WeaponHud {
     readonly playerService: PlayerService,
   ) {}
   
-  @logClient
-  @event(Events["tdm.player.weapon_slot"])
-  changeWeaponSlot(id: number, slot: string, weapon: string) {
-    if (id === this.playerService.local.remoteId) {
-      this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data, weapon)
-    }
-  }
-  
   @event(Events["tdm.player.switch_weapon"])
   switchWeapon(weapon: string) {
     this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data, weapon)
@@ -28,11 +20,16 @@ export default class WeaponHud {
     this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data)
   }
 
+  @event(Events["tdm.round.remove"])
+  roundRemove() {
+    this.uiService.cef.call(Events["tdm.cef.weapon_hud"])
+  }
+
   get data() {
     const {
       primary,
       secondary,
-      melee
+      melee,
     } = this.playerService.getVariable(this.playerService.local, 'weaponSlot') || {}
 
     return {

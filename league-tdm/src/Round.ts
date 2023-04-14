@@ -31,6 +31,7 @@ export default class Round {
     this.prepareTimer = setTimeout(() => this.start(), helpers.toMs(this.config.prepareSeconds))
     this.state = RoundState.prepare
 
+    this.config.players.forEach(player => this.playerService.setState(player, State.prepare))
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
     mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.config.players)
     mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.config.players])
@@ -60,6 +61,10 @@ export default class Round {
 
   end() {
     if (!this.prepared && !this.running && !this.paused) {
+      return
+    }
+
+    if (this.stopped) {
       return
     }
 
@@ -153,15 +158,16 @@ export default class Round {
       : Team.defenders
   }
 
-  private async watch() { // todo rewise this lifecycle
-    while (this.running) {
-      if (!this.shouldRunning) {
-        this.end()
-        break
-      }
+  private async watch() {
+    if (!this.config.aliveWatcher) {
+      return
+    }
 
+    while (this.shouldRunning) {
       await helpers.sleep(0.1)
     }
+
+    this.end()
   }
 
   private get shouldRunning(): boolean {
@@ -218,6 +224,10 @@ export default class Round {
 
   get prepared() {
     return this.state === RoundState.prepare
+  }
+
+  get stopped() {
+    return this.state === RoundState.stopped
   }
 
   get players(): number[] {

@@ -142,6 +142,7 @@ export const key: Record<string, number> = {
   1: 0x31,
   2: 0x32,
   3: 0x33,
+  4: 0x34,
   left: 0x25,
   up: 0x26,
   right: 0x27,

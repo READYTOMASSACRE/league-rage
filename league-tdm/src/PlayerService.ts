@@ -1,7 +1,7 @@
 import { event, eventable, ensurePlayer } from "../../league-core";
 import { Events, IConfig, tdm } from "../../league-core/src/types";
 import { Role } from "../../league-core/src/types/permission";
-import { PlayerData, StateDimensions } from "../../league-core/src/types/tdm";
+import { PlayerData, StateDimensions, WeaponSlot } from "../../league-core/src/types/tdm";
 import TaskManager from "./TaskManager";
 
 @eventable
@@ -122,12 +122,18 @@ export default class PlayerService {
   }
 
   @ensurePlayer
+  inRound(p: number | PlayerMp) {
+    return this.hasState(p, [tdm.State.alive, tdm.State.prepare])
+  }
+
+  @ensurePlayer
   spawnLobby(p: number | PlayerMp, force?: boolean) {
     const player = <PlayerMp>p
     const state = this.getState(player)
 
     if (!force && [
       tdm.State.alive,
+      tdm.State.prepare,
       tdm.State.select,
       tdm.State.idle,
     ].includes(state)) {
@@ -155,7 +161,9 @@ export default class PlayerService {
 
     if (!slot) {
       player.removeAllWeapons()
-      this.setVariable(player, 'weaponSlot', {})
+      this.setVariable(player, 'weaponSlot', {
+        [WeaponSlot.unarmed]: 'unarmed',
+      })
     } else {
       this.setVariable(player, 'weaponSlot', {
         ...this.getVariable(player, 'weaponSlot'),
@@ -167,7 +175,7 @@ export default class PlayerService {
       const weaponHash = `weapon_${weapon.replace(/^weapon_/, '')}`
 
       player.giveWeapon(mp.joaat(weaponHash), Number(ammo) || 0)
-      mp.players.call(Events["tdm.player.weapon_slot"], [player.id, slot, weapon])
+      this.call([player.id], Events["tdm.player.weapon_slot"], slot, weapon)
     }
   }
 
