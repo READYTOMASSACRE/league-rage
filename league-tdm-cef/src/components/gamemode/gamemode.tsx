@@ -5,7 +5,7 @@ import { Events } from '../../../../league-core/src/types'
 import cefLog from '../../helpers/cefLog'
 
 export default () => {
-  const [text, set] = useState('League 0.6a')
+  const [text, set] = useState('League')
 
   useEffect(() => {
     RageAPI.subscribe(Events['tdm.cef.gamemode'], 'gamemode', (text: string) => {

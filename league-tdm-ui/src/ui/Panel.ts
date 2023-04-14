@@ -1,8 +1,7 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable, logClient, console } from "../../../league-core/client";
 import { Events, IConfig, Procs, userId } from "../../../league-core/src/types";
 import { PanelData } from "../../../league-core/src/types/statistic";
 import ArenaService from "../ArenaService";
-import console from "../helpers/console";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
 

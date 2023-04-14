@@ -228,6 +228,8 @@ export const enum Events {
   'tdm.arena.refresh' = 'tdm.arena.refresh',
   /** Fires when clientside/cef recieved language */
   'tdm.language' = 'tdm.language',
+  /** Fires from clientsilde when arena is ready */
+  'tdm.mapeditor.save' = 'tdm.mapeditor.save',
 }
 
 export const enum Procs {

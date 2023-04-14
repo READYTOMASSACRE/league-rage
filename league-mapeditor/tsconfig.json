@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "commonjs",
+        "experimentalDecorators": true,
+        "outDir": "../../packages/league-mapeditor",
+        "preserveConstEnums": true,
+        "allowJs": true,
+        "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"],
+    },
+    "references": [
+        {"path": "../league-core", "declarationMap": true},
+        {"path": "../league-lang"}
+    ],
+    "include": ["index.ts", "src/**/*"],
+    "exclude": ["node_modules"]
+}

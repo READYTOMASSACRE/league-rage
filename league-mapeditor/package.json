@@ -1,0 +1,24 @@
+{
+  "name": "league-tdm",
+  "version": "0.1.1",
+  "license": "ISC",
+  "devDependencies": {
+    "@ragempcommunity/types-server": "^2.1.1",
+    "@types/colors": "^1.2.1",
+    "@types/node": "^18.14.0"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "date-fns": "^2.29.3",
+    "reflect-metadata": "^0.1.13"
+  },
+  "scripts": {
+    "watch": "tsc -p tsconfig.local.json --watch",
+    "build": "tsc -p tsconfig.local.json",
+    "prebuild:external": "rm -rf ../../packages/league-mapeditor",
+    "build:external": "tsc",
+    "postbuild:external": "cp -R node_modules ../../packages/league-mapeditor",
+    "source:external": "tsc",
+    "watch:external": "tsc --watch"
+  }
+}

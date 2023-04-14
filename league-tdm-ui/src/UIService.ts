@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../league-core/client";
+import { event, eventable, logClient, console } from "../../league-core/client";
 import { ClientConfig, Events } from "../../league-core/src/types";
 import { ILanguage, Lang } from "../../league-lang/language";
 import ArenaService from "./ArenaService";
@@ -7,7 +7,6 @@ import KeybindService from "./KeybindService";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import TeamService from "./TeamService";
-import console from "./helpers/console";
 import Chat from "./ui/Chat";
 import Controls from "./ui/Controls";
 import Deathlog from "./ui/Deathlog";

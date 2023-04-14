@@ -1,5 +1,5 @@
+import { console } from '../../league-core/client'
 import { keyPriority } from "./@types/common"
-import console from "./helpers/console"
 
 type Binding = {
   handler: Function

@@ -1,10 +1,8 @@
-import { event, eventable } from "../../league-core/client"
+import { event, eventable, console, route } from "../../league-core/client"
 import { tdm } from "../../league-core/src/types"
 import { Entity, RoundState } from "../../league-core/src/types/tdm"
 import DummyService from "./DummyService"
-import console from "./helpers/console"
 import PlayerService from "./PlayerService"
-import { IRoute, Route } from "./Route"
 import Zone from "./Zone"
 
 @eventable
@@ -15,7 +13,7 @@ export default class ZoneService {
     private delay: number = Date.now()
     private rollbackVector?: Vector3
     private zone?: Zone
-    private route?: IRoute
+    private route?: route.IRoute
 
     constructor(
         readonly playerService: PlayerService,
@@ -24,7 +22,7 @@ export default class ZoneService {
 
     enable(arena: tdm.Arena) {
         this.zone = new Zone(arena)
-        this.route = new Route()
+        this.route = new route.Route()
 
         this.enabled = true
 
