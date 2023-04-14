@@ -61,7 +61,6 @@ export default class StatisticService {
       dateTo = Number(dateTo)
     }
 
-
     return JSON.stringify(await this.roundService.get({
       userId,
       limit,

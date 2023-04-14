@@ -17,11 +17,7 @@ export default () => {
   const [active, setActive] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
-<<<<<<< HEAD
 
-  const [active, setActive] = useState<boolean>(true)
-=======
->>>>>>> 2ab40a6425a5470f29e44830341fc89f5aec945c
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
   const [arenas, setArenas] = useState<Record<number, Arena>>()
