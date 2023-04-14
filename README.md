@@ -1,5 +1,5 @@
 [![League](https://i.imgur.com/VHQz6bz.png)](https://discord.gg/5RBfSc3hvE) 
-# **League TDM 0.6a**
+# **League TDM 0.7a**
 ### Team deathmatch with arenas based on rage.mp multiplayer
 
 

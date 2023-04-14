@@ -1,6 +1,5 @@
-import { command, commandable, logClient } from "../../league-core/client";
+import { command, commandable, logClient, console } from "../../league-core/client";
 import { Events } from "../../league-core/src/types";
-import console from "./helpers/console";
 import PlayerService from "./PlayerService";
 
 @commandable

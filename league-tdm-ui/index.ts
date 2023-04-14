@@ -1,5 +1,5 @@
 import { ClientConfig, Events, IConfig, Procs } from "../league-core/src/types"
-import './src/helpers/console'
+import { console } from "../league-core/client"
 import { Language } from '../league-lang/language'
 import DebugService from "./src/DebugService"
 import DummyService from "./src/DummyService"
@@ -13,6 +13,7 @@ import WeaponService from "./src/WeaponService"
 import ZoneService from "./src/ZoneService"
 import TeamService from "./src/TeamService"
 import ArenaService from "./src/ArenaService"
+
 
 const main = async () => {
   try {
@@ -45,7 +46,7 @@ const main = async () => {
     new InteractionService(config, playerService, teamService, dummyService, keybindService, uiService)
     new DebugService(playerService)
 
-    mp.console.log('league-tdm-ui package initialized')
+    console.log('league-tdm-ui package initialized')
   
     mp.events.call(Events["tdm.player.ready"])
     mp.events.callRemote(Events["tdm.player.ready"])

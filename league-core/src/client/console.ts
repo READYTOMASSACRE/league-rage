@@ -1,9 +1,9 @@
-import { decorate, throttle } from "../../../league-core/src/helpers"
-import { Events } from "../../../league-core/src/types"
+import { decorate, throttle } from "../helpers"
+import { Events } from "../types"
 
 const console = new class {
-  private queue: string[] = []
-  private ready: boolean = false
+  public queue: string[] = []
+  public ready: boolean = false
 
   constructor() {
     this.log = this.log.bind(this)
@@ -34,7 +34,7 @@ const console = new class {
     return this.message(args, 'fatal')
   }
 
-  private message(args: any[], type: 'log' | 'error' | 'warning' | 'fatal' = 'log') {
+  public message(args: any[], type: 'log' | 'error' | 'warning' | 'fatal' = 'log') {
     try {
       args = args.map(decorate)
       if (this.ready) {
@@ -54,12 +54,11 @@ const throttledConsole = {
   error: throttle((...args: any[]) => console.error(...args), throttleMs),
   warning: throttle((...args: any[]) => console.warning(...args), throttleMs),
   fatal: throttle((...args: any[]) => console.fatal(...args), throttleMs),
-}
+};
 
-mp.console.log = console.log
-mp.console.error = console.error
-mp.console.warning = console.warning
-mp.console.fatal = console.fatal
+(mp as any).console.log = console.log;
+(mp as any).console.error = console.error;
+(mp as any).console.warning = console.warning;
+(mp as any).console.fatal = console.fatal;
 
-export default console
-export { throttledConsole }
+export { throttledConsole, console }

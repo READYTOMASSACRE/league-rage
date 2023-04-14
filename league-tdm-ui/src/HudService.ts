@@ -1,6 +1,5 @@
 import { event, eventable } from "../../league-core/client";
 import { ClientConfig, Events } from "../../league-core/src/types";
-import console from "./helpers/console";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";

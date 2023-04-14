@@ -1,6 +1,5 @@
-import { event, eventable } from "../../../league-core/client";
+import { event, eventable, console } from "../../../league-core/client";
 import { Events } from "../../../league-core/src/types";
-import console from "../helpers/console";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";
 import UIService from "../UIService";

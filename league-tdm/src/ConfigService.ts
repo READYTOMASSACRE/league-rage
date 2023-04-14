@@ -23,7 +23,7 @@ export default class ConfigService {
             interaction: this.config.interaction,
             statistic: this.config.statistic,
             effects: this.config.effects,
-            version: 'League 0.6a',
+            version: 'League 0.7a',
             prefix: this.config.prefix,
         }
     }

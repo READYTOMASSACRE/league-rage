@@ -1,8 +1,7 @@
-import { event, eventable } from "../../../league-core/client";
+import { event, eventable, console } from "../../../league-core/client";
 import { State } from "../../../league-core/src/types/tdm";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";
-import console from "../helpers/console";
 import { isPlayer } from "../helpers/guards";
 
 @eventable

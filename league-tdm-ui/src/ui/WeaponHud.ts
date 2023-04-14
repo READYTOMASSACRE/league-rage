@@ -1,4 +1,4 @@
-import { event, eventable, logClient } from "../../../league-core/client";
+import { event, eventable } from "../../../league-core/client";
 import { Events } from "../../../league-core/src/types";
 import PlayerService from "../PlayerService";
 import UIService from "../UIService";

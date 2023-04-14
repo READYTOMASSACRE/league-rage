@@ -10,7 +10,8 @@ interface ThrottleSettings {
   **/
   trailing?: boolean;
 }
-interface Cancelable {
+
+export interface Cancelable {
   cancel(): void;
 }
 
