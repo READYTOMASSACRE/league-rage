@@ -17,6 +17,7 @@ export default () => {
   const [active, setActive] = useState<boolean>(false)
   const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
+
   const [profile, setProfile] = useState<ClientProfile>()
   const [rounds, setRounds] = useState<Round[]>([])
   const [arenas, setArenas] = useState<Record<number, Arena>>()
@@ -60,9 +61,9 @@ export default () => {
     <div className={styles.root}>
       <CurrentPage.Provider value={{ currentPage, setCurrentPage }}>
         <ShrinkNavbar.Provider value={{ shrink, setShrink }}>
-          <Header title={title} />
-          <Navbar />
-          <Main rounds={rounds} profile={profile} arenas={arenas}/>
+            <Header title={title} />
+            <Navbar />
+            <Main rounds={rounds} profile={profile} arenas={arenas} />
         </ShrinkNavbar.Provider>
       </CurrentPage.Provider>
     </div>

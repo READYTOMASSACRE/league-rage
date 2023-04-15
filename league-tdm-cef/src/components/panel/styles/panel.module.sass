@@ -68,7 +68,7 @@
   width: 60px
   transition: all 0.5s ease-in-out
   &.shrink
-    width: 150px
+    width: 200px
 
 .navbarItem
   display: flex
@@ -92,7 +92,8 @@
 .main
   grid-area: 2 / 2 / 3 / 3
   border-left: 1px solid $yellow
-  height: inherit
+  height: 100%
+  padding: 10px
   & > div
     animation: page 0.4s
 
@@ -139,14 +140,19 @@
   display: flex
   flex-direction: column
   row-gap: 10px
+  height: 100%
+
+.matchesList
+  display: flex
+  flex-direction: column
   overflow: auto
+  height: 100%
   gap: 5px
-  height: inherit
-  & div:nth-child(even)
+  & div:nth-child(odd)
     background-color: $black2
-    &:hover
-      background: white
-      color: #000000
+  & div:hover
+    background: white
+    color: #000000
 
 .matchItem
   width: 100%
@@ -166,9 +172,27 @@
     width: 100px
   :nth-child(4)
     width: 130px
-  &:hover
-    background: white
-    color: #000000
+
+.pagination
+  display: flex
+  flex-direction: row
+  gap: 5px
+  align-self: center
+  div
+    height: 30px
+    width: 30px
+    background: red
+    display: flex
+    justify-content: center
+    align-items: center
+    background: $yellow
+    color: black
+    &:hover
+      background: $black
+      color: $yellow
+    &.current
+      background: $black
+      color: $yellow
 
 // Main --> Voting
 
@@ -214,6 +238,7 @@
 
 .page
   padding: 15px
+  height: 100%
   & h1
     border-bottom: 1px solid white
 
