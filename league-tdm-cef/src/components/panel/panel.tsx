@@ -14,7 +14,7 @@ import cefLog from '../../helpers/cefLog'
 import { Arena } from '../../../../league-core/src/types/tdm'
 
 export default () => {
-  const [active, setActive] = useState<boolean>(false)
+  const [active, setActive] = useState<boolean>(true)
   const [currentPage, setCurrentPage] = useState<string>('Matches')
   const [shrink, setShrink] = useState<boolean>(false)
 
@@ -61,9 +61,9 @@ export default () => {
     <div className={styles.root}>
       <CurrentPage.Provider value={{ currentPage, setCurrentPage }}>
         <ShrinkNavbar.Provider value={{ shrink, setShrink }}>
-          <Header title={title} />
-          <Navbar />
-          <Main rounds={rounds} profile={profile} arenas={arenas}/>
+            <Header title={title} />
+            <Navbar />
+            <Main rounds={rounds} profile={profile} arenas={arenas} />
         </ShrinkNavbar.Provider>
       </CurrentPage.Provider>
     </div>
