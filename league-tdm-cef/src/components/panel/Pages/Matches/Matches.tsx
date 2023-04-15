@@ -65,9 +65,12 @@ const Games: FC<Props> = ({ name, id, amount }) => {
         <span>Date</span>
       </div>
       <div className={styles.matchesList} ref={ref}>
-        {matches.length ? matches.map((match) => (
-          <MatchItem key={match.id} name={name} match={match} id={id} />
-        )) : <h1>Загрузка...</h1>}
+        {(amount === 0 || undefined) ?
+          <h1>Нет данных</h1> :
+          matches.length ? matches.map((match) => (
+            <MatchItem key={match.id} name={name} match={match} id={id} />
+          )) : <h1>Загрузка...</h1>
+        }
       </div>
       <div className={styles.pagination}>
         {pages.map((page) => (
