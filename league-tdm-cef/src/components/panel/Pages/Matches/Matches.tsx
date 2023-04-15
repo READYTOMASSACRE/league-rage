@@ -58,11 +58,12 @@ const Games: FC<Props> = ({ matches, name, id, amount }) => {
         <span>K/D/A</span>
         <span>Date</span>
       </div>
-      <div className={styles.matchesList} ref={ref}>
+      {matches ? <div className={styles.matchesList} ref={ref}>
         {matches.map((match, index) => (
           <MatchItem key={match.id} name={name} match={match} id={id} />
         ))}
-      </div>
+      </div> :
+        <h1>Загрука...</h1>}
       <div className={styles.pagination}>
         {pages.map((page) => (
           <div className={currentPage === page ? styles.current : ''} key={page} onClick={() => setCurrentPage(page)}>
