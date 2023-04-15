@@ -27,14 +27,17 @@ const Games: FC<Props> = ({ name, id, amount }) => {
       let el = ((height / 35) - 1)
       setElementsPerPage(el)
     }
-  }, [])
+  }, [ref])
 
   const pages = useMemo(() => {
     const arr = new Array
 
     if (amount && elementsPerPage) {
+      if(amount > elementsPerPage)
       for (let i = 1; i <= Math.ceil(amount / elementsPerPage); i++) {
         arr.push(i)
+      } else {
+        arr.push(1)
       }
     }
 
