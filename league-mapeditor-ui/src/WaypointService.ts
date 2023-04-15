@@ -1,37 +1,41 @@
-import { console, route, command, commandable, eventable, event } from '../../league-core/client'
+import { console, route, command, commandable } from '../../league-core/client'
 import { sleep } from '../../league-core/src/helpers'
 import { Events } from '../../league-core/src/types'
 import Fly from './Fly'
 
-@eventable
 @commandable
 export default class WaypointService {
   static userMark: number = 162
   static hudColor: number = 9
   static thickness: number = 5
   static cmd = 'medit'
+  static vkSpace = 0x20
+  static vkDelete = 0x2E
 
   private route: route.IRoute
-  private poly: Record<number, {dot: Array2d, expired?: boolean}> = {}
   private enable: boolean = false
   private interval: number = 0
+  private poly: Array2d[] = []
+  private drawPoly: Record<string, Array2d> = {}
+  private binded: boolean = false
 
   constructor(readonly fly: Fly) {
     this.route = new route.Route()
-  }
-
-  @event("playerCreateWaypoint")
-  playerCreateWaypoint(vec: Vector3) {
-    const array = [vec.x, vec.y, vec.z]
-    mp.events.callRemote(Events['tdm.mapeditor.save'], JSON.stringify(array))
+    this.commit = this.commit.bind(this)
+    this.rollback = this.rollback.bind(this)
   }
   
-  @command('start', { group: WaypointService.cmd})
-  start() {
+  @command('start', { group: WaypointService.cmd })
+  async start() {
+    if (this.enable) {
+      this.toggle(false)
+      await sleep(.5)
+    }
+
     this.toggle(true)
   }
 
-  @command('stop', { group: WaypointService.cmd})
+  @command('stop', { group: WaypointService.cmd })
   stop(err?: Error) {
     this.toggle(false)
 
@@ -42,11 +46,11 @@ export default class WaypointService {
 
   @command('save', { group: WaypointService.cmd })
   save() {
-    mp.events.callRemote(Events['tdm.mapeditor.save'], JSON.stringify(Object.values(this.poly).map(poly => poly.dot)))
+    mp.events.callRemote(Events['tdm.mapeditor.save'], JSON.stringify(this.poly))
   }
 
   @command('reset', { group: WaypointService.cmd})
-  async clearCmd() {
+  async reset() {
     this.toggle(false)
 
     await sleep(.5)
@@ -54,32 +58,56 @@ export default class WaypointService {
     this.toggle(true)
   }
 
+  @command('back', { group: WaypointService.cmd })
+  private rollback() {
+    this.poly = this.poly.slice(0, -1)
+    this.refreshRoute()
+  }
+
   @command('fly', { group: WaypointService.cmd })
-  flyCmd(description: string, toggle?: string) {
+  flyCmd(_: string, toggle?: string) {
     this.fly.toggle(Boolean(toggle))
   }
 
-  toggle(enable: boolean) {
+  private toggle(enable: boolean) {
     clearInterval(this.interval)
     this.enable = enable
     this.clear()
+    this.bindKeys()
 
     if (this.enable) {
       this.interval = setInterval(() => this.render(), 0)
     }
   }
 
-  render() {
-    try {
-      this.userBlipDetect()
+  private bindKeys() {
+    if (this.binded) {
+      mp.keys.unbind(WaypointService.vkSpace, true, this.commit)
+      mp.keys.unbind(WaypointService.vkDelete, true, this.rollback)
+      this.binded = false
+    }
 
-      const values = Object.values(this.poly)
+    if (this.enable) {
+      mp.keys.bind(WaypointService.vkSpace, true, this.commit)
+      mp.keys.bind(WaypointService.vkDelete, true, this.rollback)
+      this.binded = true
+    }
+  }
+
+  private render() {
+    try {
+      this.fillDrawPoly()
+
+      const values = [
+        ...this.poly,
+        ...Object.values(this.drawPoly),
+      ].filter(Boolean)
 
       if (!values.length) {
         return
       }
   
-      for (const {dot} of values) {
+      for (const dot of values) {
         if (dot?.length !== 2) {
           continue
         }
@@ -94,87 +122,86 @@ export default class WaypointService {
   }
 
   private clear() {
-    this.expirePolyMarks()
-    this.route.clear()
-    this.route.start(WaypointService.hudColor)
+    this.poly = []
+    this.drawPoly = {}
+
+    this.refreshRoute()
   }
 
-  // todo 162 can have only 10 blips
-  private userBlipDetect() {
-    const aliveMarks = this.getUserMarks()
+  private fillDrawPoly() {
+    const mark = this.getUserMark()
 
-    this.refreshPolyMarks(aliveMarks)
-
-    for (const mark of aliveMarks) {
-      const coords = mp.game.ui.getBlipInfoIdCoord(mark)
-
-      if (!coords) {
-        continue
-      }
-
-      const [x, y] = [
-        Number(coords.x.toFixed(4)),
-        Number(coords.y.toFixed(4))
-      ]
-
-      const {
-        dot: [polyX, polyY] = [],
-        expired = false,
-      } = this.poly[mark] || {}
-
-      if (expired) {
-        continue
-      }
-
-      if (polyX !== x || polyY !== y) {
-        this.addPoint(mark, [x, y])
-      }
-    }
-  }
-
-  private getUserMarks() {
-    const total = mp.game.ui.getNumberOfActiveBlips()
-    const marks: number[] = []
-
-    let index = 0
-
-    while (index++ < total) {
-      const mark = mp.game.ui.getNextBlipInfoId(WaypointService.userMark) >> 0
-
-      if (!mp.game.ui.doesBlipExist(mark)) {
-        continue
-      }
-
-      marks.push(mark)
-    }
-
-    return marks
-  }
-
-  private refreshPolyMarks(aliveMarks: number[]) {
-    if (!aliveMarks.length) {
+    if (!mark || !mp.game.ui.doesBlipExist(mark)) {
+      console.log(`fillDrawPoly doesntExist:${mark}`)
       return
     }
 
-    this.poly = aliveMarks.reduce((acc, current) => {
-      acc[current] = { ...this.poly[current] }
+    console.log(`fillDrawPoly:${mark}`)
 
-      return acc
-    }, {})
+    const coords = mp.game.ui.getBlipInfoIdCoord(mark)
+
+    if (!coords) {
+      return
+    }
+
+    const [x, y] = [
+      Number(coords.x.toFixed(4)),
+      Number(coords.y.toFixed(4))
+    ]
+
+    if (!this.drawPoly[mark]) {
+      this.drawPoly = Object.keys(this.drawPoly).reduce((acc, current) => {
+        if (this.drawPoly[current]) {
+          acc = { ...this.drawPoly[current] }
+        }
+  
+        return acc
+      }, {})
+    }
+
+    const [polyX, polyY] = this.drawPoly[mark] || []
+    
+    if (polyX !== x && polyY !== y) {
+      this.drawPoly[mark] = [x, y]
+
+      if (!this.poly.length) {
+        this.poly = [[x, y]]
+      }
+
+      this.refreshRoute()
+    }
   }
 
-  private expirePolyMarks() {
-    const aliveMarks = this.getUserMarks()
-
-    this.poly = aliveMarks.reduce((acc, current) => {
-      acc[current] = { ...this.poly[current], expired: true }
-      return acc
-    }, {})
+  private getUserMark(): number | undefined {
+    return mp.game.ui.getFirstBlipInfoId(WaypointService.userMark)
   }
 
-  private addPoint(mark: number, dot: Array2d) {
-    this.poly[mark] = { ...this.poly[mark], dot }
+  private commit() {
+    const [[x, y] = []] = Object.values(this.drawPoly).slice(-1)
 
+    if (!x || !y) {
+      console.error('Not found dot for commit')
+      return
+    }
+
+    const existPoly = this.findByDot([x, y])
+
+    if (existPoly) {
+      console.error('Already existing dot, skipping')
+      return
+    }
+
+    this.poly.push([x, y])
+    this.refreshRoute()
+  }
+
+  private findByDot([x, y]: Array2d) {
+    return this.poly.find(([polyX, polyY]) => (
+      x === polyX && y === polyY
+    ))
+  }
+
+  private refreshRoute() {
     this.route.clear()
     this.route.start(WaypointService.hudColor)
   }

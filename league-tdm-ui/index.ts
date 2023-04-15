@@ -57,7 +57,11 @@ const main = async () => {
 
 main()
 
+// Some hidden info about rage apis
+// Uint numbers:
 // about Right shift >> with mp.game.invoke
 // when you use mp.game.invoke js might eat your huge ingeters by making it float
 // try like (weaponHash >> 0) to make it "strict" integer
 // However there is player.weapon = weaponHash as well
+// Ref ints:
+// Try pass [number] instead of number
