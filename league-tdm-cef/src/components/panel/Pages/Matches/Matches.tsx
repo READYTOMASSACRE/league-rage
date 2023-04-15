@@ -7,14 +7,14 @@ import RageAPI from '../../../../helpers/RageAPI'
 import { Lang } from '../../../../../../league-lang/language'
 
 interface Props {
-  matches: Round[]
   name?: string
   id?: string
   amount?: number
 }
 
-const Games: FC<Props> = ({ matches, name, id, amount }) => {
+const Games: FC<Props> = ({ name, id, amount }) => {
 
+  const [matches, setMatches] = useState<Round[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [elementsPerPage, setElementsPerPage] = useState<undefined | number>(undefined)
   const [[from, to], setRange] = useState<[number | undefined, number | undefined]>([undefined, undefined])
@@ -49,6 +49,12 @@ const Games: FC<Props> = ({ matches, name, id, amount }) => {
     }
   }, [currentPage])
 
+  useEffect(() => {
+    if (from && to) {
+      // RageApi, setMathces
+    }
+  }, [from, to])
+
   return (
     <div className={styles.matches}>
       <h1>{RageAPI.lang.get(Lang['cef.panel.matches_title'])}</h1>
@@ -58,12 +64,11 @@ const Games: FC<Props> = ({ matches, name, id, amount }) => {
         <span>K/D/A</span>
         <span>Date</span>
       </div>
-      {matches ? <div className={styles.matchesList} ref={ref}>
-        {matches.map((match, index) => (
+      <div className={styles.matchesList} ref={ref}>
+        {matches.length ? matches.map((match) => (
           <MatchItem key={match.id} name={name} match={match} id={id} />
-        ))}
-      </div> :
-        <h1>Загрука...</h1>}
+        )) : <h1>Загрузка...</h1>}
+      </div>
       <div className={styles.pagination}>
         {pages.map((page) => (
           <div className={currentPage === page ? styles.current : ''} key={page} onClick={() => setCurrentPage(page)}>

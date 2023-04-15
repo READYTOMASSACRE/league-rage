@@ -23,7 +23,7 @@ const Main: FC<Props> = ({ rounds, profile, arenas }) => {
 
   const page = useMemo(() => {
     if (currentPage === 'Profile' && profile) return (<Profile profile={profile} />)
-    if (currentPage === 'Matches') return (<Matches matches={rounds} name={profile?.name} id={profile?.id} amount={57}/>)
+    if (currentPage === 'Matches') return (<Matches name={profile?.name} id={profile?.id} amount={57}/>)
     if (currentPage === 'Vote') return (<Voting arenas={arenas} />)
     if (currentPage === 'About') return (<About />)
   }, [currentPage, profile, rounds])
