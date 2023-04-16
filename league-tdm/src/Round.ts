@@ -31,7 +31,13 @@ export default class Round {
     this.prepareTimer = setTimeout(() => this.start(), helpers.toMs(this.config.prepareSeconds))
     this.state = RoundState.prepare
 
-    this.config.players.forEach(player => this.playerService.setState(player, State.prepare))
+    this.config.players.forEach(player => {
+      const vector = this.arena.getRandVector(this.playerService.getTeam(player))
+
+      this.playerService.setState(player, State.prepare)
+      this.playerService.spawn(player, vector)
+    })
+
     this.dummyService.set(Entity.ROUND, 'arena', this.arena.code)
     mp.events.call(Events["tdm.round.prepare"], this.arena.id, this.config.players)
     mp.players.call(Events["tdm.round.prepare"], [this.arena.id, this.config.players])
@@ -86,9 +92,6 @@ export default class Round {
   }
 
   addPlayer(id: number, manual?: boolean, whoAdded?: number) {
-    const vector = this.arena.getRandVector(this.playerService.getTeam(id))
-
-    this.playerService.spawn(id, vector)
     this.playerService.setState(id, State.alive)
     this.playerService.setHealth(id, 100)
 

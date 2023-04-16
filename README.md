@@ -173,6 +173,7 @@ var c = {
   "effects": {
     "death": 5, // death timer in seconds
   },
+  "mapeditor": false // enable/disable mapeditor
 }
 ```
 

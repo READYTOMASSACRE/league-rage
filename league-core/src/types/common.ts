@@ -93,6 +93,7 @@ export interface IConfig {
   effects: EffectsConfig
   prefix: string
   rcon?: string
+  mapeditor: boolean
 }
 
 export interface ClientConfig extends Omit<IConfig, 'db' | 'rcon'> {

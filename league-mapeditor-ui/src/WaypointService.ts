@@ -7,7 +7,7 @@ import Fly from './Fly'
 export default class WaypointService {
   static userMark: number = 162
   static hudColor: number = 9
-  static thickness: number = 5
+  static thickness: number = 2
   static cmd = 'medit'
   static vkSpace = 0x20
   static vkDelete = 0x2E
@@ -47,6 +47,13 @@ export default class WaypointService {
   @command('save', { group: WaypointService.cmd })
   save() {
     mp.events.callRemote(Events['tdm.mapeditor.save'], JSON.stringify(this.poly))
+  }
+
+  @command('savepos', { group: WaypointService.cmd })
+  savePos() {
+    const {x, y, z} = mp.players.local.position
+
+    mp.events.callRemote(Events['tdm.mapeditor.save'], JSON.stringify([[x, y, z]]))
   }
 
   @command('reset', { group: WaypointService.cmd})
@@ -132,11 +139,8 @@ export default class WaypointService {
     const mark = this.getUserMark()
 
     if (!mark || !mp.game.ui.doesBlipExist(mark)) {
-      console.log(`fillDrawPoly doesntExist:${mark}`)
       return
     }
-
-    console.log(`fillDrawPoly:${mark}`)
 
     const coords = mp.game.ui.getBlipInfoIdCoord(mark)
 
@@ -180,14 +184,12 @@ export default class WaypointService {
     const [[x, y] = []] = Object.values(this.drawPoly).slice(-1)
 
     if (!x || !y) {
-      console.error('Not found dot for commit')
       return
     }
 
     const existPoly = this.findByDot([x, y])
 
     if (existPoly) {
-      console.error('Already existing dot, skipping')
       return
     }
 

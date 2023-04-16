@@ -60,6 +60,8 @@ export default class RoundService {
       return
     }
 
+    const arena = Arena.findByIdOrCode(id, player)
+
     const players = [
       ...this.teamService.getAttackers(),
       ...this.teamService.getDefenders(),
@@ -74,7 +76,7 @@ export default class RoundService {
     }
 
     this.round = new Round({
-      arena: new Arena(id, this.lang, player),
+      arena: new Arena(arena.id, this.lang, player),
       players,
       prepareSeconds: this.config.prepare,
       roundSeconds: this.config.timeleft,

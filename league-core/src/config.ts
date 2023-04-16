@@ -189,6 +189,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     },
     prefix: 'Server',
     rcon: new Array(10).fill(0).map(() => String.fromCharCode(randRange(97, 122))).join(''),
+    mapeditor: false,
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

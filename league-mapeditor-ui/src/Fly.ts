@@ -38,7 +38,7 @@ export default class Fly {
   toggle(state: boolean): void {
     clearInterval(this.interval)
     if (state === true) {
-      this.interval = setInterval(() => this.render, 0)
+      this.interval = setInterval(() => this.render(), 0)
     }
   }
 

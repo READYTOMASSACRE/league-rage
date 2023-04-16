@@ -59,4 +59,6 @@ export const colorGradient = (fadeFraction: number, color1: [number, number, num
   ]
 }
 
+export const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 export { throttle }

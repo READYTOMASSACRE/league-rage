@@ -25,6 +25,7 @@ export default class ConfigService {
             effects: this.config.effects,
             version: 'League 0.7a',
             prefix: this.config.prefix,
+            mapeditor: this.config.mapeditor,
         }
     }
 }

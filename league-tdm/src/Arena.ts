@@ -4,6 +4,7 @@ import { arenaPath } from "./helpers"
 import { helpers, types, catchError } from '../../league-core'
 import { ILanguage, Lang } from "../../league-lang/language"
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler"
+import BroadCastError from "./error/BroadCastError"
 
 export default class Arena {
   readonly arena: types.tdm.Arena
@@ -45,7 +46,6 @@ export default class Arena {
     const index = typeof Arena.indexById[id] !== 'undefined'
       ? Arena.indexById[id]
       : Arena.indexByCode[id]
-
 
     if (!this.arenas[index]) {
       if (player) {
@@ -95,6 +95,37 @@ export default class Arena {
     this.indexByCode = indexByCode
 
     return true
+  }
+
+  @catchError(ErrorNotifyHandler)
+  static findByIdOrCode(id: string, player?: PlayerMp) {
+    let index = typeof Arena.indexById[id] !== 'undefined'
+      ? Arena.indexById[id]
+      : Arena.indexByCode[id]
+
+    if (!this.arenas[index]) {
+      if (player) {
+        const codes = Object.keys(Arena.indexByCode)
+        const regexp = new RegExp(id, 'i')
+        const arenas = codes.filter(code => code.match(regexp))
+        const [code] = arenas
+        const arenaId = Arena.indexByCode[code]
+  
+        if (!this.arenas[arenaId]) {
+          throw new NotFoundError(Lang["error.arena.not_found"], player, { arena: id })
+        }
+  
+        if (arenas.length > 1) {
+          throw new BroadCastError(Lang["error.arena.too_many_result"], player, { arena: arenas.join(', ') })
+        }
+  
+        index = arenaId
+      } else {
+        throw new Error(`Arena ${id} not found`)
+      }
+    }
+
+    return this.arenas[index]
   }
 
   private static isArenaConfig(a: any): a is types.tdm.Arena {

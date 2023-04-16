@@ -6,6 +6,7 @@
   "error.arena.invalid_format": "Invalid arenas format",
   "error.arena.not_found": "Arena :arena not found",
   "error.arena.not_found_spawn": "Not found spawn points in arena :arena",
+  "error.arena.too_many_result": "Найдено слишком много арен: arena",
 
   "error.team.not_found": "Команда :team не знайдена",
   "error.team.player_is_busy": "В данный момент вы не можете изменить команду",

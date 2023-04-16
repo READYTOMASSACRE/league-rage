@@ -1,12 +1,16 @@
 import { console } from "../league-core/client"
+import { ClientConfig, Procs } from "../league-core/src/types"
 import Fly from "./src/Fly"
 import WaypointService from "./src/WaypointService"
 
 const main = async () => {
   try {
     const fly = new Fly()
+    const config: ClientConfig = await mp.events.callRemoteProc(Procs["tdm.config.get"])
 
-    new WaypointService(fly)
+    if (config.mapeditor) {
+      new WaypointService(fly)
+    }
 
     console.log('league-mapeditor-ui package initialized')
   } catch (err) {

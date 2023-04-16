@@ -6,6 +6,7 @@ export const enum Lang {
   "error.arena.invalid_format" = "error.arena.invalid_format",
   "error.arena.not_found" = "error.arena.not_found",
   "error.arena.not_found_spawn" = "error.arena.not_found_spawn",
+  "error.arena.too_many_result" = "error.arena.too_many_result",
 
   "error.team.not_found" = "error.team.not_found",
   "error.team.player_is_busy" = "error.team.player_is_busy",
