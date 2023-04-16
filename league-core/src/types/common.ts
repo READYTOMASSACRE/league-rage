@@ -196,6 +196,8 @@ export const enum Events {
   'tdm.cef.gamemode' = 'tdm.cef.gamemode',
   /** Fires when vote_arena requested from client/cef */
   'tdm.cef.vote.arena_request' = 'tdm.cef.vote.arena_request',
+  /** Fires when matches requested from client/cef */
+  'tdm.cef.match.request' = 'tdm.cef.match.request',
   /** Fires when someone push to popup */
   'tdm.popup.push' = 'tdm.popup.push',
   /** Fires when infopanel gets data */
@@ -247,6 +249,8 @@ export const enum Procs {
   'tdm.statistic.profile.get' = 'tdm.statistic.profile.get',
   /** Returns player round's statistic */
   'tdm.statistic.round.get' = 'tdm.statistic.round.get',
+  /** Returns player round's statistic */
+  'tdm.statistic.round.total' = 'tdm.statistic.round.total',
   /** Returns round's timeleft */
   'tdm.round.timeleft' = 'tdm.round.timeleft',
 }

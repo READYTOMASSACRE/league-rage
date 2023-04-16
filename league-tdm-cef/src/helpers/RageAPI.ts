@@ -1,4 +1,5 @@
 import { Enviroment, Events } from "../../../league-core/src/types"
+import { ListRequest } from "../../../league-core/src/types/statistic"
 import { ILanguage, Lang, Language } from '../../../league-lang/language'
 import cefLog from "./cefLog"
 
@@ -57,6 +58,15 @@ export default new class RageAPI {
 
   panelRequest(...args: any[]) {
     mp.trigger(Events["tdm.cef.panel"], true, ...args)
+  }
+
+  matchRequest({
+    limit = 20,
+    offset = 0,
+    dateFrom,
+    dateTo
+  }: ListRequest = {}) {
+    mp.trigger(Events["tdm.cef.match.request"], limit, offset, dateFrom, dateTo)
   }
 
   voteArenaRequest(id: string | number) {

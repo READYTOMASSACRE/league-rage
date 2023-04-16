@@ -11,6 +11,7 @@ export default class WeaponService {
   static isPedArmed = '0x475768A975D5AD17'
   static setCurrentPedWeapon = '0xADF692B254977C0C'
   static exceptFists = 7
+  static exceptMelee = 6
 
   private throttledIncomingUpdate: Function
   private damage: number = 0
@@ -44,11 +45,28 @@ export default class WeaponService {
       mp.game.player.setHealthRechargeMultiplier(0.0);
 		  mp.game.player.restoreStamina(100)
 
-      if (mp.game.invoke(WeaponService.isPedArmed, this.playerService.local.handle, WeaponService.exceptFists)) {
+      // stealth kill
+      if (mp.players.local.isPerformingStealthKill()) {
+        mp.players.local.clearTasksImmediately()
+      }
+
+      // disable stealth melee by weapons
+      if (mp.game.invoke(WeaponService.isPedArmed, this.playerService.local.handle, WeaponService.exceptMelee)) {
         mp.game.controls.disableControlAction(0, 140, true)
         mp.game.controls.disableControlAction(0, 141, true)
         mp.game.controls.disableControlAction(0, 142, true)
       }
+
+      // combat running
+      if (mp.players.local.isUsingActionMode()) {
+        mp.players.local.setUsingActionMode(false, -1, "-1")
+      }
+
+      // slowmotion Camera abuses
+      mp.game.controls.disableControlAction(0, 7, true) // INPUT_CINEMATIC_SLOWMO
+      mp.game.controls.disableControlAction(0, 334, true) // INPUT_VEH_SLOWMO_UD
+      mp.game.controls.disableControlAction(0, 335, true) // INPUT_VEH_SLOWMO_UP_ONLY
+      mp.game.controls.disableControlAction(0, 336, true) // INPUT_VEH_SLOWMO_DOWN_ONLY
     } catch (err) {
       console.error(err)
       this.rendering = false

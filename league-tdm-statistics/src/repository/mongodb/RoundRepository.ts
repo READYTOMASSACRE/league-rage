@@ -6,13 +6,21 @@ import MongodbRepository from "./MongodbRepository";
 export default class RoundRepository extends MongodbRepository<MongoRound> {
   name = 'round'
 
-  async get({
+  async get(filter: RoundMongoFilter) {
+    return super.get(this.makeFilter(filter))
+  }
+
+  async count(filter: RoundMongoFilter) {
+    return super.count(this.makeFilter(filter))
+  }
+
+  private makeFilter({
     userId,
     dateFrom,
     dateTo,
     ...filter
   }: RoundMongoFilter) {
-    return super.get({
+    return {
       ...filter,
       ...(dateFrom || dateTo ? {
         id: {
@@ -26,6 +34,6 @@ export default class RoundRepository extends MongodbRepository<MongoRound> {
           {[`${Team.defenders}.players.${userId}`]: { $exists: true }},
         ],
       } : {}),
-    })
+    }
   }
 }

@@ -17,6 +17,7 @@ export interface IRepository<T extends TEntity> {
   get(...args: any[]): Promise<T[]>
   getOne(...args: any[]): Promise<T | undefined>
   getById(id: number | string): Promise<T | undefined>
+  count(...args: any[]): Promise<number>
 }
 
 export interface IProfileRepoSitory extends IRepository<Profile> {}

@@ -69,10 +69,22 @@ export type MongoRound = Round & { _id: any }
 
 export type PanelData = {
   profile: ClientProfile
-  rounds: Round[]
+  roundsTotal: number
   visible: boolean
   arenas: Record<number, Arena>
   title?: string
 }
 
+export type PanelMatchData = ListReponse<Round>
+
 export type AuthType = 'pending' | 'social' | 'auth' | 'error'
+
+export type ListReponse<T> = { list: T[], total: number }
+
+export type ListRequest = {
+  userId?: userId
+  limit?: number
+  offset?: number
+  dateFrom?: number
+  dateTo?: number
+}

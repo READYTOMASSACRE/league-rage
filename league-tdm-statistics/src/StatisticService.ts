@@ -1,6 +1,7 @@
-import { event, eventable, proc, proceable } from "../../league-core";
+import { event, eventable, log, proc, proceable } from "../../league-core";
 import { toClientProfile } from "../../league-core/src/helpers/toStatistic";
 import { Events, Procs } from "../../league-core/src/types";
+import { ListRequest } from "../../league-core/src/types/statistic";
 import PlayerService from "./PlayerService";
 import ProfileService from "./ProfileService";
 import RoundService from "./RoundService";
@@ -44,30 +45,60 @@ export default class StatisticService {
 
   @proc(Procs["tdm.statistic.round.get"])
   async getRound(
+    player: PlayerMp,
+    idOrUserId?: string | number,
+    limit: number = maxLimit,
+    offset?: number,
+    dateFrom?: number,
+    dateTo?: number, 
+  ) {
+    try {
+      const userId = this.getUserId(player, idOrUserId)
+  
+      const query: ListRequest = {
+        userId,
+        limit,
+        offset: offset ?? 0,
+      }
+  
+      if (dateFrom) {
+        query.dateFrom = Number(dateFrom)
+      }
+  
+      if (dateTo) {
+        query.dateTo = Number(dateTo)
+      }
+  
+      return JSON.stringify(await this.roundService.get(query))
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  }
+
+  @log
+  @proc(Procs["tdm.statistic.round.total"])
+  async getRoundCount(
       player: PlayerMp,
       idOrUserId?: string | number,
-      limit: number = maxLimit,
-      offset?: number,
       dateFrom?: number,
       dateTo?: number, 
     ) {
     const userId = this.getUserId(player, idOrUserId)
 
+    const query: ListRequest = {
+      userId,
+    }
+
     if (dateFrom) {
-      dateFrom = Number(dateFrom)
+      query.dateFrom = Number(dateFrom)
     }
 
     if (dateTo) {
-      dateTo = Number(dateTo)
+      query.dateTo = Number(dateTo)
     }
 
-    return JSON.stringify(await this.roundService.get({
-      userId,
-      limit,
-      offset,
-      dateFrom,
-      dateTo,
-    }))
+    return await this.roundService.count(query)
   }
 
   private getUserId(player: PlayerMp, idOrUserId?: number | string) {

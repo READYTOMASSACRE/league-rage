@@ -17,12 +17,7 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
     if (opts?.write) await this.saveDatabase()
   }
 
-  async get({
-    ids,
-    offset = 0,
-    limit = maxLimit,
-    ...query
-  }: LokiFilter<T> = {}) {
+  async get({ ids, offset = 0, limit = maxLimit, ...query }: LokiFilter<T> = {}) {
     return Promise.resolve(
       this.collection
         .chain()
@@ -34,6 +29,19 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
         .offset(Number(offset))
         .limit(Number(limit))
         .data()
+    )
+  }
+
+  async count({ ids, ...query }: LokiFilter<T> = {}) {
+    return Promise.resolve(
+      this.collection
+        .chain()
+        .find({
+          ...(ids ? { id: { $in: ids } } : false),
+          ...query,
+        })
+        .data()
+        .length
     )
   }
 

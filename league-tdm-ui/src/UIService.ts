@@ -70,7 +70,7 @@ export default class UIService {
     this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
     this.deathlog = new Deathlog(this, playerService, teamService)
     this.motd = new Motd(config, this, keybindService)
-    this.panel = new Panel(config.name, this, keybindService, arenaService)
+    this.panel = new Panel(config.name, this, keybindService, arenaService, playerService)
     this.spectate = new Spectate(this, playerService)
     this.weaponHud = new WeaponHud(this, playerService)
     this.winner = new Winner(this, teamService)

@@ -19,16 +19,18 @@ export default abstract class MongodbRepository<T extends MongoEntity> extends B
     }
   }
 
-  async get({
-    ids,
-    limit = maxLimit,
-    offset,
-    ...query
-  }: Filter<T> = {}) {
+  async get({ ids, limit = maxLimit, offset, ...query }: Filter<T> = {}) {
     return this.collection.find({
       ...(ids ? { id: { $in: ids } } : false),
       ...query,
     }).limit(Number(limit)).skip(Number(offset) || 0).sort({ _id: -1 }).toArray() as any as T[]
+  }
+
+  async count({ ids, ...query }: Filter<T> = {}) {
+    return this.collection.countDocuments({
+      ...(ids ? { id: { $in: ids } } : false),
+      ...query,
+    })
   }
 
   async getOne(query: Filter<T>) {

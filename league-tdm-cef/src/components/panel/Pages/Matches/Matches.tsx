@@ -1,10 +1,12 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Round } from '../../../../../../league-core/src/types/statistic'
+import { ListReponse, Round } from '../../../../../../league-core/src/types/statistic'
 
 import * as styles from '../../styles/panel.module.sass'
 import MatchItem from './MatchItem'
 import RageAPI from '../../../../helpers/RageAPI'
 import { Lang } from '../../../../../../league-lang/language'
+import { Events } from '../../../../../../league-core/src/types'
+import cefLog from '../../../../helpers/cefLog'
 
 interface Props {
   name?: string
@@ -20,6 +22,20 @@ const Games: FC<Props> = ({ name, id, amount }) => {
   const [[from, to], setRange] = useState<[number | undefined, number | undefined]>([undefined, undefined])
 
   const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    RageAPI.subscribe(Events['tdm.cef.match.request'], 'matches', (payload: string) => {
+      try {
+        const {list, total}: ListReponse<Round> = JSON.parse(payload)
+
+        // RageAPI.matchRequest({ limit: 20, offset: 0 }) match request
+      } catch (err) {
+        cefLog(err)
+      }
+    })
+
+    return () => RageAPI.unsubscribe(Events['tdm.cef.match.request'], 'matches')
+  }, [])
 
   useEffect(() => {
     if (ref.current) {

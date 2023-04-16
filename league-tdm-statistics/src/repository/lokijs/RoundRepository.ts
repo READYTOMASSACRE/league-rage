@@ -7,13 +7,21 @@ import LokijsRepository from "./LokijsRepository";
 export default class RoundRepository extends LokijsRepository<Round> {
   name = 'round'
 
-  async get({
+  async get(filter: RoundLokiFilter) {
+    return super.get(this.makeFilter(filter))
+  }
+
+  async count(filter: RoundLokiFilter) {
+    return super.count(this.makeFilter(filter))
+  }
+
+  private makeFilter({
     userId,
     dateFrom = Date.now() - (day * 10),
     dateTo,
     ...filter
   }: RoundLokiFilter) {
-    return super.get({
+    return {
       ...filter,
       ...(dateFrom || dateTo ? {
         id: {
@@ -27,7 +35,7 @@ export default class RoundRepository extends LokijsRepository<Round> {
           {[`${Team.defenders}.players.${userId}`]: { $exists: true }},
         ],
       } : {}),
-    })
+    }
   }
 }
 

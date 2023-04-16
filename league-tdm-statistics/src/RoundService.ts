@@ -1,6 +1,6 @@
 import { toRound } from "../../league-core/src/helpers/toStatistic";
 import { userId } from "../../league-core/src/types";
-import { Round } from "../../league-core/src/types/statistic";
+import { ListReponse, ListRequest, Round } from "../../league-core/src/types/statistic";
 import RepositoryService from "./RepositoryService";
 import { maxLimit } from "./helpers";
 
@@ -19,15 +19,8 @@ export default class RoundService {
     userId,
     limit,
     offset,
-    dateFrom,
-    dateTo,
-  }: {
-    userId: userId
-    limit?: number
-    offset?: number
-    dateFrom?: number
-    dateTo?: number
-  }) {
+    ...args
+  }: ListRequest): Promise<ListReponse<Round>> {
     try {
       limit = Number(limit ?? maxLimit)
       offset = Number(offset ?? 0)
@@ -40,14 +33,24 @@ export default class RoundService {
         userId,
         limit,
         offset,
-        dateFrom,
-        dateTo
+        ...args
       })
 
-      return rounds.map(toRound)
+      const total = await this.repositoryService.round.count({ userId, ...args })
+
+      return { list: rounds.map(toRound), total }
     } catch (err) {
       console.error(err)
-      return []
+      return { list: [], total: 0 }
+    }
+  }
+
+  async count(request: ListRequest) {
+    try {
+      return await this.repositoryService.round.count(request)
+    } catch (err) {
+      console.error(err)
+      return 0
     }
   }
 }

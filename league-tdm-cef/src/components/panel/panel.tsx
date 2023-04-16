@@ -19,7 +19,7 @@ export default () => {
   const [shrink, setShrink] = useState<boolean>(false)
 
   const [profile, setProfile] = useState<ClientProfile>()
-  const [rounds, setRounds] = useState<Round[]>([])
+  const [rounds, setRounds] = useState<Round[]>([]) // больше не приходит
   const [arenas, setArenas] = useState<Record<number, Arena>>()
   const [title, setTitle] = useState('Game panel')
 
@@ -33,7 +33,8 @@ export default () => {
 
         const {
           profile,
-          rounds = [],
+          rounds = [], // больше не приходит
+          roundsTotal,
           visible,
           arenas,
           title = 'Game panel',
