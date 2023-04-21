@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+      "target": "esnext",
+      "module": "commonjs",
+      "experimentalDecorators": true,
+      "outDir": "./dist",
+      "preserveConstEnums": true,
+      "allowJs": true,
+      "alwaysStrict": true,
+      "composite": true,
+      "skipLibCheck": true,
+      "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"],
+      "esModuleInterop": true
+  },
+  "include": ["client.ts", "index.ts", "src/**/*"],
+  "exclude": ["node_modules"]
+}

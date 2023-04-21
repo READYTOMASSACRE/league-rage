@@ -1,0 +1,26 @@
+{
+  "name": "league-tdm-statistics",
+  "description": "League tdm statics package",
+  "version": "0.1.1",
+  "license": "ISC",
+  "devDependencies": {
+    "@ragempcommunity/types-server": "^2.1.1",
+    "@types/lokijs": "^1.5.7",
+    "esbuild": "^0.17.17"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.local.json",
+    "watch": "tsc -p tsconfig.local.json --watch",
+    "source:external": "tsc",
+    "prebuild:external": "rm -rf ../../../packages/league-tdm-statistics",
+    "build:external": "esbuild index.ts --bundle --platform=node --outfile=../../../packages/league-tdm-statistics/index.js",
+    "watch:external": "esbuild index.ts --bundle --platform=node --outfile=../../../packages/league-tdm-statistics/index.js --watch"
+  },
+  "dependencies": {
+    "@types/node": "^18.15.9",
+    "date-fns": "^2.29.3",
+    "deepmerge": "^4.3.1",
+    "lokijs": "^1.5.12",
+    "mongodb": "^5.1.0"
+  }
+}
