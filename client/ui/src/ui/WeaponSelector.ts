@@ -29,15 +29,6 @@ export default class WeaponRequest {
     this.data = this.getData()
   }
 
-  @event(Events["tdm.round.prepare"])
-  roundPrepare(arenaId: number, players: number[]) {
-    if (!players.includes(this.playerService.local.remoteId)) {
-      return
-    }
-
-    this.request(true)
-  }
-
   @event([Events["tdm.round.end"], Events["tdm.round.remove"], "playerDeath"])
   close() {
     if (this.visible) {

@@ -79,6 +79,12 @@ export default class Round {
     this.state = RoundState.stopped
     this.time = 0
     this.dummyService.set(Entity.ROUND, 'arena', '')
+
+    this.players = [...this.players, ...this.config.players.filter(id => (
+      ![State.select, State.spectate].includes(this.playerService.getState(id)) &&
+      !this.players.includes(id)
+    ))]
+
     this.players.forEach(id => this.removePlayer(id))
 
     clearTimeout(this.prepareTimer)

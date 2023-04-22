@@ -62,12 +62,11 @@ export default class RoundService {
 
     const arena = Arena.findByIdOrCode(id, player)
 
-    const players = [
-      ...this.teamService.getAttackers(),
-      ...this.teamService.getDefenders(),
-    ]
+    const attackers = this.teamService.getAttackers()
+    const defenders = this.teamService.getDefenders()
+    const players = [...attackers, ...defenders]
 
-    if (!players.length) {
+    if (this.config.watcher.alive && (!attackers.length || !defenders.length)) {
       if (player) {
         throw new BroadCastError(Lang["tdm.round.start_empty"], player)
       }
@@ -153,7 +152,6 @@ export default class RoundService {
     if (!this.round) return
     
     this.round.end()
-    delete this.round
   }
 
   get state() {
