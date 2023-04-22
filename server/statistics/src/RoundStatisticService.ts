@@ -1,10 +1,10 @@
-import { eventable, event } from '../../league-core'
-import { Events, userId } from '../../league-core/src/types'
-import { Entity, Team, TeamConfig } from '../../league-core/src/types/tdm'
+import { eventable, event } from '../../../core'
+import { Events, userId } from '../../../core/src/types'
+import { Entity, Team, TeamConfig } from '../../../core/src/types/tdm'
 import PlayerService from './PlayerService'
-import { PlayerStat, Profile, Round, StatisticConfig } from '../../league-core/src/types/statistic'
-import { toPlayerStat, toRound } from '../../league-core/src/helpers/toStatistic'
-import DummyService from "../../league-core/src/server/DummyService";
+import { PlayerStat, Profile, Round, StatisticConfig } from '../../../core/src/types/statistic'
+import { toPlayerStat, toRound } from '../../../core/src/helpers/toStatistic'
+import DummyService from "../../../core/src/server/DummyService";
 import ProfileService from './ProfileService'
 import RoundService from './RoundService'
 

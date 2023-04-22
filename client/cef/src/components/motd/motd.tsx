@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './motd.module.sass'
 

@@ -1,6 +1,6 @@
-import { event, eventable, helpers, console } from "../../league-core/client";
-import { Events } from "../../league-core/src/types";
-import { WeaponSlot } from "../../league-core/src/types/tdm";
+import { event, eventable, helpers, console } from "../../../core/client";
+import { Events } from "../../../core/src/types";
+import { WeaponSlot } from "../../../core/src/types/tdm";
 import KeybindService, { key } from "./KeybindService";
 import PlayerService from "./PlayerService";
 import weapons from "./weapons";

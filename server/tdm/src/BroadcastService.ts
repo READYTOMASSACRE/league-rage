@@ -1,10 +1,10 @@
-import { event, eventable } from "../../league-core";
-import { Enviroment, Events, IConfig, tdm, userId } from "../../league-core/src/types";
-import { ChatItem } from "../../league-core/src/types/cef";
-import { Role } from "../../league-core/src/types/permission";
-import { AuthType } from "../../league-core/src/types/statistic";
-import { Vote } from "../../league-core/src/types/tdm";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { event, eventable } from "../../../core";
+import { Enviroment, Events, IConfig, tdm, userId } from "../../../core/src/types";
+import { ChatItem } from "../../../core/src/types/cef";
+import { Role } from "../../../core/src/types/permission";
+import { AuthType } from "../../../core/src/types/statistic";
+import { Vote } from "../../../core/src/types/tdm";
+import { ILanguage, Lang } from "../../../lang/language";
 import Arena from "./Arena";
 import PlayerService from "./PlayerService";
 import TeamService from "./TeamService";

@@ -1,5 +1,5 @@
-import { event, eventable } from "../../league-core/client";
-import { ClientConfig, Events } from "../../league-core/src/types";
+import { event, eventable } from "../../../core/client";
+import { ClientConfig, Events } from "../../../core/src/types";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";

@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Round } from '../../../../../../league-core/src/types/statistic'
+import { Round } from '../../../../../../../core/src/types/statistic'
 
 import * as styles from '../../styles/panel.module.sass'
 

@@ -1,6 +1,6 @@
-import { console, route, command, commandable } from '../../league-core/client'
-import { sleep } from '../../league-core/src/helpers'
-import { Events } from '../../league-core/src/types'
+import { console, route, command, commandable } from '../../../core/client'
+import { sleep } from '../../../core/src/helpers'
+import { Events } from '../../../core/src/types'
 import Fly from './Fly'
 
 @commandable

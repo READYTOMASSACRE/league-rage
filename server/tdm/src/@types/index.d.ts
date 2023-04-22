@@ -1,5 +1,5 @@
-import { userId } from "../../../league-core/src/types";
-import { ChatItem } from "../../../league-core/src/types/cef";
+import { userId } from "../../../../core/src/types";
+import { ChatItem } from "../../../../core/src/types/cef";
 
 declare global {
   interface PlayerMp {

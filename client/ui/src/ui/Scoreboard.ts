@@ -1,6 +1,6 @@
-import { event, eventable } from "../../../league-core/client";
-import { Events, scoreboard } from "../../../league-core/src/types";
-import { Entity } from "../../../league-core/src/types/tdm";
+import { event, eventable } from "../../../../core/client";
+import { Events, scoreboard } from "../../../../core/src/types";
+import { Entity } from "../../../../core/src/types/tdm";
 import DummyService from "../DummyService";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";

@@ -1,9 +1,9 @@
 import PermissionError from "./error/PermissionError";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
-import { Right, Role, Rule } from "../../league-core/src/types/permission";
-import { Events, IConfig } from "../../league-core/src/types";
-import { command, commandable, event, eventable, catchError } from "../../league-core";
+import { Right, Role, Rule } from "../../../core/src/types/permission";
+import { Events, IConfig } from "../../../core/src/types";
+import { command, commandable, event, eventable, catchError } from "../../../core";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import BroadCastError from "./error/BroadCastError";
 

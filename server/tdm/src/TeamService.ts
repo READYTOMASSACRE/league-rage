@@ -1,9 +1,9 @@
-import { eventable, event, ensurePlayer, commandable, command, helpers, catchError } from "../../league-core";
-import { deepclone } from "../../league-core/src/helpers";
-import DummyService from "../../league-core/src/server/DummyService";
-import { Events, tdm } from "../../league-core/src/types";
-import { Entity } from "../../league-core/src/types/tdm";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { eventable, event, ensurePlayer, commandable, command, helpers, catchError } from "../../../core";
+import { deepclone } from "../../../core/src/helpers";
+import DummyService from "../../../core/src/server/DummyService";
+import { Events, tdm } from "../../../core/src/types";
+import { Entity } from "../../../core/src/types/tdm";
+import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
 import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";

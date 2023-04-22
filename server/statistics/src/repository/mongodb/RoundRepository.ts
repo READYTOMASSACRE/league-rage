@@ -1,5 +1,5 @@
-import { MongoRound } from "../../../../league-core/src/types/statistic";
-import { Team } from "../../../../league-core/src/types/tdm";
+import { MongoRound } from "../../../../../core/src/types/statistic";
+import { Team } from "../../../../../core/src/types/tdm";
 import { RoundMongoFilter } from "../../@types";
 import MongodbRepository from "./MongodbRepository";
 

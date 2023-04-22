@@ -1,6 +1,6 @@
-import { deepclone } from "../../../league-core/src/helpers";
-import { Events } from "../../../league-core/src/types";
-import { DamageConfig } from "../../../league-core/src/types/hud";
+import { deepclone } from "../../../../core/src/helpers";
+import { Events } from "../../../../core/src/types";
+import { DamageConfig } from "../../../../core/src/types/hud";
 import Hud from "./Hud";
 
 interface Damage extends DamageConfig {}

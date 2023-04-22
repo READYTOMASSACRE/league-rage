@@ -1,4 +1,4 @@
-import { Dummy, Entity } from "../../league-core/src/types/tdm";
+import { Dummy, Entity } from "../../../core/src/types/tdm";
 
 export default class DummyService {
   getOne(type: Entity): DummyEntityMp | undefined {

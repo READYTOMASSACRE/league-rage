@@ -1,4 +1,4 @@
-import { Entity, Team, TeamConfig } from "../../league-core/src/types/tdm";
+import { Entity, Team, TeamConfig } from "../../../core/src/types/tdm";
 import DummyService from "./DummyService";
 
 export default class TeamService {

@@ -1,8 +1,8 @@
-import { event, eventable } from "../../league-core";
-import { toClientProfile, toProfile } from "../../league-core/src/helpers/toStatistic";
-import { Events, userId } from "../../league-core/src/types";
-import { Role } from "../../league-core/src/types/permission";
-import { Profile } from "../../league-core/src/types/statistic";
+import { event, eventable } from "../../../core";
+import { toClientProfile, toProfile } from "../../../core/src/helpers/toStatistic";
+import { Events, userId } from "../../../core/src/types";
+import { Role } from "../../../core/src/types/permission";
+import { Profile } from "../../../core/src/types/statistic";
 import PlayerService from "./PlayerService";
 import RepositoryService from "./RepositoryService";
 

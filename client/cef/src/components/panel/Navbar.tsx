@@ -8,7 +8,7 @@ import About from 'jsx:../../../public/assets/svg/about.svg'
 import * as styles from './styles/panel.module.sass'
 import cl from 'classnames'
 import RageAPI from '../../helpers/RageAPI'
-import { Lang } from '../../../../league-lang/language'
+import { Lang } from '../../../../../lang/language'
 
 const data = [
   { code: 'Profile', svg: <Profile className={styles.icon}/>,},

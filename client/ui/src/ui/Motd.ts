@@ -1,5 +1,5 @@
-import { command, commandable, event, eventable } from "../../../league-core/client";
-import { ClientConfig, Enviroment, Events } from "../../../league-core/src/types";
+import { command, commandable, event, eventable } from "../../../../core/client";
+import { ClientConfig, Enviroment, Events } from "../../../../core/src/types";
 import { keyPriority } from "../@types/common";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";

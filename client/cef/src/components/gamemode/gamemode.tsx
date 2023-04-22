@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import * as styles from './gamemode.module.sass'
 import RageAPI from '../../helpers/RageAPI'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 
 export default () => {

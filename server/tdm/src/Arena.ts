@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
 import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { helpers, types, catchError } from '../../league-core'
-import { ILanguage, Lang } from "../../league-lang/language"
+import { helpers, types, catchError } from '../../../core'
+import { ILanguage, Lang } from "../../../lang/language"
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler"
 import BroadCastError from "./error/BroadCastError"
 

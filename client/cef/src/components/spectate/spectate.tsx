@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Events } from '../../../../league-core/src/types'
-import { CurrentPlayer } from '../../../../league-core/src/types/spectate'
+import { Events } from '../../../../../core/src/types'
+import { CurrentPlayer } from '../../../../../core/src/types/spectate'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './spectate.module.sass'
-import { Lang } from '../../../../league-lang/language'
+import { Lang } from '../../../../../lang/language'
 
 export default () => {
   const [current, set] = useState<CurrentPlayer>()

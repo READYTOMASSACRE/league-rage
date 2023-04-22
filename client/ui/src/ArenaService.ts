@@ -1,5 +1,5 @@
-import { event, eventable } from "../../league-core/client"
-import { Events, Procs, tdm } from "../../league-core/src/types"
+import { event, eventable } from "../../../core/client"
+import { Events, Procs, tdm } from "../../../core/src/types"
 
 @eventable
 export default class ArenaService {

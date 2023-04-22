@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
-import { ClientProfile } from '../../../../../../league-core/src/types/statistic'
+import { ClientProfile } from '../../../../../../../core/src/types/statistic'
 
 import * as styles from '../../styles/panel.module.sass'
 import ProfileItem from './ProfileItem'
 import RageAPI from '../../../../helpers/RageAPI'
-import { Lang } from '../../../../../../league-lang/language'
+import { Lang } from '../../../../../../../lang/language'
 
 interface Props {
   profile: ClientProfile

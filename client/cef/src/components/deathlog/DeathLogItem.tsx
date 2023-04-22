@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import * as s from './DeathLogItem.module.sass'
-import { deathlog } from '../../../../league-core/src/types'
+import { deathlog } from '../../../../../core/src/types'
 
 interface Props {
   data: deathlog.DeathLog

@@ -7,11 +7,11 @@ import Header from './Header'
 import Main from './Main'
 import Navbar from './Navbar'
 
-import { ClientProfile, Round } from '../../../../league-core/src/types/statistic'
+import { ClientProfile, Round } from '../../../../../core/src/types/statistic'
 import RageAPI from '../../helpers/RageAPI'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
-import { Arena } from '../../../../league-core/src/types/tdm'
+import { Arena } from '../../../../../core/src/types/tdm'
 
 export default () => {
   const [active, setActive] = useState<boolean>(false)

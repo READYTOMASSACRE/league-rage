@@ -1,6 +1,6 @@
-import { event, eventable } from "../../../league-core/client";
-import { Enviroment, Events } from "../../../league-core/src/types";
-import { ChatItem } from "../../../league-core/src/types/cef";
+import { event, eventable } from "../../../../core/client";
+import { Enviroment, Events } from "../../../../core/src/types";
+import { ChatItem } from "../../../../core/src/types/cef";
 import KeybindService, { key } from "../KeybindService";
 import UIService from "../UIService";
 

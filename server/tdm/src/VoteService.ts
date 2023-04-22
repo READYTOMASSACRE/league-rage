@@ -1,7 +1,7 @@
-import { eventable, helpers, catchError, event } from "../../league-core";
-import { Events, userId } from "../../league-core/src/types";
-import { Vote, VoteConfig } from "../../league-core/src/types/tdm";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { eventable, helpers, catchError, event } from "../../../core";
+import { Events, userId } from "../../../core/src/types";
+import { Vote, VoteConfig } from "../../../core/src/types/tdm";
+import { ILanguage, Lang } from "../../../lang/language";
 import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 

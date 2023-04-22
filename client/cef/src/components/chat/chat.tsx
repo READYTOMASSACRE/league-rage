@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import * as styles from './chat.module.sass'
 import cls from 'classnames'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import RageAPI from '../../helpers/RageAPI'
-import { ChatItem, ChatMessage } from '../../../../league-core/src/types/cef'
-import { toColor } from '../../../../league-core/src/helpers'
+import { ChatItem, ChatMessage } from '../../../../../core/src/types/cef'
+import { toColor } from '../../../../../core/src/helpers'
 import cefLog from '../../helpers/cefLog'
-import { Lang } from '../../../../league-lang/language'
+import { Lang } from '../../../../../lang/language'
 
 const MAX_CHAT_SIZE = 50
 const MAX_CHAR_SIZE = 128

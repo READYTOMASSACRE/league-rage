@@ -1,7 +1,7 @@
 import React from 'react'
 import * as styles from '../../styles/panel.module.sass'
 import RageAPI from '../../../../helpers/RageAPI'
-import { Lang } from '../../../../../../league-lang/language'
+import { Lang } from '../../../../../../../lang/language'
 
 export default () => {
   return (

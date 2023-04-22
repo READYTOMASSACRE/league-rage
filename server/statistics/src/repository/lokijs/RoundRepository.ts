@@ -1,5 +1,5 @@
-import { Round } from "../../../../league-core/src/types/statistic";
-import { Team } from "../../../../league-core/src/types/tdm";
+import { Round } from "../../../../../core/src/types/statistic";
+import { Team } from "../../../../../core/src/types/tdm";
 import { RoundLokiFilter } from "../../@types";
 import { day } from "../../helpers";
 import LokijsRepository from "./LokijsRepository";

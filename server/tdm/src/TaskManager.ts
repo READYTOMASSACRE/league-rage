@@ -1,4 +1,4 @@
-import { toMs } from "../../league-core/src/helpers"
+import { toMs } from "../../../core/src/helpers"
 
 export type Task = () => void | Promise<void>
 

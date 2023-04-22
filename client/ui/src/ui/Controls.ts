@@ -1,6 +1,6 @@
-import { event, eventable } from "../../../league-core/client";
-import { cef, Events } from "../../../league-core/src/types";
-import { ILanguage, Lang } from "../../../league-lang/language";
+import { event, eventable } from "../../../../core/client";
+import { cef, Events } from "../../../../core/src/types";
+import { ILanguage, Lang } from "../../../../lang/language";
 import UIService from "../UIService";
 
 @eventable

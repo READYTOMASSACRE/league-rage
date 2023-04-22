@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import RageAPI from '../../helpers/RageAPI'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import * as styles from './effects.module.sass'
 import { nanoid } from 'nanoid'
-import { toMs } from '../../../../league-core/src/helpers'
+import { toMs } from '../../../../../core/src/helpers'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 type Effect = [string, string, number]

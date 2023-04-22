@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import * as s from './WeaponSection.module.sass'
 import WeaponSectionItem from '../WeaponSectionItem/WeaponSectionItem';
-import { cef } from '../../../../../league-core/src/types';
+import { cef } from '../../../../../../core/src/types';
 
 
 interface Props {

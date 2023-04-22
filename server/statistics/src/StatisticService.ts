@@ -1,7 +1,7 @@
-import { event, eventable, log, proc, proceable } from "../../league-core";
-import { toClientProfile } from "../../league-core/src/helpers/toStatistic";
-import { Events, Procs } from "../../league-core/src/types";
-import { ListRequest } from "../../league-core/src/types/statistic";
+import { event, eventable, log, proc, proceable } from "../../../core";
+import { toClientProfile } from "../../../core/src/helpers/toStatistic";
+import { Events, Procs } from "../../../core/src/types";
+import { ListRequest } from "../../../core/src/types/statistic";
 import PlayerService from "./PlayerService";
 import ProfileService from "./ProfileService";
 import RoundService from "./RoundService";

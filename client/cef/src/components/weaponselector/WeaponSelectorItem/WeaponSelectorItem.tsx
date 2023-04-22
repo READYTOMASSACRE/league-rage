@@ -1,5 +1,5 @@
 import React, { CSSProperties, FC } from 'react'
-import { cef } from '../../../../../league-core/src/types';
+import { cef } from '../../../../../../core/src/types';
 import RageAPI from '../../../helpers/RageAPI';
 import { weaponNames } from '../../../weaponNameForUI';
 import * as s from './WeaponSelectorItem.module.sass'

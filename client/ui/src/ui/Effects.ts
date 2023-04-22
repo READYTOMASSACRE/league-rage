@@ -1,7 +1,7 @@
-import { event, eventable, logClient } from "../../../league-core/client";
-import { toMs } from "../../../league-core/src/helpers";
-import { Events } from "../../../league-core/src/types";
-import { EffectsConfig } from "../../../league-core/src/types/ui";
+import { event, eventable, logClient } from "../../../../core/client";
+import { toMs } from "../../../../core/src/helpers";
+import { Events } from "../../../../core/src/types";
+import { EffectsConfig } from "../../../../core/src/types/ui";
 import PlayerService from "../PlayerService";
 import UIService from "../UIService";
 

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import * as styles from './selector.module.sass'
 import cls from 'classnames'
 import RageAPI from '../../helpers/RageAPI'

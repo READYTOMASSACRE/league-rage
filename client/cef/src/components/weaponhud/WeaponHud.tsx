@@ -3,7 +3,7 @@ import * as s from './styles/WeaponHud.module.sass'
 import WeaponHudItem from './WeaponHudItem'
 import { weaponSlot } from '../../weaponNameForUI'
 import RageAPI from '../../helpers/RageAPI'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 
 

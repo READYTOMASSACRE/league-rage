@@ -1,8 +1,8 @@
-import { event, eventable } from "../../../league-core/client";
-import { toMs } from "../../../league-core/src/helpers";
-import { Events } from "../../../league-core/src/types";
-import { RoundConfig } from "../../../league-core/src/types/tdm";
-import { ILanguage, Lang } from "../../../league-lang/language";
+import { event, eventable } from "../../../../core/client";
+import { toMs } from "../../../../core/src/helpers";
+import { Events } from "../../../../core/src/types";
+import { RoundConfig } from "../../../../core/src/types/tdm";
+import { ILanguage, Lang } from "../../../../lang/language";
 import RoundService from "../RoundService";
 import UIService from "../UIService";
 

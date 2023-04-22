@@ -1,6 +1,6 @@
-import { event, eventable, logClient, console } from "../../../league-core/client";
-import { Events, Procs, userId } from "../../../league-core/src/types";
-import { ListReponse, ListRequest, PanelData, Round } from "../../../league-core/src/types/statistic";
+import { event, eventable, logClient, console } from "../../../../core/client";
+import { Events, Procs, userId } from "../../../../core/src/types";
+import { ListReponse, ListRequest, PanelData, Round } from "../../../../core/src/types/statistic";
 import ArenaService from "../ArenaService";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";

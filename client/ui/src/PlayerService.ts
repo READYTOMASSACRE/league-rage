@@ -1,7 +1,7 @@
-import { event, eventable, console } from "../../league-core/client";
-import { Events, Procs } from "../../league-core/src/types";
-import { PlayerData, State, StateDimensions, Team, WeaponState } from "../../league-core/src/types/tdm";
-import { toPlayerStat, toProfile } from '../../league-core/src/helpers/toStatistic';
+import { event, eventable, console } from "../../../core/client";
+import { Events, Procs } from "../../../core/src/types";
+import { PlayerData, State, StateDimensions, Team, WeaponState } from "../../../core/src/types/tdm";
+import { toPlayerStat, toProfile } from '../../../core/src/helpers/toStatistic';
 
 @eventable
 export default class PlayerService {

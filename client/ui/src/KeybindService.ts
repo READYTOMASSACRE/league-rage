@@ -1,4 +1,4 @@
-import { console } from '../../league-core/client'
+import { console } from '../../../core/client'
 import { keyPriority } from "./@types/common"
 
 type Binding = {

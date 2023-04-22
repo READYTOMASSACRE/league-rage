@@ -7,8 +7,8 @@ import Profile from './Pages/Profile/Profile'
 import Voting from './Pages/Voting/Voting'
 
 import * as styles from './styles/panel.module.sass'
-import { ClientProfile, Round } from '../../../../league-core/src/types/statistic'
-import { Arena } from '../../../../league-core/src/types/tdm'
+import { ClientProfile, Round } from '../../../../../core/src/types/statistic'
+import { Arena } from '../../../../../core/src/types/tdm'
 import About from './Pages/About/About'
 
 interface Props {

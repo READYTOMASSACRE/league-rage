@@ -1,7 +1,7 @@
-import { eventable, event } from '../../league-core'
-import { toPlayerStat } from '../../league-core/src/helpers/toStatistic'
-import { Events } from '../../league-core/src/types'
-import { PlayerStat } from '../../league-core/src/types/statistic'
+import { eventable, event } from '../../../core'
+import { toPlayerStat } from '../../../core/src/helpers/toStatistic'
+import { Events } from '../../../core/src/types'
+import { PlayerStat } from '../../../core/src/types/statistic'
 import PlayerService from './PlayerService'
 
 @eventable

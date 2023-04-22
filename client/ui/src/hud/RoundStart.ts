@@ -1,5 +1,5 @@
-import { deepclone } from "../../../league-core/src/helpers"
-import { hud } from "../../../league-core/src/types"
+import { deepclone } from "../../../../core/src/helpers"
+import { hud } from "../../../../core/src/types"
 import Hud from "./Hud"
 
 interface RoundStart extends hud.RoundStartConfig {}

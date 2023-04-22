@@ -1,5 +1,5 @@
 import { resolve } from "path";
-import { DbAdapter, DbConfig } from "../../league-core/src/types";
+import { DbAdapter, DbConfig } from "../../../core/src/types";
 import { IProfileRepoSitory, IRoundRepository } from "./@types";
 import { packagesPath } from "./helpers";
 import LokijsProfileRepository from "./repository/lokijs/ProfileRepository";
@@ -7,7 +7,7 @@ import LokijsRoundRepository from "./repository/lokijs/RoundRepository";
 import MongodbProfileRepository from "./repository/mongodb/ProfileRepository";
 import MongodbRoundRepository from "./repository/mongodb/RoundRepository";
 import Loki from 'lokijs'
-import { event, eventable } from "../../league-core";
+import { event, eventable } from "../../../core";
 import { MongoClient } from "mongodb";
 
 const collections = ['profile', 'round']

@@ -1,5 +1,5 @@
-import { event, eventable, console } from "../../../league-core/client";
-import { State } from "../../../league-core/src/types/tdm";
+import { event, eventable, console } from "../../../../core/client";
+import { State } from "../../../../core/src/types/tdm";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";
 import { isPlayer } from "../helpers/guards";

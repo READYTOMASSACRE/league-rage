@@ -1,7 +1,7 @@
-import { event, eventable, ensurePlayer } from "../../league-core";
-import { Events, IConfig, tdm } from "../../league-core/src/types";
-import { Role } from "../../league-core/src/types/permission";
-import { PlayerData, StateDimensions, WeaponSlot } from "../../league-core/src/types/tdm";
+import { event, eventable, ensurePlayer } from "../../../core";
+import { Events, IConfig, tdm } from "../../../core/src/types";
+import { Role } from "../../../core/src/types/permission";
+import { PlayerData, StateDimensions, WeaponSlot } from "../../../core/src/types/tdm";
 import TaskManager from "./TaskManager";
 
 @eventable

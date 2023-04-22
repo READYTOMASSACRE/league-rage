@@ -1,8 +1,8 @@
-import { event, eventable, logClient } from "../../../league-core/client";
-import { cef, Events } from "../../../league-core/src/types";
-import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
-import { Config as WeaponConfig } from "../../../league-core/src/types/weapon";
-import { Lang } from "../../../league-lang/language";
+import { event, eventable, logClient } from "../../../../core/client";
+import { cef, Events } from "../../../../core/src/types";
+import { Entity, RoundState, Team } from "../../../../core/src/types/tdm";
+import { Config as WeaponConfig } from "../../../../core/src/types/weapon";
+import { Lang } from "../../../../lang/language";
 import DummyService from "../DummyService";
 import PopupError from "../error/PopupError";
 import KeybindService, { key } from "../KeybindService";

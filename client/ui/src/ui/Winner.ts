@@ -1,6 +1,6 @@
-import { event, eventable } from "../../../league-core/client";
-import { Events } from "../../../league-core/src/types";
-import { Team } from "../../../league-core/src/types/tdm";
+import { event, eventable } from "../../../../core/client";
+import { Events } from "../../../../core/src/types";
+import { Team } from "../../../../core/src/types/tdm";
 import TeamService from "../TeamService";
 import UIService from "../UIService";
 

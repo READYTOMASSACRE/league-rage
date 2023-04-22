@@ -1,4 +1,4 @@
-import { PlayerData } from "../../league-core/src/types/tdm"
+import { PlayerData } from "../../../core/src/types/tdm"
 
 export default class PlayerService {
   setVariable<_, K extends keyof PlayerData, V extends PlayerData[K]>(

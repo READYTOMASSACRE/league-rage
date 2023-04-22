@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { cef, Events } from '../../../../league-core/src/types'
+import { cef, Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './controls.module.sass'

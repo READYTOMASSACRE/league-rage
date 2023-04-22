@@ -1,5 +1,5 @@
-import { colorGradient, deepclone, hex2rgba } from "../../../league-core/src/helpers"
-import { NametagConfig } from "../../../league-core/src/types/hud"
+import { colorGradient, deepclone, hex2rgba } from "../../../../core/src/helpers"
+import { NametagConfig } from "../../../../core/src/types/hud"
 import PlayerService from "../PlayerService"
 import TeamService from "../TeamService"
 import Hud from "./Hud"

@@ -1,5 +1,5 @@
-import { proc, proceable } from "../../league-core";
-import { ClientConfig, IConfig, Procs } from "../../league-core/src/types";
+import { proc, proceable } from "../../../core";
+import { ClientConfig, IConfig, Procs } from "../../../core/src/types";
 
 @proceable
 export default class ConfigService {

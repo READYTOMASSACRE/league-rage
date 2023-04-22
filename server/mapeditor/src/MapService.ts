@@ -1,5 +1,5 @@
-import { eventable, event, log } from '../../league-core'
-import { Events } from '../../league-core/src/types'
+import { eventable, event, log } from '../../../core'
+import { Events } from '../../../core/src/types'
 
 @eventable
 export default class MapService {

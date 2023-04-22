@@ -1,8 +1,8 @@
 import PlayerService from "../PlayerService";
 import UIService from "../UIService";
-import { CurrentPlayer } from '../../../league-core/src/types/spectate'
-import { toPlayerStat } from "../../../league-core/src/helpers/toStatistic";
-import { Events } from "../../../league-core/src/types";
+import { CurrentPlayer } from '../../../../core/src/types/spectate'
+import { toPlayerStat } from "../../../../core/src/helpers/toStatistic";
+import { Events } from "../../../../core/src/types";
 
 export default class Spectate {
   public visible: boolean = false

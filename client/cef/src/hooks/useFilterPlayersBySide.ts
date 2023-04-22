@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { scoreboard } from "../../../league-core/src/types";
+import { scoreboard } from "../../../../core/src/types";
 
 export default function useFilterPlayersBySide(arrayPlayers: scoreboard.Player[], rolePlayers: string) {
   const sortedPlayers = useMemo(() => {

@@ -1,6 +1,5 @@
-import { event, eventable, logClient } from "../../league-core/client";
-import { ClientConfig, Events } from "../../league-core/src/types";
-import { State, Team } from "../../league-core/src/types/tdm";
+import { event, eventable, logClient } from "../../../core/client";
+import { ClientConfig, Events } from "../../../core/src/types";
 import DummyService from "./DummyService";
 import PlayerBlip from "./interactions/PlayerBlip";
 import Spectate from "./interactions/Spectate";

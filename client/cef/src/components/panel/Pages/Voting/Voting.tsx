@@ -1,12 +1,12 @@
 import React, { FC, useMemo, useState } from 'react'
-import { Arena } from '../../../../../../league-core/src/types/tdm'
+import { Arena } from '../../../../../../../core/src/types/tdm'
 
 import * as styles from '../../styles/panel.module.sass'
 
 import VotingCategoryItem from './VotingCategoryItem'
 import VotingItem from './VotingItem'
 import RageAPI from '../../../../helpers/RageAPI'
-import { Lang } from '../../../../../../league-lang/language'
+import { Lang } from '../../../../../../../lang/language'
 
 interface Props {
   arenas?: Record<number, Arena>

@@ -1,4 +1,4 @@
-import { WeaponSlot } from "../../league-core/src/types/tdm"
+import { WeaponSlot } from "../../../core/src/types/tdm"
 
 const weaponNames = {
   "dagger": "Dagger",

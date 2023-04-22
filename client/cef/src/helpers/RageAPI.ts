@@ -1,6 +1,6 @@
-import { Enviroment, Events } from "../../../league-core/src/types"
-import { ListRequest } from "../../../league-core/src/types/statistic"
-import { ILanguage, Lang, Language } from '../../../league-lang/language'
+import { Enviroment, Events } from "../../../../core/src/types"
+import { ListRequest } from "../../../../core/src/types/statistic"
+import { ILanguage, Lang, Language } from '../../../../lang/language'
 import cefLog from "./cefLog"
 
 export default new class RageAPI {

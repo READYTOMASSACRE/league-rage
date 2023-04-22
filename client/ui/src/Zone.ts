@@ -1,4 +1,4 @@
-import { tdm } from "../../league-core/src/types";
+import { tdm } from "../../../core/src/types";
 
 export default class Zone {
     constructor(readonly arena: tdm.Arena) {}

@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import * as styles from './winner.module.sass'
 import Letter from './letter'
-import { rand, randRange, toColor } from '../../../../league-core/src/helpers'
+import { rand, randRange, toColor } from '../../../../../core/src/helpers'
 import RageAPI from '../../helpers/RageAPI'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 
 const maskLength = 10

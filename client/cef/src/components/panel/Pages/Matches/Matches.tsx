@@ -1,11 +1,11 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { ListReponse, Round } from '../../../../../../league-core/src/types/statistic'
+import { ListReponse, Round } from '../../../../../../../core/src/types/statistic'
 
 import * as styles from '../../styles/panel.module.sass'
 import MatchItem from './MatchItem'
 import RageAPI from '../../../../helpers/RageAPI'
-import { Lang } from '../../../../../../league-lang/language'
-import { Events } from '../../../../../../league-core/src/types'
+import { Lang } from '../../../../../../../lang/language'
+import { Events } from '../../../../../../../core/src/types'
 import cefLog from '../../../../helpers/cefLog'
 
 interface Props {

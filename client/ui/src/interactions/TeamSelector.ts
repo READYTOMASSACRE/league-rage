@@ -1,8 +1,8 @@
-import { event, eventable, logClient } from "../../../league-core/client";
-import { deepclone, toId } from "../../../league-core/src/helpers";
-import { Events, tdm } from "../../../league-core/src/types";
-import { State } from "../../../league-core/src/types/tdm";
-import { TeamSelectorConfig } from "../../../league-core/src/types/ui";
+import { event, eventable, logClient } from "../../../../core/client";
+import { deepclone, toId } from "../../../../core/src/helpers";
+import { Events, tdm } from "../../../../core/src/types";
+import { State } from "../../../../core/src/types/tdm";
+import { TeamSelectorConfig } from "../../../../core/src/types/ui";
 import KeybindService, { key } from "../KeybindService";
 import PlayerService from "../PlayerService";
 import TeamService from "../TeamService";

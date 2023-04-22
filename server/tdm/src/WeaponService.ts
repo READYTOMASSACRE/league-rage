@@ -1,8 +1,8 @@
-import { catchError, event, eventable } from "../../league-core";
-import { Events, tdm, weapon } from "../../league-core/src/types";
-import { State, WeaponState } from "../../league-core/src/types/tdm";
-import { Category } from "../../league-core/src/types/weapon";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { catchError, event, eventable } from "../../../core";
+import { Events, tdm, weapon } from "../../../core/src/types";
+import { State, WeaponState } from "../../../core/src/types/tdm";
+import { Category } from "../../../core/src/types/weapon";
+import { ILanguage, Lang } from "../../../lang/language";
 import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import PlayerService from "./PlayerService";

@@ -1,6 +1,6 @@
-import { event, eventable } from "../../../league-core/client";
-import { cef, Events, Procs } from "../../../league-core/src/types";
-import { Entity, RoundState, Team } from "../../../league-core/src/types/tdm";
+import { event, eventable } from "../../../../core/client";
+import { cef, Events, Procs } from "../../../../core/src/types";
+import { Entity, RoundState, Team } from "../../../../core/src/types/tdm";
 import DummyService from "../DummyService";
 import TeamService from "../TeamService";
 import UIService from "../UIService";

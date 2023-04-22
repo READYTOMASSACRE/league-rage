@@ -1,5 +1,5 @@
-import { event, eventable, console } from "../../league-core/client";
-import { Events, Procs, tdm } from "../../league-core/src/types";
+import { event, eventable, console } from "../../../core/client";
+import { Events, Procs, tdm } from "../../../core/src/types";
 import ArenaService from "./ArenaService";
 import PlayerService from "./PlayerService";
 import ZoneService from "./ZoneService";

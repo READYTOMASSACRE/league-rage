@@ -1,6 +1,6 @@
-import { toRound } from "../../league-core/src/helpers/toStatistic";
-import { userId } from "../../league-core/src/types";
-import { ListReponse, ListRequest, Round } from "../../league-core/src/types/statistic";
+import { toRound } from "../../../core/src/helpers/toStatistic";
+import { userId } from "../../../core/src/types";
+import { ListReponse, ListRequest, Round } from "../../../core/src/types/statistic";
 import RepositoryService from "./RepositoryService";
 import { maxLimit } from "./helpers";
 

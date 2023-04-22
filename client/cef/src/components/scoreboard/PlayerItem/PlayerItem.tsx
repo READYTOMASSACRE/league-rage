@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import cl from 'classnames'
 import * as s from './PlayerItem.module.sass'
-import { scoreboard } from '../../../../../league-core/src/types';
+import { scoreboard } from '../../../../../../core/src/types';
 
 
 interface Props {

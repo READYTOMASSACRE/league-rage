@@ -1,6 +1,6 @@
-import { event, eventable, logClient, console } from "../../league-core/client";
-import { ClientConfig, Events } from "../../league-core/src/types";
-import { ILanguage, Lang } from "../../league-lang/language";
+import { event, eventable, logClient, console } from "../../../core/client";
+import { ClientConfig, Events } from "../../../core/src/types";
+import { ILanguage, Lang } from "../../../lang/language";
 import ArenaService from "./ArenaService";
 import DummyService from "./DummyService";
 import KeybindService from "./KeybindService";

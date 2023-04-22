@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
-import { toColor } from '../../../../league-core/src/helpers'
-import { cef, Events } from '../../../../league-core/src/types'
+import { toColor } from '../../../../../core/src/helpers'
+import { cef, Events } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 import * as styles from './infopanel.module.sass'

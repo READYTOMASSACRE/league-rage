@@ -13,7 +13,7 @@ import Footer from './Footer/Footer'
 import useFilterTeamBySide from '../../hooks/useFilterTeamBySide'
 import useFilterPlayersBySide from '../../hooks/useFilterPlayersBySide'
 
-import { Events, scoreboard, tdm } from '../../../../league-core/src/types'
+import { Events, scoreboard, tdm } from '../../../../../core/src/types'
 import cefLog from '../../helpers/cefLog'
 import RageAPI from '../../helpers/RageAPI'
 

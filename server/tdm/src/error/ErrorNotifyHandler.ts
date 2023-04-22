@@ -1,7 +1,7 @@
-import { Language } from "../../../league-lang/language";
-import LanguageService from '../../../league-lang'
-import { config } from "../../../league-core";
-import { Lang } from "../../../league-lang/language";
+import { Language } from "../../../../lang/language";
+import LanguageService from '../../../../lang'
+import { config } from "../../../../core";
+import { Lang } from "../../../../lang/language";
 import PermissionError from "./PermissionError";
 
 const lang = new Language(LanguageService.get(config.lang))

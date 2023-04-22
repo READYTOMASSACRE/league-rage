@@ -1,5 +1,5 @@
-import { toMs } from "../../../league-core/src/helpers"
-import { IHud } from "../../../league-core/src/types/hud"
+import { toMs } from "../../../../core/src/helpers"
+import { IHud } from "../../../../core/src/types/hud"
 
 abstract class Hud implements IHud {
   public alive: number

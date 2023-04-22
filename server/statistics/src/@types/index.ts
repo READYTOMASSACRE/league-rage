@@ -1,6 +1,6 @@
 import { InferIdType, Filter as MongoFilter } from 'mongodb'
-import { userId } from "../../../league-core/src/types"
-import { MongoRound, Profile, Round } from "../../../league-core/src/types/statistic"
+import { userId } from "../../../../core/src/types"
+import { MongoRound, Profile, Round } from "../../../../core/src/types/statistic"
 
 export type TEntity = {
   id: number | string

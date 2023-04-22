@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react'
-import { Events } from '../../../../league-core/src/types'
+import { Events } from '../../../../../core/src/types'
 import { IMessage } from '../../types'
 import * as s from './popup.module.sass'
 import PopupItem from './popupItem'

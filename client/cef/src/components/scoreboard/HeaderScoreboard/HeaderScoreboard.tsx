@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import cl from 'classnames'
 import * as s from './HeaderScoreboard.module.sass'
-import { scoreboard } from '../../../../../league-core/src/types';
-import { toColor } from '../../../../../league-core/src/helpers';
+import { scoreboard } from '../../../../../../core/src/types';
+import { toColor } from '../../../../../../core/src/helpers';
 
 interface Props {
   attackTeam?: scoreboard.Team
