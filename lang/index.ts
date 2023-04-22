@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
-import { proceable, proc } from '../league-core'
-import { Procs } from '../league-core/src/types'
+import { proceable, proc } from '../core'
+import { Procs } from '../core/src/types'
 import { Lang } from './language'
 
 @proceable

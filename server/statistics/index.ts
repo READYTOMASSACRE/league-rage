@@ -1,4 +1,4 @@
-import { config } from "../league-core"
+import { config } from "../../core"
 import PlayerService from "./src/PlayerService"
 import PlayerStatisticService from "./src/PlayerStatisticService"
 import ProfileService from "./src/ProfileService"

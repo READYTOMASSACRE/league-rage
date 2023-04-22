@@ -1,6 +1,6 @@
-import { ClientConfig, Events, IConfig, Procs } from "../league-core/src/types"
-import { console } from "../league-core/client"
-import { Language } from '../league-lang/language'
+import { ClientConfig, Events, IConfig, Procs } from "../../core/src/types"
+import { console } from "../../core/client"
+import { Language } from '../../lang/language'
 import DebugService from "./src/DebugService"
 import DummyService from "./src/DummyService"
 import HudService from "./src/HudService"

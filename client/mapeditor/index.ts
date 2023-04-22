@@ -1,5 +1,5 @@
-import { console } from "../league-core/client"
-import { ClientConfig, Procs } from "../league-core/src/types"
+import { console } from "../../core/client"
+import { ClientConfig, Procs } from "../../core/src/types"
 import Fly from "./src/Fly"
 import WaypointService from "./src/WaypointService"
 
