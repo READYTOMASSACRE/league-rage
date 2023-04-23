@@ -110,6 +110,9 @@ export const enum Lang {
   "cef.panel.navbar_matches" = "cef.panel.navbar_matches",
   "cef.panel.navbar_vote" = "cef.panel.navbar_vote",
   "cef.panel.navbar_about" = "cef.panel.navbar_about",
+  "cef.team_selector.team_control" = "cef.team_selector.team_control",
+  "cef.team_selector.skin_control" = "cef.team_selector.skin_control",
+  "cef.team_selector.submit" = "cef.team_selector.submit",
 }
 
 export interface ILanguage {

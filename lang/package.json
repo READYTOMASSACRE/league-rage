@@ -7,9 +7,9 @@
     "build": "tsc -p tsconfig.local.json",
     "watch": "tsc -p tsconfig.local.json --watch",
     "source:external": "tsc",
-    "prebuild:external": "rm -rf ../../../packages/league-lang",
-    "build:external": "esbuild empty.ts --bundle --platform=node --outfile=../../../packages/league-lang/index.js",
-    "postbuild:external": "cp -R lang ../../../packages/league-lang/lang"
+    "prebuild:external": "rm -rf ../../packages/league-lang",
+    "build:external": "esbuild empty.ts --bundle --platform=node --outfile=../../packages/league-lang/index.js",
+    "postbuild:external": "cp -R lang ../../packages/league-lang/lang"
   },
   "devDependencies": {
     "@types/node": "^18.14.6",

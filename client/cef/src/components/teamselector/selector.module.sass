@@ -1,3 +1,5 @@
+@use '../../variables' as *
+
 .item
   position: absolute
   text-align: center
@@ -11,3 +13,35 @@
 
 .active
   visibility: visible
+
+.guide
+  position: absolute
+  display: flex
+  flex-direction: column
+  place-self: center
+  bottom: 10vh
+  background-color: $transparentBlack
+  border-radius: 3px
+  color: $yellow
+  min-width: 20vw
+  & > *
+    margin: 5px
+
+.keycup
+  text-align: center
+  & > span
+    font-size: .8em
+    margin: 5px
+
+.button
+  padding: 5px
+  outline: none
+  border: none
+  font-weight: 600
+  color: white
+  background-color: transparent
+  border-top: 1px solid $yellow
+  &:active, &:focus
+    outline: none
+  &:active, &:hover
+    color: $yellow

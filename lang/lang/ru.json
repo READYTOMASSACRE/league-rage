@@ -108,5 +108,8 @@
   "cef.panel.navbar_profile": "Профиль",
   "cef.panel.navbar_matches": "Матчи",
   "cef.panel.navbar_vote": "Голосование",
-  "cef.panel.navbar_about": "О сервере"
+  "cef.panel.navbar_about": "О сервере",
+  "cef.team_selector.team_control": "- листать команды",
+  "cef.team_selector.skin_control": "- листать скины",
+  "cef.team_selector.submit": "Играть (Enter)"
 }

@@ -23,9 +23,9 @@ export default () => {
   }, [])
 
   const keyClasses = {
-    1: styles.key,
-    2: cls(styles.key, styles.medium),
-    default: cls(styles.key, styles.large),
+    1: styles.tiny,
+    2: styles.medium,
+    default: styles.large,
   }
 
   if (!active) return <></>
@@ -35,8 +35,8 @@ export default () => {
       {controls.map((control, key) => {
         return (
           <div className={styles.item} key={key}>
-            <div className={keyClasses[control.key.length] || keyClasses.default}>
-              <span>{control.key}</span>
+            <div className={styles.key}>
+              <span className={keyClasses[control.key.length] || keyClasses.default}>{control.key}</span>
             </div>
             <span className={styles.desc}>{control.description}</span>
           </div>
