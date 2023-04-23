@@ -9,8 +9,6 @@ export default new class RageAPI {
   public lang: ILanguage
 
   constructor() {
-    this.updateLanguage = this.updateLanguage.bind(this)
-    this.subscribe(Events["tdm.language"], 'language', this.updateLanguage)
     this.lang = new Language(<Record<Lang, string>>{})
   }
 
@@ -71,18 +69,6 @@ export default new class RageAPI {
 
   voteArenaRequest(id: string | number) {
     mp.trigger(Events["tdm.cef.vote.arena_request"], id)
-  }
-
-  updateLanguage(lang?: string) {
-    try {
-      if (!lang || typeof lang !== 'string') {
-        return
-      }
-
-      this.lang.change(JSON.parse(lang))
-    } catch (err) {
-      cefLog(err)
-    }
   }
 
   sendReady() {

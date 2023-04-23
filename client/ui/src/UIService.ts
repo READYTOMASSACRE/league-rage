@@ -98,6 +98,7 @@ export default class UIService {
     }
 
     this.cef = mp.browsers.new(this.url)
+    this.refreshCefLanguage()
 
     return this.url
   }
@@ -122,7 +123,6 @@ export default class UIService {
   @event(Events["tdm.ui.ready"])
   ready() {
     mp.events.callRemote(Events["tdm.client.ready"])
-    this.refreshCefLanguage()
   }
 
   @event(Events["tdm.language"])

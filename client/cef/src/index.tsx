@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
 import './index.module.sass'
@@ -23,8 +23,29 @@ import {Hud, Top, Center, Bottom, Absolute} from './components/hud/hud'
 import Winner from './components/winner/winner'
 import Effects from './components/effects/effects'
 import Gamemode from './components/gamemode/gamemode'
+import { Events } from '../../../core/src/types'
+import cefLog from './helpers/cefLog'
 
 const App = () => {
+  useEffect(() => {
+    RageAPI.subscribe(Events["tdm.language"], 'app', (lang: string) => {
+      try {
+        if (!lang || typeof lang !== 'string') {
+          return
+        }
+  
+        RageAPI.lang.change(JSON.parse(lang))
+
+      } catch (err) {
+        cefLog(err)
+      }
+    })
+
+    RageAPI.sendReady()
+
+    return () => RageAPI.unsubscribe(Events['tdm.language'], 'app')
+  }, [])
+
   return (
     <>
       <Hud>
@@ -54,7 +75,6 @@ const App = () => {
           <Effects />
         </Absolute>
       </Hud>
-      {RageAPI.sendReady()}
     </>
   )
 }
