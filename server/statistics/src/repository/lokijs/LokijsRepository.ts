@@ -54,7 +54,7 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
   }
 
   async getById(_id: number | string) {
-    return this.getOne({ _id: { $eq: _id }})
+    return this.getOne({ _id: { $aeq: _id }})
   }
 
   get collection() {
