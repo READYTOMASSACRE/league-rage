@@ -16,14 +16,6 @@ export default class StatisticService {
     readonly roundService: RoundService,
   ) {}
 
-  @event("playerJoin")
-  async overrideUserId(player: PlayerMp) {
-    Object.defineProperty(player, 'userId', {
-      get: () => this.playerService.getVariable(player, 'userId'),
-      set: (value: string) => this.playerService.setVariable(player, 'userId', value)
-    })
-  }
-
   @event(Events["tdm.client.ready"])
   async playerReady(player: PlayerMp) {
     await this.profileService.logSocial(player)

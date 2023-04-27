@@ -1,11 +1,10 @@
-import { eventable, event, ensurePlayer, commandable, command, helpers, catchError } from "../../../core";
+import { eventable, event, ensurePlayer, commandable, command, helpers, catchError, BroadCastError } from "../../../core";
 import { deepclone } from "../../../core/src/helpers";
 import DummyService from "../../../core/src/server/DummyService";
 import { Events, tdm } from "../../../core/src/types";
 import { Entity } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
-import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @eventable

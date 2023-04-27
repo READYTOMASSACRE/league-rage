@@ -1,4 +1,4 @@
-import { eventable, event } from '../../../core'
+import { eventable, event, log } from '../../../core'
 import { Events, userId } from '../../../core/src/types'
 import { Entity, Team, TeamConfig } from '../../../core/src/types/tdm'
 import PlayerService from './PlayerService'
@@ -141,6 +141,7 @@ export default class RoundStatisticService {
     teamStat[player.userId][key] = modifier(teamStat[player.userId][key], teamStat[player.userId])
   }
 
+  @log
   private async saveProfile(userId: userId, stat: PlayerStat, win?: boolean) {
     try {
       const profile = await this.profileService.getById(userId)
@@ -149,11 +150,14 @@ export default class RoundStatisticService {
 
       const profileStat = this.mergePlayerStat(profile, stat)
 
-      await this.profileService.saveById(userId, {
+      const newProfile = {
         ...profileStat,
         ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
         ...this.calculateAverageStats(profile, win),
-      })
+      }
+      await this.profileService.saveById(userId, newProfile)
+
+      return newProfile
     } catch (err) {
       console.error(err)
     }

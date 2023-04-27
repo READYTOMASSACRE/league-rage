@@ -1,4 +1,4 @@
-import { Point2d, Point3d } from "./common"
+import { Point2d, Point3d, userId } from "./common"
 import { Role } from "./permission"
 import { ClientProfile, PlayerStat } from "./statistic"
 
@@ -103,7 +103,7 @@ export type PlayerData = {
   health: number
   alive: boolean
   spectate?: number
-  userId: string
+  userId: userId
   profile: ClientProfile
   statistic: PlayerStat
   role: Role,

@@ -19,7 +19,8 @@ import SpectateService from './src/SpectateService'
 import TaskManager from './src/TaskManager'
 
 const main = async () => {
-  const language = new Language(LanguageService.get(config.lang))
+  const language = new Language(await LanguageService.get(config.lang))
+
   new ConfigService(config)
 
   const playerService = new PlayerService(config)

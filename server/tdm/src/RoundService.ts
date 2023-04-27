@@ -1,4 +1,4 @@
-import { event, eventable, proc, proceable } from "../../../core"
+import { BroadCastError, event, eventable, proc, proceable } from "../../../core"
 import { RoundConfig, State, Team } from "../../../core/src/types/tdm"
 import { IDummyService } from '../../../core/src/server/DummyService'
 import { ILanguage, Lang } from "../../../lang/language"
@@ -6,7 +6,6 @@ import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import Round from "./Round"
 import TeamService from "./TeamService"
-import BroadCastError from "./error/BroadCastError"
 import { Procs } from "../../../core/src/types"
 
 @proceable

@@ -21,8 +21,8 @@ export default new class ErrorNotifyHandler {
 
       player.outputChatBox(message)
 
-      if (typeof player.outputPopup === 'function') {
-        player.outputPopup(message, 'error')
+      if (typeof (<any>player).outputPopup === 'function') {
+        (<any>player).outputPopup(message, 'error')
       }
 
       const who = `${err.constructor?.name}`.red + ' ' + `${player.name}[${player.id}]`.yellow + ' ' + err.message.underline
@@ -33,11 +33,11 @@ export default new class ErrorNotifyHandler {
     throw err
   }
 
-  private ensurePlayer(err: any): PlayerMp | undefined {
+  ensurePlayer(err: any): PlayerMp | undefined {
     return typeof err?.player === 'number' ? mp.players.at(err.player) : err?.player 
   }
 
-  private getMessage(err: any) {
+  getMessage(err: any) {
     if (err instanceof PermissionError) {
       return this.lang.get(Lang["error.permission.invalid"], { permission: err.message })
     }

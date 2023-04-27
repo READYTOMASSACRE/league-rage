@@ -1,4 +1,4 @@
-import { commandable, command, proceable, proc, catchError, event, eventable } from "../../../core";
+import { commandable, command, proceable, proc, catchError, event, eventable, BroadCastError } from "../../../core";
 import PermissionService from "./PermissionService";
 import RoundService from "./RoundService";
 import PlayerService from "./PlayerService";
@@ -7,7 +7,6 @@ import Arena from "./Arena";
 import WeaponService from "./WeaponService";
 import { Events, Procs } from "../../../core/src/types";
 import { ILanguage, Lang } from "../../../lang/language";
-import BroadCastError from "./error/BroadCastError";
 import DummyService from "../../../core/src/server/DummyService";
 import { Entity, RoundState, State, Team } from "../../../core/src/types/tdm";
 import TeamService from "./TeamService";

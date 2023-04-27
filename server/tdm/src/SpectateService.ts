@@ -1,12 +1,11 @@
-import { catchError, command, commandable, event, eventable, proc, proceable } from "../../../core";
+import { BroadCastError, catchError, command, commandable, event, eventable, proc, proceable } from "../../../core";
 import { Events, Procs } from "../../../core/src/types";
 import { State, Team } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
-import BroadCastError from "./error/BroadCastError";
-import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import TaskManager from "./TaskManager";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @proceable
 @commandable

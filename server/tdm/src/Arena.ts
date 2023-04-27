@@ -1,10 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from "fs"
-import NotFoundError from "./error/NotFoundError"
 import { arenaPath } from "./helpers"
-import { helpers, types, catchError } from '../../../core'
+import { helpers, types, catchError, BroadCastError, NotFoundError } from '../../../core'
 import { ILanguage, Lang } from "../../../lang/language"
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler"
-import BroadCastError from "./error/BroadCastError"
 
 export default class Arena {
   readonly arena: types.tdm.Arena

@@ -1,8 +1,7 @@
-import { eventable, helpers, catchError, event } from "../../../core";
+import { eventable, helpers, catchError, event, BroadCastError } from "../../../core";
 import { Events, userId } from "../../../core/src/types";
 import { Vote, VoteConfig } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
-import BroadCastError from "./error/BroadCastError";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 interface InternalVoteConfig {

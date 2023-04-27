@@ -1,12 +1,9 @@
-import PermissionError from "./error/PermissionError";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
 import { Right, Role, Rule } from "../../../core/src/types/permission";
 import { Events, IConfig } from "../../../core/src/types";
-import { command, commandable, event, eventable, catchError } from "../../../core";
+import { command, commandable, event, eventable, catchError, PermissionError, BroadCastError } from "../../../core";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
-import BroadCastError from "./error/BroadCastError";
-
 const MAX_RCON_ATTEMPTS = 3
 
 @commandable

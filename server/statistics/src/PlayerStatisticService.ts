@@ -35,7 +35,7 @@ export default class PlayerStatisticService {
     if (typeof player === 'number') player = mp.players.at(player)
     if (!mp.players.exists(player)) return
 
-    const statistic = this.playerService.getVariable(player, 'statistic')
+    const statistic = this.playerService.getStatistic(player)
     statistic[key] = modifier(statistic[key])
 
     this.playerService.setVariable(player, 'statistic', statistic)

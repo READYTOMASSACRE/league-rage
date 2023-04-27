@@ -1,13 +1,12 @@
-import { catchError, event, eventable } from "../../../core";
+import { BroadCastError, catchError, event, eventable } from "../../../core";
 import { Events, tdm, weapon } from "../../../core/src/types";
 import { State, WeaponState } from "../../../core/src/types/tdm";
 import { Category } from "../../../core/src/types/weapon";
 import { ILanguage, Lang } from "../../../lang/language";
-import BroadCastError from "./error/BroadCastError";
-import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 import PlayerService from "./PlayerService";
 import RoundService from "./RoundService";
 import TaskManager, { Task } from "./TaskManager";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @eventable
 export default class WeaponService {

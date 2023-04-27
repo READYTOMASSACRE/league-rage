@@ -1,10 +1,12 @@
-import { event, eventable, log } from "../../../core";
+import { BroadCastError, catchError, event, eventable } from "../../../core";
 import { toClientProfile, toProfile } from "../../../core/src/helpers/toStatistic";
 import { Events, userId } from "../../../core/src/types";
 import { Role } from "../../../core/src/types/permission";
 import { Profile } from "../../../core/src/types/statistic";
+import { Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
 import RepositoryService from "./RepositoryService";
+import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
 @eventable
 export default class ProfileService {
@@ -12,6 +14,14 @@ export default class ProfileService {
     readonly playerService: PlayerService,
     readonly repositoryService: RepositoryService
   ) {}
+
+  @event("playerJoin")
+  async overrideUserId(player: PlayerMp) {
+    Object.defineProperty(player, 'userId', {
+      get: () => this.playerService.getVariable(player, 'userId'),
+      set: (value: userId) => this.playerService.setVariable(player, 'userId', value)
+    })
+  }
 
   @event(Events["tdm.permission.role"])
   playerRole(id: number, role: Role) {
@@ -51,24 +61,32 @@ export default class ProfileService {
     return this.playerService.atUserId(userId)
   }
 
-  @log
+  @catchError(ErrorNotifyHandler)
   async logSocial(player: PlayerMp) {
     try {
       player.logged = 'pending'
 
       const userProfile = await this.getByRgscId(player.rgscId)
-      const profile = toProfile({ name: player.name, rgscId: player.rgscId, ...userProfile })
 
-      this.playerService.setVariable(player, 'profile', toClientProfile(profile))
-      this.playerService.setVariable(player, 'role', profile.role)
+      if (!userProfile) {
+        await this.repositoryService.profile.save(toProfile({
+          name: player.name,
+          rgscId: player.rgscId,
+        }))
+      }
+
+      const profile = userProfile ?? await this.getByRgscId(player.rgscId)
+
+      if (!profile) {
+        throw new BroadCastError(Lang["error.not_found"], player)
+      }
 
       player.name = profile.name || player.name
       player.userId = profile._id
       player.logged = 'social'
 
-      if (!userProfile) {
-        await this.repositoryService.profile.save(profile)
-      }
+      this.playerService.setVariable(player, 'profile', toClientProfile(profile))
+      this.playerService.setVariable(player, 'role', profile.role)
 
       mp.events.call(Events["tdm.profile.login"], player.id, player.userId, player.logged)
     } catch (err) {
