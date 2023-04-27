@@ -62,7 +62,7 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
   }
 
   get lastId() {
-    return this.collection.data.length || 1
+    return this.collection.data.length
   }
 
   private async saveDatabase() {

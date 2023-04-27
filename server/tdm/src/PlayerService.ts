@@ -21,7 +21,7 @@ export default class PlayerService {
     this.setTeam(player, tdm.Team.spectators)
     this.setWeaponState(player, tdm.WeaponState.idle)
     this.setWeaponSlot(player)
-    this.setRole(player, Role.socialUser)
+    this.setRole(player, Role.user)
   }
 
   @event("playerDeath")

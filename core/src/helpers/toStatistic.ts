@@ -1,4 +1,4 @@
-import { Role } from "../types/permission";
+import { Role, Type } from "../types/permission";
 import { ClientProfile, PlayerStat, Profile, Round } from "../types/statistic";
 import { Team } from "../types/tdm";
 
@@ -15,17 +15,18 @@ export const toPlayerStat = (o?: any): PlayerStat => ({
 })
 
 export const toProfile = (o?: any): Profile => ({
-  ...toPlayerStat(o),
   _id: o?.id,
   rgscId: o?.rgscId,
   lvl: o?.lvl ?? 0,
-  role: o?.role ?? Role.socialUser,
+  type: o?.type ?? Type.social,
+  role: o?.role ?? Role.user,
   victory: o?.victory ?? 0,
   rating: o?.rating ?? 0,
   averageDamage: o?.averageDamage ?? 0,
   wins: o?.wins ?? 0,
   loses: o?.loses ?? 0,
   draws: o?.draw ?? 0,
+  ...toPlayerStat(o),
 })
 
 export const toClientProfile = (o?: any): ClientProfile => {

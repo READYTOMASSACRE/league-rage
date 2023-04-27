@@ -13,10 +13,7 @@ const MAX_RCON_ATTEMPTS = 3
 @eventable
 export default class PermissionService {
   static readonly rights: Right = {
-    [Role.socialUser]: {
-      [Rule.tdmVote]: true,
-    },
-    [Role.authUser]: {
+    [Role.user]: {
       [Rule.tdmVote]: true,
     },
     [Role.moderator]: {
@@ -102,7 +99,7 @@ export default class PermissionService {
 
     const mapRole = {
       'moderator': Role.moderator,
-      'user': foundPlayer.logged === 'auth' ? Role.authUser : Role.socialUser,
+      'user': Role.user,
       'admin': Role.admin,
       'root': Role.root,
     }

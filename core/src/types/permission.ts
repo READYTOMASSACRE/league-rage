@@ -1,6 +1,10 @@
+export const enum Type {
+  social = 'social',
+  email = 'email',
+}
+
 export const enum Role {
-  socialUser = 'socialUser',
-  authUser = 'authUser',
+  user = 'user',
   moderator = 'moderator',
   admin = 'admin',
   root = 'root'

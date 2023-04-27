@@ -1,5 +1,5 @@
 import { userId } from "./common"
-import { Role } from "./permission"
+import { Role, Type } from "./permission"
 import { Arena, Team } from "./tdm"
 
 export type StatisticConfig = {
@@ -27,6 +27,7 @@ export type Profile = {
   damageRecieved: number
   hit: number
   name: string
+  type: Type
   role: Role
   rating: number
   victory: number
