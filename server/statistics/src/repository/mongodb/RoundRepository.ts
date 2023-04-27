@@ -23,7 +23,7 @@ export default class RoundRepository extends MongodbRepository<MongoRound> {
     return {
       ...filter,
       ...(dateFrom || dateTo ? {
-        id: {
+        createDate: {
           ...(dateFrom ? { $gt: dateFrom }: false),
           ...(dateTo ? { $lt: dateTo }: false),
         },

@@ -1,5 +1,4 @@
 import { toRound } from "../../../core/src/helpers/toStatistic";
-import { userId } from "../../../core/src/types";
 import { ListReponse, ListRequest, Round } from "../../../core/src/types/statistic";
 import RepositoryService from "./RepositoryService";
 import { maxLimit } from "./helpers";

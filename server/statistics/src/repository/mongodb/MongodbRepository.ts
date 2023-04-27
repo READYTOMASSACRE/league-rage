@@ -9,7 +9,7 @@ export default abstract class MongodbRepository<T extends MongoEntity> extends B
   }
 
   async save(t: T) {
-    const item = await this.getById(t.id)
+    const item = await this.getById(t._id)
     if (item) {
       const {_id, ...doc} = item
 
@@ -21,14 +21,14 @@ export default abstract class MongodbRepository<T extends MongoEntity> extends B
 
   async get({ ids, limit = maxLimit, offset, ...query }: Filter<T> = {}) {
     return this.collection.find({
-      ...(ids ? { id: { $in: ids } } : false),
+      ...(ids ? { _id: { $in: ids } } : false),
       ...query,
     }).limit(Number(limit)).skip(Number(offset) || 0).sort({ _id: -1 }).toArray() as any as T[]
   }
 
   async count({ ids, ...query }: Filter<T> = {}) {
     return this.collection.countDocuments({
-      ...(ids ? { id: { $in: ids } } : false),
+      ...(ids ? { _id: { $in: ids } } : false),
       ...query,
     })
   }
@@ -37,8 +37,8 @@ export default abstract class MongodbRepository<T extends MongoEntity> extends B
     return this.collection.findOne(query) as any as T
   }
 
-  async getById(id: number | string) {
-    return this.collection.findOne(<Filter<T>>{id}) as any as T
+  async getById(_id: number | string) {
+    return this.collection.findOne(<Filter<T>>{_id}) as any as T
   }
 
   get collection(): Collection<T> {

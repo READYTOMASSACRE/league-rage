@@ -6,12 +6,12 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
   abstract readonly name: string
 
   async save(t: T, opts?: {write?: boolean}) {
-    const doc = await this.getById(t.id)
+    const doc = await this.getById(t._id)
 
     if (doc) {
-      this.collection.update({...doc, ...t})
+      this.collection.update({...doc, ...t, _id: doc._id})
     } else {
-      this.collection.insert(t)
+      this.collection.insert({...t, _id: this.lastId + 1})
     }
 
     if (opts?.write) await this.saveDatabase()
@@ -22,10 +22,10 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
       this.collection
         .chain()
         .find({
-          ...(ids ? { id: { $in: ids } } : false),
+          ...(ids ? { _id: { $in: ids } } : false),
           ...query,
         })
-        .sort((a, b) => Number(b.id) - Number(a.id))
+        .sort((a, b) => Number(b._id) - Number(a._id))
         .offset(Number(offset))
         .limit(Number(limit))
         .data()
@@ -37,7 +37,7 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
       this.collection
         .chain()
         .find({
-          ...(ids ? { id: { $in: ids } } : false),
+          ...(ids ? { _id: { $in: ids } } : false),
           ...query,
         })
         .data()
@@ -49,12 +49,16 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
     return Promise.resolve(this.collection.findOne(query))
   }
 
-  async getById(id: number | string) {
-    return this.getOne({ id: { $eq: id }})
+  async getById(_id: number | string) {
+    return this.getOne({ _id: { $eq: _id }})
   }
 
   get collection() {
     return this.db.getCollection<T>(this.name)
+  }
+
+  get lastId() {
+    return this.collection.data.length || 1
   }
 
   private async saveDatabase() {

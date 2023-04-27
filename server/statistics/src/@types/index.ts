@@ -3,7 +3,7 @@ import { userId } from "../../../../core/src/types"
 import { MongoRound, Profile, Round } from "../../../../core/src/types/statistic"
 
 export type TEntity = {
-  id: number | string
+  _id: number | string
 }
 
 export type MongoEntity = TEntity & {
@@ -20,7 +20,10 @@ export interface IRepository<T extends TEntity> {
   count(...args: any[]): Promise<number>
 }
 
-export interface IProfileRepoSitory extends IRepository<Profile> {}
+export interface IProfileRepoSitory extends IRepository<Profile> {
+  getByRgscId(rgscId: string): Promise<Profile | undefined>
+}
+
 export interface IRoundRepository extends IRepository<Round> {}
 
 export type AbstractFilter = {

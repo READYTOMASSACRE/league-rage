@@ -36,14 +36,16 @@ export default class ProfileService {
       }
     }
 
-    return this.repositoryService.profile.save({
-      ...profile,
-      id: userId,
-    })
+    return this.repositoryService.profile.save({...profile, _id: userId})
   }
 
   async getById(userId: userId) {
     const profile = await this.repositoryService.profile.getById(userId)
+    return toProfile(profile)
+  }
+
+  async getByRgscId(rgscId: string) {
+    const profile = await this.repositoryService.profile.getByRgscId(rgscId)
     return toProfile(profile)
   }
 
@@ -53,20 +55,20 @@ export default class ProfileService {
 
   async logSocial(player: PlayerMp) {
     try {
-      player.userId = `rg_${player.rgscId}`
       player.logged = 'pending'
 
-      const userProfile = await this.getById(player.userId)
-      const profile = toProfile({ name: player.name, id: player.userId, ...userProfile })
+      const userProfile = await this.getByRgscId(player.rgscId)
+      const profile = toProfile({ name: player.name, rgscId: player.rgscId, ...userProfile })
 
       this.playerService.setVariable(player, 'profile', toClientProfile(profile))
       this.playerService.setVariable(player, 'role', profile.role)
 
       player.name = profile.name || player.name
+      player.userId = profile._id
       player.logged = 'social'
 
       if (!userProfile) {
-        await this.saveById(profile.id, profile)
+        await this.repositoryService.profile.save(profile)
       }
 
       mp.events.call(Events["tdm.profile.login"], player.id, player.userId, player.logged)

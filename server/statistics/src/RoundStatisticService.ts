@@ -76,7 +76,7 @@ export default class RoundStatisticService {
     await Promise.all(promises)
 
     this.roundService.save({
-      id: Date.now(),
+      createDate: Date.now(),
       arenaId: arenaId,
       result,
       [Team.attackers]: this.stat[Team.attackers],

@@ -24,7 +24,7 @@ export default class RoundRepository extends LokijsRepository<Round> {
     return {
       ...filter,
       ...(dateFrom || dateTo ? {
-        id: {
+        createDate: {
           ...(dateFrom ? { $gt: dateFrom }: false),
           ...(dateTo ? { $lt: dateTo }: false),
         },
@@ -38,4 +38,3 @@ export default class RoundRepository extends LokijsRepository<Round> {
     }
   }
 }
-
