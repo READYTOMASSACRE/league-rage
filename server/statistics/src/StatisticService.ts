@@ -1,4 +1,4 @@
-import { event, eventable, log, proc, proceable } from "../../../core";
+import { event, eventable, proc, proceable } from "../../../core";
 import { toClientProfile } from "../../../core/src/helpers/toStatistic";
 import { Events, Procs } from "../../../core/src/types";
 import { ListRequest } from "../../../core/src/types/statistic";
@@ -71,7 +71,6 @@ export default class StatisticService {
     }
   }
 
-  @log
   @proc(Procs["tdm.statistic.round.total"])
   async getRoundCount(
       player: PlayerMp,
@@ -100,14 +99,14 @@ export default class StatisticService {
     idOrUserId = idOrUserId ?? -1
 
     if (idOrUserId !== -1) {
-      let targetPlayer = this.playerService.atUserId(String(idOrUserId))
+      let targetPlayer = this.playerService.atUserId(idOrUserId)
       targetPlayer = targetPlayer ?? mp.players.at(Number(idOrUserId))
   
       if (!mp.players.exists(targetPlayer)) {
         return undefined
       }
 
-      return String(idOrUserId)
+      return idOrUserId
     }
 
     return player.userId

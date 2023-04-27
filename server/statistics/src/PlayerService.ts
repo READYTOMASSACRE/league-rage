@@ -28,7 +28,7 @@ export default class PlayerService {
   }
 
   atUserId(id: userId): PlayerMp | undefined {
-    const player = mp.players.toArray().find(player => player.userId === id)
+    const player = mp.players.toArray().find(player => player.userId == id)
     return player && mp.players.exists(player) ? player : undefined
   }
 

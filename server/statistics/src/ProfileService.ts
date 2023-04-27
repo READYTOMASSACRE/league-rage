@@ -57,10 +57,6 @@ export default class ProfileService {
     return this.repositoryService.profile.getByRgscId(rgscId)
   }
 
-  atUserId(userId: userId) {
-    return this.playerService.atUserId(userId)
-  }
-
   @catchError(ErrorNotifyHandler)
   async logSocial(player: PlayerMp) {
     try {
