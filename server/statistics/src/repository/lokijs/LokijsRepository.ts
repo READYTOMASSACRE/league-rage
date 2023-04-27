@@ -46,7 +46,11 @@ export default abstract class LokijsRepository<T extends TEntity> extends BaseRe
   }
 
   async getOne(query: LokiQuery<T & LokiObj> = {}): Promise<T & LokiObj | undefined> {
-    return Promise.resolve(this.collection.findOne(query))
+    const entity = await Promise.resolve(this.collection.findOne(query))
+
+    if (!entity) return
+
+    return entity
   }
 
   async getById(_id: number | string) {

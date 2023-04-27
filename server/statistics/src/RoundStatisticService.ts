@@ -47,8 +47,12 @@ export default class RoundStatisticService {
       const winners = this.getPlayersStatByTeam(result)
   
       for (const userId of Object.keys(winners)) {
+        const player = this.playerService.atUserId(userId)
+
+        if (!player) continue
+
         this.addStat(
-          this.playerService.atUserId(userId),
+          player,
           'exp',
           prev => prev + this.exp.win
         )
@@ -88,7 +92,9 @@ export default class RoundStatisticService {
 
   @event(Events['tdm.player.kill'])
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
-    const addKda = (_: number, full: PlayerStat) => {
+    const addKda = (_: number, full?: PlayerStat) => {
+      if (!full) return 0
+      
       const kda = (full.kill + full.assists / (full.death || 1)).toFixed(2)
       return Number(kda)
     }
@@ -138,12 +144,15 @@ export default class RoundStatisticService {
   private async saveProfile(userId: userId, stat: PlayerStat, win?: boolean) {
     try {
       const profile = await this.profileService.getById(userId)
+      
+      if (!profile) return
+
       const profileStat = this.mergePlayerStat(profile, stat)
 
       await this.profileService.saveById(userId, {
         ...profileStat,
         ...this.calculateLvl(profile.lvl, stat.exp + profile.exp),
-        ...this.calculateAverageStats(profileStat, profile, win),
+        ...this.calculateAverageStats(profile, win),
       })
     } catch (err) {
       console.error(err)
@@ -182,6 +191,8 @@ export default class RoundStatisticService {
   }
 
   private getPlayersStatByTeam(team: Team): Record<userId, PlayerStat> {
+    if (Team.spectators === team) return {}
+
     return this.stat[team]?.players || {}
   }
 
@@ -192,7 +203,7 @@ export default class RoundStatisticService {
     }
   }
 
-  private calculateAverageStats(stat: Omit<PlayerStat, 'exp' | 'name'>, profile: Profile, win: boolean) {
+  private calculateAverageStats(profile: Profile, win?: boolean) {
     const wins = win === true ? profile.wins + 1 : profile.wins
     const loses = win === false ? profile.loses + 1 : profile.loses
     const draws = win === undefined ? profile.draws + 1 : profile.draws

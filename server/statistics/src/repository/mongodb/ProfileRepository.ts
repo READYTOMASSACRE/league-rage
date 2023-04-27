@@ -5,6 +5,10 @@ export default class ProfileRepository extends MongodbRepository<MongoProfile> {
   name = 'profile'
 
   async getByRgscId(rgscId: string) {
-    return this.collection.findOne({rgscId})
+    const profile = await this.collection.findOne({rgscId})
+
+    if (!profile) return
+
+    return profile
   }
 }

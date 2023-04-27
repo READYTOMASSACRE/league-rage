@@ -1,4 +1,4 @@
-import { event, eventable } from "../../../core";
+import { event, eventable, log } from "../../../core";
 import { toClientProfile, toProfile } from "../../../core/src/helpers/toStatistic";
 import { Events, userId } from "../../../core/src/types";
 import { Role } from "../../../core/src/types/permission";
@@ -40,19 +40,18 @@ export default class ProfileService {
   }
 
   async getById(userId: userId) {
-    const profile = await this.repositoryService.profile.getById(userId)
-    return toProfile(profile)
+    return this.repositoryService.profile.getById(userId)
   }
 
   async getByRgscId(rgscId: string) {
-    const profile = await this.repositoryService.profile.getByRgscId(rgscId)
-    return toProfile(profile)
+    return this.repositoryService.profile.getByRgscId(rgscId)
   }
 
-  atUserId(userId: userId): PlayerMp {
+  atUserId(userId: userId) {
     return this.playerService.atUserId(userId)
   }
 
+  @log
   async logSocial(player: PlayerMp) {
     try {
       player.logged = 'pending'

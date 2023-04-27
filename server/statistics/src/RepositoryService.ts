@@ -17,7 +17,7 @@ export default class RepositoryService {
   readonly profile: IProfileRepoSitory
   readonly round: IRoundRepository
   private lokijs?: Loki
-  private lokiPromise: Promise<void>
+  private lokiPromise: Promise<void> = new Promise((resolve) => resolve(void 0))
   private mongoClient?: MongoClient
 
   constructor(readonly config: DbConfig) {
@@ -66,7 +66,7 @@ export default class RepositoryService {
   }
 
   private lokiLoad(resolve: () => void, reject: () => void) {
-    if (!this.lokijs) reject()
+    if (!this.lokijs) return reject()
 
     for (const collection of collections) {
       if (!this.lokijs.getCollection(collection)) {
@@ -93,6 +93,8 @@ export default class RepositoryService {
   }
 
   getMongoUri(config: DbConfig["mongodb"]) {
+    if (!config) throw new Error('Mongodb config not found')
+
     const credentials = [config.username, config.password].filter(Boolean).join(':')
     return `mongodb://${credentials.length ? credentials + '@' : ''}${config.host}:${config.port}/${config.database}`
   }

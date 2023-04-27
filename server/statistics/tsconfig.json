@@ -8,9 +8,10 @@
       "allowJs": true,
       "alwaysStrict": true,
       "composite": true,
-      "skipLibCheck": true,
       "typeRoots": ["node_modules/@types", "node_modules/@ragempcommunity"],
       "esModuleInterop": true,
+      "strict": true,
+      "noImplicitAny": true
   },
   "references": [
     {"path": "../../core", "declarationMap": true},

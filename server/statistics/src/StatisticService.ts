@@ -33,6 +33,9 @@ export default class StatisticService {
   async getProfile(player: PlayerMp, idOrUserId?: string | number) {
     try {
       const userId = this.getUserId(player, idOrUserId)
+
+      if (!userId) return
+
       const profile = await this.profileService.getById(userId)
   
       if (!profile) return
