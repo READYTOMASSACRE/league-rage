@@ -16,38 +16,30 @@ export const toPlayerStat = (o?: any): PlayerStat => ({
 
 export const toProfile = (o?: any): Profile => ({
   ...toPlayerStat(o),
-  id: o?.id ?? '-1',
-  name: o?.name ?? '',
+  _id: o?.id,
+  rgscId: o?.rgscId,
   lvl: o?.lvl ?? 0,
-  exp: o?.exp ?? 0,
   role: o?.role ?? Role.socialUser,
   victory: o?.victory ?? 0,
   rating: o?.rating ?? 0,
-  kda: o?.kda ?? 0,
   averageDamage: o?.averageDamage ?? 0,
   wins: o?.wins ?? 0,
   loses: o?.loses ?? 0,
   draws: o?.draw ?? 0,
 })
 
-export const toClientProfile = (o?: any): ClientProfile => ({
-  ...toPlayerStat(o),
-  id: o?.id ?? '-1',
-  name: o?.name ?? '',
-  lvl: o?.lvl ?? 0,
-  exp: o?.exp ?? 0,
-  role: o?.role ?? Role.socialUser,
-  victory: o?.victory ?? 0,
-  rating: o?.rating ?? 0,
-  kda: o?.kda ?? 0,
-  averageDamage: o?.averageDamage ?? 0,
-  wins: o?.wins ?? 0,
-  loses: o?.loses ?? 0,
-  draws: o?.draw ?? 0,
-})
+export const toClientProfile = (o?: any): ClientProfile => {
+  const profile = toProfile(o)
+
+  delete profile.rgscId
+  delete profile.password
+
+  return profile
+}
 
 export const toRound = (o?: Partial<Round>): Round => ({
-  id: o?.id ?? Date.now(),
+  _id: o?._id,
+  createDate: o?.createDate ?? Date.now(),
   arenaId: o?.arenaId ?? 0,
   result: o?.result ?? "draw",
   [Team.attackers]: o?.[Team.attackers] ?? { name: '', players: {} },

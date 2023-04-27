@@ -1,6 +1,6 @@
 declare global {
   interface PlayerMp {
-    userId: string
+    userId: number | string
     logged?: 'pending' | 'social' | 'auth' | 'error'
   }
 }

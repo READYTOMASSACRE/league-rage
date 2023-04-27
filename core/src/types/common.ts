@@ -100,7 +100,7 @@ export interface ClientConfig extends Omit<IConfig, 'db' | 'rcon'> {
   version: string
 }
 
-export type userId = string
+export type userId = number | string
 
 export type Catcher = { catch(err: Error): void }
 

@@ -1,6 +1,6 @@
 import { Point2d, Point3d } from "./common"
 import { Role } from "./permission"
-import { PlayerStat, Profile } from "./statistic"
+import { ClientProfile, PlayerStat } from "./statistic"
 
 export enum Team {
   attackers = 'attackers',
@@ -104,7 +104,7 @@ export type PlayerData = {
   alive: boolean
   spectate?: number
   userId: string
-  profile: Profile
+  profile: ClientProfile
   statistic: PlayerStat
   role: Role,
 }

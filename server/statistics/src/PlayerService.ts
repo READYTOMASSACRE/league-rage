@@ -1,3 +1,4 @@
+import { userId } from "../../../core/src/types"
 import { PlayerData } from "../../../core/src/types/tdm"
 
 export default class PlayerService {
@@ -17,7 +18,7 @@ export default class PlayerService {
     return this.getVariable(player, 'team')
   }
 
-  atUserId(id: string): PlayerMp | undefined {
+  atUserId(id: userId): PlayerMp | undefined {
     const player = mp.players.toArray().find(player => player.userId === id)
     return mp.players.exists(player) ? player : undefined
   }

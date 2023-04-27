@@ -16,7 +16,7 @@ export type StatisticConfig = {
 }
 
 export type Profile = {
-  _id: number | string
+  _id: userId
   rgscId: string
   lvl: number
   exp: number
@@ -35,6 +35,7 @@ export type Profile = {
   wins: number
   loses: number
   draws: number
+  password?: string
 }
 
 export type MongoProfile = Profile & { _id: any }
