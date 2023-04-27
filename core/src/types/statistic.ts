@@ -16,7 +16,8 @@ export type StatisticConfig = {
 }
 
 export type Profile = {
-  id: string
+  _id: number | string
+  rgscId: string
   lvl: number
   exp: number
   kill: number
@@ -58,7 +59,8 @@ export type TeamStat = {
 }
 
 export type Round = {
-  id: number
+  _id: number | string
+  createDate: number
   arenaId: number
   result: Team | "draw"
   [Team.attackers]: TeamStat
