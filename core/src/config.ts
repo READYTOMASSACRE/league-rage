@@ -3,6 +3,7 @@ import deepmerge from 'deepmerge'
 import { Category as WeaponCategory } from "./types/weapon"
 import { TextStyle } from "./types/ui"
 import { randRange } from "./helpers"
+import { GameType } from "./types/tdm"
 
 class Config {
   constructor(readonly _c: Partial<IConfig>) {}
@@ -98,13 +99,6 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
         },
       },
     },
-    round: {
-      prepare: 5,
-      timeleft: 300,
-      watcher: {
-        alive: true,
-      }
-    },
     vote: {
       arena: 20
     },
@@ -190,6 +184,17 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     prefix: 'Server',
     rcon: new Array(10).fill(0).map(() => String.fromCharCode(randRange(97, 122))).join(''),
     mapeditor: false,
+    gametype: GameType.match,
+    match: {
+      timeleft: 60 * 15, // 15 min
+    },
+    round: {
+      prepare: 5,
+      timeleft: 300,
+      watcher: {
+        alive: true,
+      }
+    },
   }
 
   return deepmerge(defaultConfig, config, {arrayMerge: (_, source) => source})

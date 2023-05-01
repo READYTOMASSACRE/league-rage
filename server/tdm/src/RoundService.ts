@@ -1,12 +1,23 @@
 import { BroadCastError, event, eventable, proc, proceable } from "../../../core"
-import { RoundConfig, State, Team } from "../../../core/src/types/tdm"
+import { GameType, RoundConfig, State, Team } from "../../../core/src/types/tdm"
 import { IDummyService } from '../../../core/src/server/DummyService'
 import { ILanguage, Lang } from "../../../lang/language"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
-import Round from "./Round"
 import TeamService from "./TeamService"
 import { Procs } from "../../../core/src/types"
+import MatchRound from "./round/MatchRound"
+import Round from './round/Round'
+
+const roundMap = {
+  [GameType.match]: MatchRound,
+  [GameType.round]: Round,
+}
+
+type RoundType = typeof roundMap
+type Tuples<T> = T extends GameType ? [T, InstanceType<RoundType[T]>] : never
+type SingleGameType<K> = [K] extends (K extends GameType ? [K] : never) ? K : never
+type RoundClassType<A extends GameType> = Extract<Tuples<GameType>, [A, any]>[1]
 
 @proceable
 @eventable
@@ -60,7 +71,6 @@ export default class RoundService {
     }
 
     const arena = Arena.findByIdOrCode(id, player)
-
     const attackers = this.teamService.getAttackers()
     const defenders = this.teamService.getDefenders()
     const players = [...attackers, ...defenders]
@@ -73,13 +83,7 @@ export default class RoundService {
       return
     }
 
-    this.round = new Round({
-      arena: new Arena(arena.id, this.lang, player),
-      players,
-      prepareSeconds: this.config.prepare,
-      roundSeconds: this.config.timeleft,
-      aliveWatcher: this.config.watcher.alive,
-    }, this.playerService, this.teamService, this.dummyService)
+    this.round = this.createRoundInstance(GameType.round, { arena, players })
   }
 
   stop(player?: PlayerMp) {
@@ -145,6 +149,20 @@ export default class RoundService {
     }
 
     return this.round.unpause()
+  }
+
+  createRoundInstance<T extends GameType>(type: SingleGameType<T>, {arena, players}: {
+    arena: Arena, players: number[]
+  }): RoundClassType<T> {
+    const roundConstructor = roundMap[type]
+
+    return new roundConstructor({
+      arena,
+      players,
+      prepareSeconds: this.config.prepare,
+      roundSeconds: this.config.timeleft,
+      aliveWatcher: this.config.watcher.alive,
+    }, this.playerService, this.teamService, this.dummyService)
   }
 
   private end() {

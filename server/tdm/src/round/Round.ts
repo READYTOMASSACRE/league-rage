@@ -1,10 +1,10 @@
-import { helpers } from "../../../core"
-import { IDummyService } from "../../../core/src/server/DummyService"
-import { Events } from "../../../core/src/types"
-import { Entity, RoundState, State, Team, WeaponState } from "../../../core/src/types/tdm"
-import Arena from "./Arena"
-import PlayerService from "./PlayerService"
-import TeamService from "./TeamService"
+import { helpers } from "../../../../core"
+import { IDummyService } from "../../../../core/src/server/DummyService"
+import { Events } from "../../../../core/src/types"
+import { Entity, RoundState, State, Team, WeaponState } from "../../../../core/src/types/tdm"
+import Arena from "../Arena"
+import PlayerService from "../PlayerService"
+import TeamService from "../TeamService"
 
 interface RoundConfig {
   arena: Arena

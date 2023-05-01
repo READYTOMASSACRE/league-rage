@@ -112,3 +112,18 @@ export type PlayerData = {
 export enum Vote {
   arena = 'arena'
 }
+
+export enum GameType {
+  round = 'round',
+  match = 'match'
+}
+
+export type MatchConfig = {
+  timeleft: number
+}
+
+export type GameConfig = {
+  type: GameType
+  [GameType.match]: MatchConfig
+  [GameType.round]: RoundConfig
+}

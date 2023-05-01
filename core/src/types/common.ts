@@ -1,5 +1,5 @@
 import { Config as WeaponConfig } from './weapon'
-import { RoundConfig, TeamConfig, VoteConfig } from './tdm';
+import { GameType, MatchConfig, RoundConfig, TeamConfig, VoteConfig } from './tdm';
 import { EffectsConfig, HudConfig, InteractionConfig } from './ui';
 import { StatisticConfig } from './statistic';
 
@@ -84,7 +84,6 @@ export interface IConfig {
   cef: string
   team: TeamConfig
   weapon: WeaponConfig
-  round: RoundConfig
   vote: VoteConfig
   hud: HudConfig
   interaction: InteractionConfig
@@ -94,6 +93,9 @@ export interface IConfig {
   prefix: string
   rcon?: string
   mapeditor: boolean
+  gametype: GameType
+  round: RoundConfig
+  match: MatchConfig
 }
 
 export interface ClientConfig extends Omit<IConfig, 'db' | 'rcon'> {

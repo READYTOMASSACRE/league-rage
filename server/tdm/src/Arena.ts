@@ -13,15 +13,12 @@ export default class Arena {
   private static indexById: Record<number, number> = {}
   private static indexByCode: Record<string, number> = {}
 
-  private readonly lang: ILanguage
-
-  constructor(id: number | string, lang: ILanguage, player?: PlayerMp) {
+  constructor(id: number | string, player?: PlayerMp) {
     const arena = Arena.get(id, player)
 
     this.arena = arena
     this.id = this.arena.id
     this.code = this.arena.code
-    this.lang = lang
   }
 
   getRandVector(team: types.tdm.Team): Vector3 {
@@ -29,7 +26,7 @@ export default class Arena {
     const vector = this.arena[team][randIndex]
 
     if (!vector) {
-      throw new Error(this.lang.get(Lang["error.arena.not_found_spawn"], { arena: this.arena.id }))
+      throw new Error(`Spawn not found for arena: ${this.id} ${this.code}`)
     }
 
     return new mp.Vector3(...vector)
@@ -123,7 +120,7 @@ export default class Arena {
       }
     }
 
-    return this.arenas[index]
+    return new Arena(this.arenas[index].id, player)
   }
 
   private static isArenaConfig(a: any): a is types.tdm.Arena {

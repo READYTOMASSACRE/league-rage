@@ -17,7 +17,6 @@ export default class ConfigService {
             cef: this.config.cef,
             team: this.config.team,
             weapon: this.config.weapon,
-            round: this.config.round,
             vote: this.config.vote,
             hud: this.config.hud,
             interaction: this.config.interaction,
@@ -26,6 +25,9 @@ export default class ConfigService {
             version: 'League 0.7a',
             prefix: this.config.prefix,
             mapeditor: this.config.mapeditor,
+            gametype: this.config.gametype,
+            match: this.config.match,
+            round: this.config.round,
         }
     }
 }
