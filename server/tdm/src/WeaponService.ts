@@ -19,8 +19,7 @@ export default class WeaponService {
     readonly lang: ILanguage,
   ) {}
 
-  @event(Events["tdm.round.prepare"])
-  tdmRoundPrepare(_: number, players: number[]) {
+  onRoundPrepare(_: number, players: number[]) {
     this.clearDelayedTasks()
     this.delayedTasks = [TaskManager.add(() => {
       players.forEach((p) => {
@@ -39,8 +38,7 @@ export default class WeaponService {
     })
   }
 
-  @event(Events["tdm.round.end"])
-  tdmRoundEnd() {
+  onRoundEnd() {
     this.clearDelayedTasks()
     mp.players.forEachFast((p) => {
       p.removeAllWeapons()
@@ -49,8 +47,7 @@ export default class WeaponService {
     })
   }
 
-  @event(Events["tdm.round.add"])
-  tdmRoundAdd(id: number, manual?: boolean) {
+  onRoundAdd(id: number, manual?: boolean) {
     if (manual) {
       this.playerService.setWeaponSlot(id)
       this.playerService.setWeaponState(id, tdm.WeaponState.idle)
@@ -65,8 +62,7 @@ export default class WeaponService {
     }
   }
 
-  @event(Events["tdm.round.remove"])
-  tdmRoundRemove(id: number, reason?: 'manual' | 'death') {
+  onRoundRemove(id: number) {
     this.playerService.setWeaponSlot(id)
     this.playerService.setWeaponState(id, tdm.WeaponState.idle)
   }
@@ -137,6 +133,7 @@ export default class WeaponService {
       throw new BroadCastError(Lang["error.weapon.weapon_not_found"], player)
     }
 
+    // todo circular dependency
     if (!this.roundService.running) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }

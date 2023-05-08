@@ -6,7 +6,11 @@ import { StatisticConfig } from './statistic';
 export type ctor<T = {}> = new (...args: any[]) => T
 export type callable = (...args: any[]) => any
 
-export interface Event {
+export interface EventParams {
+  serverOnly?: boolean
+}
+
+export interface Event extends EventParams {
   events: string[]
   method: string
   descriptor: TypedPropertyDescriptor<any>

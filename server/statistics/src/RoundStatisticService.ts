@@ -22,12 +22,12 @@ export default class RoundStatisticService {
     this.stat = this.toDefault()
   }
 
-  @event(Events['tdm.round.prepare'])
+  @event(Events['tdm.round.prepare'], { serverOnly: true })
   roundPrepare() {
     this.stat = this.toDefault()
   }
 
-  @event(Events['tdm.round.add'])
+  @event(Events['tdm.round.add'], { serverOnly: true })
   roundAdd(id: number, manual?: boolean) {
     const player = mp.players.at(id)
     if (!mp.players.exists(player)) return
@@ -41,7 +41,7 @@ export default class RoundStatisticService {
     })
   }
 
-  @event(Events['tdm.round.end'])
+  @event(Events['tdm.round.end'], { serverOnly: true })
   async roundEnd(arenaId: number, result: Team | 'draw') {
     if (result !== 'draw') {
       const winners = this.getPlayersStatByTeam(result)
@@ -90,7 +90,7 @@ export default class RoundStatisticService {
     this.stat = this.toDefault()
   }
 
-  @event(Events['tdm.player.kill'])
+  @event(Events['tdm.player.kill'], { serverOnly: true })
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
     const addKda = (_: number, full?: PlayerStat) => {
       if (!full) return 0
@@ -114,7 +114,7 @@ export default class RoundStatisticService {
     }
   }
 
-  @event(Events['tdm.player.damage'])
+  @event(Events['tdm.player.damage'], { serverOnly: true })
   playerDamage(victimId: number, killerId: number, weapon: string, damage: number) {
     this.addStat(victimId, 'damageRecieved', prev => prev + damage)
     this.addStat(victimId, 'exp', prev => prev + this.exp.damageRecieved)

@@ -1,13 +1,17 @@
 import { BroadCastError, event, eventable, proc, proceable } from "../../../core"
-import { GameType, RoundConfig, State, Team } from "../../../core/src/types/tdm"
+import { GameType, RoundConfig, State, Team, Vote } from "../../../core/src/types/tdm"
 import { IDummyService } from '../../../core/src/server/DummyService'
 import { ILanguage, Lang } from "../../../lang/language"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import TeamService from "./TeamService"
-import { Procs } from "../../../core/src/types"
+import { Events, Procs } from "../../../core/src/types"
 import MatchRound from "./round/MatchRound"
 import Round from './round/Round'
+import SpectateService from "./SpectateService"
+import BroadcastService from "./BroadcastService"
+import WeaponService from "./WeaponService"
+import VoteService from "./VoteService"
 
 const roundMap = {
   [GameType.match]: MatchRound,
@@ -28,8 +32,21 @@ export default class RoundService {
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly dummyService: IDummyService,
+    readonly spectateService: SpectateService,
+    readonly broadcastService: BroadcastService,
+    readonly weaponService: WeaponService,
+    readonly voteService: VoteService,
     readonly lang: ILanguage,
   ) {}
+
+  @event(['playerDeath', 'playerQuit'])
+  playerDeathOrQuit(player: PlayerMp) {
+    if (!this.running) {
+      return
+    }
+
+    this.spectateService.onPLayerDeathOrQuit(player)
+  }
 
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
@@ -55,6 +72,50 @@ export default class RoundService {
     if (this.round) {
       this.round.playerQuit(player.id)
     }
+  }
+
+  @event(Events["tdm.round.prepare"], { serverOnly: true })
+  onPrepare(arenaId: number, players: number[]) {
+    this.voteService.stop(Vote.arena)
+    this.weaponService.onRoundPrepare(arenaId, players)
+    this.broadcastService.byServer(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: arenaId }))
+  }
+
+  @event(Events["tdm.round.start"], { serverOnly: true })
+  onStart(arenaId: number, players: number[]) {
+    this.spectateService.onRoundStart(players)
+    this.broadcastService.byServer(this.lang.get(Lang["tdm.round.arena_start"], { arena: arenaId }))
+  }
+
+  @event(Events["tdm.round.end"], { serverOnly: true })
+  onEnd(arenaId: number, result: Team | 'draw') {
+    const teamName = this.teamService.getName(result)
+
+    this.weaponService.onRoundEnd()
+    this.spectateService.stopSpectatePlayers()
+    this.broadcastService.byServer(this.lang.get(Lang["tdm.round.end"], { arena: arenaId, result: teamName }))
+  }
+
+  @event(Events["tdm.round.add"], { serverOnly: true })
+  onAdd(id: number, manual: boolean | undefined, arenaId: number, whoAdded?: number) {
+    this.weaponService.onRoundAdd(id, manual)
+    this.spectateService.stopSpectate(id)
+    this.broadcastService.onRoundAdd(id, manual, arenaId, whoAdded)
+  }
+
+  @event(Events["tdm.round.remove"], { serverOnly: true })
+  onRemove(id: number, reason: 'manual' | 'death' | undefined, arenaId: number, whoRemoved?: number) {
+    this.weaponService.onRoundRemove(id)
+    this.spectateService.onPlayerRemove(id, reason)
+    this.broadcastService.onRoundRemove(id, reason, arenaId, whoRemoved)
+  }
+
+  @event(Events["tdm.round.pause"], { serverOnly: true })
+  onPause(toggle: boolean) {
+    this.broadcastService.byServer(toggle ?
+      this.lang.get(Lang["tdm.round.is_paused"]) :
+      this.lang.get(Lang["tdm.round.is_unpaused"])
+    )
   }
 
   @proc(Procs["tdm.round.timeleft"])

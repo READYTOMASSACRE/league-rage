@@ -1,4 +1,4 @@
-import { Decorator } from "../types"
+import { Decorator, EventParams } from "../types"
 
 /**
  * Decorator for adding events into RAGE API
@@ -10,7 +10,7 @@ import { Decorator } from "../types"
  * event("playerJoin")
  * event(["playerDeath", "playerQuit"])
  */
-export const event = (eventName: string | string[]): MethodDecorator => {
+export const event = (eventName: string | string[], params: EventParams = {}): MethodDecorator => {
   const events = Array.isArray(eventName) ? eventName : [eventName]
 
   return function(target: Object, method: string, descriptor: TypedPropertyDescriptor<any>) {
@@ -22,7 +22,7 @@ export const event = (eventName: string | string[]): MethodDecorator => {
       Decorator.events,
       [
         ...(Reflect.getMetadata(Decorator.events, target) || []),
-        {events, descriptor, method}
+        { events, descriptor, method, ...params },
       ],
       target
     )

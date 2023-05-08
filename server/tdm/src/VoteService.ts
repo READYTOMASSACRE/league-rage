@@ -32,11 +32,6 @@ export default class VoteService {
     }
   }
 
-  @event(Events["tdm.round.prepare"])
-  roundPrepare() {
-    this.stop(Vote.arena)
-  }
-
   isRunning(vote: Vote) {
     return Boolean(this.info[vote] && this.info[vote].timer)
   }
@@ -85,7 +80,7 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote.start"], vote, player.id, this.info[vote].result)
   }
 
-  private stop(vote: string, result?: string) {
+  stop(vote: string, result?: string) {
     clearTimeout(this.info[vote]?.timer)
 
     this.info[vote] = {

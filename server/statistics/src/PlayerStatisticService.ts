@@ -13,14 +13,14 @@ export default class PlayerStatisticService {
     this.playerService.setVariable(player, 'statistic', toPlayerStat())
   }
 
-  @event(Events['tdm.player.kill'])
+  @event(Events['tdm.player.kill'], { serverOnly: true })
   playerKill(victimId: number, killerId: number, weapon: string, assistId?: number) {
     this.addStat(killerId, 'kill', (prev) => prev + 1)
     this.addStat(victimId, 'death', (prev) => prev + 1)
     if (typeof assistId !== 'undefined') this.addStat(assistId, 'assists', (prev) => prev + 1)
   }
 
-  @event(Events['tdm.player.damage'])
+  @event(Events['tdm.player.damage'], { serverOnly: true })
   playerDamage(victimId: number, killerId: number, weapon: string, damage: number) {
     this.addStat(victimId, 'damageRecieved', prev => prev + damage)
     this.addStat(killerId, 'damageDone', prev => prev + damage)

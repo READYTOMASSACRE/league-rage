@@ -20,31 +20,11 @@ export default class BroadcastService {
     readonly lang: ILanguage,
   ) {}
 
-  @event(Events["tdm.round.prepare"])
-  tdmRoundPrepare(id: number) {
-    this.broadcastByServer(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: id }))
-  }
-
-  @event(Events["tdm.round.start"])
-  tdmRoundStart(id: number, players: number[]) {
-    const message = this.lang.get(Lang["tdm.round.arena_start"], { arena: id })
-
-    this.broadcastByServer(message)
-  }
-
-  @event(Events["tdm.round.end"])
-  tdmRoundEnd(id: number, team: tdm.Team | "draw") {
-    const result = this.teamService.getName(team)
-
-    this.broadcastByServer(this.lang.get(Lang["tdm.round.end"], { arena: id, result }))
-  }
-
-  @event(Events["tdm.round.add"])
-  tdmRoundAdd(id: number, manual?: boolean, arenaId?: number, whoAdded?: number) {
+  onRoundAdd(id: number, manual?: boolean, arenaId?: number, whoAdded?: number) {
     if (manual) {
       const message = this.lang.get(Lang["tdm.round.add"], { player: id })
 
-      this.broadcastByServer(message)
+      this.byServer(message)
 
       if (typeof whoAdded !== 'undefined') {
         this.playerService.popup(whoAdded, message, 'success')
@@ -52,11 +32,10 @@ export default class BroadcastService {
     }
   }
 
-  @event(Events["tdm.round.remove"])
-  tdmRoundRemove(id: number, reason?: 'manual' | 'death', arenaId?: number, whoRemoved?: number) {
+  onRoundRemove(id: number, reason?: 'manual' | 'death', arenaId?: number, whoRemoved?: number) {
     if (reason === 'manual') {
       const message = this.lang.get(Lang["tdm.round.remove"], { player: id })
-      this.broadcastByServer(message)
+      this.byServer(message)
 
       if (typeof whoRemoved !== 'undefined') {
         this.playerService.popup(whoRemoved, message, 'success')
@@ -64,22 +43,14 @@ export default class BroadcastService {
     }
   }
 
-  @event(Events["tdm.round.pause"])
-  tdmRoundPause(toggle: boolean) {
-    this.broadcastByServer(toggle ?
-      this.lang.get(Lang["tdm.round.is_paused"]) :
-      this.lang.get(Lang["tdm.round.is_unpaused"])
-    )
-  }
-
-  @event(Events["tdm.vote"])
+  @event(Events["tdm.vote"], { serverOnly: true })
   tdmVote(vote: Vote, id: number, key: Record<string, number> | string) {
     const player = this.playerService.getById(id)
     const alive = this.config.vote[vote] || this.defaultNotifyAlive
     const replacements = this.getReplacements(vote, player, key)
     const message = this.getMessage(vote, Lang["tdm.vote.add"], replacements)
 
-    this.broadcastByServer(message.replace('%ss', ''))
+    this.byServer(message.replace('%ss', ''))
 
     if (vote == Vote.arena) {
       this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'default', true)
@@ -88,14 +59,14 @@ export default class BroadcastService {
     }
   }
 
-  @event(Events["tdm.vote.start"])
+  @event(Events["tdm.vote.start"], { serverOnly: true })
   tdmVoteStart(vote: Vote, id: number, key: Record<string, number> | string) {
     const player = this.playerService.getById(id)
     const alive = this.config.vote[vote] || this.defaultNotifyAlive
     const replacements = this.getReplacements(vote, player, key)
     const message = this.getMessage(vote, Lang["tdm.vote.text"], replacements)
 
-    this.broadcastByServer(message.replace('%ss', ''))
+    this.byServer(message.replace('%ss', ''))
 
     if (vote == Vote.arena) {
       this.notify(this.lang.get(Lang["tdm.vote.text_arena_notify"], replacements), alive, vote, 'default')
@@ -104,10 +75,10 @@ export default class BroadcastService {
     }
   }
 
-  @event(Events["tdm.vote.end"])
+  @event(Events["tdm.vote.end"], { serverOnly: true })
   tdmVoteEnd(vote: Vote, result?: string) {
     if (result) {
-      this.broadcastByServer(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
+      this.byServer(this.lang.get(Lang["tdm.vote.end"], { vote, result }))
     }
 
     this.notifyStop(vote)
@@ -174,12 +145,12 @@ export default class BroadcastService {
 
   @event(Events["tdm.player.change_name"])
   onChangeName(id: number, old: string, newName: string) {
-    this.broadcastByServer(this.lang.get(Lang["tdm.player.change_name"], { player: old, new: newName }))
+    this.byServer(this.lang.get(Lang["tdm.player.change_name"], { player: old, new: newName }))
   }
 
   @event(Events["tdm.permission.role"])
   playerRole(id: number, role: Role) {
-    this.broadcastByServer({
+    this.byServer({
       message: [
         [this.lang.get(Lang["tdm.permission.role"], { role }), '#6ce36f']
       ]
@@ -210,7 +181,7 @@ export default class BroadcastService {
       this.call(Events["tdm.popup.push"], [message, type])
     }
 
-    this.broadcastByServer(this.config.welcomeText, [player.id])
+    this.byServer(this.config.welcomeText, [player.id])
   }
 
   @event(Events["tdm.profile.login"])
@@ -219,7 +190,7 @@ export default class BroadcastService {
     const role = this.playerService.getRole(id)
     const message = this.lang.get(Lang["tdm.player.login"], { player: player.name, role })
 
-    this.broadcastByServer({ message: [[message, '#6ce36f']] }, [id])
+    this.byServer({ message: [[message, '#6ce36f']] }, [id])
     this.playerService.popup(id, message, 'success')
   }
 
@@ -238,7 +209,7 @@ export default class BroadcastService {
     return message
   }
 
-  broadcastByServer(input: string | ChatItem, players?: number[]) {
+  byServer(input: string | ChatItem, players?: number[]) {
     if (typeof input === 'string') {
       input = { message: [[input, '#fff']] }
     }

@@ -17,12 +17,7 @@ export default class SpectateService {
     readonly lang: ILanguage,
   ) {}
 
-  @event(['playerDeath', 'playerQuit'])
   onPLayerDeathOrQuit(player: PlayerMp) {
-    if (!this.roundService.running) {
-      return
-    }
-
     const players = this.playerService.getWithState(State.spectate)
 
     for (const spectatePlayer of players) {
@@ -32,13 +27,7 @@ export default class SpectateService {
     }
   }
 
-  @event(Events["tdm.round.end"])
-  onRoundEnd() {
-    return this.stopSpectatePlayers()
-  }
-
-  @event(Events["tdm.round.start"])
-  async onRoundStart(arenaId: number, players: number[]) {
+  async onRoundStart(players: number[]) {
     this.stopSpectatePlayers()
 
     const spectators = this.playerService.getByTeam(Team.spectators)
@@ -70,7 +59,6 @@ export default class SpectateService {
     }
   }
 
-  @event(Events["tdm.round.remove"])
   onPlayerRemove(id: number, reason?: 'manual' | 'death') {
     if (!reason) {
       return
@@ -95,11 +83,6 @@ export default class SpectateService {
         this.turnSpecate(spectatePlayer, 'right')
       }
     }
-  }
-
-  @event(Events["tdm.round.add"])
-  onPlayerAdd(id: number) {
-    this.stopSpectate(id)
   }
 
   @catchError(ErrorNotifyHandler)
@@ -170,6 +153,7 @@ export default class SpectateService {
   }
 
   validateSpectate(player: PlayerMp, spectatePlayer?: PlayerMp) {
+    // todo circular dependency
     if (!this.roundService.running) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
@@ -202,7 +186,7 @@ export default class SpectateService {
     }
   }
 
-  private stopSpectatePlayers() {
+  stopSpectatePlayers() {
     const players = this.playerService.getWithState(State.spectate)
 
     for (const spectatePlayer of players) {
@@ -210,7 +194,7 @@ export default class SpectateService {
     }
   }
 
-  private stopSpectate(player: PlayerMp | number) {
+  stopSpectate(player: PlayerMp | number) {
     player = typeof player === 'number' ? mp.players.at(player) : player
 
     if (!mp.players.exists(player)) {

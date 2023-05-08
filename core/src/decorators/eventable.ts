@@ -26,7 +26,7 @@ export const eventable = <T extends ctor>(target: T): T => {
       if (!Reflect.getMetadata(Decorator.eventsInit, target.prototype)) {
         const list: Event[] = Reflect.getMetadata(Decorator.events, target.prototype) || []
 
-        for (const {events, descriptor, method} of list) {
+        for (const { events, descriptor, method, serverOnly } of list) {
           const callback = descriptor.value
 
           if (typeof callback !== 'function') {
@@ -39,7 +39,7 @@ export const eventable = <T extends ctor>(target: T): T => {
               const [player] = args
               if (
                 Enviroment.server &&
-                serverOnly.includes(eventName) &&
+                serverOnly &&
                 typeof player === 'object' &&
                 mp.players.exists(player)
               ) {
