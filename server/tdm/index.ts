@@ -31,7 +31,7 @@ const main = async () => {
   const spectateService = new SpectateService(playerService, DummyService, language)
   const broadcastService = new BroadcastService(config, playerService, teamService, language)
   const roundService = new RoundService(
-    config.round, playerService, teamService,
+    config, playerService, teamService,
     DummyService, spectateService, broadcastService,
     weaponService, voteService, language
   )

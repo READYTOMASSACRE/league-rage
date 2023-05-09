@@ -187,6 +187,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     gametype: GameType.match,
     match: {
       timeleft: 60 * 15, // 15 min
+      prepare: 5,
     },
     round: {
       prepare: 5,

@@ -1,34 +1,26 @@
 import { BroadCastError, event, eventable, proc, proceable } from "../../../core"
-import { GameType, RoundConfig, State, Team, Vote } from "../../../core/src/types/tdm"
+import { GameType, State, Team, Vote } from "../../../core/src/types/tdm"
 import { IDummyService } from '../../../core/src/server/DummyService'
 import { ILanguage, Lang } from "../../../lang/language"
 import Arena from "./Arena"
 import PlayerService from "./PlayerService"
 import TeamService from "./TeamService"
-import { Events, Procs } from "../../../core/src/types"
-import MatchRound from "./round/MatchRound"
-import Round from './round/Round'
+import { Events, IConfig, Procs } from "../../../core/src/types"
+import Round from './Round'
 import SpectateService from "./SpectateService"
 import BroadcastService from "./BroadcastService"
 import WeaponService from "./WeaponService"
 import VoteService from "./VoteService"
-
-const roundMap = {
-  [GameType.match]: MatchRound,
-  [GameType.round]: Round,
-}
-
-type RoundType = typeof roundMap
-type Tuples<T> = T extends GameType ? [T, InstanceType<RoundType[T]>] : never
-type SingleGameType<K> = [K] extends (K extends GameType ? [K] : never) ? K : never
-type RoundClassType<A extends GameType> = Extract<Tuples<GameType>, [A, any]>[1]
+import TaskManager from "./TaskManager" 
 
 @proceable
 @eventable
 export default class RoundService {
   private round?: Round
+  private mapId?: string
+
   constructor(
-    readonly config: RoundConfig,
+    readonly config: IConfig,
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly dummyService: IDummyService,
@@ -37,7 +29,9 @@ export default class RoundService {
     readonly weaponService: WeaponService,
     readonly voteService: VoteService,
     readonly lang: ILanguage,
-  ) {}
+  ) {
+    this.start = this.start.bind(this)
+  }
 
   @event(['playerDeath', 'playerQuit'])
   playerDeathOrQuit(player: PlayerMp) {
@@ -88,12 +82,18 @@ export default class RoundService {
   }
 
   @event(Events["tdm.round.end"], { serverOnly: true })
-  onEnd(arenaId: number, result: Team | 'draw') {
+  onEnd(arenaId: number, result: Team | 'draw', players: number[]) {
     const teamName = this.teamService.getName(result)
 
     this.weaponService.onRoundEnd()
     this.spectateService.stop()
     this.broadcastService.byServer(this.lang.get(Lang["tdm.round.end"], { arena: arenaId, result: teamName }))
+
+    players.forEach(player => this.playerService.spawnLobby(player, true))
+
+    if (this.config.gametype === GameType.match) {
+      this.scheduleNextRound()
+    }
   }
 
   @event(Events["tdm.round.add"], { serverOnly: true })
@@ -108,6 +108,10 @@ export default class RoundService {
     this.weaponService.onRoundRemove(id)
     this.spectateService.onPlayerRemove(id, reason)
     this.broadcastService.onRoundRemove(id, reason, arenaId, whoRemoved)
+    
+    if (reason !== 'death') {
+      this.playerService.spawnLobby(id, true)
+    }
   }
 
   @event(Events["tdm.round.pause"], { serverOnly: true })
@@ -123,7 +127,7 @@ export default class RoundService {
     return this.timeleft
   }
 
-  start(id: string, player?: PlayerMp) {
+  start(id?: string, player?: PlayerMp) {
     if (this.running) {
       if (player) {
         throw new BroadCastError(Lang["tdm.round.is_running"], player)
@@ -131,12 +135,14 @@ export default class RoundService {
       return
     }
 
+    id = id ?? this.mapId
+
     const arena = Arena.findByIdOrCode(id, player)
     const attackers = this.teamService.getAttackers()
     const defenders = this.teamService.getDefenders()
     const players = [...attackers, ...defenders]
 
-    if (this.config.watcher.alive && (!attackers.length || !defenders.length)) {
+    if (this.roundConfig.watcher.alive && (!attackers.length || !defenders.length)) {
       if (player) {
         throw new BroadCastError(Lang["tdm.round.start_empty"], player)
       }
@@ -144,7 +150,18 @@ export default class RoundService {
       return
     }
 
-    this.round = this.createRoundInstance(GameType.round, { arena, players })
+    this.round = new Round({
+      arena,
+      players,
+      prepareSeconds: this.roundConfig.prepare,
+      roundSeconds: this.roundConfig.timeleft,
+      aliveWatcher: this.roundConfig.watcher.alive,
+    }, this.playerService, this.teamService, this.dummyService)
+  }
+
+  scheduleNextRound() {
+    TaskManager.remove(this.start)
+    TaskManager.add(this.start, this.config.match.prepare)
   }
 
   stop(player?: PlayerMp) {
@@ -212,20 +229,6 @@ export default class RoundService {
     return this.round.unpause()
   }
 
-  createRoundInstance<T extends GameType>(type: SingleGameType<T>, {arena, players}: {
-    arena: Arena, players: number[]
-  }): RoundClassType<T> {
-    const roundConstructor = roundMap[type]
-
-    return new roundConstructor({
-      arena,
-      players,
-      prepareSeconds: this.config.prepare,
-      roundSeconds: this.config.timeleft,
-      aliveWatcher: this.config.watcher.alive,
-    }, this.playerService, this.teamService, this.dummyService)
-  }
-
   private end() {
     if (!this.round) return
     
@@ -248,5 +251,9 @@ export default class RoundService {
 
   get timeleft() {
     return this.round?.timeleft ?? 0
+  }
+
+  get roundConfig() {
+    return this.config.round
   }
 }

@@ -1,10 +1,10 @@
-import { helpers } from "../../../../core"
-import { IDummyService } from "../../../../core/src/server/DummyService"
-import { Events } from "../../../../core/src/types"
-import { Entity, RoundState, State, Team, WeaponState } from "../../../../core/src/types/tdm"
-import Arena from "../Arena"
-import PlayerService from "../PlayerService"
-import TeamService from "../TeamService"
+import { helpers } from "../../../core"
+import { IDummyService } from "../../../core/src/server/DummyService"
+import { Events } from "../../../core/src/types"
+import { Entity, RoundState, State, Team, WeaponState } from "../../../core/src/types/tdm"
+import Arena from "./Arena"
+import PlayerService from "./PlayerService"
+import TeamService from "./TeamService"
 
 interface RoundConfig {
   arena: Arena
@@ -85,6 +85,8 @@ export default class Round {
       !this.players.includes(id)
     ))]
 
+    const players = [...this.players]
+
     this.players.forEach(id => this.removePlayer(id))
 
     clearTimeout(this.prepareTimer)
@@ -93,8 +95,8 @@ export default class Round {
 
     this.teamService.addScore(result)
 
-    mp.players.call(Events["tdm.round.end"], [this.arena.id, result])
-    mp.events.call(Events["tdm.round.end"], this.arena.id, result)
+    mp.players.call(Events["tdm.round.end"], [this.arena.id, result, players])
+    mp.events.call(Events["tdm.round.end"], this.arena.id, result, players)
   }
 
   addPlayer(id: number, manual?: boolean, whoAdded?: number) {
@@ -113,10 +115,6 @@ export default class Round {
     }
 
     this.players = this.players.filter(playerId => playerId !== id)
-
-    if (reason !== 'death') {
-      this.playerService.spawnLobby(id, true)
-    }
 
     this.playerService.call([id], Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
     mp.events.call(Events["tdm.round.remove"], id, reason, this.arena.id, whoRemoved)
