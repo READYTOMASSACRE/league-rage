@@ -26,16 +26,21 @@ const main = async () => {
   const playerService = new PlayerService(config)
   const permissionService = new PermissionService(config, playerService, language)
   const teamService = new TeamService(playerService, language)
-  const roundService = new RoundService(config.round, playerService, teamService, DummyService, language)
   const voteService = new VoteService(config.vote, language)
-  const weaponService = new WeaponService(config.weapon, playerService, roundService, language)
+  const weaponService = new WeaponService(config.weapon, playerService, DummyService, language)
+  const spectateService = new SpectateService(playerService, DummyService, language)
+  const broadcastService = new BroadcastService(config, playerService, teamService, language)
+  const roundService = new RoundService(
+    config.round, playerService, teamService,
+    DummyService, spectateService, broadcastService,
+    weaponService, voteService, language
+  )
 
-  new BroadcastService(config, playerService, teamService, language)
-  new SpectateService(playerService, roundService, language)
   new TdmService(
     roundService, permissionService, playerService,
     voteService, weaponService, teamService, language
   )
+  
   new DebugService(playerService, DummyService)
 
   Arena.load(language)

@@ -1,9 +1,9 @@
 import { BroadCastError, catchError, command, commandable, event, eventable, proc, proceable } from "../../../core";
+import { IDummyService } from "../../../core/src/server/DummyService";
 import { Events, Procs } from "../../../core/src/types";
-import { State, Team } from "../../../core/src/types/tdm";
+import { Entity, RoundState, State, Team } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
-import RoundService from "./RoundService";
 import TaskManager from "./TaskManager";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
@@ -13,22 +13,22 @@ import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 export default class SpectateService {
   constructor(
     readonly playerService: PlayerService,
-    readonly roundService: RoundService,
+    readonly dummyService: IDummyService,
     readonly lang: ILanguage,
   ) {}
 
-  onPLayerDeathOrQuit(player: PlayerMp) {
+  onPlayerDeathOrQuit(player: PlayerMp) {
     const players = this.playerService.getWithState(State.spectate)
 
     for (const spectatePlayer of players) {
       if (player.id === this.playerService.getSpectateId(spectatePlayer)) {
-        this.stopSpectate(spectatePlayer)
+        this.stopByPlayer(spectatePlayer)
       }
     }
   }
 
-  async onRoundStart(players: number[]) {
-    this.stopSpectatePlayers()
+  onRoundStart(players: number[]) {
+    this.stop()
 
     const spectators = this.playerService.getByTeam(Team.spectators)
     const [id] = players
@@ -103,7 +103,7 @@ export default class SpectateService {
     }
 
     if (this.playerService.hasState(player, State.spectate) && id === 'off') {
-      return this.stopSpectate(player)
+      return this.stopByPlayer(player)
     }
 
     this.validateSpectate(player, spectatePlayer)
@@ -153,8 +153,9 @@ export default class SpectateService {
   }
 
   validateSpectate(player: PlayerMp, spectatePlayer?: PlayerMp) {
-    // todo circular dependency
-    if (!this.roundService.running) {
+    const state = this.dummyService.get(Entity.ROUND, 'state')
+
+    if (state !== RoundState.running) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
@@ -186,15 +187,15 @@ export default class SpectateService {
     }
   }
 
-  stopSpectatePlayers() {
+  stop() {
     const players = this.playerService.getWithState(State.spectate)
 
     for (const spectatePlayer of players) {
-      this.stopSpectate(spectatePlayer)
+      this.stopByPlayer(spectatePlayer)
     }
   }
 
-  stopSpectate(player: PlayerMp | number) {
+  stopByPlayer(player: PlayerMp | number) {
     player = typeof player === 'number' ? mp.players.at(player) : player
 
     if (!mp.players.exists(player)) {

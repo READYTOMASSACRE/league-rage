@@ -1,10 +1,10 @@
 import { BroadCastError, catchError, event, eventable } from "../../../core";
+import { IDummyService } from "../../../core/src/server/DummyService";
 import { Events, tdm, weapon } from "../../../core/src/types";
-import { State, WeaponState } from "../../../core/src/types/tdm";
+import { Entity, RoundState, State, WeaponState } from "../../../core/src/types/tdm";
 import { Category } from "../../../core/src/types/weapon";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
-import RoundService from "./RoundService";
 import TaskManager, { Task } from "./TaskManager";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 
@@ -15,11 +15,11 @@ export default class WeaponService {
   constructor(
     readonly config: weapon.Config,
     readonly playerService: PlayerService,
-    readonly roundService: RoundService,
+    readonly dummyService: IDummyService,
     readonly lang: ILanguage,
   ) {}
 
-  onRoundPrepare(_: number, players: number[]) {
+  onRoundPrepare(players: number[]) {
     this.clearDelayedTasks()
     this.delayedTasks = [TaskManager.add(() => {
       players.forEach((p) => {
@@ -124,6 +124,22 @@ export default class WeaponService {
     }
   }
 
+  getCategory(weapon: string): Category | undefined {
+    for (const [category, weapons] of Object.entries(this.config.category)) {
+      if (weapons.includes(weapon)) {
+        return <Category>category
+      }
+    }
+  }
+
+  getSlotByCategory(category: Category): string | undefined {
+    for (const [slot, categories] of Object.entries(this.config.slot)) {
+      if (categories.includes(category)) {
+        return slot
+      }
+    }
+  }
+
   private validateRequest(player: PlayerMp, weapon: string) {
     if (!mp.players.exists(player)) {
       throw new Error(this.lang.get(Lang["error.player.not_found"], { player: player?.id }))
@@ -133,8 +149,9 @@ export default class WeaponService {
       throw new BroadCastError(Lang["error.weapon.weapon_not_found"], player)
     }
 
-    // todo circular dependency
-    if (!this.roundService.running) {
+    const state = this.dummyService.get(Entity.ROUND, 'state')
+
+    if (state !== RoundState.running) {
       throw new BroadCastError(Lang["tdm.round.is_not_running"], player)
     }
 
@@ -171,22 +188,6 @@ export default class WeaponService {
     }
 
     return slot
-  }
-
-  getCategory(weapon: string): Category | undefined {
-    for (const [category, weapons] of Object.entries(this.config.category)) {
-      if (weapons.includes(weapon)) {
-        return <Category>category
-      }
-    }
-  }
-
-  getSlotByCategory(category: Category): string | undefined {
-    for (const [slot, categories] of Object.entries(this.config.slot)) {
-      if (categories.includes(category)) {
-        return slot
-      }
-    }
   }
 
   private clearDelayedTasks() {

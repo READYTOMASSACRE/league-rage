@@ -45,7 +45,7 @@ export default class RoundService {
       return
     }
 
-    this.spectateService.onPLayerDeathOrQuit(player)
+    this.spectateService.onPlayerDeathOrQuit(player)
   }
 
   @event("playerDeath")
@@ -77,7 +77,7 @@ export default class RoundService {
   @event(Events["tdm.round.prepare"], { serverOnly: true })
   onPrepare(arenaId: number, players: number[]) {
     this.voteService.stop(Vote.arena)
-    this.weaponService.onRoundPrepare(arenaId, players)
+    this.weaponService.onRoundPrepare(players)
     this.broadcastService.byServer(this.lang.get(Lang["tdm.round.arena_prepare"], { arena: arenaId }))
   }
 
@@ -92,14 +92,14 @@ export default class RoundService {
     const teamName = this.teamService.getName(result)
 
     this.weaponService.onRoundEnd()
-    this.spectateService.stopSpectatePlayers()
+    this.spectateService.stop()
     this.broadcastService.byServer(this.lang.get(Lang["tdm.round.end"], { arena: arenaId, result: teamName }))
   }
 
   @event(Events["tdm.round.add"], { serverOnly: true })
   onAdd(id: number, manual: boolean | undefined, arenaId: number, whoAdded?: number) {
     this.weaponService.onRoundAdd(id, manual)
-    this.spectateService.stopSpectate(id)
+    this.spectateService.stopByPlayer(id)
     this.broadcastService.onRoundAdd(id, manual, arenaId, whoAdded)
   }
 
