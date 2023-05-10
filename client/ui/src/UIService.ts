@@ -50,7 +50,6 @@ export default class UIService {
     readonly playerService: PlayerService,
     readonly teamService: TeamService,
     readonly dummyService: DummyService,
-    readonly roundService: RoundService,
     readonly arenaService: ArenaService,
     readonly lang: ILanguage
   ) {
@@ -67,7 +66,7 @@ export default class UIService {
     this.teamSelect = new TeamSelector(this, keybindService)
     this.infoPanel = new Infopanel(this, this.dummyService, teamService)
     this.controls = new Controls(this, lang)
-    this.notifyText = new NotifyText(config.round, this, this.roundService, lang)
+    this.notifyText = new NotifyText(config.round, this, lang)
     this.deathlog = new Deathlog(this, playerService, teamService)
     this.motd = new Motd(config, this, keybindService)
     this.panel = new Panel(config.name, this, keybindService, arenaService, playerService)

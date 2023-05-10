@@ -11,8 +11,7 @@ export default class Winner {
     readonly teamService: TeamService,
   ) {}
 
-  @event(Events["tdm.round.end"])
-  roundEnd(arenaId: number, result: Team | "draw") {
+  roundEnd(result: Team | "draw") {
     const {
       name = result,
       color = '#fff',
@@ -23,7 +22,6 @@ export default class Winner {
     return {name, color}
   }
 
-  @event(Events["tdm.round.prepare"])
   roundPrepare() {
     this.uiService.cef.call(Events["tdm.cef.winner"])
   }

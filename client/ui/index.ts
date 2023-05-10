@@ -27,8 +27,8 @@ const main = async () => {
     const playerService = new PlayerService()
     const teamService = new TeamService(config.team, dummyService)
     const zoneService = new ZoneService(playerService, dummyService)
-    const roundService = new RoundService(zoneService, playerService, arenaService)
     const keybindService = new KeybindService()
+    const hudService = new HudService(config, playerService, teamService)
     const uiService = new UIService(
       "package://league-tdm-cef/index.html",
       config,
@@ -36,15 +36,14 @@ const main = async () => {
       playerService,
       teamService,
       dummyService,
-      roundService,
       arenaService,
       language
     )
 
     new WeaponService(playerService, keybindService)
-    new HudService(config, roundService, playerService, teamService)
     new InteractionService(config, playerService, teamService, dummyService, keybindService, uiService)
     new DebugService(playerService)
+    new RoundService(zoneService, playerService, arenaService, hudService, uiService)
 
     console.log('league-tdm-ui package initialized')
   

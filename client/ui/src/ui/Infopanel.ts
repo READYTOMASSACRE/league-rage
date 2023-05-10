@@ -37,14 +37,12 @@ export default class Infopanel {
     }
   }
 
-  @event(Events["tdm.round.start"])
   roundStart() {
     this.dateStart = Date.now()
     clearInterval(this.interval)
     this.interval = setInterval(() => this.sendRoundData(), 1000)
   }
 
-  @event(Events["tdm.round.end"])
   roundEnd() {
     clearInterval(this.interval)
     this.sendRoundData()
@@ -55,7 +53,6 @@ export default class Infopanel {
     this.sendRoundData()
   }
 
-  @event(Events["tdm.round.pause"])
   roundPause(toggle: boolean) {
     clearInterval(this.interval)
     if (!toggle) {

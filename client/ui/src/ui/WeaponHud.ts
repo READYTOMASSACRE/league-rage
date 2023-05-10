@@ -20,7 +20,6 @@ export default class WeaponHud {
     this.uiService.cef.call(Events["tdm.cef.weapon_hud"], this.data)
   }
 
-  @event(Events["tdm.round.remove"])
   roundRemove() {
     this.uiService.cef.call(Events["tdm.cef.weapon_hud"])
   }

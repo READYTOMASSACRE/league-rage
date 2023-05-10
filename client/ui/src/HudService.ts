@@ -1,5 +1,6 @@
 import { event, eventable } from "../../../core/client";
 import { ClientConfig, Events } from "../../../core/src/types";
+import { Arena } from "../../../core/src/types/tdm";
 import Damage from "./hud/Damage";
 import Nametag from "./hud/Nametag";
 import RoundStart from "./hud/RoundStart";
@@ -17,13 +18,11 @@ export default class HudService {
 
     constructor(
         readonly config: ClientConfig,
-        readonly roundService: RoundService,
         readonly playerService: PlayerService,
         readonly teamService: TeamService,
     ) {}
 
-    @event(Events["tdm.round.prepare"])
-    drawRoundStart(id: number) {
+    drawRoundStart(arena: Arena) {
         if (this.playerService.select) {
             return
         }
@@ -32,8 +31,6 @@ export default class HudService {
             this.roundStart.destroy()
         }
 
-        const arena = this.roundService.getArenaById(id)
-
         if (arena) {
             const zone = new Zone(arena)
             this.roundStart = new RoundStart(this.config.hud.roundStart)
@@ -41,7 +38,6 @@ export default class HudService {
         }
     }
 
-    @event([Events["tdm.round.start"], Events["tdm.round.end"]])
     stopDrawRoundStart() {
         if (this.roundStart) {
             this.roundStart.destroy()

@@ -1,7 +1,7 @@
 import { event, eventable } from "../../../../core/client";
 import { toMs } from "../../../../core/src/helpers";
 import { Events } from "../../../../core/src/types";
-import { RoundConfig } from "../../../../core/src/types/tdm";
+import { Arena, RoundConfig } from "../../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../../lang/language";
 import RoundService from "../RoundService";
 import UIService from "../UIService";
@@ -15,14 +15,10 @@ export default class NotifyText {
   constructor(
     readonly config: RoundConfig,
     readonly uiService: UIService,
-    readonly roundService: RoundService,
     readonly lang: ILanguage
   ) {}
 
-  @event(Events["tdm.round.prepare"])
-  roundPrepare(id: number) {
-    const arena = this.roundService.getArenaById(id)
-
+  roundPrepare(arena: Arena) {
     this.show(
       this.lang.get(Lang["tdm.round.arena_prepare_timer"], { arena: arena.code }),
       this.config.prepare,
