@@ -44,6 +44,16 @@ export default class RoundService {
 
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
+    if (this.config.gametype === GameType.round) {
+      TaskManager.add(() => {
+        if (!mp.players.exists(player)) {
+          return
+        }
+  
+        this.playerService.spawnLobby(player)
+      }, this.config.effects.death)
+    }
+
     if (!this.running) {
       return
     }
@@ -89,10 +99,8 @@ export default class RoundService {
     this.spectateService.stop()
     this.broadcastService.byServer(this.lang.get(Lang["tdm.round.end"], { arena: arenaId, result: teamName }))
 
-    players.forEach(player => this.playerService.spawnLobby(player, true))
-
-    if (this.config.gametype === GameType.match) {
-      this.scheduleNextRound()
+    if (this.config.gametype === GameType.round) {
+      players.forEach(player => this.playerService.spawnLobby(player, true))
     }
   }
 
@@ -109,7 +117,7 @@ export default class RoundService {
     this.spectateService.onPlayerRemove(id, reason)
     this.broadcastService.onRoundRemove(id, reason, arenaId, whoRemoved)
     
-    if (reason !== 'death') {
+    if (reason !== 'death' && this.config.gametype === GameType.round) {
       this.playerService.spawnLobby(id, true)
     }
   }
@@ -135,8 +143,6 @@ export default class RoundService {
       return
     }
 
-    id = id ?? this.mapId
-
     const arena = Arena.findByIdOrCode(id, player)
     const attackers = this.teamService.getAttackers()
     const defenders = this.teamService.getDefenders()
@@ -157,11 +163,6 @@ export default class RoundService {
       roundSeconds: this.roundConfig.timeleft,
       aliveWatcher: this.roundConfig.watcher.alive,
     }, this.playerService, this.teamService, this.dummyService)
-  }
-
-  scheduleNextRound() {
-    TaskManager.remove(this.start)
-    TaskManager.add(this.start, this.config.match.prepare)
   }
 
   stop(player?: PlayerMp) {
@@ -255,5 +256,9 @@ export default class RoundService {
 
   get roundConfig() {
     return this.config.round
+  }
+
+  get matchConfig() {
+    return this.config.match
   }
 }

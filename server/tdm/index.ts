@@ -17,6 +17,8 @@ import ConfigService from './src/ConfigService'
 import DebugService from './src/DebugService'
 import SpectateService from './src/SpectateService'
 import TaskManager from './src/TaskManager'
+import { GameType } from '../../core/src/types/tdm'
+import MatchService from './src/MatchService'
 
 const main = async () => {
   const language = new Language(await LanguageService.get(config.lang))
@@ -25,10 +27,10 @@ const main = async () => {
 
   const playerService = new PlayerService(config)
   const permissionService = new PermissionService(config, playerService, language)
-  const teamService = new TeamService(playerService, language)
+  const teamService = new TeamService(config, playerService, language)
   const voteService = new VoteService(config.vote, language)
   const weaponService = new WeaponService(config.weapon, playerService, DummyService, language)
-  const spectateService = new SpectateService(playerService, DummyService, language)
+  const spectateService = new SpectateService(config, playerService, DummyService, language)
   const broadcastService = new BroadcastService(config, playerService, teamService, language)
   const roundService = new RoundService(
     config, playerService, teamService,
@@ -42,6 +44,10 @@ const main = async () => {
   )
   
   new DebugService(playerService, DummyService)
+
+  if (config.gametype === GameType.match) {
+    new MatchService(config.match, roundService, voteService)
+  }
 
   Arena.load(language)
 

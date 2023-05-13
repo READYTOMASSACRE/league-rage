@@ -1,7 +1,7 @@
 import { BroadCastError, catchError, command, commandable, event, eventable, proc, proceable } from "../../../core";
 import { IDummyService } from "../../../core/src/server/DummyService";
-import { Events, Procs } from "../../../core/src/types";
-import { Entity, RoundState, State, Team } from "../../../core/src/types/tdm";
+import { Events, IConfig, Procs } from "../../../core/src/types";
+import { Entity, GameType, RoundState, State, Team } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
 import TaskManager from "./TaskManager";
@@ -12,6 +12,7 @@ import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 @eventable
 export default class SpectateService {
   constructor(
+    readonly config: IConfig,
     readonly playerService: PlayerService,
     readonly dummyService: IDummyService,
     readonly lang: ILanguage,
@@ -149,7 +150,10 @@ export default class SpectateService {
     }
 
     this.playerService.setVariable(player, 'spectate', undefined)
-    this.playerService.spawnLobby(player)
+
+    if (this.config.gametype === GameType.round) {
+      this.playerService.spawnLobby(player)
+    }
   }
 
   validateSpectate(player: PlayerMp, spectatePlayer?: PlayerMp) {
@@ -207,7 +211,7 @@ export default class SpectateService {
 
   private turnSpecate(
     player: PlayerMp | number,
-    turn: 'start' | 'right' | 'left',
+    turn: 'start' | 'right' | 'left' | 'deathcam',
     spectatePlayer?: PlayerMp
   ) {
     player = typeof player === 'number' ? mp.players.at(player) : player
@@ -224,6 +228,8 @@ export default class SpectateService {
 
     if (turn === 'start') {
       this.playerService.call([player.id], Events["tdm.spectate.start"], spectatePlayer?.id)
+    } else if (turn == 'deathcam') {
+      this.playerService.call([player.id], Events["tdm.spectate.deathcam"])
     } else {
       this.playerService.call([player.id], Events["tdm.spectate.turn"], turn)
     }

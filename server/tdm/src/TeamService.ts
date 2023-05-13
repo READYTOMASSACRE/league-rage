@@ -1,8 +1,8 @@
 import { eventable, event, ensurePlayer, commandable, command, helpers, catchError, BroadCastError } from "../../../core";
 import { deepclone } from "../../../core/src/helpers";
 import DummyService from "../../../core/src/server/DummyService";
-import { Events, tdm } from "../../../core/src/types";
-import { Entity } from "../../../core/src/types/tdm";
+import { Events, IConfig, tdm } from "../../../core/src/types";
+import { Entity, GameType } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
 import PlayerService from "./PlayerService";
 import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
@@ -11,6 +11,7 @@ import ErrorNotifyHandler from "./error/ErrorNotifyHandler";
 @commandable
 export default class TeamService {
   constructor(
+    readonly config: IConfig,
     readonly playerService: PlayerService,
     readonly lang: ILanguage,
   ) {}
@@ -102,7 +103,10 @@ export default class TeamService {
     }
 
     this.playerService.setTeam(p, team)
-    this.playerService.spawnLobby(p, true)
+
+    if (this.config.gametype === GameType.round) {
+      this.playerService.spawnLobby(p, true)
+    }
 
     if (model) {
       this.playerService.setModel(p, mp.joaat(model))

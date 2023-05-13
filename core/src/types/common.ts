@@ -221,6 +221,8 @@ export const enum Events {
   'tdm.spectate.stop' = 'tdm.spectate.stop',
   /** Fires when spectate should turn */
   'tdm.spectate.turn' = 'tdm.spectate.turn',
+  /** Fires when spectate should turn to deathcam */
+  'tdm.spectate.deathcam' = 'tdm.spectate.deathcam',
   /** Fires on clientside when spectate is preparing by streamingPlayer */
   'tdm.spectate.prepare' = 'tdm.spectate.prepare',
   /** Fires on clientside when player start/stop spectating */
@@ -239,6 +241,12 @@ export const enum Events {
   'tdm.language' = 'tdm.language',
   /** Fires from clientsilde when arena is ready */
   'tdm.mapeditor.save' = 'tdm.mapeditor.save',
+  /** Fires from serverside when match timeleft has gone */
+  'tdm.match.timeleft' = 'tdm.match.timeleft',
+  /** Fires from serverside when map has changed */
+  'tdm.match.change_map' = 'tdm.match.change_map',
+  /** Fires from serverside when round is last in match */
+  'tdm.match.last_round' = 'tdm.match.last_round',
 }
 
 export const enum Procs {

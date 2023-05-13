@@ -28,7 +28,7 @@ export default class VoteService {
     if (this.isRunning(Vote.arena)) {
       this.add(Vote.arena, key, player)
     } else {
-      this.start(Vote.arena, key, player, callback)
+      this.start(Vote.arena, key, callback, player)
     }
   }
 
@@ -62,10 +62,10 @@ export default class VoteService {
     mp.events.call(Events["tdm.vote"], vote, player.id, this.info[vote].result)
   }
 
-  private start(vote: Vote, key: string | number, player: PlayerMp, callback: (result: string) => void) {
+  private start(vote: Vote, key: string | number, callback: (result: string) => void, player?: PlayerMp) {
     this.info[vote] = {
       result: { [key]: 1 },
-      players: [player.userId],
+      players: player ? [player.userId] : [],
       timer: setTimeout(() => {
         try {
           const result = this.getResult(vote)
@@ -77,7 +77,7 @@ export default class VoteService {
       }, this.getTimeleft(vote))
     }
 
-    mp.events.call(Events["tdm.vote.start"], vote, player.id, this.info[vote].result)
+    mp.events.call(Events["tdm.vote.start"], vote, player?.id, this.info[vote].result)
   }
 
   stop(vote: string, result?: string) {

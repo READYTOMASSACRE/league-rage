@@ -27,14 +27,6 @@ export default class PlayerService {
   @event("playerDeath")
   playerDeath(player: PlayerMp) {
     this.setState(player, tdm.State.dead)
-
-    TaskManager.add(() => {
-      if (!mp.players.exists(player)) {
-        return
-      }
-
-      this.spawnLobby(player)
-    }, this.config.effects.death)
   }
 
   @ensurePlayer
