@@ -186,6 +186,7 @@ const prepareConfig = (config: Partial<IConfig>): IConfig => {
     mapeditor: false,
     gametype: GameType.match,
     match: {
+      vote: 60 * 14, // 14 min
       timeleft: 60 * 15, // 15 min
       prepare: 5,
     },

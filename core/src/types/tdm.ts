@@ -119,6 +119,7 @@ export enum GameType {
 }
 
 export type MatchConfig = {
+  vote: number
   timeleft: number
   prepare: number
 }

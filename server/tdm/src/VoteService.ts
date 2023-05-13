@@ -1,4 +1,5 @@
 import { eventable, helpers, catchError, event, BroadCastError } from "../../../core";
+import { shuffle } from "../../../core/src/helpers";
 import { Events, userId } from "../../../core/src/types";
 import { Vote, VoteConfig } from "../../../core/src/types/tdm";
 import { ILanguage, Lang } from "../../../lang/language";
@@ -36,11 +37,20 @@ export default class VoteService {
     return Boolean(this.info[vote] && this.info[vote].timer)
   }
 
-  getResult(vote: string): string {
-    const {key} = Object.entries(this.info[vote].result).reduce((acc, [key, vote]) => {
+  getResult(vote: Vote): string | undefined {
+    const { result } = this.info[vote]
+
+    if (!result) {
+      return
+    }
+
+    const votes = Object.entries(result)
+
+    shuffle(votes)
+
+    const {key} = votes.reduce((acc, [key, vote]) => {
       if (acc.vote < vote) {
-        acc.key = key
-        acc.vote = vote
+        acc = { key, vote }
       }
 
       return acc
